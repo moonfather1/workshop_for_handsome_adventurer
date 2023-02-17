@@ -1,0 +1,40 @@
+{
+	"item.workshop_for_handsome_adventurer.workstation_placer": "Workstation",
+	"item.workshop_for_handsome_adventurer.workstation_placer.tooltip1": "A proper crafting table. Enough room to work on multiple items.",
+	"item.workshop_for_handsome_adventurer.workstation_placer.tooltip2": "Can access nearby inventories. Can hold items.",
+
+	"block.workshop_for_handsome_adventurer.simple_table_oak": "Crafting Table",
+	"block.workshop_for_handsome_adventurer.simple_table_spruce": "Crafting Table",
+	"block.workshop_for_handsome_adventurer.simple_table_birch": "Crafting Table",
+	"block.workshop_for_handsome_adventurer.simple_table_jungle": "Crafting Table",
+	"block.workshop_for_handsome_adventurer.simple_table_dark_oak": "Crafting Table",
+	"block.workshop_for_handsome_adventurer.simple_table.tooltip1": "A tiny crafting table. Uncomfortable and a little embarrassing to use.",
+	"block.workshop_for_handsome_adventurer.simple_table.tooltip2": "Can access nearby inventories. Can hold items.",
+
+	"block.workshop_for_handsome_adventurer.tool_rack_double_oak": "Tool Rack (triple)",
+	"block.workshop_for_handsome_adventurer.tool_rack_double_spruce": "Tool Rack (triple)",
+	"block.workshop_for_handsome_adventurer.tool_rack_double_dark_oak": "Tool Rack (triple)",
+	"block.workshop_for_handsome_adventurer.tool_rack_double_acacia": "Tool Rack (triple)",
+	"block.workshop_for_handsome_adventurer.tool_rack_double_jungle": "Tool Rack (triple)",
+	"block.workshop_for_handsome_adventurer.tool_rack_double_birch": "Tool Rack (triple)",
+	"block.workshop_for_handsome_adventurer.tool_rack_double.tooltip1": "Holds 6 items.",
+	"block.workshop_for_handsome_adventurer.tool_rack_double.tooltip2": "Convenient usage, decent aesthetics.",
+
+	"block.workshop_for_handsome_adventurer.tool_rack_single_oak": "Tool Rack (single)",
+	"block.workshop_for_handsome_adventurer.tool_rack_single_spruce": "Tool Rack (single)",
+	"block.workshop_for_handsome_adventurer.tool_rack_single_dark_oak": "Tool Rack (single)",
+	"block.workshop_for_handsome_adventurer.tool_rack_single_acacia": "Tool Rack (single)",
+	"block.workshop_for_handsome_adventurer.tool_rack_single_jungle": "Tool Rack (single)",
+	"block.workshop_for_handsome_adventurer.tool_rack_single_birch": "Tool Rack (single)",
+	"block.workshop_for_handsome_adventurer.tool_rack_single.tooltip1": "Holds 2 items.",
+	"block.workshop_for_handsome_adventurer.tool_rack_single.tooltip2": "Convenient usage, elegant design.",
+
+	"message.workshop_for_handsome_adventurer.no_room_for_workstation": "No room to place a workstation there.",
+	"message.workshop_for_handsome_adventurer.workshop_table_obscured": "Crafting table is obscured.",
+	"message.workshop_for_handsome_adventurer.invalid_item_for_rack": "You can't put that onto the rack.",
+
+	"message.workshop_for_handsome_adventurer.extension_slot1": "Put a chest or a storage drawer here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests.",
+	"message.workshop_for_handsome_adventurer.extension_slot2": "Put a chest or a storage drawer here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests. \n(optionally another one [ITEM] for a range of two blocks)\n \nOr a lantern to make it a part of the workstation \nand light up the surroundings.",
+
+	"itemGroup.workshop_for_handsome_adventurer": "Workshop for handsome adventurer"
+}

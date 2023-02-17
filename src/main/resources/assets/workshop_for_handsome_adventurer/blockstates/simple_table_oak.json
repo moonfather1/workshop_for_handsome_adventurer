@@ -1,0 +1,7 @@
+{
+    "variants":
+    {
+        "has_inventory=true": { "model": "workshop_for_handsome_adventurer:block/simple_table_with_drawer" },
+        "has_inventory=false": { "model": "workshop_for_handsome_adventurer:block/simple_table" }
+    }
+}

@@ -1,0 +1,26 @@
+{
+	"replace": false,
+	"values": [
+		"workshop_for_handsome_adventurer:simple_table_oak",
+		"workshop_for_handsome_adventurer:simple_table_spruce",
+		"workshop_for_handsome_adventurer:simple_table_jungle",
+		"workshop_for_handsome_adventurer:simple_table_birch",
+		"workshop_for_handsome_adventurer:simple_table_dark_oak",
+		
+		"workshop_for_handsome_adventurer:dual_table_primary",
+		"workshop_for_handsome_adventurer:dual_table_secondary",
+		"workshop_for_handsome_adventurer:dual_table_top",
+		
+		"workshop_for_handsome_adventurer:tool_rack_single_oak",
+		"workshop_for_handsome_adventurer:tool_rack_single_spruce",
+		"workshop_for_handsome_adventurer:tool_rack_single_birch",
+		"workshop_for_handsome_adventurer:tool_rack_single_jungle",
+		"workshop_for_handsome_adventurer:tool_rack_single_dark_oak",
+		
+		"workshop_for_handsome_adventurer:tool_rack_double_oak",
+		"workshop_for_handsome_adventurer:tool_rack_double_birch",
+		"workshop_for_handsome_adventurer:tool_rack_double_spruce",
+		"workshop_for_handsome_adventurer:tool_rack_double_jungle",
+		"workshop_for_handsome_adventurer:tool_rack_double_dark_oak"
+	]
+}

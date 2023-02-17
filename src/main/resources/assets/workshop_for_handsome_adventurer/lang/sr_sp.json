@@ -1,0 +1,40 @@
+﻿{
+	"item.workshop_for_handsome_adventurer.workstation_placer": "Радна станица",
+	"item.workshop_for_handsome_adventurer.workstation_placer.tooltip1": "Прописни радни сто. Довољно места да правиш више ствари одједном.",
+	"item.workshop_for_handsome_adventurer.workstation_placer.tooltip2": "Лак приступ сандуцима и фиокама поред стола. Може да држи стварчице.",
+
+	"block.workshop_for_handsome_adventurer.simple_table_oak": "Радни сто",
+	"block.workshop_for_handsome_adventurer.simple_table_spruce": "Радни сто",
+	"block.workshop_for_handsome_adventurer.simple_table_birch": "Радни сто",
+	"block.workshop_for_handsome_adventurer.simple_table_jungle": "Радни сто",
+	"block.workshop_for_handsome_adventurer.simple_table_dark_oak": "Радни сто",
+	"block.workshop_for_handsome_adventurer.simple_table.tooltip1": "Малени радни сто. Неудобан и стидећеш се ако га користиш.",
+	"block.workshop_for_handsome_adventurer.simple_table.tooltip2": "Лак приступ сандуцима и фиокама поред стола. Може да држи стварчице.",
+
+	"block.workshop_for_handsome_adventurer.tool_rack_double_oak": "Држач за алатке (три реда)",
+	"block.workshop_for_handsome_adventurer.tool_rack_double_spruce": "Држач за алатке (три реда)",
+	"block.workshop_for_handsome_adventurer.tool_rack_double_dark_oak": "Држач за алатке (три реда)",
+	"block.workshop_for_handsome_adventurer.tool_rack_double_acacia": "Држач за алатке (три реда)",
+	"block.workshop_for_handsome_adventurer.tool_rack_double_jungle": "Држач за алатке (три реда)",
+	"block.workshop_for_handsome_adventurer.tool_rack_double_birch": "Држач за алатке (три реда)",
+	"block.workshop_for_handsome_adventurer.tool_rack_double.tooltip1": "Држи 6 алатки.",
+	"block.workshop_for_handsome_adventurer.tool_rack_double.tooltip2": "Лак за употребу, пристојна естетика.",
+
+	"block.workshop_for_handsome_adventurer.tool_rack_single_oak": "Држач за алатке (један ред)",
+	"block.workshop_for_handsome_adventurer.tool_rack_single_spruce": "Држач за алатке (један ред)",
+	"block.workshop_for_handsome_adventurer.tool_rack_single_dark_oak": "Држач за алатке (један ред)",
+	"block.workshop_for_handsome_adventurer.tool_rack_single_acacia": "Држач за алатке (један ред)",
+	"block.workshop_for_handsome_adventurer.tool_rack_single_jungle": "Држач за алатке (један ред)",
+	"block.workshop_for_handsome_adventurer.tool_rack_single_birch": "Држач за алатке (један ред)",
+	"block.workshop_for_handsome_adventurer.tool_rack_single.tooltip1": "Држи 2 алатке.",
+	"block.workshop_for_handsome_adventurer.tool_rack_single.tooltip2": "Лак за употребу, елегантан дизајн.",
+
+	"message.workshop_for_handsome_adventurer.no_room_for_workstation": "Ту нема места за радну станицу.",
+	"message.workshop_for_handsome_adventurer.workshop_table_obscured": "Не можеш прићи радној површини стола.",
+	"message.workshop_for_handsome_adventurer.invalid_item_for_rack": "Не можеш то окачити на држач за алатке.",
+
+	"message.workshop_for_handsome_adventurer.extension_slot1": "Стави овде сандук или фиоку да \nомогућиш да стварчице остају у гриду. \n \nИли, стави [ITEM] овде\nза приступ суседним сандуцима.",
+	"message.workshop_for_handsome_adventurer.extension_slot2": "Стави овде сандук или фиоку да \nомогућиш да стварчице остају у гриду. \n \nИли, стави [ITEM] овде\nза приступ суседним сандуцима. \n(опционо још један за домет од два блока)\n \nИли светиљку да постане део радне станице\nи осветљава околину.",
+
+	"itemGroup.workshop_for_handsome_adventurer": "Радионица за згодног авантуристу"
+}

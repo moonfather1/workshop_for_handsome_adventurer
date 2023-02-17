@@ -1,0 +1,37 @@
+modLoader="javafml"
+loaderVersion="[40,)"
+license="All rights reserved"
+
+[[mods]]
+modId="workshop_for_handsome_adventurer"
+version="${file.jarVersion}"
+displayName="Workshop for handsome adventurer"
+#updateJSONURL="https://change.me.example.invalid/updates.json"
+#displayURL="https://change.me.to.your.mods.homepage.example.invalid/"
+#logoFile="logo.png"
+credits="Thanks for this example mod goes to Java"
+authors="MoonFather"
+description='''
+Adds a few blocks:
+- small worktable like the one from Tinker's Construct
+- dual worktable like the one from Gany's Nether mod
+- tool rack like one from BiblioCraft or Tetra, etc.
+'''
+
+[[dependencies.workshop_for_handsome_adventurer]]
+    modId="forge" #mandatory
+    mandatory=true #mandatory
+    versionRange="[40,)" #mandatory
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.workshop_for_handsome_adventurer]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.18.2,1.19)"
+    ordering="NONE"
+    side="BOTH"
+
+
+[modproperties.workshop_for_handsome_adventurer]
+    catalogueImageIcon="textures/items/hatchet.png"
+    configuredBackground="minecraft:textures/block/spruce_planks.png"

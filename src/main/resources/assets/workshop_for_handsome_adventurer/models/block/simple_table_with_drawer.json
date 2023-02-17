@@ -1,0 +1,154 @@
+{
+	"credit": "Model generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc)",
+	"textures": {
+		"handle": "block/light_gray_concrete",
+		"crafting_table_top": "block/crafting_table_top",
+		"oak_planks": "block/oak_planks",
+		"particle": "block/stripped_oak_log",
+		"stripped_oak_log": "block/stripped_oak_log"
+	},
+	"elements": [
+		{
+			"name": "TopCenter",
+			"from": [3, 16.01, 3],
+			"to": [13, 16.01, 13],
+			"faces": {
+				"up": {"uv": [3, 3, 13, 13], "texture": "#crafting_table_top"},
+				"down": {"uv": [2, 2, 12, 12], "texture": "#oak_planks"}
+			}
+		},
+		{
+			"name": "TopPlank",
+			"from": [0, 12, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [1, 0, 5, 16], "rotation": 90, "texture": "#stripped_oak_log"},
+				"east": {"uv": [0, 0, 16, 4], "texture": "#stripped_oak_log"},
+				"south": {"uv": [1, 1, 5, 16], "rotation": 90, "texture": "#stripped_oak_log"},
+				"west": {"uv": [0, 0, 16, 4], "texture": "#stripped_oak_log"},
+				"up": {"uv": [0, 0, 16, 16], "rotation": 90, "texture": "#stripped_oak_log"},
+				"down": {"uv": [0, 0, 16, 16], "rotation": 270, "texture": "#stripped_oak_log"}
+			}
+		},
+		{
+			"name": "Leg1",
+			"from": [0, 0, 0],
+			"to": [3.5, 12, 3.5],
+			"faces": {
+				"north": {"uv": [0, 7, 12, 12], "rotation": 90, "texture": "#oak_planks"},
+				"east": {"uv": [0, 7, 12, 12], "rotation": 90, "texture": "#oak_planks"},
+				"south": {"uv": [0, 7, 12, 12], "rotation": 90, "texture": "#oak_planks"},
+				"west": {"uv": [0, 7, 12, 12], "rotation": 90, "texture": "#oak_planks"},
+				"down": {"uv": [3, 3, 8, 8], "texture": "#oak_planks"}
+			}
+		},
+		{
+			"name": "Leg2",
+			"from": [12.5, 0, 0],
+			"to": [16, 12, 3.5],
+			"faces": {
+				"north": {"uv": [0, 7, 12, 12], "rotation": 90, "texture": "#oak_planks"},
+				"east": {"uv": [0, 7, 12, 12], "rotation": 90, "texture": "#oak_planks"},
+				"south": {"uv": [0, 7, 12, 12], "rotation": 90, "texture": "#oak_planks"},
+				"west": {"uv": [0, 7, 12, 12], "rotation": 90, "texture": "#oak_planks"},
+				"down": {"uv": [3, 3, 8, 8], "texture": "#oak_planks"}
+			}
+		},
+		{
+			"name": "Leg3",
+			"from": [12.5, 0, 12.5],
+			"to": [16, 12, 16],
+			"faces": {
+				"north": {"uv": [0, 7, 12, 12], "rotation": 90, "texture": "#oak_planks"},
+				"east": {"uv": [0, 7, 12, 12], "rotation": 90, "texture": "#oak_planks"},
+				"south": {"uv": [0, 7, 12, 12], "rotation": 90, "texture": "#oak_planks"},
+				"west": {"uv": [0, 7, 12, 12], "rotation": 90, "texture": "#oak_planks"},
+				"down": {"uv": [3, 3, 8, 8], "texture": "#oak_planks"}
+			}
+		},
+		{
+			"name": "Leg4",
+			"from": [0, 0, 12.5],
+			"to": [3.5, 12, 16],
+			"faces": {
+				"north": {"uv": [0, 7, 12, 12], "rotation": 90, "texture": "#oak_planks"},
+				"east": {"uv": [0, 7, 12, 12], "rotation": 90, "texture": "#oak_planks"},
+				"south": {"uv": [0, 7, 12, 12], "rotation": 90, "texture": "#oak_planks"},
+				"west": {"uv": [0, 7, 12, 12], "rotation": 90, "texture": "#oak_planks"},
+				"down": {"uv": [3, 3, 8, 8], "texture": "#oak_planks"}
+			}
+		},
+		{
+			"name": "Drawer1",
+			"from": [3.5, 9, 0.5],
+			"to": [12.5, 12, 15.5],
+			"faces": {
+				"north": {"uv": [5, 7, 16, 12], "texture": "#oak_planks"},
+				"south": {"uv": [0, 3, 11, 8], "texture": "#oak_planks"},
+				"down": {"uv": [0, 0, 9, 15], "texture": "#oak_planks"}
+			}
+		},
+		{
+			"name": "Drawer2",
+			"from": [0.5, 9.03, 3.5],
+			"to": [15.5, 12.03, 12.5],
+			"faces": {
+				"east": {"uv": [0, 7, 11, 12], "texture": "#oak_planks"},
+				"west": {"uv": [0, 3, 11, 8], "texture": "#oak_planks"},
+				"down": {"uv": [1, 3, 16, 12], "texture": "#oak_planks"}
+			}
+		},
+		{
+			"name": "DrawerHandle1",
+			"from": [6, 10, 0],
+			"to": [10, 11, 16],
+			"faces": {
+				"north": {"uv": [11, 15, 15, 16], "texture": "#handle"},
+				"east": {"uv": [0, 3, 16, 4], "texture": "#handle"},
+				"south": {"uv": [11, 0, 15, 1], "texture": "#handle"},
+				"west": {"uv": [0, 5, 16, 6], "texture": "#handle"},
+				"up": {"uv": [7, 0, 11, 16], "texture": "#handle"},
+				"down": {"uv": [12, 0, 16, 16], "texture": "#handle"}
+			}
+		},
+		{
+			"name": "DrawerHandle2",
+			"from": [0, 10, 6],
+			"to": [16, 11, 10],
+			"faces": {
+				"north": {"uv": [11, 15, 15, 16], "texture": "#handle"},
+				"east": {"uv": [0, 3, 16, 4], "texture": "#handle"},
+				"south": {"uv": [11, 0, 15, 1], "texture": "#handle"},
+				"west": {"uv": [0, 5, 16, 6], "texture": "#handle"},
+				"up": {"uv": [7, 0, 11, 16], "texture": "#handle"},
+				"down": {"uv": [12, 0, 16, 16], "texture": "#handle"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, 315, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 315, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"gui": {
+			"rotation": [30, 45, 0],
+			"scale": [0.625, 0.625, 0.625]
+		},
+		"head": {
+			"rotation": [0, 180, 0]
+		},
+		"fixed": {
+			"rotation": [0, 180, 0]
+		}
+	}
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "",
+  "pattern": [
+    "ss",
+    "ss",
+    "ss"
+  ],
+  "key": {
+    "s": {
+      "item": "minecraft:dark_oak_slab"
+    }
+  },
+  "result": {
+    "item": "workshop_for_handsome_adventurer:tool_rack_double_dark_oak",
+    "count": 1
+  },
+  "conditions":  []
+}
