@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -14,20 +13,15 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class DualToolRack extends ToolRack
 {
-    public DualToolRack(int itemCount)
+    public DualToolRack(int itemCount, String type)
     {
-        super(itemCount);
+        super(itemCount, type);
         registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER));
     }
 
@@ -39,30 +33,6 @@ public class DualToolRack extends ToolRack
         builder.add(BlockStateProperties.DOUBLE_BLOCK_HALF);
         builder.add(DualTableBaseBlock.BEING_PLACED);
         super.createBlockStateDefinition(builder);
-    }
-
-
-    Map<VoxelShape, VoxelShape> shapeCache = new HashMap<VoxelShape, VoxelShape>();
-    @Override
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext collisionContext)
-    {
-        if (state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF).equals(DoubleBlockHalf.UPPER))
-        {
-            VoxelShape half = super.getShape(state, world, pos, collisionContext);
-            if (! shapeCache.containsKey(half))
-            {
-                shapeCache.put(half, half.move(0, -1, 0));
-            }
-            return Shapes.or(half, shapeCache.get(half));
-        }
-        else
-        {
-            return Shapes.empty();
-        }
-    }
-    public VoxelShape getInteractionShape(BlockState state, BlockGetter world, BlockPos pos)
-    {
-        return this.getShape(state, world, pos, null);
     }
 
 

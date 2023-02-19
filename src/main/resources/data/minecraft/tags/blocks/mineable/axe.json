@@ -21,6 +21,18 @@
 		"workshop_for_handsome_adventurer:tool_rack_double_birch",
 		"workshop_for_handsome_adventurer:tool_rack_double_spruce",
 		"workshop_for_handsome_adventurer:tool_rack_double_jungle",
-		"workshop_for_handsome_adventurer:tool_rack_double_dark_oak"
+		"workshop_for_handsome_adventurer:tool_rack_double_dark_oak",
+
+		"workshop_for_handsome_adventurer:tool_rack_pframed_oak",
+		"workshop_for_handsome_adventurer:tool_rack_pframed_birch",
+		"workshop_for_handsome_adventurer:tool_rack_pframed_spruce",
+		"workshop_for_handsome_adventurer:tool_rack_pframed_jungle",
+		"workshop_for_handsome_adventurer:tool_rack_pframed_dark_oak",
+
+		"workshop_for_handsome_adventurer:tool_rack_framed_oak",
+		"workshop_for_handsome_adventurer:tool_rack_framed_birch",
+		"workshop_for_handsome_adventurer:tool_rack_framed_spruce",
+		"workshop_for_handsome_adventurer:tool_rack_framed_jungle",
+		"workshop_for_handsome_adventurer:tool_rack_framed_dark_oak"
 	]
 }

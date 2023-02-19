@@ -20,16 +20,6 @@ public class BaseContainerBlockEntity extends BlockEntity
 
     ///////////////////////////////////
 
-    //@Override
-    //public void setRemoved()
-    //{
-    //    this.DropAll();
-    //    super.setRemoved();
-    //}
-
-
-    ///////////////////////////////////
-
     private final List<ItemStack> items = new ArrayList<ItemStack>(9);
     protected int capacity = 9;
 

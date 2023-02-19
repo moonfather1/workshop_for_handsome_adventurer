@@ -13,6 +13,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -36,19 +37,19 @@ import java.util.*;
 
 public class ToolRack extends HorizontalDirectionalBlock implements EntityBlock
 {
-	public ToolRack(int itemCount)
+	public ToolRack(int itemCount, String type)
 	{
-		super(Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2f, 3f).sound(SoundType.WOOD));
+		super(Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2f, 3f).sound(SoundType.WOOD).noOcclusion());
 		this.itemCount = itemCount;
 
 		registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
 		this.PrepareListOfShapes();
 
 		String translationKeyStructure = "block.%s.tool_rack_%s.tooltip%d";
-		String translationKey = String.format(translationKeyStructure, Constants.MODID, itemCount < 4 ? "single" : "double", 1);
-		this.Tooltip1 = new TranslatableComponent(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
-		translationKey = String.format(translationKeyStructure, Constants.MODID, itemCount < 4 ? "single" : "double", 2);
-		this.Tooltip2 = new TranslatableComponent(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
+		String translationKey = String.format(translationKeyStructure, Constants.MODID, type, 1);
+		this.Tooltip1 = new TranslatableComponent(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
+		translationKey = String.format(translationKeyStructure, Constants.MODID, type, 2);
+		this.Tooltip2 = new TranslatableComponent(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
 	}
 
 
@@ -56,10 +57,10 @@ public class ToolRack extends HorizontalDirectionalBlock implements EntityBlock
 	private final int itemCount;
 	private final MutableComponent Tooltip1, Tooltip2;
 
-	private static final VoxelShape SHAPE_PLANK1N = Block.box(0.0D, 1.0D, 0.0D, 16.0D, 15.0D, 1.0D);
-	private static final VoxelShape SHAPE_PLANK1E = Block.box(15.0D, 1.0D, 0.0D, 16.0D, 15.0D, 16.0D);
-	private static final VoxelShape SHAPE_PLANK1S = Block.box(0.0D, 1.0D, 15.0D, 16.0D, 15.0D, 16.0D);
-	private static final VoxelShape SHAPE_PLANK1W = Block.box(0.0D, 1.0D, 0.0D, 1.0D, 15.0D, 16.0D);
+	private static final VoxelShape SHAPE_PLANK1N = Block.box(1.0D, 1.0D, 0.0D, 15.0D, 15.0D, 1.0D);
+	private static final VoxelShape SHAPE_PLANK1E = Block.box(15.0D, 1.0D, 1.0D, 16.0D, 15.0D, 15.0D);
+	private static final VoxelShape SHAPE_PLANK1S = Block.box(1.0D, 1.0D, 15.0D, 15.0D, 15.0D, 16.0D);
+	private static final VoxelShape SHAPE_PLANK1W = Block.box(0.0D, 1.0D, 1.0D, 1.0D, 15.0D, 15.0D);
 
 
 
@@ -218,6 +219,13 @@ public class ToolRack extends HorizontalDirectionalBlock implements EntityBlock
 			return InteractionResult.sidedSuccess(level.isClientSide);
 		}
 
+		if (blockState.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF) && blockState.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.LOWER)
+		{
+			BlockPos above = pos.above();
+			return this.use(level.getBlockState(above), level, above, player, hand, blockHitResult.withPosition(above));
+		}
+
+
 		int slot = this.GetTargetedSlot(blockHitResult);
 		if (slot >= this.itemCount)
 		{
@@ -292,4 +300,7 @@ public class ToolRack extends HorizontalDirectionalBlock implements EntityBlock
 		}
 		return true;
 	}
+
+
+
 }

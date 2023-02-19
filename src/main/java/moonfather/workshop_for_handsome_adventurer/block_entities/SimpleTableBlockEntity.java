@@ -12,7 +12,7 @@ public class SimpleTableBlockEntity extends BaseContainerBlockEntity
 	public SimpleTableBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(Registration.SIMPLE_TABLE_BE.get(), pos, state);
-		this.capacity = 9 /*crafting*/ + 2 /*customization*/;
+		this.capacity = 9 /*crafting*/ + 4 /*customization, was forced to put max here*/;
 	}
 
 	public void DepositCustomizationItem(int slot, ItemStack itemStack)

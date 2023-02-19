@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "",
+  "pattern": [
+    "m"
+  ],
+  "key": {
+    "m": {
+      "item": "workshop_for_handsome_adventurer:tool_rack_double_birch"
+    }
+  },
+  "result": {
+    "item": "workshop_for_handsome_adventurer:tool_rack_single_birch",
+    "count": 3
+  },
+  "conditions":  []
+}

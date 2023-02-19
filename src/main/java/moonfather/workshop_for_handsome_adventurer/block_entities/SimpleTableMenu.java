@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedContents;
@@ -28,21 +29,30 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-public class SimpleTableMenu extends RecipeBookMenu<CraftingContainer>
+public class SimpleTableMenu extends AbstractContainerMenu//RecipeBookMenu<CraftingContainer>
 {
+	public static final int CUST_CONTAINER_SIZE = 4;
+	public static final int TAB_SMUGGLING_CONTAINER_SIZE = 32;
 	private static final TagKey<Item> ChestTag = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge:chests"));
 	public static final int RESULT_SLOT = 0;
-	//private static final int CRAFT_SLOT_START = 1;
-	//private static final int CRAFT_SLOT_END = 10;
-	//private static final int INV_SLOT_START = 10;
-	//private static final int INV_SLOT_END = 37;
-	//private static final int USE_ROW_SLOT_START = 37;
-	//private static final int USE_ROW_SLOT_END = 46;
+	public static final int CRAFT_SLOT_START = 1;
+	public static final int CRAFT_SLOT_END = CRAFT_SLOT_START + 9 - 1;//9
+	public static final int INV_SLOT_START = CRAFT_SLOT_END + 1;//10;
+	public static final int INV_SLOT_END = INV_SLOT_START + 27 - 1;//36;
+	public static final int HOTBAR_ROW_SLOT_START = INV_SLOT_END + 1;//37;
+	public static final int HOTBAR_ROW_SLOT_END = HOTBAR_ROW_SLOT_START + 9 - 1;//45;
+	public static final int CUST_SLOT_START = HOTBAR_ROW_SLOT_END + 1;//46;
+	public static final int CUST_SLOT_END = CUST_SLOT_START + CUST_CONTAINER_SIZE - 1;//49;
+	public static final int TABS_SLOT_START = CUST_SLOT_END + 1;//50;
+	public static final int TABS_SLOT_END = TABS_SLOT_START + TAB_SMUGGLING_CONTAINER_SIZE - 1;//81;
 	private final CraftingContainer craftSlots = new CraftingContainer(this, 3, 3);
 	private final ResultContainer resultSlots = new ResultContainer();
-	private final CraftingContainer customizationSlots = new CraftingContainer(this, 2, 1);
+	private final Container customizationSlots = new SimpleContainer(CUST_CONTAINER_SIZE);
+	private final Container tabElements = new SimpleContainer(TAB_SMUGGLING_CONTAINER_SIZE); // magic to transfer to client
 	private final ContainerLevelAccess access;
 	private final Player player;
 
@@ -58,7 +68,7 @@ public class SimpleTableMenu extends RecipeBookMenu<CraftingContainer>
 		this.player = inventory.player;
 		this.addSlot(new ResultSlot(inventory.player, this.craftSlots, this.resultSlots, 0, 124-12, 35));
 
-		for(int ver = 0; ver < 3; ++ver)
+		for (int ver = 0; ver < 3; ++ver)
 		{
 			for(int hor = 0; hor < 3; ++hor)
 			{
@@ -66,7 +76,7 @@ public class SimpleTableMenu extends RecipeBookMenu<CraftingContainer>
 			}
 		}
 
-		for(int ver = 0; ver < 3; ++ver)
+		for (int ver = 0; ver < 3; ++ver)
 		{
 			for(int hor = 0; hor < 9; ++hor)
 			{
@@ -74,16 +84,29 @@ public class SimpleTableMenu extends RecipeBookMenu<CraftingContainer>
 			}
 		}
 
-		for(int hor = 0; hor < 9; ++hor)
+		for (int hor = 0; hor < 9; ++hor)
 		{
 			this.addSlot(new Slot(inventory, hor, 8 + hor * 18, 142));
 		}
 
-		this.addSlot(new CustomizationSlot(this.customizationSlots, 0, 152, 17));
-		this.addSlot(new CustomizationSlot(this.customizationSlots, 1, 152, 39));
+		int custSlotCount = this.getCustomizationSlotCount();
+		this.addSlot(new CustomizationSlot(this.customizationSlots, 0, 152, 17 + 0*22 + ((0 < custSlotCount) ? 0 : 9009)));
+		this.addSlot(new CustomizationSlot(this.customizationSlots, 1, 152, 17 + 1*22 + ((1 < custSlotCount) ? 0 : 9009)));
+		this.addSlot(new CustomizationSlot(this.customizationSlots, 2, 152, 17 + 2*22 + ((2 < custSlotCount) ? 0 : 9009)));
+		this.addSlot(new CustomizationSlot(this.customizationSlots, 3, 152, 17 + 3*22 + ((3 < custSlotCount) ? 0 : 9009)));
 		this.access.execute(this::loadFromWorld);
+
+		for (int i = 0; i < tabElements.getContainerSize(); i++)
+		{
+			this.addSlot(new Slot(this.tabElements, i, 9009, 9009+i*30));
+		}
 		this.initialLoading = false;
+		this.storeAdjacentInventoriesInSlots();
 	}
+
+
+	//todo:override
+	protected int getCustomizationSlotCount()	{ return OptionsHolder.COMMON.SimpleTableNumberOfSlots.get(); }
 
 	public SimpleTableMenu(int containerId, Inventory inventory, FriendlyByteBuf friendlyByteBuf)
 	{
@@ -288,7 +311,7 @@ public class SimpleTableMenu extends RecipeBookMenu<CraftingContainer>
 
 	private boolean isCustomizationContainer(Container container)
 	{
-		return container.getContainerSize() == 2;
+		return container.getContainerSize() == CUST_CONTAINER_SIZE;
 	}
 
 	private void storeCraftingGridToWorld(Container container, Level level, BlockPos pos)
@@ -357,6 +380,39 @@ public class SimpleTableMenu extends RecipeBookMenu<CraftingContainer>
 			}
 		}
 		return false;
+	}
+
+	public boolean showInventoryAccess()
+	{
+		for (int i = 0; i < this.customizationSlots.getContainerSize(); i++)
+		{
+			if (this.customizationSlots.getItem(i).is(CustomizationSlot.getAccessItem()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private List<InventoryAccessHelper.InventoryAccessRecord> adjacentInventories = null;
+	private void storeAdjacentInventoriesInSlots()
+	{
+		if (this.adjacentInventories == null)
+		{
+			this.adjacentInventories = new ArrayList<>();
+			this.access.execute((level, pos) -> InventoryAccessHelper.getAdjacentInventories(level, pos, this.adjacentInventories));
+		}
+		int max = Math.min(this.adjacentInventories.size(), TAB_SMUGGLING_CONTAINER_SIZE/2);
+		for (int i = 0; i < max; i++)
+		{
+			InventoryAccessHelper.InventoryAccessRecord current = this.adjacentInventories.get(i);
+			ItemStack chest = current.ItemChest.copy();
+			chest.setHoverName(current.Name);
+			ItemStack suff = current.ItemFirst.copy();
+			this.tabElements.setItem(i*2, chest);
+			this.tabElements.setItem(i*2+1, suff);
+		}
+		this.tabElements.setChanged();
 	}
 
 	////////////////////////////////////////////

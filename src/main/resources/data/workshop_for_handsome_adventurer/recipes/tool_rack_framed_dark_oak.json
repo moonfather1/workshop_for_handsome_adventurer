@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "",
+  "pattern": [
+    "sns",
+    "sns",
+    "sns"
+  ],
+  "key": {
+    "s": {
+      "item": "minecraft:dark_oak_slab"
+    },
+	"n": {
+      "tag": "forge:nuggets"
+    }
+  },
+  "result": {
+    "item": "workshop_for_handsome_adventurer:tool_rack_framed_dark_oak",
+    "count": 1
+  },
+  "conditions":  []
+}
