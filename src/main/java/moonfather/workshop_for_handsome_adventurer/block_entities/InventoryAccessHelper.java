@@ -19,7 +19,6 @@ public class InventoryAccessHelper
 {
     public static void getAdjacentInventories(Level level, BlockPos pos, List<InventoryAccessRecord> listToFill)
     {
-        System.out.println("~~~ testing world at " + pos.getX() + ", "+ pos.getZ());
         BlockPos.MutableBlockPos pos2 = new BlockPos.MutableBlockPos();
         for (int dy = 1; dy >= 0; dy--)
         {
@@ -49,12 +48,13 @@ public class InventoryAccessHelper
                         }
                         LazyOptional<IItemHandler> ih = be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
                         ih.ifPresent(inventory -> record.ItemFirst = inventory.getStackInSlot(0)); //getSlots==27??
+                        record.x = pos2.getX(); record.y = pos2.getY(); record.z = pos2.getZ();
+                        record.Index = listToFill.size();
                         listToFill.add(record);
                     }
                 }
             }
         }
-        System.out.println("~~~ found " + listToFill.size() + ",   client==" + level.isClientSide);
     }
     ////////////////////////////////////////////
 
@@ -63,5 +63,6 @@ public class InventoryAccessHelper
         public Component Name = null;
         public ItemStack ItemChest = ItemStack.EMPTY;
         public ItemStack ItemFirst = ItemStack.EMPTY;
+        public int Index, x, y, z;
     }
 }

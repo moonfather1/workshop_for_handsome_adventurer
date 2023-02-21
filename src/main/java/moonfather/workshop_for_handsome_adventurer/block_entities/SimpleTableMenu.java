@@ -409,6 +409,7 @@ public class SimpleTableMenu extends AbstractContainerMenu//RecipeBookMenu<Craft
 			ItemStack chest = current.ItemChest.copy();
 			chest.setHoverName(current.Name);
 			ItemStack suff = current.ItemFirst.copy();
+			chest.getOrCreateTag().putInt("w_index", current.Index);
 			this.tabElements.setItem(i*2, chest);
 			this.tabElements.setItem(i*2+1, suff);
 		}

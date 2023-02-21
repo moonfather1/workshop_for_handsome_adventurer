@@ -31,37 +31,31 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     protected static final ResourceLocation BG_CHEST_LOCATION_3_ROWS = new ResourceLocation("workshop_for_handsome_adventurer:textures/gui/left_panel_normal_chest.png");
 
     private int xOffset;
-    private int width;
-    private int height;
     private final List<TabButton> tabButtons = Lists.newArrayList();
     private TabButton selectedTab;
-    protected SimpleTableMenu menu;
-    protected Minecraft minecraft;
     private EditBox renameBox;
     private boolean visible;
     private int tickCount = 0;
-    private boolean widthTooNarrow = false;
+    private boolean widthTooNarrow2 = false;
+    private SimpleTableCraftingScreen parent;
 
-    public void init(int width, int height, Minecraft minecraft, boolean widthTooNarrow, SimpleTableMenu menu)
+    public void init(SimpleTableCraftingScreen parent, boolean widthTooNarrow)
     {
-        this.minecraft = minecraft;
-        this.width = width;
-        this.height = height;
-        this.menu = menu;
-        this.widthTooNarrow = widthTooNarrow;
-        minecraft.player.containerMenu = menu;
+        this.parent = parent;
+        this.widthTooNarrow2 = widthTooNarrow;
+        this.parent.getMinecraft().player.containerMenu = this.parent.getMenu();
         //this.timesInventoryChanged = minecraft.player.getInventory().getTimesChanged();
         this.visible = this.isVisibleAccordingToMenuData();
         if (this.visible)
         {
             this.initVisuals();
         }
-        minecraft.keyboardHandler.setSendRepeatsToGui(true);
+        this.parent.getMinecraft().keyboardHandler.setSendRepeatsToGui(true);
     }
 
     public void initVisuals()
     {
-        this.xOffset = this.widthTooNarrow ? 0 : 86;
+        this.xOffset = (this.parent.width - this.parent.getImageWidth() - PANEL_WIDTH) / 2;
         //int i = (this.width - 147) / 2 - this.xOffset;
         //int j = (this.height - 166) / 2;
         //String s = this.searchBox != null ? this.searchBox.getValue() : "";
@@ -76,7 +70,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         this.tabButtons.clear();
         for (int i = SimpleTableMenu.TABS_SLOT_START; i < SimpleTableMenu.TABS_SLOT_END; i+=2)
         {
-            ItemStack stack = this.menu.slots.get(i).getItem();
+            ItemStack stack = this.parent.getMenu().slots.get(i).getItem();
             if (stack.isEmpty())
             {
                 break;
@@ -84,8 +78,9 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             TabButton button = new TabButton();
             button.setMessage(stack.getHoverName());
             button.itemMain = stack;
-            button.itemSub = this.menu.slots.get(i+1).getItem();
-            button.setClickHandler( this::tabChanged );
+            button.itemSub = this.parent.getMenu().slots.get(i+1).getItem();
+            button.chestIndex = stack.getTag().getInt("w_index");
+            //button.setClickHandler( this::tabChanged ); //doesn't work
             this.tabButtons.add(button);
         }
 
@@ -102,14 +97,14 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         }
         button.setStateTriggered(true);
         this.selectedTab = button;
-        System.out.println("~~tabchanged");
+        System.out.println("~~tabchanged to " + button.chestIndex);
         return false;
     }
 
     public int preferredScreenPositionX(int totalWidth, int dialogWidth)
     {
         int x;
-        if (this.isVisible() && !this.widthTooNarrow)
+        if (this.isVisibleAccordingToMenuData() && ! this.widthTooNarrow2)
         {
             x = (totalWidth - dialogWidth - PANEL_WIDTH) / 2 + PANEL_WIDTH + 2;
         } else
@@ -131,8 +126,8 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, BG_CHEST_LOCATION_3_ROWS);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            int x = (this.width - PANEL_WIDTH) / 2 - this.xOffset - /*temp*/ PANEL_WIDTH/2;
-            int y = (this.height - PANEL_HEIGHT_WITH_TABS) / 2;
+            int x = (this.parent.width - PANEL_WIDTH - this.parent.getXSize()) / 2;
+            int y = (this.parent.height - PANEL_HEIGHT_WITH_TABS) / 2;
             this.blit(poseStack, x, y, 1, 1, PANEL_WIDTH, PANEL_HEIGHT_WITH_TABS);
             //if (!this.searchBox.isFocused() && this.searchBox.getValue().isEmpty()) {
             //    drawString(poseStack, this.minecraft.font, SEARCH_HINT, i + 25, j + 14, -1);
@@ -158,8 +153,8 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             {
                 if (tabButton.isHoveredOrFocused())
                 {
-                    if (this.minecraft.screen != null) {
-                        this.minecraft.screen.renderTooltip(poseStack, tabButton.getMessage(), p_100365_, p_100366_);
+                    if (this.parent.getMinecraft().screen != null) {
+                        this.parent.getMinecraft().screen.renderTooltip(poseStack, tabButton.getMessage(), p_100365_, p_100366_);
                     }
                     break;
                 }
@@ -174,13 +169,11 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput output)
-    {
+    public void updateNarration(NarrationElementOutput output) {
         List<NarratableEntry> list = Lists.newArrayList();
         list.addAll(this.tabButtons);
-        Screen.NarratableSearchResult screen$narratablesearchresult = Screen.findNarratableWidget(list, (NarratableEntry)null);
-        if (screen$narratablesearchresult != null)
-        {
+        Screen.NarratableSearchResult screen$narratablesearchresult = Screen.findNarratableWidget(list, (NarratableEntry) null);
+        if (screen$narratablesearchresult != null) {
             screen$narratablesearchresult.entry.updateNarration(output.nest());
         }
     }
@@ -192,7 +185,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         return false;
     }
     public void removed() {
-        this.minecraft.keyboardHandler.setSendRepeatsToGui(false);
+        this.parent.getMinecraft().keyboardHandler.setSendRepeatsToGui(false);
     }
     public void toggleVisibility() {
         this.setVisible(!this.isVisible());
@@ -200,7 +193,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     public boolean isVisible() {
         return this.visible;
     }
-    private boolean isVisibleAccordingToMenuData() { return this.menu.showInventoryAccess(); }
+    private boolean isVisibleAccordingToMenuData() { return this.parent.getMenu().showInventoryAccess(); }
 
     protected void setVisible(boolean value)
     {
@@ -219,6 +212,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             if (this.isVisible() != flag)
             {
                 this.setVisible(flag);
+                this.parent.setLeft(this.preferredScreenPositionX(this.parent.width, this.parent.getImageWidth()));
             }
         }
         if (this.isVisible())
@@ -230,8 +224,8 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
 
     private void updateTabs()
     {
-        int startx = this.xOffset;//(this.width - 147) / 2 - this.xOffset - 30;
-        int starty = (this.height - PANEL_HEIGHT_WITH_TABS) / 2; //(this.height - 166) / 2 + 3;
+        int startx = this.xOffset + 3;//(this.width - 147) / 2 - this.xOffset - 30;
+        int starty = (this.parent.height - PANEL_HEIGHT_WITH_TABS) / 2; //(this.height - 166) / 2 + 3;
         int counter = 0;
         for(StateSwitchingButton tabButton : this.tabButtons)
         {
@@ -276,6 +270,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         public static final int WIDTH = 22;
         public static final int HEIGHT = 36;
         private ItemStack itemMain = ItemStack.EMPTY, itemSub = ItemStack.EMPTY;
+        private int chestIndex;
         public TabButton()
         {
             super(0, 0, WIDTH, HEIGHT, false);
@@ -303,8 +298,8 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         private void renderIcon(ItemRenderer itemRenderer)
         {
             //int i = this.isStateTriggered ? -2 : 0;
-            itemRenderer.renderAndDecorateFakeItem(itemMain, this.x + 3, this.y + 1);
-            itemRenderer.renderAndDecorateFakeItem(itemSub, this.x + 3, this.y + 2 + 16);
+            itemRenderer.renderAndDecorateFakeItem(itemMain, this.x + 3, this.y + 0);
+            itemRenderer.renderAndDecorateFakeItem(itemSub, this.x + 3, this.y + 0 + 16);
         }
 
         private Function<TabButton, Boolean> handler = null;

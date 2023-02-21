@@ -6,7 +6,6 @@ import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
@@ -31,7 +30,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	private static final TranslatableComponent TooltipCustomizationsRaw = new TranslatableComponent("message.workshop_for_handsome_adventurer.extension_slot1");
 	private static List<Component> TooltipCustomizations = null;
 	private final InventoryAccessComponent inventoryComponent = new InventoryAccessComponent();
-	private boolean widthTooNarrow;
+	private boolean widthTooNarrow1;
 	private ImageButton buttonBook, buttonChest;
 
 	public SimpleTableCraftingScreen(SimpleTableMenu p_98448_, Inventory p_98449_, Component p_98450_) {
@@ -40,8 +39,8 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 
 	protected void init() {
 		super.init();
-		this.widthTooNarrow = this.width < 400;
-		this.inventoryComponent.init(this.width, this.height, this.minecraft, this.widthTooNarrow, this.menu);
+		this.widthTooNarrow1 = this.width < 400;
+		this.inventoryComponent.init(this, this.widthTooNarrow1);
 		this.leftPos = this.inventoryComponent.preferredScreenPositionX(this.width, this.imageWidth);
 		//this.buttonBook = this.addRenderableWidget(new ImageButton(this.leftPos + 148, this.height / 2 - 49+25, 20, 18, 0, 0, 19, RECIPE_BUTTON_LOCATION, (button) -> {
 		//	this.recipeBookComponent.toggleVisibility();
@@ -62,20 +61,18 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 
 	public void render(PoseStack poseStack, int p_98480_, int p_98481_, float p_98482_) {
 		this.renderBackground(poseStack);
-		if (this.inventoryComponent.isVisible() && this.widthTooNarrow) {
-			this.renderBg(poseStack, p_98482_, p_98480_, p_98481_);
+		if (this.inventoryComponent.isVisible() && ! this.widthTooNarrow1)
+		{
 			this.inventoryComponent.render(poseStack, p_98480_, p_98481_, p_98482_);
-		} else {
-			this.inventoryComponent.render(poseStack, p_98480_, p_98481_, p_98482_);
-			super.render(poseStack, p_98480_, p_98481_, p_98482_);
 		}
+		super.render(poseStack, p_98480_, p_98481_, p_98482_);
 
 		this.renderTooltip(poseStack, p_98480_, p_98481_);
 		this.inventoryComponent.renderTooltip(poseStack, this.leftPos, this.topPos, p_98480_, p_98481_);
-		this.renderOurTooltips(poseStack, p_98480_, p_98481_);
+		this.renderCustomizationTooltips(poseStack, p_98480_, p_98481_);
 	}
 
-	private void renderOurTooltips(PoseStack poseStack, int mouseX, int mouseY)
+	private void renderCustomizationTooltips(PoseStack poseStack, int mouseX, int mouseY)
 	{
 		if (this.hoveredSlot != null && this.hoveredSlot.hasItem())
 		{
@@ -125,9 +122,9 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		}
 	}
 
-	protected boolean isHovering(int p_98462_, int p_98463_, int p_98464_, int p_98465_, double p_98466_, double p_98467_) {
-		return (!this.widthTooNarrow || !this.inventoryComponent.isVisible()) && super.isHovering(p_98462_, p_98463_, p_98464_, p_98465_, p_98466_, p_98467_);
-	}
+	//protected boolean isHovering(int p_98462_, int p_98463_, int p_98464_, int p_98465_, double p_98466_, double p_98467_) {
+	//	return (this.widthTooNarrow1 || !this.inventoryComponent.isVisible()) && super.isHovering(p_98462_, p_98463_, p_98464_, p_98465_, p_98466_, p_98467_);
+	//}
 
 	public boolean mouseClicked(double p_98452_, double p_98453_, int p_98454_) {
 		//System.out.println("~~~mouseclii  " + p_98452_ + "   " + p_98453_ + "    " + p_98454_);ppp
@@ -153,5 +150,14 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	public void removed() {
 		this.inventoryComponent.removed();
 		super.removed();
+	}
+
+	public int getImageWidth()
+	{
+		return this.imageWidth;
+	}
+
+	public void setLeft(int newX) {
+		this.leftPos = newX;
 	}
 }
