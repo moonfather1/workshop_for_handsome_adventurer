@@ -38,13 +38,16 @@ public class ModWorkshop
     //--rack-- --MUST--
     //...
     //--rack-- --NTH--
+    //todo: lights
     //.....
-    //todo: bib version with six slots
     //check offhand how feels -> not well
 
     //--simpletable--  --MUST--
     //todo: TC widget windows
+    //krenuo poze,, produzzi tabove na slici, slot spusti za 1
+    //now magic inventory,  figure out tab messages, issue: on re-show tab isnt lit
     //todo: return items to current chest or player
+    //todo: handle destroyed BE in initializeFirstInventoryAccess
     //--simpletable--  --NTH--
     //consider: other crafting tables accessible?
     //todo: option to replace vanilla table

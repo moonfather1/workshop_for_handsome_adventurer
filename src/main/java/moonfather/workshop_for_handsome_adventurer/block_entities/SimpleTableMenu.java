@@ -9,7 +9,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -24,19 +23,18 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
-public class SimpleTableMenu extends AbstractContainerMenu//RecipeBookMenu<CraftingContainer>
+public class SimpleTableMenu extends AbstractContainerMenu
 {
 	public static final int CUST_CONTAINER_SIZE = 4;
-	public static final int TAB_SMUGGLING_CONTAINER_SIZE = 32;
+	public static final int TAB_SMUGGLING_CONTAINER_SIZE = 32; // 16 tabs max
+	public static final int TEMP_CHEST_LIMIT = 27;//todo:rework
+	public static final int LEFT_PANEL_WIDTH = 176;
 	private static final TagKey<Item> ChestTag = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge:chests"));
 	public static final int RESULT_SLOT = 0;
 	public static final int CRAFT_SLOT_START = 1;
@@ -53,6 +51,7 @@ public class SimpleTableMenu extends AbstractContainerMenu//RecipeBookMenu<Craft
 	private final ResultContainer resultSlots = new ResultContainer();
 	private final Container customizationSlots = new SimpleContainer(CUST_CONTAINER_SIZE);
 	private final Container tabElements = new SimpleContainer(TAB_SMUGGLING_CONTAINER_SIZE); // magic to transfer to client
+	private Container chestSlots = null;//new SimpleContainer(TEMP_CHEST_LIMIT);
 	private final ContainerLevelAccess access;
 	private final Player player;
 
@@ -96,12 +95,28 @@ public class SimpleTableMenu extends AbstractContainerMenu//RecipeBookMenu<Craft
 		this.addSlot(new CustomizationSlot(this.customizationSlots, 3, 152, 17 + 3*22 + ((3 < custSlotCount) ? 0 : 9009)));
 		this.access.execute(this::loadFromWorld);
 
-		for (int i = 0; i < tabElements.getContainerSize(); i++)
+		for (int i = 0; i < this.tabElements.getContainerSize(); i++)
 		{
 			this.addSlot(new Slot(this.tabElements, i, 9009, 9009+i*30));
 		}
-		this.initialLoading = false;
 		this.storeAdjacentInventoriesInSlots();
+
+		//this.access.execute( (level, pos) -> this.inventoryAccessHelper.initializeFirstInventoryAccess(level, this.player ) );
+		if (this.inventoryAccessHelper.cont2 != null)	{
+			this.chestSlots = this.inventoryAccessHelper.cont2;
+			//this.inventoryAccessHelper.menu2.addSlotListener(new SlotListenerForAccessedChests(this));
+		} else {
+			this.chestSlots = new SimpleContainer(27);//!!
+		}
+
+		for (int ver = 0; ver < this.chestSlots.getContainerSize()/9; ++ver)
+		{
+			for (int hor = 0; hor < 9; ++hor)
+			{
+				this.addSlot(new OptionallyDrawnSlot(this.chestSlots, ver*9+hor, 5 + hor * 18 - LEFT_PANEL_WIDTH, 30 + ver * 18, () -> this.showInventoryAccess()));
+			}
+		}
+		this.initialLoading = false;
 	}
 
 
@@ -143,6 +158,15 @@ public class SimpleTableMenu extends AbstractContainerMenu//RecipeBookMenu<Craft
 		else if (isCustomizationContainer(container))
 		{
 			// changing drawer state of block in world here causes duping
+		}
+		else if (!this.initialLoading && container.getContainerSize()==TAB_SMUGGLING_CONTAINER_SIZE)
+		{
+			for (int i = 0; i < TAB_SMUGGLING_CONTAINER_SIZE; i+=2) {
+				if (container.getItem(i).getCount() > 1)
+				{
+					System.out.println("tab change to " + (i/2));        //NE RADI
+				}
+			}
 		}
 		else
 		{
@@ -382,43 +406,37 @@ public class SimpleTableMenu extends AbstractContainerMenu//RecipeBookMenu<Craft
 		return false;
 	}
 
+
 	public boolean showInventoryAccess()
 	{
+		if (this.tabElements.getItem(0).isEmpty())
+		{
+			return false; // no tabs
+		}
 		for (int i = 0; i < this.customizationSlots.getContainerSize(); i++)
 		{
 			if (this.customizationSlots.getItem(i).is(CustomizationSlot.getAccessItem()))
 			{
 				return true;
 			}
-		}
+		} // name tags?
 		return false;
 	}
 
-	private List<InventoryAccessHelper.InventoryAccessRecord> adjacentInventories = null;
+
+
 	private void storeAdjacentInventoriesInSlots()
 	{
-		if (this.adjacentInventories == null)
-		{
-			this.adjacentInventories = new ArrayList<>();
-			this.access.execute((level, pos) -> InventoryAccessHelper.getAdjacentInventories(level, pos, this.adjacentInventories));
-		}
-		int max = Math.min(this.adjacentInventories.size(), TAB_SMUGGLING_CONTAINER_SIZE/2);
-		for (int i = 0; i < max; i++)
-		{
-			InventoryAccessHelper.InventoryAccessRecord current = this.adjacentInventories.get(i);
-			ItemStack chest = current.ItemChest.copy();
-			chest.setHoverName(current.Name);
-			ItemStack suff = current.ItemFirst.copy();
-			chest.getOrCreateTag().putInt("w_index", current.Index);
-			this.tabElements.setItem(i*2, chest);
-			this.tabElements.setItem(i*2+1, suff);
-		}
+		this.access.execute((level, pos) -> this.inventoryAccessHelper.loadAdjacentInventories(level, pos));
+		this.inventoryAccessHelper.putInventoriesIntoAContainerForTransferToClient(this.tabElements, TAB_SMUGGLING_CONTAINER_SIZE/2);
 		this.tabElements.setChanged();
 	}
 
+	private InventoryAccessHelper inventoryAccessHelper = new InventoryAccessHelper();
+
 	////////////////////////////////////////////
 
-	public class CustomizationSlot extends Slot
+	private class CustomizationSlot extends Slot
 	{
 		public CustomizationSlot(Container p_39521_, int p_39522_, int p_39523_, int p_39524_) { super(p_39521_, p_39522_, p_39523_, p_39524_);	}
 
@@ -441,5 +459,40 @@ public class SimpleTableMenu extends AbstractContainerMenu//RecipeBookMenu<Craft
 			}
 			return accessItem;
 		}
+	}
+
+	//////////////////////////////////////////////////////////////
+
+	public static class OptionallyDrawnSlot extends Slot
+	{
+		private final Supplier<Boolean> condition;
+
+		public OptionallyDrawnSlot(Container p_40223_, int p_40224_, int p_40225_, int p_40226_, Supplier<Boolean> condition)
+		{
+			super(p_40223_, p_40224_, p_40225_, p_40226_);
+			this.condition = condition;
+		}
+
+		public boolean shouldRender()
+		{
+			return this.condition != null && this.condition.get();
+		}
+
+		@Override
+		public boolean isActive() {
+			return this.shouldRender();
+		}
+	}
+
+	private class SlotListenerForAccessedChests implements ContainerListener {  //todo: treba li mi?
+		public SlotListenerForAccessedChests(SimpleTableMenu parent) { }
+
+		@Override
+		public void slotChanged(AbstractContainerMenu menu, int slot, ItemStack p_39317_) {
+			System.out.println("~~!~!~ clot changed: " + slot);
+		}
+
+		@Override
+		public void dataChanged(AbstractContainerMenu menu, int p_150525_, int p_150526_) { }
 	}
 }

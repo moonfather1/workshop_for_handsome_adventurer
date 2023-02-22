@@ -61,7 +61,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 
 	public void render(PoseStack poseStack, int p_98480_, int p_98481_, float p_98482_) {
 		this.renderBackground(poseStack);
-		if (this.inventoryComponent.isVisible() && ! this.widthTooNarrow1)
+		if (this.inventoryComponent.isVisibleTotal())
 		{
 			this.inventoryComponent.render(poseStack, p_98480_, p_98481_, p_98482_);
 		}
