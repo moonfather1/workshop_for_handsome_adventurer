@@ -43,11 +43,16 @@ public class ModWorkshop
     //check offhand how feels -> not well
 
     //--simpletable--  --MUST--
+    //now: slots still show up if too narrow!!!!
     //todo: TC widget windows
-    //krenuo poze,, produzzi tabove na slici, slot spusti za 1
+    //todo: remove C from C-slots
+    //todo: ender chests
+    //todo: double chests
     //now magic inventory,  figure out tab messages, issue: on re-show tab isnt lit
     //todo: return items to current chest or player
     //todo: handle destroyed BE in initializeFirstInventoryAccess
+    //todo: test command locking, should work
+    //todo: covered shulker boxes still show in table
     //--simpletable--  --NTH--
     //consider: other crafting tables accessible?
     //todo: option to replace vanilla table
@@ -77,6 +82,7 @@ public class ModWorkshop
         FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::init);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::Initialize));
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::RegisterRenderers));
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::StitchTextures));
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
     }
 

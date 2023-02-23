@@ -20,13 +20,12 @@ import java.util.List;
 
 public class InventoryAccessHelper
 {
-    public static void getAdjacentInventories(Level level, BlockPos pos, List<InventoryAccessRecord> listToFill)
+    public static void getAdjacentInventories(Level level, BlockPos pos, List<InventoryAccessRecord> listToFill, Player player)
     {
         BlockPos.MutableBlockPos pos2 = new BlockPos.MutableBlockPos();
         for (int dy = 1; dy >= 0; dy--)
         {
-            if (pos.getY()
-                    + dy > level.getMaxBuildHeight())
+            if (pos.getY() + dy > level.getMaxBuildHeight())
             {
                 continue;
             }
@@ -39,9 +38,13 @@ public class InventoryAccessHelper
                         continue; //corners or center, range 1
                     }
                     pos2.set(pos.getX() + dx, pos.getY() + dy, pos.getZ() + dz);
-                    if (level.getBlockState(pos2).is(Tags.Blocks.CHESTS))
+                    BlockEntity be = level.getBlockEntity(pos2);
+                    if (be instanceof Container container && container.getContainerSize() == 27)
                     {
-                        BlockEntity be = level.getBlockEntity(pos2);
+                        if (be instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity bcbe && ! bcbe.canOpen(player))
+                        {
+                            continue;
+                        }
                         InventoryAccessRecord record = new InventoryAccessRecord();
                         record.ItemChest = be.getBlockState().getBlock().asItem().getDefaultInstance();
                         if (be instanceof Nameable nameable) {
@@ -50,7 +53,7 @@ public class InventoryAccessHelper
                             record.Name = record.ItemChest.getHoverName();
                         }
                         LazyOptional<IItemHandler> ih = be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
-                        ih.ifPresent(inventory -> record.ItemFirst = inventory.getStackInSlot(0)); //getSlots==27??
+                        ih.ifPresent(inventory -> record.ItemFirst = inventory.getStackInSlot(0));
                         record.x = pos2.getX(); record.y = pos2.getY(); record.z = pos2.getZ();
                         record.Index = listToFill.size();
                         listToFill.add(record);
@@ -62,29 +65,28 @@ public class InventoryAccessHelper
     }
     private List<InventoryAccessHelper.InventoryAccessRecord> adjacentInventories = null;
 
-    public void loadAdjacentInventories(Level level, BlockPos pos)
+    public void loadAdjacentInventories(Level level, BlockPos pos, Player player)
     {
         if (this.adjacentInventories == null)
         {
             this.adjacentInventories = new ArrayList<>();
         }
-        getAdjacentInventories(level, pos, this.adjacentInventories);
+        getAdjacentInventories(level, pos, this.adjacentInventories, player);
     }
     ////////////////////////////////////////////
 
-    private LazyOptional<IItemHandler> itemHandler;
     public Container cont2;
 
-    public void initializeFirstInventoryAccess(Level level, Player player)
+    public boolean tryInitializeFirstInventoryAccess(Level level, Player player)
     {
         //container.clearContent();
         if (this.adjacentInventories == null || this.adjacentInventories.size() == 0)
         {
-            return;
+            return false;
         }
         InventoryAccessHelper.InventoryAccessRecord record = this.adjacentInventories.get(0);
         BlockEntity be = level.getBlockEntity(new BlockPos(record.x, record.y, record.z));
-        if (be == null) { return; }
+        if (be == null) { return false; }
         //this.itemHandler = be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
         //this.itemHandler.ifPresent(
         //        inventory ->
@@ -94,7 +96,9 @@ public class InventoryAccessHelper
         //            }
         //        }
         //);
-        //this.cont2 = menu2.getSlot(0).container;
+        if (! (be instanceof Container c)) { return false; }
+        this.cont2 = c;
+        return true;
     }
 
     public void putInventoriesIntoAContainerForTransferToClient(Container tabElements, int max)

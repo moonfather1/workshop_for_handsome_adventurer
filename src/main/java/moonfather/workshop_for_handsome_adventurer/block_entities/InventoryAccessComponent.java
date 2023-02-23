@@ -80,7 +80,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             button.itemMain = stack;
             button.itemSub = this.parent.getMenu().slots.get(i+1).getItem();
             button.chestIndex = (i - SimpleTableMenu.TABS_SLOT_START) / 2;
-            button.parentLeft = this.xOffset;
+            button.parent = this;
             //button.setClickHandler( this::tabChanged ); //doesn't work
             this.tabButtons.add(button);
         }
@@ -281,8 +281,9 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     {
         public static final int WIDTH = 22;
         public static final int HEIGHT = 26;
+        public InventoryAccessComponent parent;
         private ItemStack itemMain = ItemStack.EMPTY, itemSub = ItemStack.EMPTY;
-        private int chestIndex, parentLeft;
+        private int chestIndex;
         public TabButton()
         {
             super(0, 0, WIDTH, HEIGHT, false);
@@ -300,7 +301,6 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             int texY = this.yTexStart;
             if (this.isStateTriggered) { texX += this.xDiffTex; }
             if (this.isHoveredOrFocused()) { texY += this.yDiffTex; } //not a thing
-            //if (this.isStateTriggered) { ySpec = -2; } // up a little
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             this.blit(poseStack, this.x, this.y, texX, texY, this.width, this.height);
             RenderSystem.enableDepthTest();
@@ -309,19 +309,16 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
 
         private void renderIcon(ItemRenderer itemRenderer)
         {
-            //int i = this.isStateTriggered ? -2 : 0;
-            itemRenderer.renderAndDecorateFakeItem(itemMain, this.x + 1, this.y + 1);
-            //itemRenderer.renderAndDecorateFakeItem(itemMain, this.x + 2, this.y + 1);  //DOBAR
+            itemRenderer.renderAndDecorateFakeItem(itemMain, this.x + 1, this.y + 2);
 
+            int x = (this.parent.parent.width - PANEL_WIDTH - this.parent.parent.getXSize()) / 2;
+            int y = (this.parent.parent.height - PANEL_HEIGHT_WITH_TABS) / 2;
             PoseStack posestack = RenderSystem.getModelViewStack();
             posestack.pushPose();
-            posestack.translate(24.0D + this.chestIndex * WIDTH, 23.0D, +100.0D);
             posestack.scale(0.667F, 0.667F, 0.667F);
+            posestack.translate(0, 0, +100.0D);
             RenderSystem.applyModelViewMatrix();
-
-            //itemRenderer.renderAndDecorateFakeItem(itemSub, this.x + 2, this.y + 1 + 16);  DOBAR
-            itemRenderer.renderAndDecorateFakeItem(itemSub, this.parentLeft, this.y);
-
+            itemRenderer.renderAndDecorateFakeItem(itemSub, (int)((x + this.chestIndex * (WIDTH-1) + 13) * 1.5d), (int)((y+12)*1.5d));
             posestack.popPose();
             RenderSystem.applyModelViewMatrix();
         }

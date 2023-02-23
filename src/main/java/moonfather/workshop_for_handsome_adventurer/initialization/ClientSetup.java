@@ -1,14 +1,19 @@
 package moonfather.workshop_for_handsome_adventurer.initialization;
 
+import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableCraftingScreen;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackTESR;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.inventory.CraftingScreen;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class ClientSetup
@@ -27,5 +32,12 @@ public class ClientSetup
 	public static void RegisterRenderers(EntityRenderersEvent.RegisterRenderers event)
 	{
 		event.registerBlockEntityRenderer(Registration.TOOL_RACK_BE.get(),	ToolRackTESR::new);
+	}
+
+	public static void StitchTextures(TextureStitchEvent.Pre event)
+	{
+		if (event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
+			event.addSprite(new ResourceLocation(Constants.MODID, "gui/c_slot"));
+		}
 	}
 }

@@ -1,8 +1,10 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
+import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.blocks.SimpleTable;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
@@ -101,7 +103,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 		this.storeAdjacentInventoriesInSlots();
 
-		//this.access.execute( (level, pos) -> this.inventoryAccessHelper.initializeFirstInventoryAccess(level, this.player ) );
+		Optional<Boolean> haveContainer = this.access.evaluate( (level, pos) -> this.inventoryAccessHelper.tryInitializeFirstInventoryAccess(level, this.player ) );
 		if (this.inventoryAccessHelper.cont2 != null)	{
 			this.chestSlots = this.inventoryAccessHelper.cont2;
 			//this.inventoryAccessHelper.menu2.addSlotListener(new SlotListenerForAccessedChests(this));
@@ -427,7 +429,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	private void storeAdjacentInventoriesInSlots()
 	{
-		this.access.execute((level, pos) -> this.inventoryAccessHelper.loadAdjacentInventories(level, pos));
+		this.access.execute((level, pos) -> this.inventoryAccessHelper.loadAdjacentInventories(level, pos, this.player));
 		this.inventoryAccessHelper.putInventoriesIntoAContainerForTransferToClient(this.tabElements, TAB_SMUGGLING_CONTAINER_SIZE/2);
 		this.tabElements.setChanged();
 	}
@@ -438,7 +440,13 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	private class CustomizationSlot extends Slot
 	{
-		public CustomizationSlot(Container p_39521_, int p_39522_, int p_39523_, int p_39524_) { super(p_39521_, p_39522_, p_39523_, p_39524_);	}
+		public static final ResourceLocation EMPTY_SLOT_BG = new ResourceLocation(Constants.MODID, "gui/c_slot");
+
+		public CustomizationSlot(Container p_39521_, int p_39522_, int p_39523_, int p_39524_)
+		{
+			super(p_39521_, p_39522_, p_39523_, p_39524_);
+			this.setBackground(InventoryMenu.BLOCK_ATLAS, EMPTY_SLOT_BG);
+		}
 
 		public boolean mayPlace(ItemStack itemStack)
 		{
