@@ -36,30 +36,27 @@ public class ModWorkshop
     //consider renaming chests at the cost of 1 XPL
 
     //--rack-- --MUST--
+    //todo: lights
     //...
     //--rack-- --NTH--
-    //todo: lights
     //.....
     //check offhand how feels -> not well
 
     //--simpletable--  --MUST--
-    //now: slots still show up if too narrow!!!!
-    //todo: TC widget windows
     //todo: shift+click in crafting table should consider access inven
-    //todo: ender chests
     //todo: double chests
-    //now magic inventory,  figure out tab messages, issue: on re-show tab isnt lit
+    //issue: on re-show tab isnt lit
     //todo: return items to current chest or player
-    //todo: handle destroyed BE in initializeFirstInventoryAccess
-    //todo: test command locking, should work
-    //todo: covered shulker boxes still show in table
     //--simpletable--  --NTH--
     //consider: other crafting tables accessible?
     //todo: option to replace vanilla table
+    //todo: covered shulker boxes still show in table
+    //--known issues
+    //jei bookmarks observe screen.left
 
     //--dualtable--  --MUST--
     //todo: option for number of slots, 0-4, def 2
-    //todo: customization slot, accepts chest/drawer / spyglass(?) / spyglass (2) / 2x lantern
+    //todo: customization slot, accepts chest/drawer / spyglass(?) / spyglass (2) / 1x lantern
     //todo: lantern gives both top blocks 10 light
     //todo: inventory item transformations
     //todo: chest mode visible
@@ -67,7 +64,6 @@ public class ModWorkshop
     //todo: TC widget windows
     //todo: JEI places items
     //--dualtable--  --NTH--
-    //consider: eg apple for more distance?, carrot for default distance?
     //consider: right click top to turn lamps off/on
     //consider: nine storage slots, other than crafting slots
 

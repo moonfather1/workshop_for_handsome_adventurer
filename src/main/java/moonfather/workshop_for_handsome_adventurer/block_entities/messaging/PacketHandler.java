@@ -13,7 +13,6 @@ public class PacketHandler
             // Work that needs to be threadsafe (most work)
             ServerPlayer player = contextSupplier.get().getSender(); // the client that sent this packet
             // do stuff
-            System.out.println("~~PACKET: " + player + ",   tab==" + msg.getTab());
             if (player.containerMenu instanceof SimpleTableMenu menu)
             {
                 menu.changeTabTo(msg.getTab());

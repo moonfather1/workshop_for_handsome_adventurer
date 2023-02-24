@@ -121,9 +121,9 @@ public class InventoryAccessHelper
         }
         InventoryAccessHelper.InventoryAccessRecord record = this.adjacentInventories.get(index);
         BlockEntity be = level.getBlockEntity(new BlockPos(record.x, record.y, record.z));
-        if (be == null) { return false; }
-        if (! (be instanceof Container c)) { return false; }
-        this.chosenContainer = c;
+        Container container = resolveContainer(be, player);
+        if (container == null) { return false; }
+        this.chosenContainer = container;
         return true;
     }
     ////////////////////////////////////////////

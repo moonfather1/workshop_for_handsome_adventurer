@@ -72,6 +72,25 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		this.renderCustomizationTooltips(poseStack, p_98480_, p_98481_);
 	}
 
+	@Override
+	public void renderSlot(PoseStack poseStack, Slot slot)
+	{
+		if (! this.inventoryComponent.isVisibleTotal() && /*slot instanceof SimpleTableMenu.OptionallyDrawnSlot2*/ slot.x < this.leftPos)
+		{
+			return;
+		}
+		super.renderSlot(poseStack, slot);
+	}
+
+	@Override
+	public boolean isHovering(Slot slot, double x, double y) {
+		if (! this.inventoryComponent.isVisibleTotal() && /*slot instanceof SimpleTableMenu.OptionallyDrawnSlot2*/ slot.x < this.leftPos)
+		{
+			return false;
+		}
+		return this.isHovering(slot.x, slot.y, 16, 16, x, y);
+	}
+
 	private void renderCustomizationTooltips(PoseStack poseStack, int mouseX, int mouseY)
 	{
 		if (this.hoveredSlot != null && this.hoveredSlot.hasItem())
