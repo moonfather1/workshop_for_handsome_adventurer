@@ -45,7 +45,7 @@ public class ModWorkshop
     //--simpletable--  --MUST--
     //now: slots still show up if too narrow!!!!
     //todo: TC widget windows
-    //todo: remove C from C-slots
+    //todo: shift+click in crafting table should consider access inven
     //todo: ender chests
     //todo: double chests
     //now magic inventory,  figure out tab messages, issue: on re-show tab isnt lit

@@ -4,7 +4,6 @@ import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.blocks.SimpleTable;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
@@ -13,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
+import net.minecraft.world.ContainerListener;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -35,6 +35,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 {
 	public static final int CUST_CONTAINER_SIZE = 4;
 	public static final int TAB_SMUGGLING_CONTAINER_SIZE = 32; // 16 tabs max
+	public static final int TAB_SMUGGLING_SOFT_LIMIT = 8; // that much fits above dialog
 	public static final int TEMP_CHEST_LIMIT = 27;//todo:rework
 	public static final int LEFT_PANEL_WIDTH = 176;
 	private static final TagKey<Item> ChestTag = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge:chests"));
@@ -49,15 +50,18 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	public static final int CUST_SLOT_END = CUST_SLOT_START + CUST_CONTAINER_SIZE - 1;//49;
 	public static final int TABS_SLOT_START = CUST_SLOT_END + 1;//50;
 	public static final int TABS_SLOT_END = TABS_SLOT_START + TAB_SMUGGLING_CONTAINER_SIZE - 1;//81;
+	public static final int ACCESS27_SLOT_START = TABS_SLOT_END + 1;//82;
+	public static final int ACCESS27_SLOT_END = ACCESS27_SLOT_START + TEMP_CHEST_LIMIT - 1;//108;
 	private final CraftingContainer craftSlots = new CraftingContainer(this, 3, 3);
 	private final ResultContainer resultSlots = new ResultContainer();
-	private final Container customizationSlots = new SimpleContainer(CUST_CONTAINER_SIZE);
+	private final SimpleContainer customizationSlots = new SimpleContainer(CUST_CONTAINER_SIZE);
 	private final Container tabElements = new SimpleContainer(TAB_SMUGGLING_CONTAINER_SIZE); // magic to transfer to client
-	private Container chestSlots = null;//new SimpleContainer(TEMP_CHEST_LIMIT);
+	private Container chestSlots = null;
 	private final ContainerLevelAccess access;
 	private final Player player;
 
 	private boolean initialLoading = true;
+	private boolean isValidAccessContainer = true;
 
 	public SimpleTableMenu(int containerId, Inventory inventory) {
 		this(containerId, inventory, ContainerLevelAccess.NULL);
@@ -67,8 +71,10 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		super(Registration.CRAFTING_SINGLE_MENU_TYPE.get(), containerId);
 		this.access = levelAccess;
 		this.player = inventory.player;
+		//---crafting result slot---
 		this.addSlot(new ResultSlot(inventory.player, this.craftSlots, this.resultSlots, 0, 124-12, 35));
 
+		//---crafting grid slots---
 		for (int ver = 0; ver < 3; ++ver)
 		{
 			for(int hor = 0; hor < 3; ++hor)
@@ -77,6 +83,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			}
 		}
 
+		//---player inventory slots---
 		for (int ver = 0; ver < 3; ++ver)
 		{
 			for(int hor = 0; hor < 9; ++hor)
@@ -85,39 +92,49 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			}
 		}
 
+		//---player hotbar slots---
 		for (int hor = 0; hor < 9; ++hor)
 		{
 			this.addSlot(new Slot(inventory, hor, 8 + hor * 18, 142));
 		}
 
+		//---customization slots (chest to store items, etc.)---
 		int custSlotCount = this.getCustomizationSlotCount();
 		this.addSlot(new CustomizationSlot(this.customizationSlots, 0, 152, 17 + 0*22 + ((0 < custSlotCount) ? 0 : 9009)));
 		this.addSlot(new CustomizationSlot(this.customizationSlots, 1, 152, 17 + 1*22 + ((1 < custSlotCount) ? 0 : 9009)));
 		this.addSlot(new CustomizationSlot(this.customizationSlots, 2, 152, 17 + 2*22 + ((2 < custSlotCount) ? 0 : 9009)));
 		this.addSlot(new CustomizationSlot(this.customizationSlots, 3, 152, 17 + 3*22 + ((3 < custSlotCount) ? 0 : 9009)));
 		this.access.execute(this::loadFromWorld);
+		this.customizationSlots.addListener(new CustomizationListener(this));
+		((SimpleContainer)this.tabElements).addListener(new CustomizationListener(this));
 
+		//---slots to sneak tab images to the client---
 		for (int i = 0; i < this.tabElements.getContainerSize(); i++)
 		{
 			this.addSlot(new Slot(this.tabElements, i, 9009, 9009+i*30));
 		}
 		this.storeAdjacentInventoriesInSlots();
 
-		Optional<Boolean> haveContainer = this.access.evaluate( (level, pos) -> this.inventoryAccessHelper.tryInitializeFirstInventoryAccess(level, this.player ) );
-		if (this.inventoryAccessHelper.cont2 != null)	{
-			this.chestSlots = this.inventoryAccessHelper.cont2;
-			//this.inventoryAccessHelper.menu2.addSlotListener(new SlotListenerForAccessedChests(this));
-		} else {
-			this.chestSlots = new SimpleContainer(27);//!!
+		//---slots for adjacent inventories---
+		Optional<Boolean> haveContainer = Optional.of(false);
+		if (this.showInventoryAccess())
+		{
+			haveContainer = this.access.evaluate((level, pos) -> this.inventoryAccessHelper.tryInitializeFirstInventoryAccess(level, this.player));
 		}
-
+		if (this.inventoryAccessHelper.chosenContainer != null)	{
+			this.chestSlots = this.inventoryAccessHelper.chosenContainer;
+		} else {
+			this.chestSlots = new DisabledContainer(27);
+		}
+		this.isValidAccessContainer = haveContainer.isPresent() && haveContainer.get();
 		for (int ver = 0; ver < this.chestSlots.getContainerSize()/9; ++ver)
 		{
 			for (int hor = 0; hor < 9; ++hor)
 			{
-				this.addSlot(new OptionallyDrawnSlot(this.chestSlots, ver*9+hor, 5 + hor * 18 - LEFT_PANEL_WIDTH, 30 + ver * 18, () -> this.showInventoryAccess()));
+				this.addSlot(new OptionallyDrawnSlot2(this.chestSlots, ver*9+hor, 5 + hor * 18 - LEFT_PANEL_WIDTH, 30 + ver * 18));
 			}
 		}
+		this.customizationSlots.setChanged();
 		this.initialLoading = false;
 	}
 
@@ -157,22 +174,10 @@ public class SimpleTableMenu extends AbstractContainerMenu
 				slotChangedCraftingGrid(this, p_39386_, this.player, this.craftSlots, this.resultSlots);
 			});
 		}
-		else if (isCustomizationContainer(container))
-		{
-			// changing drawer state of block in world here causes duping
-		}
-		else if (!this.initialLoading && container.getContainerSize()==TAB_SMUGGLING_CONTAINER_SIZE)
-		{
-			for (int i = 0; i < TAB_SMUGGLING_CONTAINER_SIZE; i+=2) {
-				if (container.getItem(i).getCount() > 1)
-				{
-					System.out.println("tab change to " + (i/2));        //NE RADI
-				}
-			}
-		}
 		else
 		{
 			// what container now?
+			// this doesn't trigger for SimpleContainer
 		}
 	}
 
@@ -425,8 +430,6 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		return false;
 	}
 
-
-
 	private void storeAdjacentInventoriesInSlots()
 	{
 		this.access.execute((level, pos) -> this.inventoryAccessHelper.loadAdjacentInventories(level, pos, this.player));
@@ -434,8 +437,26 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		this.tabElements.setChanged();
 	}
 
-	private InventoryAccessHelper inventoryAccessHelper = new InventoryAccessHelper();
+	private final InventoryAccessHelper inventoryAccessHelper = new InventoryAccessHelper();
 
+	public void changeTabTo(int index)
+	{
+		Optional<Boolean> haveContainer = this.access.evaluate( (level, pos) -> this.inventoryAccessHelper.tryInitializeAnotherInventoryAccess(level, this.player, index) );
+		this.isValidAccessContainer = haveContainer.isPresent() && haveContainer.get();
+		if (this.isValidAccessContainer)
+		{
+			this.chestSlots = this.inventoryAccessHelper.chosenContainer;
+		}
+		else
+		{
+			if (this.chestSlots instanceof DisabledContainer) { return; }
+			this.chestSlots = new DisabledContainer(27);
+		}
+		for (int i = ACCESS27_SLOT_START; i <= ACCESS27_SLOT_END; i++) {
+			this.getSlot(i).container = this.chestSlots;
+		}
+		this.sendAllDataToRemote();
+	}
 	////////////////////////////////////////////
 
 	private class CustomizationSlot extends Slot
@@ -492,15 +513,73 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 	}
 
-	private class SlotListenerForAccessedChests implements ContainerListener {  //todo: treba li mi?
-		public SlotListenerForAccessedChests(SimpleTableMenu parent) { }
+	//////////////////////////////////////////////////////////////
 
-		@Override
-		public void slotChanged(AbstractContainerMenu menu, int slot, ItemStack p_39317_) {
-			System.out.println("~~!~!~ clot changed: " + slot);
+	public static class OptionallyDrawnSlot2 extends Slot
+	{
+		public OptionallyDrawnSlot2(Container p_40223_, int p_40224_, int p_40225_, int p_40226_)
+		{
+			super(p_40223_, p_40224_, p_40225_, p_40226_);
 		}
 
 		@Override
-		public void dataChanged(AbstractContainerMenu menu, int p_150525_, int p_150526_) { }
+		public boolean isActive() {
+			return this.container.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED;
+		}
+	}
+
+	////////////////////////////////////////////////////////////////
+
+	private static class DisabledContainer extends SimpleContainer
+	{
+		private final static int MARKER_FOR_DISABLED = 707;
+		private boolean disabled = true;
+		@Override
+		public int getMaxStackSize() {
+			return this.disabled ? MARKER_FOR_DISABLED : super.getMaxStackSize();
+		}
+
+		@Override
+		public boolean canPlaceItem(int p_18952_, ItemStack p_18953_) {
+			return !this.disabled && super.canPlaceItem(p_18952_, p_18953_);
+		}
+
+		public DisabledContainer(int size) {
+			super(size);
+		}
+	}
+
+	/////////////////////////////////////////////////////////////////////////
+
+	private class CustomizationListener implements ContainerListener {
+		private final SimpleTableMenu parent;
+		public CustomizationListener(SimpleTableMenu simpleTableMenu) {
+			this.parent = simpleTableMenu;
+		}
+
+		@Override
+		public void containerChanged(Container container) {
+			// changing drawer state of block in world here causes duping (fixed onRemove, might work now)
+			// anyway we need to hide/show access slots here
+			if (this.parent.initialLoading == false && this.parent.showInventoryAccess() && this.parent.chestSlots.getMaxStackSize() == DisabledContainer.MARKER_FOR_DISABLED) {
+				this.parent.changeTabTo(0);
+				if (this.parent.chestSlots.getMaxStackSize() == DisabledContainer.MARKER_FOR_DISABLED)
+				{
+					//happens on client
+					((DisabledContainer)this.parent.chestSlots).disabled = false;
+				}
+				this.parent.sendAllDataToRemote();
+			}
+			// and again
+			if (this.parent.initialLoading == false && ! this.parent.showInventoryAccess() && this.parent.chestSlots.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED) {
+				this.parent.changeTabTo(0);
+				if (this.parent.chestSlots instanceof DisabledContainer && this.parent.chestSlots.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED)
+				{
+					//happens on client
+					((DisabledContainer)this.parent.chestSlots).disabled = true;
+				}
+				this.parent.sendAllDataToRemote();
+			}
+		}
 	}
 }

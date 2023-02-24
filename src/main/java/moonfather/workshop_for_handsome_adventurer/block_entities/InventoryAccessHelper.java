@@ -2,15 +2,13 @@ package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.Nameable;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.Tags;
+import net.minecraft.world.level.block.entity.EnderChestBlockEntity;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -39,7 +37,8 @@ public class InventoryAccessHelper
                     }
                     pos2.set(pos.getX() + dx, pos.getY() + dy, pos.getZ() + dz);
                     BlockEntity be = level.getBlockEntity(pos2);
-                    if (be instanceof Container container && container.getContainerSize() == 27)
+                    Container container = resolveContainer(be, player);
+                    if (container != null)
                     {
                         if (be instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity bcbe && ! bcbe.canOpen(player))
                         {
@@ -52,17 +51,32 @@ public class InventoryAccessHelper
                         }else{
                             record.Name = record.ItemChest.getHoverName();
                         }
-                        LazyOptional<IItemHandler> ih = be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
-                        ih.ifPresent(inventory -> record.ItemFirst = inventory.getStackInSlot(0));
+                        //ih.ifPresent(inventory -> record.ItemFirst = inventory.getStackInSlot(0) );
+                        record.ItemFirst = container.getItem(0);
                         record.x = pos2.getX(); record.y = pos2.getY(); record.z = pos2.getZ();
                         record.Index = listToFill.size();
                         listToFill.add(record);
+                        if (listToFill.size() == SimpleTableMenu.TAB_SMUGGLING_SOFT_LIMIT) { return; }
                     }
                 }
             }
         }
-
     }
+
+    private static Container resolveContainer(BlockEntity be, Player player)
+    {
+        if (be == null) {
+            return null;
+        }
+        if (be instanceof Container container && container.getContainerSize() == 27) {
+            return container;
+        }
+        if (be instanceof EnderChestBlockEntity) {
+            return player.getEnderChestInventory();
+        }
+        return null;
+    }
+
     private List<InventoryAccessHelper.InventoryAccessRecord> adjacentInventories = null;
 
     public void loadAdjacentInventories(Level level, BlockPos pos, Player player)
@@ -75,30 +89,11 @@ public class InventoryAccessHelper
     }
     ////////////////////////////////////////////
 
-    public Container cont2;
+    public Container chosenContainer;
 
     public boolean tryInitializeFirstInventoryAccess(Level level, Player player)
     {
-        //container.clearContent();
-        if (this.adjacentInventories == null || this.adjacentInventories.size() == 0)
-        {
-            return false;
-        }
-        InventoryAccessHelper.InventoryAccessRecord record = this.adjacentInventories.get(0);
-        BlockEntity be = level.getBlockEntity(new BlockPos(record.x, record.y, record.z));
-        if (be == null) { return false; }
-        //this.itemHandler = be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
-        //this.itemHandler.ifPresent(
-        //        inventory ->
-        //        {
-        //            for (int i = 0; i < inventory.getSlots(); i++) {
-        //                container.setItem(i, inventory.getStackInSlot(i));
-        //            }
-        //        }
-        //);
-        if (! (be instanceof Container c)) { return false; }
-        this.cont2 = c;
-        return true;
+        return this.tryInitializeAnotherInventoryAccess(level, player, 0);
     }
 
     public void putInventoriesIntoAContainerForTransferToClient(Container tabElements, int max)
@@ -114,10 +109,22 @@ public class InventoryAccessHelper
             ItemStack chest = current.ItemChest.copy();
             chest.setHoverName(current.Name);
             ItemStack suff = current.ItemFirst.copy();
-            //chest.getOrCreateTag().putInt("w_index", current.Index);
             tabElements.setItem(i*2, chest);
             tabElements.setItem(i*2+1, suff);
         }
+    }
+
+    public boolean tryInitializeAnotherInventoryAccess(Level level, Player player, int index) {
+        if (this.adjacentInventories == null || this.adjacentInventories.size() <= index)
+        {
+            return false;
+        }
+        InventoryAccessHelper.InventoryAccessRecord record = this.adjacentInventories.get(index);
+        BlockEntity be = level.getBlockEntity(new BlockPos(record.x, record.y, record.z));
+        if (be == null) { return false; }
+        if (! (be instanceof Container c)) { return false; }
+        this.chosenContainer = c;
+        return true;
     }
     ////////////////////////////////////////////
 

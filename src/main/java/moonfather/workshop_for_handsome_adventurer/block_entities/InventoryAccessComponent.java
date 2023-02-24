@@ -3,6 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.block_entities;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.EditBox;
@@ -93,21 +94,15 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
 
     private Boolean tabChanged(TabButton button)
     {
-        if (this.selectedTab != null && this.selectedTab != button)
-        {
-            this.selectedTab.setStateTriggered(false);
-            //int slot = this.selectedTab.chestIndex * 2 + SimpleTableMenu.TABS_SLOT_START;
-            //ItemStack chest = this.parent.getMenu().slots.get(slot).getItem();
-            //chest.setCount(1);
-            //this.parent.getMenu().slots.get(slot).set(chest);         DOBRA IDEJA ALI NE RADI U OVOM SMERU
+        if (! button.equals(this.selectedTab)) {
+            if (this.selectedTab != null) {
+                this.selectedTab.setStateTriggered(false);
+            }
+            button.setStateTriggered(true);
+            this.selectedTab = button;
+            PacketSender.sendToServer(this.parent.getMinecraft().player, button.chestIndex);
+            return true;
         }
-        button.setStateTriggered(true);
-        this.selectedTab = button;
-        System.out.println("~~tabchanged to " + button.chestIndex);
-        //int slot = button.chestIndex * 2 + SimpleTableMenu.TABS_SLOT_START;
-        //ItemStack chest = this.parent.getMenu().slots.get(slot).getItem();
-        //chest.setCount(2);
-        //this.parent.getMenu().slots.get(slot).set(chest);     DOBRA IDEJA ALI NE RADI U OVOM SMERU
         return false;
     }
 
@@ -252,14 +247,15 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         System.out.println("~~~ slot clicked~ " + (slot == null ? "NULL" : (slot.index)));
     }
 
-    public boolean hasClickedOutside(double mouseX, double mouseY, int leftPos, int topPos, int dialogWidth, int dialogHeight, int whoKnows)
+    public boolean hasClickedOutside(double mouseX, double mouseY, int rightPartLeftPos, int rightPartTopPos, int rightPartWidth, int rightPartHeight, int mouseButton)
     {
-        if (!this.isVisible()) {
+        if (! this.isVisibleTotal()) {
             return true;
         } else {
-            boolean flag = mouseX < (double)leftPos || mouseY < (double)topPos || mouseX >= (double)(leftPos + dialogWidth) || mouseY >= (double)(topPos + dialogHeight);
-            boolean flag1 = (double)(leftPos - PANEL_WIDTH) < mouseX && mouseX < (double)leftPos && (double)topPos < mouseY && mouseY < (double)(topPos + dialogHeight);
-            return flag && !flag1 && !this.selectedTab.isHoveredOrFocused();
+            return mouseX < rightPartLeftPos - PANEL_WIDTH
+                || mouseX > rightPartLeftPos + rightPartWidth
+                || mouseY < rightPartTopPos
+                || mouseY > rightPartTopPos + rightPartHeight;
         }
     }
 
