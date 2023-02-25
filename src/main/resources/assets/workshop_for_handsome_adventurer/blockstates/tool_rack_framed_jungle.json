@@ -1,13 +1,13 @@
 {
     "variants":
     {
-        "facing=north,half=upper": { "model": "workshop_for_handsome_adventurer:block/framed_rack_full_jungle" },
-        "facing=east,half=upper": { "model": "workshop_for_handsome_adventurer:block/framed_rack_full_jungle", "y": 90 },
-        "facing=south,half=upper": { "model": "workshop_for_handsome_adventurer:block/framed_rack_full_jungle", "y": 180 },
-        "facing=west,half=upper": { "model": "workshop_for_handsome_adventurer:block/framed_rack_full_jungle", "y": 270 },
-        "facing=north,half=lower": { "model": "workshop_for_handsome_adventurer:block/empty" },
-        "facing=east,half=lower": { "model": "workshop_for_handsome_adventurer:block/empty", "y": 90 },
-        "facing=south,half=lower": { "model": "workshop_for_handsome_adventurer:block/empty", "y": 180 },
-        "facing=west,half=lower": { "model": "workshop_for_handsome_adventurer:block/empty", "y": 270 }
+        "facing=north,half=upper": { "model": "workshop_for_handsome_adventurer:block/framed_rack_full_top_jungle" },
+        "facing=east,half=upper": { "model": "workshop_for_handsome_adventurer:block/framed_rack_full_top_jungle", "y": 90 },
+        "facing=south,half=upper": { "model": "workshop_for_handsome_adventurer:block/framed_rack_full_top_jungle", "y": 180 },
+        "facing=west,half=upper": { "model": "workshop_for_handsome_adventurer:block/framed_rack_full_top_jungle", "y": 270 },
+        "facing=north,half=lower": { "model": "workshop_for_handsome_adventurer:block/framed_rack_full_bottom_jungle" },
+        "facing=east,half=lower": { "model": "workshop_for_handsome_adventurer:block/framed_rack_full_bottom_jungle", "y": 90 },
+        "facing=south,half=lower": { "model": "workshop_for_handsome_adventurer:block/framed_rack_full_bottom_jungle", "y": 180 },
+        "facing=west,half=lower": { "model": "workshop_for_handsome_adventurer:block/framed_rack_full_bottom_jungle", "y": 270 }
     }
 }

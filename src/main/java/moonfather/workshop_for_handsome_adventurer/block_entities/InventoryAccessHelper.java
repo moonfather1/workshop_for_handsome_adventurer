@@ -4,11 +4,20 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.Nameable;
+import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.DirectionalBlock;
+import net.minecraft.world.level.block.DoubleBlockCombiner;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.entity.EnderChestBlockEntity;
+import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -18,8 +27,84 @@ import java.util.List;
 
 public class InventoryAccessHelper
 {
-    public static void getAdjacentInventories(Level level, BlockPos pos, List<InventoryAccessRecord> listToFill, Player player)
+    private void resolveContainer(BlockEntity be, Player player, BlockPos pos, Level level)
     {
+        this.chosenContainer = null;   this.addonContainer = null;
+        if (be == null) {
+            return;
+        }
+        if (be instanceof ChestBlockEntity) {
+            if (ChestBlock.isChestBlockedAt(level, pos)) {
+                return;
+            }
+            //this is how chest combines inv:   Container container = new CompoundContainer(p_51604_, p_51605_);
+            DoubleBlockCombiner.BlockType type = ChestBlock.getBlockType(be.getBlockState());
+            if (type == DoubleBlockCombiner.BlockType.SINGLE) {
+                this.chosenContainer = (Container)be;
+            }
+            if (type == DoubleBlockCombiner.BlockType.FIRST) {
+                BlockPos pos2 = pos.relative(ChestBlock.getConnectedDirection(be.getBlockState()));
+                BlockEntity be2 = level.getBlockEntity(pos2);
+                if (be2 instanceof ChestBlockEntity && be2.getBlockState().getValue(ChestBlock.TYPE) != be.getBlockState().getValue(ChestBlock.TYPE))
+                {
+                    if (ChestBlock.isChestBlockedAt(level, pos2)) {
+                        return;
+                    }
+                    this.chosenContainer = (Container)be;
+                    this.addonContainer = (Container)be2;
+                } else {
+                    System.out.println("~~~WTF2");
+                    return;
+                }
+            }
+            if (type == DoubleBlockCombiner.BlockType.SECOND) {
+                BlockPos pos2 = pos.relative(ChestBlock.getConnectedDirection(be.getBlockState()));
+                BlockEntity be2 = level.getBlockEntity(pos2);
+                if (be2 instanceof ChestBlockEntity && be2.getBlockState().getValue(ChestBlock.TYPE) != be.getBlockState().getValue(ChestBlock.TYPE))
+                {
+                    if (ChestBlock.isChestBlockedAt(level, pos2)) {
+                        return;
+                    }
+                    this.addonContainer = (Container)be;
+                    this.chosenContainer = (Container)be2;
+                } else {
+                    System.out.println("~~~WTF");
+                    return;
+                }
+            }
+            return;
+        }
+        if (be instanceof Container container && container.getContainerSize() == 27) {
+            if (be instanceof ShulkerBoxBlockEntity && ! canOpenShulkerBox(level, be.getBlockState(), pos)) {
+                return;
+            }
+            this.chosenContainer = container;
+            return;
+        }
+        if (be instanceof EnderChestBlockEntity) {
+            if (ChestBlock.isChestBlockedAt(level, pos)) {
+                return;
+            }
+            this.chosenContainer =  player.getEnderChestInventory();
+            return;
+        }
+    }
+
+    private static boolean canOpenShulkerBox(Level level, BlockState blockState, BlockPos pos) {
+        AABB aabb = Shulker.getProgressDeltaAabb(blockState.getValue(DirectionalBlock.FACING), 0.0F, 0.5F).move(pos).deflate(1.0E-6D);
+        return level.noCollision(aabb);
+    }
+
+
+
+    private List<InventoryAccessHelper.InventoryAccessRecord> adjacentInventories = null;
+
+    public void loadAdjacentInventories(Level level, BlockPos pos, Player player)
+    {
+        if (this.adjacentInventories == null)
+        {
+            this.adjacentInventories = new ArrayList<>();
+        }
         BlockPos.MutableBlockPos pos2 = new BlockPos.MutableBlockPos();
         for (int dy = 1; dy >= 0; dy--)
         {
@@ -37,12 +122,12 @@ public class InventoryAccessHelper
                     }
                     pos2.set(pos.getX() + dx, pos.getY() + dy, pos.getZ() + dz);
                     BlockEntity be = level.getBlockEntity(pos2);
-                    Container container = resolveContainer(be, player);
-                    if (container != null)
+                    this.resolveContainer(be, player, pos2, level);
+                    if (this.chosenContainer != null)
                     {
                         if (be instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity bcbe && ! bcbe.canOpen(player))
                         {
-                            continue;
+                            continue; //locked
                         }
                         InventoryAccessRecord record = new InventoryAccessRecord();
                         record.ItemChest = be.getBlockState().getBlock().asItem().getDefaultInstance();
@@ -52,49 +137,26 @@ public class InventoryAccessHelper
                             record.Name = record.ItemChest.getHoverName();
                         }
                         //ih.ifPresent(inventory -> record.ItemFirst = inventory.getStackInSlot(0) );
-                        record.ItemFirst = container.getItem(0);
+                        record.ItemFirst = this.chosenContainer.getItem(0);
                         record.x = pos2.getX(); record.y = pos2.getY(); record.z = pos2.getZ();
-                        record.Index = listToFill.size();
-                        listToFill.add(record);
-                        if (listToFill.size() == SimpleTableMenu.TAB_SMUGGLING_SOFT_LIMIT) { return; }
+                        record.Index = this.adjacentInventories.size();
+                        this.adjacentInventories.add(record);
+                        if (this.adjacentInventories.size() == SimpleTableMenu.TAB_SMUGGLING_SOFT_LIMIT) { return; }
                     }
                 }
             }
         }
     }
 
-    private static Container resolveContainer(BlockEntity be, Player player)
-    {
-        if (be == null) {
-            return null;
-        }
-        if (be instanceof Container container && container.getContainerSize() == 27) {
-            return container;
-        }
-        if (be instanceof EnderChestBlockEntity) {
-            return player.getEnderChestInventory();
-        }
-        return null;
-    }
-
-    private List<InventoryAccessHelper.InventoryAccessRecord> adjacentInventories = null;
-
-    public void loadAdjacentInventories(Level level, BlockPos pos, Player player)
-    {
-        if (this.adjacentInventories == null)
-        {
-            this.adjacentInventories = new ArrayList<>();
-        }
-        getAdjacentInventories(level, pos, this.adjacentInventories, player);
-    }
     ////////////////////////////////////////////
 
-    public Container chosenContainer;
+    public Container chosenContainer, addonContainer;
 
     public boolean tryInitializeFirstInventoryAccess(Level level, Player player)
     {
         return this.tryInitializeAnotherInventoryAccess(level, player, 0);
     }
+
 
     public void putInventoriesIntoAContainerForTransferToClient(Container tabElements, int max)
     {
@@ -114,17 +176,17 @@ public class InventoryAccessHelper
         }
     }
 
+
     public boolean tryInitializeAnotherInventoryAccess(Level level, Player player, int index) {
         if (this.adjacentInventories == null || this.adjacentInventories.size() <= index)
         {
             return false;
         }
         InventoryAccessHelper.InventoryAccessRecord record = this.adjacentInventories.get(index);
-        BlockEntity be = level.getBlockEntity(new BlockPos(record.x, record.y, record.z));
-        Container container = resolveContainer(be, player);
-        if (container == null) { return false; }
-        this.chosenContainer = container;
-        return true;
+        BlockPos pos = new BlockPos(record.x, record.y, record.z);
+        BlockEntity be = level.getBlockEntity(pos);
+        resolveContainer(be, player, pos, level);
+        return this.chosenContainer != null;
     }
     ////////////////////////////////////////////
 

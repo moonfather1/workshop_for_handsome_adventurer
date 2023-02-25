@@ -34,6 +34,7 @@ public class ModWorkshop
     //todo: sword rack?
     //todo: other wood types
     //consider renaming chests at the cost of 1 XPL
+    //potion shelf 2x2 in one block, takes up to 4 (conf)
 
     //--rack-- --MUST--
     //todo: lights
@@ -55,7 +56,6 @@ public class ModWorkshop
     //jei bookmarks observe screen.left
 
     //--dualtable--  --MUST--
-    //todo: option for number of slots, 0-4, def 2
     //todo: customization slot, accepts chest/drawer / spyglass(?) / spyglass (2) / 1x lantern
     //todo: lantern gives both top blocks 10 light
     //todo: inventory item transformations
@@ -84,8 +84,16 @@ public class ModWorkshop
 
     private void enqueueIMC(final InterModEnqueueEvent event)
     {
-        InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID+":dual_table_primary");
-        InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID+":dual_table_secondary");
-        InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID+":dual_table_top");
+        InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":dual_table_primary");
+        InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":dual_table_secondary");
+        InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":dual_table_top");
+        String[] woodTypes = {"oak", "spruce", "jungle", "birch", "dark_oak"};
+        for (String woodType: woodTypes)
+        {
+            InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":tool_rack_double_" + woodType);
+            InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":tool_rack_framed_" + woodType);
+            InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":tool_rack_pframed_" + woodType);
+            InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":dual_table_primary_" + woodType);
+        }
     } 
 }

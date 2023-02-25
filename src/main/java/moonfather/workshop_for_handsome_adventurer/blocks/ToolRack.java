@@ -286,7 +286,7 @@ public class ToolRack extends HorizontalDirectionalBlock implements EntityBlock
 		{
 			return true;
 		}
-		if (mainHandItem.getMaxStackSize() > 1 && !mainHandItem.getItem().equals(Items.LEAD))
+		if (mainHandItem.getMaxStackSize() > 1 && ! mainHandItem.getItem().equals(Items.LEAD))
 		{
 			return false;
 		}
@@ -297,6 +297,10 @@ public class ToolRack extends HorizontalDirectionalBlock implements EntityBlock
 		if (mainHandItem.getItem().getFoodProperties() != null || mainHandItem.getItem() instanceof BucketItem || mainHandItem.getItem() instanceof MinecartItem || mainHandItem.getItem() instanceof BoatItem)
 		{
 			return false;
+		}
+		if (mainHandItem.getTag() != null && mainHandItem.getTag().contains("Potion"))
+		{
+			return false;  //will have potion shelf
 		}
 		return true;
 	}

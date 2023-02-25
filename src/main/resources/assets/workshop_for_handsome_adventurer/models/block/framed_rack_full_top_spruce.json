@@ -1,5 +1,5 @@
 {
-    "parent": "workshop_for_handsome_adventurer:block/framed_rack_full",
+    "parent": "workshop_for_handsome_adventurer:block/framed_rack_full_top",
     "textures": {
         "particle": "minecraft:block/spruce_planks",
         "plank": "minecraft:block/spruce_planks",

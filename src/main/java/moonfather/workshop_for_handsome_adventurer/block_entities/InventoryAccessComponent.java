@@ -100,7 +100,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             }
             button.setStateTriggered(true);
             this.selectedTab = button;
-            PacketSender.sendToServer(this.parent.getMinecraft().player, button.chestIndex);
+            PacketSender.sendToServer(button.chestIndex);
             return true;
         }
         return false;

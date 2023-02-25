@@ -75,18 +75,18 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	@Override
 	public void renderSlot(PoseStack poseStack, Slot slot)
 	{
-		if (! this.inventoryComponent.isVisibleTotal() && /*slot instanceof SimpleTableMenu.OptionallyDrawnSlot2*/ slot.x < this.leftPos)
+		if (! this.inventoryComponent.isVisibleTotal() && /*slot instanceof SimpleTableMenu.OptionallyDrawnSlot2*/ slot.x < 0)
 		{
-			return;
+			return;  //todo: if we ever change the meaning of leftpos to fix the JEI bookmarks issue, fix this
 		}
 		super.renderSlot(poseStack, slot);
 	}
 
 	@Override
 	public boolean isHovering(Slot slot, double x, double y) {
-		if (! this.inventoryComponent.isVisibleTotal() && /*slot instanceof SimpleTableMenu.OptionallyDrawnSlot2*/ slot.x < this.leftPos)
+		if (! this.inventoryComponent.isVisibleTotal() && /*slot instanceof SimpleTableMenu.OptionallyDrawnSlot2*/ slot.x < 0)
 		{
-			return false;
+			return false; //todo: if we ever change the meaning of leftpos to fix the JEI bookmarks issue, fix this
 		}
 		return this.isHovering(slot.x, slot.y, 16, 16, x, y);
 	}

@@ -10,13 +10,15 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolActions;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -78,17 +80,17 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			matrixStack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
 			matrixStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
 
-			if (/*itemStack.getItem() instanceof ModularShieldItem*/false)
+			if (itemStack.getItem().canPerformAction(itemStack, ToolActions.SHIELD_BLOCK))
 			{
 				matrixStack.translate(-0.25, 0, 0.16);
 				matrixStack.scale(2, 2, 2);
 			}
-			else if (/*itemStack.getItem() instanceof ModularBladedItem ||*/ itemStack.getItem() instanceof SwordItem)   //todo:tetra
+			else if (itemStack.getItem().canPerformAction(itemStack, ToolActions.SWORD_SWEEP) || itemStack.getItem() instanceof SwordItem) //ModularBladedItem
 			{
 				matrixStack.translate(0, -0.2, 0);
 				matrixStack.mulPose(Vector3f.ZP.rotationDegrees(135.0F));
 			}
-			else if (/*itemStack.getItem() instanceof ModularCrossbowItem ||*/ itemStack.getItem() instanceof CrossbowItem)
+			else if (itemStack.getItem().getClass().getSimpleName().contains("rossbow") || itemStack.getItem() instanceof CrossbowItem)  //ModularCrossbowItem
 			{
 				matrixStack.translate(0, -0.2, 0);
 				matrixStack.mulPose(Vector3f.ZP.rotationDegrees(225.0F));
@@ -115,11 +117,15 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 		{
 			return result;
 		}
-		if (!result.getTag().contains("Enchantments"))
+		if (result.getTag().contains("Enchantments"))
 		{
-			return result;
+			result.getTag().remove("Enchantments");
 		}
-		result.getTag().remove("Enchantments");
+		if (result.getTag().contains("Potion"))
+		{
+			result.getTag().putInt("CustomPotionColor", PotionUtils.getColor(PotionUtils.getPotion(result.getTag())));
+			result.getTag().remove("Potion");
+		}
 		return result;
 	}
 }

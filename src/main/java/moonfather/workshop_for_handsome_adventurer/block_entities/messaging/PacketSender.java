@@ -2,7 +2,6 @@ package moonfather.workshop_for_handsome_adventurer.block_entities.messaging;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -19,9 +18,9 @@ public class PacketSender
             PROTOCOL_VERSION::equals
     );
 
-    public static void sendToServer(Player player, int newTab)
+    public static void sendToServer(int newTab)
     {
-        TabChangeMessage message = new TabChangeMessage(newTab, player.getUUID());
+        TabChangeMessage message = new TabChangeMessage(newTab);
         CHANNEL_INSTANCE.sendToServer(message);
     }
 
