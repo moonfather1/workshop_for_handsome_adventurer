@@ -1,0 +1,9 @@
+{
+    "variants":
+    {
+        "facing=north": { "model": "workshop_for_handsome_adventurer:block/potion_shelf_birch" },
+        "facing=east": { "model": "workshop_for_handsome_adventurer:block/potion_shelf_birch", "y": 90 },
+        "facing=south": { "model": "workshop_for_handsome_adventurer:block/potion_shelf_birch", "y": 180 },
+        "facing=west": { "model": "workshop_for_handsome_adventurer:block/potion_shelf_birch", "y": 270 }
+    }
+}

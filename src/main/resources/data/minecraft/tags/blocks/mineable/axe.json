@@ -7,7 +7,11 @@
 		"workshop_for_handsome_adventurer:simple_table_birch",
 		"workshop_for_handsome_adventurer:simple_table_dark_oak",
 		
-		"workshop_for_handsome_adventurer:dual_table_primary",
+		"workshop_for_handsome_adventurer:dual_table_primary_oak",
+		"workshop_for_handsome_adventurer:dual_table_primary_birch",
+		"workshop_for_handsome_adventurer:dual_table_primary_spruce",
+		"workshop_for_handsome_adventurer:dual_table_primary_jungle",
+		"workshop_for_handsome_adventurer:dual_table_primary_dark_oak",
 		"workshop_for_handsome_adventurer:dual_table_secondary",
 		"workshop_for_handsome_adventurer:dual_table_top",
 		
@@ -33,6 +37,12 @@
 		"workshop_for_handsome_adventurer:tool_rack_framed_birch",
 		"workshop_for_handsome_adventurer:tool_rack_framed_spruce",
 		"workshop_for_handsome_adventurer:tool_rack_framed_jungle",
-		"workshop_for_handsome_adventurer:tool_rack_framed_dark_oak"
+		"workshop_for_handsome_adventurer:tool_rack_framed_dark_oak",
+
+		"workshop_for_handsome_adventurer:potion_shelf_oak",
+		"workshop_for_handsome_adventurer:potion_shelf_birch",
+		"workshop_for_handsome_adventurer:potion_shelf_spruce",
+		"workshop_for_handsome_adventurer:potion_shelf_jungle",
+		"workshop_for_handsome_adventurer:potion_shelf_dark_oak"
 	]
 }

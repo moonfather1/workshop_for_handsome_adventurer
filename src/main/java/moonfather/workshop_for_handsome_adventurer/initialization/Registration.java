@@ -1,6 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.initialization;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
+import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
@@ -96,6 +97,17 @@ public class Registration
 	public static final RegistryObject<Block> DUAL_TOOL_RACK_DARK_OAK = BLOCKS.register("tool_rack_double_dark_oak", () -> new DualToolRack(6, "double"));
 	public static final RegistryObject<Item> DUAL_TOOL_RACK_ITEM_DARK_OAK = FromBlock(DUAL_TOOL_RACK_DARK_OAK);
 
+	public static final RegistryObject<Block> POTION_SHELF_OAK = BLOCKS.register("potion_shelf_oak", () -> new PotionShelf(4));
+	public static final RegistryObject<Item> POTION_SHELF_ITEM_OAK = FromBlock(POTION_SHELF_OAK);
+	public static final RegistryObject<Block> POTION_SHELF_SPRUCE = BLOCKS.register("potion_shelf_spruce", () -> new PotionShelf(4));
+	public static final RegistryObject<Item> POTION_SHELF_ITEM_SPRUCE = FromBlock(POTION_SHELF_SPRUCE);
+	public static final RegistryObject<Block> POTION_SHELF_BIRCH = BLOCKS.register("potion_shelf_birch", () -> new PotionShelf(4));
+	public static final RegistryObject<Item> POTION_SHELF_ITEM_BIRCH = FromBlock(POTION_SHELF_BIRCH);
+	public static final RegistryObject<Block> POTION_SHELF_JUNGLE = BLOCKS.register("potion_shelf_jungle", () -> new PotionShelf(4));
+	public static final RegistryObject<Item> POTION_SHELF_ITEM_JUNGLE = FromBlock(POTION_SHELF_JUNGLE);
+	public static final RegistryObject<Block> POTION_SHELF_DARK_OAK = BLOCKS.register("potion_shelf_dark_oak", () -> new PotionShelf(4));
+	public static final RegistryObject<Item> POTION_SHELF_ITEM_DARK_OAK = FromBlock(POTION_SHELF_DARK_OAK);
+
 	private static RegistryObject<Item> FromBlock(RegistryObject<Block> block)
 	{
 		Item.Properties properties = new Item.Properties().tab(CreativeTab.TAB_WORKSHOP);
@@ -112,6 +124,8 @@ public class Registration
 			).build(null));
 	public static final RegistryObject<BlockEntityType<SimpleTableBlockEntity>> SIMPLE_TABLE_BE = BLOCK_ENTITIES.register("simple_table_be", () -> BlockEntityType.Builder.of(SimpleTableBlockEntity::new,
 			SIMPLE_TABLE_OAK.get(), SIMPLE_TABLE_SPRUCE.get(), SIMPLE_TABLE_BIRCH.get(), SIMPLE_TABLE_JUNGLE.get(), SIMPLE_TABLE_DARK_OAK.get()).build(null));
-
+	public static final RegistryObject<BlockEntityType<PotionShelfBlockEntity>> POTION_SHELF_BE = BLOCK_ENTITIES.register("potion_shelf_be", () -> BlockEntityType.Builder.of(PotionShelfBlockEntity::new,
+			POTION_SHELF_OAK.get(), POTION_SHELF_SPRUCE.get(), POTION_SHELF_JUNGLE.get(), POTION_SHELF_BIRCH.get(), POTION_SHELF_DARK_OAK.get()
+	).build(null));
 	public static final RegistryObject<MenuType<SimpleTableMenu>> CRAFTING_SINGLE_MENU_TYPE = CONTAINER_TYPES.register("crafting_single", () -> IForgeMenuType.create(SimpleTableMenu::new));
 }

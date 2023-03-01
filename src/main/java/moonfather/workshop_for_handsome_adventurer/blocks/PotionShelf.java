@@ -1,0 +1,200 @@
+package moonfather.workshop_for_handsome_adventurer.blocks;
+
+import moonfather.workshop_for_handsome_adventurer.Constants;
+import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
+import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
+import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class PotionShelf extends ToolRack
+{
+    public PotionShelf(int itemCount) {
+        super(itemCount, "----");
+        String translationKeyStructure = "block.%s.potion_shelf.tooltip%d";
+        String translationKey = String.format(translationKeyStructure, Constants.MODID, 1);
+        this.Tooltip1 = new TranslatableComponent(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
+        translationKey = String.format(translationKeyStructure, Constants.MODID, 2);
+        this.Tooltip2 = new TranslatableComponent(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
+        this.PrepareListOfShapes();
+    }
+
+
+
+    @Override
+    protected boolean canDepositItem(ItemStack mainHandItem)
+    {
+        if (mainHandItem == null || mainHandItem.isEmpty())
+        {
+            return true;
+        }
+        if (mainHandItem.getTag() != null && mainHandItem.getTag().contains("Potion"))
+        {
+            return true;
+        }
+        if (mainHandItem.is(Items.GLASS_BOTTLE))
+        {
+            return true;
+        }
+        return false;
+    }
+
+
+
+    private int getTargetedSlot(BlockHitResult blockHitResult)
+    {
+        int aboveThisRow = 0;
+        double frac = blockHitResult.getLocation().y - blockHitResult.getBlockPos().getY();
+        if (frac < 8/16d) { aboveThisRow = 2; /* row2*/ }
+
+        int integral;
+        integral = (int) blockHitResult.getLocation().z;
+        frac = (blockHitResult.getLocation().z - integral) * blockHitResult.getDirection().getStepX();
+        integral = (int) blockHitResult.getLocation().x;
+        frac -= (blockHitResult.getLocation().x - integral) * blockHitResult.getDirection().getStepZ();
+        boolean left = (frac >= -0.5 && frac < 0) || frac >= 0.5;
+
+        return aboveThisRow + (left ? 0 : 1);
+    }
+
+
+
+    private final TranslatableComponent ShelfMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_invalid_item");
+    private final TranslatableComponent MaxedMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_slot_maxed");
+    private final TranslatableComponent RemainingRoomMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_remaining_room");
+    private final TranslatableComponent RemainingItemsMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_remaining_items");
+    private final TranslatableComponent WrongPotionMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_wrong_potion");
+
+
+    @Override
+    public InteractionResult use(BlockState blockState, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult blockHitResult)
+    {
+        if (hand == InteractionHand.OFF_HAND)
+        {
+            return InteractionResult.PASS;
+        }
+        if (!this.canDepositItem(player.getMainHandItem()))
+        {
+            player.displayClientMessage(ShelfMessage, true);
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+
+        int slot = this.getTargetedSlot(blockHitResult);
+        if (slot >= this.itemCount)
+        {
+            slot -= this.itemCount;
+        }
+        PotionShelfBlockEntity BE = ((PotionShelfBlockEntity)level.getBlockEntity(pos));
+        ItemStack existing = BE.GetItem(slot);
+        if (existing.isEmpty() && !player.getMainHandItem().isEmpty())
+        {
+            //System.out.println("~~~~~DEPOSIT TO EMPTY");
+            BE.DepositPotion(slot, player.getMainHandItem());
+            player.playSound(SoundEvents.WOOD_PLACE, 0.5f, 0.7f);
+            TranslatableComponent remainingRoomMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_remaining_room");
+            player.displayClientMessage(remainingRoomMessage.append(BE.GetRemainingRoom(slot).toString()), true);
+        }
+        else if (existing.isEmpty() && player.getMainHandItem().isEmpty())
+        {
+            //System.out.println("~~~~~EMPTY TO EMPTY");
+        }
+        else if (!existing.isEmpty() && player.getMainHandItem().isEmpty())
+        {
+            //System.out.println("~~~~~TAKEN");
+            player.setItemInHand(InteractionHand.MAIN_HAND, BE.TakeOutPotion(slot));
+            player.playSound(SoundEvents.ITEM_PICKUP, 0.5f, 1);
+            if (BE.GetRemainingItems(slot) > 0) {
+                TranslatableComponent remainingItemsMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_remaining_items");
+                player.displayClientMessage(remainingItemsMessage.append(BE.GetRemainingItems(slot).toString()), true);
+            }
+        }
+        else
+        {
+            //System.out.println("~~~~~BOTH FULL");
+            if (ItemStack.isSameItemSameTags(existing, player.getMainHandItem()))
+            {
+                if (BE.IsSlotMaxed(slot))
+                {
+                    player.displayClientMessage(MaxedMessage, true);
+                    return InteractionResult.sidedSuccess(level.isClientSide);
+                }
+                BE.DepositPotion(slot, player.getMainHandItem());
+                player.playSound(SoundEvents.WOOD_PLACE, 0.5f, 0.7f);
+                TranslatableComponent remainingRoomMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_remaining_room");
+                player.displayClientMessage(remainingRoomMessage.append(BE.GetRemainingRoom(slot).toString()), true);
+            }
+            else {
+                player.displayClientMessage(WrongPotionMessage, true);
+            }
+        }
+        return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    /////////////////////////////////////
+
+    private static final VoxelShape SHAPE_FRAME1N = Block.box(1.0D, 1.0D, 0.0D, 15.0D, 15.0D, 3.0D);
+    private static final VoxelShape SHAPE_FRAME1E = Block.box(13.0D, 1.0D, 1.0D, 16.0D, 15.0D, 15.0D);
+    private static final VoxelShape SHAPE_FRAME1S = Block.box(1.0D, 1.0D, 13.0D, 15.0D, 15.0D, 16.0D);
+    private static final VoxelShape SHAPE_FRAME1W = Block.box(0.0D, 1.0D, 1.0D, 3.0D, 15.0D, 15.0D);
+    private final Map<Direction, VoxelShape> frameShapes = new HashMap<Direction, VoxelShape>(4);
+
+    private void PrepareListOfShapes()
+    {
+        this.frameShapes.put(Direction.NORTH, SHAPE_FRAME1N);
+        this.frameShapes.put(Direction.EAST,  SHAPE_FRAME1E);
+        this.frameShapes.put(Direction.SOUTH, SHAPE_FRAME1S);
+        this.frameShapes.put(Direction.WEST,  SHAPE_FRAME1W);
+    }
+
+    @Override
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter p_60579_, BlockPos p_60580_)
+    {
+        return this.frameShapes.get(state.getValue(FACING));
+    }
+
+
+    @Override
+    public VoxelShape getBlockSupportShape(BlockState state, BlockGetter p_60582_, BlockPos p_60583_)
+    {
+        return this.frameShapes.get(state.getValue(FACING));
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter p_60556_, BlockPos p_60557_, CollisionContext p_60558_)
+    {
+        return this.frameShapes.get(state.getValue(FACING));
+    }
+
+    @Override
+    public VoxelShape getInteractionShape(BlockState state, BlockGetter p_60548_, BlockPos p_60549_)
+    {
+        return super.getInteractionShape(state, p_60548_, p_60549_);
+    }
+
+    @Override
+    public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState blockState) {
+        return Registration.POTION_SHELF_BE.get().create(pos, blockState);
+    }
+}

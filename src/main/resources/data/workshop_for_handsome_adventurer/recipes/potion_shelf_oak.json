@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "",
+  "pattern": [
+    "sps",
+    "sps"
+  ],
+  "key": {
+    "s": {
+      "item": "minecraft:oak_slab"
+    },
+	"p": {
+      "item": "minecraft:oak_pressure_plate"
+    }
+  },
+  "result": {
+    "item": "workshop_for_handsome_adventurer:potion_shelf_oak",
+    "count": 1
+  },
+  "conditions":  []
+}

@@ -1,7 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.blocks;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
@@ -13,7 +12,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -39,7 +37,7 @@ public class ToolRack extends HorizontalDirectionalBlock implements EntityBlock
 {
 	public ToolRack(int itemCount, String type)
 	{
-		super(Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2f, 3f).sound(SoundType.WOOD).noOcclusion());
+		super(Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2f, 3f).sound(SoundType.WOOD));
 		this.itemCount = itemCount;
 
 		registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
@@ -54,8 +52,9 @@ public class ToolRack extends HorizontalDirectionalBlock implements EntityBlock
 
 
 
-	private final int itemCount;
-	private final MutableComponent Tooltip1, Tooltip2;
+	protected final int itemCount;
+	protected MutableComponent Tooltip1;
+	protected MutableComponent Tooltip2;
 
 	private static final VoxelShape SHAPE_PLANK1N = Block.box(1.0D, 1.0D, 0.0D, 15.0D, 15.0D, 1.0D);
 	private static final VoxelShape SHAPE_PLANK1E = Block.box(15.0D, 1.0D, 1.0D, 16.0D, 15.0D, 15.0D);
@@ -137,7 +136,7 @@ public class ToolRack extends HorizontalDirectionalBlock implements EntityBlock
 
 
 
-	private Map<Direction, VoxelShape> Shapes = new HashMap<Direction, VoxelShape>(4);
+	private final Map<Direction, VoxelShape> Shapes = new HashMap<Direction, VoxelShape>(4);
 	private void PrepareListOfShapes()
 	{
 		this.Shapes.put(Direction.NORTH, SHAPE_PLANK1N);
@@ -213,7 +212,7 @@ public class ToolRack extends HorizontalDirectionalBlock implements EntityBlock
 		{
 			return InteractionResult.PASS;
 		}
-		if (!this.CanDepositItem(player.getMainHandItem()))
+		if (!this.canDepositItem(player.getMainHandItem()))
 		{
 			player.displayClientMessage(RackMessage, true);
 			return InteractionResult.sidedSuccess(level.isClientSide);
@@ -226,7 +225,7 @@ public class ToolRack extends HorizontalDirectionalBlock implements EntityBlock
 		}
 
 
-		int slot = this.GetTargetedSlot(blockHitResult);
+		int slot = this.getTargetedSlot(blockHitResult);
 		if (slot >= this.itemCount)
 		{
 			slot -= this.itemCount;
@@ -262,7 +261,7 @@ public class ToolRack extends HorizontalDirectionalBlock implements EntityBlock
 		//return super.use(blockState, level, pos, player, hand, blockHitResult);
 	}
 
-	private int GetTargetedSlot(BlockHitResult blockHitResult)
+	private int getTargetedSlot(BlockHitResult blockHitResult)
 	{
 		int aboveThisRow = 0;
 		double frac = blockHitResult.getLocation().y - blockHitResult.getBlockPos().getY();
@@ -280,7 +279,7 @@ public class ToolRack extends HorizontalDirectionalBlock implements EntityBlock
 		return aboveThisRow + (left ? 0 : 1);
 	}
 
-	private boolean CanDepositItem(ItemStack mainHandItem)
+	protected boolean canDepositItem(ItemStack mainHandItem)
 	{
 		if (mainHandItem == null || mainHandItem.isEmpty())
 		{

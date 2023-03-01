@@ -32,6 +32,7 @@ public class ClientSetup
 	public static void RegisterRenderers(EntityRenderersEvent.RegisterRenderers event)
 	{
 		event.registerBlockEntityRenderer(Registration.TOOL_RACK_BE.get(),	ToolRackTESR::new);
+		event.registerBlockEntityRenderer(Registration.POTION_SHELF_BE.get(),	ToolRackTESR::new);
 	}
 
 	public static void StitchTextures(TextureStitchEvent.Pre event)

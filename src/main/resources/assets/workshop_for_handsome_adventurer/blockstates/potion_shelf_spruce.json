@@ -1,0 +1,9 @@
+{
+    "variants":
+    {
+        "facing=north": { "model": "workshop_for_handsome_adventurer:block/potion_shelf_spruce" },
+        "facing=east": { "model": "workshop_for_handsome_adventurer:block/potion_shelf_spruce", "y": 90 },
+        "facing=south": { "model": "workshop_for_handsome_adventurer:block/potion_shelf_spruce", "y": 180 },
+        "facing=west": { "model": "workshop_for_handsome_adventurer:block/potion_shelf_spruce", "y": 270 }
+    }
+}

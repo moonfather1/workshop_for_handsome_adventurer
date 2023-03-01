@@ -32,9 +32,10 @@ public class ModWorkshop
     //--all-- --NTH--
     //todo: woodcutter recipes
     //todo: sword rack?
-    //todo: other wood types
     //consider renaming chests at the cost of 1 XPL
-    //potion shelf 2x2 in one block, takes up to 4 (conf)
+    //potion shelf --stacking, message
+    //nice to have: waila/top support for potions
+    //after 1.0: items on top of tables
 
     //--rack-- --MUST--
     //todo: lights
@@ -66,6 +67,9 @@ public class ModWorkshop
     //--dualtable--  --NTH--
     //consider: right click top to turn lamps off/on
     //consider: nine storage slots, other than crafting slots
+
+    //--known-- issues
+    //when you have two-block rack and you're looking so that the top half isn't visible, items disappear.
 
 
     // Directly reference a slf4j logger

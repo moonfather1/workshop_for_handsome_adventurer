@@ -47,9 +47,23 @@
 	"block.workshop_for_handsome_adventurer.tool_rack_single.tooltip1": "Holds 2 items.",
 	"block.workshop_for_handsome_adventurer.tool_rack_single.tooltip2": "Easy to mount, minimalistic design.",
 
+	"block.workshop_for_handsome_adventurer.potion_shelf_oak": "Potion Shelf (oak)",
+	"block.workshop_for_handsome_adventurer.potion_shelf_spruce": "Potion Shelf (spruce)",
+	"block.workshop_for_handsome_adventurer.potion_shelf_dark_oak": "Potion Shelf (dark oak)",
+	"block.workshop_for_handsome_adventurer.potion_shelf_acacia": "Potion Shelf (acacia)",
+	"block.workshop_for_handsome_adventurer.potion_shelf_jungle": "Potion Shelf (jungle)",
+	"block.workshop_for_handsome_adventurer.potion_shelf_birch": "Potion Shelf (birch)",
+	"block.workshop_for_handsome_adventurer.potion_shelf.tooltip1": "Holds 4 sets of potions.",
+	"block.workshop_for_handsome_adventurer.potion_shelf.tooltip2": "A few bottles can be stacked in each set.",
+
 	"message.workshop_for_handsome_adventurer.no_room_for_workstation": "No room to place a workstation there.",
 	"message.workshop_for_handsome_adventurer.workshop_table_obscured": "Crafting table is obscured.",
 	"message.workshop_for_handsome_adventurer.invalid_item_for_rack": "You can't put that onto the rack.",
+	"message.workshop_for_handsome_adventurer.shelf_invalid_item": "You can't put that onto the potion shelf.",
+	"message.workshop_for_handsome_adventurer.shelf_slot_maxed": "No more space on that part of the shelf.",
+	"message.workshop_for_handsome_adventurer.shelf_remaining_room": "Remaining space: ",
+	"message.workshop_for_handsome_adventurer.shelf_remaining_items": "Remaining bottles: ",
+	"message.workshop_for_handsome_adventurer.shelf_wrong_potion": "Not the same potion. Put it in an empty slot.",
 
 	"message.workshop_for_handsome_adventurer.extension_slot1": "Put a chest or a storage drawer here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests.",
 	"message.workshop_for_handsome_adventurer.extension_slot2": "Put a chest or a storage drawer here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests. \n(optionally another one [ITEM] for a range of two blocks)\n \nOr a lantern to make it a part of the workstation \nand light up the surroundings.",

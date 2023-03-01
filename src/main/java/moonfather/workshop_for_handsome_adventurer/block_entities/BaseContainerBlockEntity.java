@@ -23,7 +23,7 @@ public class BaseContainerBlockEntity extends BlockEntity
     private final List<ItemStack> items = new ArrayList<ItemStack>(9);
     protected int capacity = 9;
 
-    private void VerifyCapacity()
+    protected void VerifyCapacity()
     {
         for (int i = this.items.size(); i < this.capacity; i++) { this.items.add(ItemStack.EMPTY); }
     }
@@ -80,7 +80,11 @@ public class BaseContainerBlockEntity extends BlockEntity
     public void DropAll()
     {
         this.VerifyCapacity();
-        for (int i = 0; i < this.capacity; i++) { Block.popResource(this.level, this.getBlockPos(), this.items.get(i)); }
+        for (int i = 0; i < this.capacity; i++)
+        {
+            Block.popResource(this.level, this.getBlockPos(), this.items.get(i));
+            this.ClearItem(i);
+        }
     }
 
     public ItemStack GetItem(int slot)
