@@ -2,7 +2,6 @@ package moonfather.workshop_for_handsome_adventurer.blocks;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
-import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,8 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -31,8 +28,8 @@ import java.util.Map;
 
 public class PotionShelf extends ToolRack
 {
-    public PotionShelf(int itemCount) {
-        super(itemCount, "----");
+    public PotionShelf() {
+        super(PotionShelfBlockEntity.CAPACITY, "----");
         String translationKeyStructure = "block.%s.potion_shelf.tooltip%d";
         String translationKey = String.format(translationKeyStructure, Constants.MODID, 1);
         this.Tooltip1 = new TranslatableComponent(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
@@ -67,16 +64,27 @@ public class PotionShelf extends ToolRack
     {
         int aboveThisRow = 0;
         double frac = blockHitResult.getLocation().y - blockHitResult.getBlockPos().getY();
-        if (frac < 8/16d) { aboveThisRow = 2; /* row2*/ }
+        if (frac < 8/16d) { aboveThisRow = 3; /* row2*/ }
 
         int integral;
         integral = (int) blockHitResult.getLocation().z;
         frac = (blockHitResult.getLocation().z - integral) * blockHitResult.getDirection().getStepX();
         integral = (int) blockHitResult.getLocation().x;
         frac -= (blockHitResult.getLocation().x - integral) * blockHitResult.getDirection().getStepZ();
-        boolean left = (frac >= -0.5 && frac < 0) || frac >= 0.5;
-
-        return aboveThisRow + (left ? 0 : 1);
+        int horizontalIndex;
+        if ((frac >= -1/3d && frac < 0) || (frac >= 2/3d && frac < 1))
+        {
+            horizontalIndex = 0; //left
+        }
+        else if ((frac >= 1/3d && frac < 2/3d) || (frac - 1 >= 1/3d && frac - 1 < 2/3d) || (frac + 1 >= 1/3d && frac + 1 < 2/3d))
+        {
+            horizontalIndex = 1; //mid
+        }
+        else
+        {
+            horizontalIndex = 2; //right
+        }
+        return aboveThisRow + horizontalIndex;
     }
 
 

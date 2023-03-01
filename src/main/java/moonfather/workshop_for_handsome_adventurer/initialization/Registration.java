@@ -97,15 +97,15 @@ public class Registration
 	public static final RegistryObject<Block> DUAL_TOOL_RACK_DARK_OAK = BLOCKS.register("tool_rack_double_dark_oak", () -> new DualToolRack(6, "double"));
 	public static final RegistryObject<Item> DUAL_TOOL_RACK_ITEM_DARK_OAK = FromBlock(DUAL_TOOL_RACK_DARK_OAK);
 
-	public static final RegistryObject<Block> POTION_SHELF_OAK = BLOCKS.register("potion_shelf_oak", () -> new PotionShelf(4));
+	public static final RegistryObject<Block> POTION_SHELF_OAK = BLOCKS.register("potion_shelf_oak", () -> new PotionShelf());
 	public static final RegistryObject<Item> POTION_SHELF_ITEM_OAK = FromBlock(POTION_SHELF_OAK);
-	public static final RegistryObject<Block> POTION_SHELF_SPRUCE = BLOCKS.register("potion_shelf_spruce", () -> new PotionShelf(4));
+	public static final RegistryObject<Block> POTION_SHELF_SPRUCE = BLOCKS.register("potion_shelf_spruce", () -> new PotionShelf());
 	public static final RegistryObject<Item> POTION_SHELF_ITEM_SPRUCE = FromBlock(POTION_SHELF_SPRUCE);
-	public static final RegistryObject<Block> POTION_SHELF_BIRCH = BLOCKS.register("potion_shelf_birch", () -> new PotionShelf(4));
+	public static final RegistryObject<Block> POTION_SHELF_BIRCH = BLOCKS.register("potion_shelf_birch", () -> new PotionShelf());
 	public static final RegistryObject<Item> POTION_SHELF_ITEM_BIRCH = FromBlock(POTION_SHELF_BIRCH);
-	public static final RegistryObject<Block> POTION_SHELF_JUNGLE = BLOCKS.register("potion_shelf_jungle", () -> new PotionShelf(4));
+	public static final RegistryObject<Block> POTION_SHELF_JUNGLE = BLOCKS.register("potion_shelf_jungle", () -> new PotionShelf());
 	public static final RegistryObject<Item> POTION_SHELF_ITEM_JUNGLE = FromBlock(POTION_SHELF_JUNGLE);
-	public static final RegistryObject<Block> POTION_SHELF_DARK_OAK = BLOCKS.register("potion_shelf_dark_oak", () -> new PotionShelf(4));
+	public static final RegistryObject<Block> POTION_SHELF_DARK_OAK = BLOCKS.register("potion_shelf_dark_oak", () -> new PotionShelf());
 	public static final RegistryObject<Item> POTION_SHELF_ITEM_DARK_OAK = FromBlock(POTION_SHELF_DARK_OAK);
 
 	private static RegistryObject<Item> FromBlock(RegistryObject<Block> block)

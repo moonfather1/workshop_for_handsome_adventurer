@@ -42,29 +42,57 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 		Direction direction = tile.getBlockState().getValue(HorizontalDirectionalBlock.FACING).getOpposite();
 		Direction itemDirection = direction.getCounterClockWise();
 
-		matrixStack.pushPose();
-		matrixStack.translate(0.5 - direction.getStepX() * 0.42, 0.7, 0.5 - direction.getStepZ() * 0.42);
-		matrixStack.scale(0.5f, 0.5f, 0.5f);
-		int rowHeight = (tile.capacity % 4 == 0) ? 15 : 20;
 		int itemsPerRow = tile.getNumberOfItemsInOreRow();
-		for (int row = 0; row < 3; row++)
+		if (itemsPerRow == 3)  // potions
 		{
-			for (int i = 0; i < 2; i++)
+			matrixStack.pushPose();
+			matrixStack.translate(0.5 - direction.getStepX() * 0.42, 0.7, 0.5 - direction.getStepZ() * 0.42);
+			matrixStack.scale(0.3f, 0.40f, 0.3f);
+			int rowHeight = 15;
+			for (int row = 0; row < 3; row++)
 			{
-				if (tile.capacity <= row * 2) { break; }
-				ItemStack itemStack = this.RemoveEnchantments(tile.GetItem(row * 2 + i));
-				if (!itemStack.isEmpty())
+				for (int i = 0; i < itemsPerRow; i++)
 				{
-					matrixStack.pushPose();
-					double antiZFighting = row * 0.003d + i * 0.001d;
-					matrixStack.translate(itemDirection.getStepX() * (i - 0.5) + antiZFighting, 0 - row*(rowHeight/16f), itemDirection.getStepZ() * (i - 0.5) + antiZFighting);
-					matrixStack.mulPose(direction.getRotation());
-					renderItemStack(tile, itemStack, matrixStack, buffer, combinedLight, combinedOverlay);
-					matrixStack.popPose();
+					if (tile.capacity <= row * itemsPerRow) { break; }
+					ItemStack itemStack = this.RemoveEnchantments(tile.GetItem(row * itemsPerRow + i));
+					if (!itemStack.isEmpty())
+					{
+						matrixStack.pushPose();
+						double antiZFighting = row * 0.003d + i * 0.001d;
+						matrixStack.translate(itemDirection.getStepX() * (i - 1d) + antiZFighting, 0 - row*(rowHeight/16f+3/16f)-2/16f, itemDirection.getStepZ() * (i - 1d) + antiZFighting);
+						matrixStack.mulPose(direction.getRotation());
+						renderItemStack(tile, itemStack, matrixStack, buffer, combinedLight, combinedOverlay);
+						matrixStack.popPose();
+					}
 				}
 			}
+			matrixStack.popPose();
 		}
-		matrixStack.popPose();
+		else // items
+		{
+			matrixStack.pushPose();
+			matrixStack.translate(0.5 - direction.getStepX() * 0.42, 0.7, 0.5 - direction.getStepZ() * 0.42);
+			matrixStack.scale(0.5f, 0.5f, 0.5f);
+			int rowHeight = (tile.capacity % 4 == 0) ? 15 : 20;
+			for (int row = 0; row < 3; row++)
+			{
+				for (int i = 0; i < itemsPerRow; i++)
+				{
+					if (tile.capacity <= row * itemsPerRow) { break; }
+					ItemStack itemStack = this.RemoveEnchantments(tile.GetItem(row * itemsPerRow + i));
+					if (!itemStack.isEmpty())
+					{
+						matrixStack.pushPose();
+						double antiZFighting = row * 0.003d + i * 0.001d;
+						matrixStack.translate(itemDirection.getStepX() * (i - 0.5) + antiZFighting, 0 - row*(rowHeight/16f), itemDirection.getStepZ() * (i - 0.5) + antiZFighting);
+						matrixStack.mulPose(direction.getRotation());
+						renderItemStack(tile, itemStack, matrixStack, buffer, combinedLight, combinedOverlay);
+						matrixStack.popPose();
+					}
+				}
+			}
+			matrixStack.popPose();
+		}
 	}
 
 
@@ -102,7 +130,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			{
 				matrixStack.mulPose(Vector3f.ZP.rotationDegrees(-45.0F));
 			}
-			else if (itemStack.getTag() != null && itemStack.getTag().contains("CustomPotionColor"))
+			else if ((itemStack.getTag() != null && itemStack.getTag().contains("CustomPotionColor")) || itemStack.is(Items.GLASS_BOTTLE))
 			{
 				matrixStack.translate(0, 0.1, 0);
 			}

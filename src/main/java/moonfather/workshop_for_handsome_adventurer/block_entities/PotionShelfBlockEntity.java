@@ -16,7 +16,7 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
         super(Registration.POTION_SHELF_BE.get(), pos, state, CAPACITY);
     }
 
-    private static final int CAPACITY = 4;
+    public static final int CAPACITY = 6;
     private final List<Integer> itemCounts = new ArrayList<Integer>(CAPACITY);
 
     @Override
@@ -36,6 +36,7 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
         }
     }
 
+    @Override
     public int getNumberOfItemsInOreRow() {
         return 3;
     }
@@ -101,7 +102,7 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
         if (this.GetItem(slot).isEmpty()) {
             return false;
         }
-        return this.itemCounts.get(slot) >= this.GetItem(slot).getMaxStackSize() * MAX_STACK;
+        return this.itemCounts.get(slot) >= Math.min(64, this.GetItem(slot).getMaxStackSize() * MAX_STACK);
     }
 
     public Integer GetRemainingRoom(int slot)
@@ -110,7 +111,7 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
         if (this.itemCounts.get(slot) == 0) {
             return MAX_STACK; //may not be true but we'll go with that
         }
-        return this.GetItem(slot).getMaxStackSize() * MAX_STACK - this.itemCounts.get(slot);
+        return Math.min(64, this.GetItem(slot).getMaxStackSize() * MAX_STACK) - this.itemCounts.get(slot);
     }
 
     public Integer GetRemainingItems(int slot) {

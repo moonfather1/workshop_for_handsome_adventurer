@@ -33,15 +33,16 @@ public class ModWorkshop
     //todo: woodcutter recipes
     //todo: sword rack?
     //consider renaming chests at the cost of 1 XPL
-    //potion shelf --stacking, message
     //nice to have: waila/top support for potions
     //after 1.0: items on top of tables
 
     //--rack-- --MUST--
     //todo: lights
+    //potion shelf shift for all
     //...
     //--rack-- --NTH--
     //.....
+    //pick potion with MMB
     //check offhand how feels -> not well
 
     //--simpletable--  --MUST--
