@@ -1,5 +1,10 @@
 ﻿{
-	"item.workshop_for_handsome_adventurer.workstation_placer": "Радна станица",
+	"item.workshop_for_handsome_adventurer.workstation_placer_oak": "Радна станица (од храста)",
+	"item.workshop_for_handsome_adventurer.workstation_placer_spruce": "Радна станица (од смреке)",
+	"item.workshop_for_handsome_adventurer.workstation_placer_birch": "Радна станица (од брезе)",
+	"item.workshop_for_handsome_adventurer.workstation_placer_jungle": "Радна станица (од прашумског дрвета)",
+	"item.workshop_for_handsome_adventurer.workstation_placer_dark_oak": "Радна станица (од тамног храста)",
+	"item.workshop_for_handsome_adventurer.workstation_placer_acacia": "Радна станица (од багрема)",
 	"item.workshop_for_handsome_adventurer.workstation_placer.tooltip1": "Прописни радни сто. Довољно места да правиш више ствари одједном.",
 	"item.workshop_for_handsome_adventurer.workstation_placer.tooltip2": "Лак приступ сандуцима и фиокама поред стола. Може да држи стварчице.",
 

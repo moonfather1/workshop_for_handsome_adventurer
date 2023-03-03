@@ -10,11 +10,11 @@
       "tag": "forge:workbench"
     },
     "l": {
-      "item": "minecraft:stripped_oak_log"
+      "item": "minecraft:stripped_birch_log"
     }
   },
   "result": {
-    "item": "workshop_for_handsome_adventurer:workstation_placer",
+    "item": "workshop_for_handsome_adventurer:workstation_placer_birch",
     "count": 1
   },
   "conditions":  []

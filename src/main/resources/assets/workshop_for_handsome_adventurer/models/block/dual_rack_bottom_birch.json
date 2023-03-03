@@ -1,5 +1,5 @@
 {
-    "parent": "workshop_for_handsome_adventurer:block/dual_rack",
+    "parent": "workshop_for_handsome_adventurer:block/dual_rack_bottom",
     "textures": {
         "particle": "minecraft:block/birch_planks",
         "plank": "minecraft:block/birch_planks",

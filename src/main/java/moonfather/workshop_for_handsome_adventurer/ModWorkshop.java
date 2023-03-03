@@ -37,7 +37,6 @@ public class ModWorkshop
     //after 1.0: items on top of tables
 
     //--rack-- --MUST--
-    //todo: lights
     //potion shelf shift for all
     //...
     //--rack-- --NTH--

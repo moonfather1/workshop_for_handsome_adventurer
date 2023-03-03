@@ -11,7 +11,7 @@
               "condition": "minecraft:survives_explosion"
             }
           ],
-          "name": "workshop_for_handsome_adventurer:workstation_placer"
+          "name": "workshop_for_handsome_adventurer:workstation_placer_jungle"
         }
       ]
     }

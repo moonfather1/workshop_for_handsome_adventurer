@@ -33,5 +33,5 @@ Adds a few blocks:
 
 
 [modproperties.workshop_for_handsome_adventurer]
-    catalogueImageIcon="textures/items/hatchet.png"
+    catalogueImageIcon="textures/gui/catalogue.png"
     configuredBackground="minecraft:textures/block/spruce_planks.png"

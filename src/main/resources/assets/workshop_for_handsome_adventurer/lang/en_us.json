@@ -1,5 +1,9 @@
 {
-	"item.workshop_for_handsome_adventurer.workstation_placer": "Workstation",
+	"item.workshop_for_handsome_adventurer.workstation_placer_oak": "Workstation (oak)",
+	"item.workshop_for_handsome_adventurer.workstation_placer_spruce": "Workstation (spruce)",
+	"item.workshop_for_handsome_adventurer.workstation_placer_birch": "Workstation (birch)",
+	"item.workshop_for_handsome_adventurer.workstation_placer_jungle": "Workstation (jungle)",
+	"item.workshop_for_handsome_adventurer.workstation_placer_dark_oak": "Workstation (dark oak)",
 	"item.workshop_for_handsome_adventurer.workstation_placer.tooltip1": "A proper crafting table. Enough room to work on multiple items.",
 	"item.workshop_for_handsome_adventurer.workstation_placer.tooltip2": "Can access nearby inventories. Can hold items.",
 

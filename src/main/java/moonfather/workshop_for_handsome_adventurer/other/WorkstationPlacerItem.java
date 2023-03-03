@@ -16,6 +16,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.Nullable;
@@ -24,21 +25,22 @@ import java.util.List;
 
 public class WorkstationPlacerItem extends Item
 {
-	public WorkstationPlacerItem(Properties properties)
+	public WorkstationPlacerItem(Block primary, Properties properties)
 	{
 		super(properties);
 		this.Tooltip1 = new TranslatableComponent("item.workshop_for_handsome_adventurer.workstation_placer.tooltip1").withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
 		this.Tooltip2 = new TranslatableComponent("item.workshop_for_handsome_adventurer.workstation_placer.tooltip2").withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
+		this.PrimaryBlock = primary;
 	}
 
-	public WorkstationPlacerItem()
+	public WorkstationPlacerItem(Block primary)
 	{
-		this(new Properties().stacksTo(1).tab(CreativeTab.TAB_WORKSHOP));
+		this(primary, new Properties().stacksTo(1).tab(CreativeTab.TAB_WORKSHOP));
 	}
+	private final Block PrimaryBlock;
 
 
-
-	private MutableComponent Tooltip1, Tooltip2;
+	private final MutableComponent Tooltip1, Tooltip2;
 	@Override
 	public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag advanced)
 	{
@@ -70,11 +72,11 @@ public class WorkstationPlacerItem extends Item
 		}
 		Direction facingToSet = context.getHorizontalDirection().getOpposite();
 		Direction right = context.getHorizontalDirection().getClockWise();
-		context.getLevel().setBlock(position, Registration.DUAL_TABLE_PRIMARY.get().defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, true), 0);
+		context.getLevel().setBlock(position, this.PrimaryBlock.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, true), 0);
 		context.getLevel().setBlock(position.above(), Registration.DUAL_TABLE_TOP.get().defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, true), 0);
 		context.getLevel().setBlock(position.relative(right), Registration.DUAL_TABLE_SECONDARY.get().defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, true), 0);
 		context.getLevel().setBlock(position.above().relative(right), Registration.DUAL_TABLE_TOP.get().defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, true), 0);
-		context.getLevel().setBlockAndUpdate(position, Registration.DUAL_TABLE_PRIMARY.get().defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, false));
+		context.getLevel().setBlockAndUpdate(position, this.PrimaryBlock.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, false));
 		context.getLevel().setBlockAndUpdate(position.above(), Registration.DUAL_TABLE_TOP.get().defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, false));
 		context.getLevel().setBlockAndUpdate(position.relative(right), Registration.DUAL_TABLE_SECONDARY.get().defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, false));
 		context.getLevel().setBlockAndUpdate(position.above().relative(right), Registration.DUAL_TABLE_TOP.get().defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, false));
