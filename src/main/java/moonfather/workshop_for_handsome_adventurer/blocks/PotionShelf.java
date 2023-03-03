@@ -7,20 +7,24 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -204,5 +208,24 @@ public class PotionShelf extends ToolRack
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState blockState) {
         return Registration.POTION_SHELF_BE.get().create(pos, blockState);
+    }
+
+    ///////////////////////////////////////////////////////////////
+
+    @Override
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
+    {
+        PotionShelfBlockEntity BE = ((PotionShelfBlockEntity)level.getBlockEntity(pos));
+        if (BE == null || ! state.hasProperty(FACING)) { return Items.STICK.getDefaultInstance(); }
+        BlockHitResult bhr = new BlockHitResult(target.getLocation(), state.getValue(FACING).getOpposite(), pos, true);
+        int slot = this.getTargetedSlot(bhr);
+        ItemStack existing = BE.GetItem(slot);
+        if (! existing.isEmpty())
+        {
+            return existing.copy();
+        }
+        String wood = this.getRegistryName().getPath();
+        wood = wood.substring(wood.indexOf("_", 8) + 1);
+        return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MODID, "potion_shelf_" + wood)));
     }
 }

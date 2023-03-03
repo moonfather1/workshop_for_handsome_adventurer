@@ -93,8 +93,8 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock
 	@Override
 	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
 	{
-		String wood = this.getRegistryName().toString();
-		wood = wood.substring(wood.lastIndexOf("_") + 1);
+		String wood = this.getRegistryName().getPath();
+		wood = wood.substring(wood.indexOf("_", 12) + 1);
 		return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MODID, "workstation_placer_" + wood)));
 	}
 }
