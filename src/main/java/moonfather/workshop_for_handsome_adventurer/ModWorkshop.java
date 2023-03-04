@@ -27,6 +27,8 @@ import java.util.stream.Collectors;
 @Mod(Constants.MODID)
 public class ModWorkshop
 {
+    //NOW  wrench,         z-fighting on the big table,             potion count bug
+
     //--all-- --MUST--
     //...
     //--all-- --NTH--
@@ -41,8 +43,9 @@ public class ModWorkshop
     //...
     //--rack-- --NTH--
     //.....
-    //pick potion with MMB
     //check offhand how feels -> not well
+    //integration: crescent hammer (thermal) won't go onto the rack.  it's fine.
+    //integration: engineer's hammer (ie) rotates without checking.   fixed.
 
     //--simpletable--  --MUST--
     //todo: shift+click in crafting table should consider access inven
@@ -68,6 +71,8 @@ public class ModWorkshop
     //consider: right click top to turn lamps off/on
     //consider: nine storage slots, other than crafting slots
 
+    //--before--pub--
+    //todo: printLn, CR in toml, ver
     //--known-- issues
     //when you have two-block rack and you're looking so that the top half isn't visible, items disappear.
 

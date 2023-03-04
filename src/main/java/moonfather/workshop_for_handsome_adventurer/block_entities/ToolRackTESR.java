@@ -42,7 +42,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 		Direction direction = tile.getBlockState().getValue(HorizontalDirectionalBlock.FACING).getOpposite();
 		Direction itemDirection = direction.getCounterClockWise();
 
-		int itemsPerRow = tile.getNumberOfItemsInOreRow();
+		int itemsPerRow = tile.getNumberOfItemsInOneRow();
 		if (itemsPerRow == 3)  // potions
 		{
 			matrixStack.pushPose();

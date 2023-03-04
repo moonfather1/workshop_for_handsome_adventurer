@@ -150,6 +150,9 @@ repositories {
         name = "Progwml6 maven"
         url = "https://dvs1.progwml6.com/files/maven/"
     }
+    maven {
+        url = "https://www.cursemaven.com"
+    }
 }
 
 dependencies {
@@ -172,6 +175,9 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
+    implementation fg.deobf("curse.maven:jade-324717:3865918")
+    implementation fg.deobf("curse.maven:the-one-probe-245211:3671753")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

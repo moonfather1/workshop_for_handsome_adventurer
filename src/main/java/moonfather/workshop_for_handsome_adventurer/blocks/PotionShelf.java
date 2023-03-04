@@ -64,7 +64,7 @@ public class PotionShelf extends ToolRack
 
 
 
-    private int getTargetedSlot(BlockHitResult blockHitResult)
+    public static int getTargetedSlot(BlockHitResult blockHitResult)
     {
         int aboveThisRow = 0;
         double frac = blockHitResult.getLocation().y - blockHitResult.getBlockPos().getY();

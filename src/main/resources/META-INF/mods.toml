@@ -31,6 +31,12 @@ Adds a few blocks:
     ordering="NONE"
     side="BOTH"
 
+[[dependencies.workshop_for_handsome_adventurer]]
+    modId="jade"
+    mandatory=false
+    versionRange="[5.2.3, )"
+    ordering="NONE"
+    side="BOTH"
 
 [modproperties.workshop_for_handsome_adventurer]
     catalogueImageIcon="textures/gui/catalogue.png"

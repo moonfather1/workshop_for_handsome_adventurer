@@ -33,11 +33,15 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
         int[] array = compoundTag.getIntArray("Counts");
         for (int i = 0; i < array.length; i++) {
             this.itemCounts.set(i, array[i]);
+            if (array[i] == 0 && ! this.GetItem(i).isEmpty())
+            {
+                this.ClearItem(i);
+            }
         }
     }
 
     @Override
-    public int getNumberOfItemsInOreRow() {
+    public int getNumberOfItemsInOneRow() {
         return 3;
     }
 

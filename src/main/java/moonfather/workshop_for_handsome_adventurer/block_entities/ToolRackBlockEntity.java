@@ -19,7 +19,7 @@ public class ToolRackBlockEntity extends BaseContainerBlockEntity
 		this.capacity = capacity;
 	}
 
-	public int getNumberOfItemsInOreRow() {
+	public int getNumberOfItemsInOneRow() {
 		return 2;
 	}
 }

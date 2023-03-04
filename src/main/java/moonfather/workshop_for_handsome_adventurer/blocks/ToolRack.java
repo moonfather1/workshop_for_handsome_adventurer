@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
@@ -33,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class ToolRack extends HorizontalDirectionalBlock implements EntityBlock
+public class ToolRack extends Block implements EntityBlock
 {
 	public ToolRack(int itemCount, String type)
 	{
@@ -55,6 +56,8 @@ public class ToolRack extends HorizontalDirectionalBlock implements EntityBlock
 	protected final int itemCount;
 	protected MutableComponent Tooltip1;
 	protected MutableComponent Tooltip2;
+
+	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
 	private static final VoxelShape SHAPE_PLANK1N = Block.box(1.0D, 1.0D, 0.0D, 15.0D, 15.0D, 1.0D);
 	private static final VoxelShape SHAPE_PLANK1E = Block.box(15.0D, 1.0D, 1.0D, 16.0D, 15.0D, 15.0D);
