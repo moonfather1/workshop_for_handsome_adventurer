@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Mod(Constants.MODID)
 public class ModWorkshop
 {
-    //NOW              z-fighting on the big table,             potion count bug
+    //NOW              
 
     //--all-- --MUST--
     //...
@@ -72,6 +72,7 @@ public class ModWorkshop
     //--dualtable--  --NTH--
     //consider: right click top to turn lamps off/on
     //consider: nine storage slots, other than crafting slots
+    //issue: Rubidium causes z-fighting (confirmed it's not any other mod)
 
     //--before--pub--
     //todo: printLn, CR in toml, ver

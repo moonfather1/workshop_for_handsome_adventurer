@@ -19,12 +19,12 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
     public static final int CAPACITY = 6;
     private final List<Integer> itemCounts = new ArrayList<Integer>(CAPACITY);
 
-    @Override
-    protected void saveAdditional(CompoundTag compoundTag)
-    {
-        super.saveAdditional(compoundTag);
-        compoundTag.putIntArray("Counts", this.itemCounts);
-    }
+//    @Override
+//    protected void saveAdditional(CompoundTag compoundTag)
+//    {
+//        super.saveAdditional(compoundTag);
+//        compoundTag.putIntArray("Counts", this.itemCounts);
+//    }
 
     @Override
     public void load(CompoundTag compoundTag)
@@ -38,6 +38,14 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
                 this.ClearItem(i);
             }
         }
+    }
+
+    @Override
+    public CompoundTag saveInternal(CompoundTag compoundTag)
+    {
+        super.saveInternal(compoundTag);
+        compoundTag.putIntArray("Counts", this.itemCounts);
+        return compoundTag;
     }
 
     @Override
