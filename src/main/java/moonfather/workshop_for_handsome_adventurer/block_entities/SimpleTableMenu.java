@@ -224,27 +224,43 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		if (slot != null && slot.hasItem()) {
 			ItemStack itemstack1 = slot.getItem();
 			itemstack = itemstack1.copy();
-			if (slotIndex == 0) {
+			if (slotIndex == 0) { //shift on result
 				this.access.execute((level, p_39379_) -> {
 					itemstack1.getItem().onCraftedBy(itemstack1, level, player);
 				});
-				if (!this.moveItemStackTo(itemstack1, 10, 46, true)) {
+				//reverse: hotbar first, then inv
+				if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, HOTBAR_ROW_SLOT_END+1, true)) {
 					return ItemStack.EMPTY;
 				}
-
 				slot.onQuickCraft(itemstack1, itemstack);
-			} else if (slotIndex >= 10 && slotIndex < 46) {
-				if (!this.moveItemStackTo(itemstack1, 1, 10, false)) {
-					if (slotIndex < 37) {
-						if (!this.moveItemStackTo(itemstack1, 37, 46, false)) {
+			} else if (slotIndex >= INV_SLOT_START && slotIndex <= HOTBAR_ROW_SLOT_END) { //from player
+				if (!this.moveItemStackTo(itemstack1, CRAFT_SLOT_START, CRAFT_SLOT_END+1, false)) {
+					// no room on crafting grid, try chest
+					if (!this.moveItemStackToOccupiedSlotsOnly(itemstack1, ACCESS27_SLOT_START, ACCESS27_SLOT_END+1, false)) {
+						// try inv->hotbar or hotbar->inv
+						if (slotIndex < HOTBAR_ROW_SLOT_START) {
+							if (!this.moveItemStackTo(itemstack1, HOTBAR_ROW_SLOT_START, HOTBAR_ROW_SLOT_END + 1, false)) {
+								return ItemStack.EMPTY;
+							}
+						} else if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, INV_SLOT_END + 1, false)) {
 							return ItemStack.EMPTY;
 						}
-					} else if (!this.moveItemStackTo(itemstack1, 10, 37, false)) {
+					}
+				}
+			} else if (slotIndex >= ACCESS27_SLOT_START && slotIndex <= ACCESS27_SLOT_END) { //from chest
+				if (!this.moveItemStackTo(itemstack1, CRAFT_SLOT_START, CRAFT_SLOT_END+1, false)) {
+					if (!this.moveItemStackTo(itemstack1, HOTBAR_ROW_SLOT_START, HOTBAR_ROW_SLOT_END + 1, true)) {
+						if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, INV_SLOT_END + 1, false)) {
+							return ItemStack.EMPTY;
+						}
+					}
+				}
+			} else if (slotIndex >= CRAFT_SLOT_START && slotIndex <= CRAFT_SLOT_END) { //from crafting
+				if (!this.moveItemStackToOccupiedSlotsOnly(itemstack1, ACCESS27_SLOT_START, ACCESS27_SLOT_END+1, false)) {
+					if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, HOTBAR_ROW_SLOT_END+1, false)) {
 						return ItemStack.EMPTY;
 					}
 				}
-			} else if (!this.moveItemStackTo(itemstack1, 10, 46, false)) {
-				return ItemStack.EMPTY;
 			}
 
 			if (itemstack1.isEmpty()) {
@@ -266,8 +282,64 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		return itemstack;
 	}
 
-	public boolean canTakeItemForPickAll(ItemStack p_39381_, Slot p_39382_) {
-		return p_39382_.container != this.resultSlots && super.canTakeItemForPickAll(p_39381_, p_39382_);
+
+
+	protected boolean moveItemStackToOccupiedSlotsOnly(ItemStack itemStack, int startingSlot, int endingSlotPlus1, boolean reverse)
+	{
+		boolean result = false;
+		int i = startingSlot;
+		if (reverse) {
+			i = endingSlotPlus1 - 1;
+		}
+
+		if (itemStack.isStackable()) {
+			while(!itemStack.isEmpty()) {
+				if (reverse) {
+					if (i < startingSlot) {
+						break;
+					}
+				} else if (i >= endingSlotPlus1) {
+					break;
+				}
+
+				Slot slot = this.slots.get(i);
+				if (reverse) {
+					--i;
+				} else {
+					++i;
+				} // don't use i anymore
+				if (! slot.isActive()) { continue; }
+				ItemStack itemstack = slot.getItem();
+				if (!itemstack.isEmpty() && ItemStack.isSameItemSameTags(itemStack, itemstack)) {
+					int j = itemstack.getCount() + itemStack.getCount();
+					int maxSize = Math.min(slot.getMaxStackSize(), itemStack.getMaxStackSize());
+					if (j <= maxSize) {
+						itemStack.setCount(0);
+						itemstack.setCount(j);
+						slot.setChanged();
+						result = true;
+					} else if (itemstack.getCount() < maxSize) {
+						itemStack.shrink(maxSize - itemstack.getCount());
+						itemstack.setCount(maxSize);
+						slot.setChanged();
+						result = true;
+					}
+				}
+
+			}
+		}
+
+		return result;
+	}
+
+
+
+	public boolean canTakeItemForPickAll(ItemStack p_39381_, Slot slot) {
+		return slot.container != this.resultSlots
+				&& slot.container != this.tabElements
+				&& slot.container != this.customizationSlots
+				&& slot.isActive()
+				&& super.canTakeItemForPickAll(p_39381_, slot);
 	}
 
 	public int getResultSlotIndex() {
@@ -282,16 +354,14 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		return this.craftSlots.getHeight();
 	}
 
-	public int getSize() {
-		return 3 * 3 + 1;
-	}
-
 	public RecipeBookType getRecipeBookType() {
 		return RecipeBookType.CRAFTING;
 	}
 
 	public boolean shouldMoveToInventory(int slotIndex) {
-		return slotIndex != this.getResultSlotIndex();
+		return slotIndex != RESULT_SLOT
+				&& ! (slotIndex >= TABS_SLOT_START && slotIndex <= TABS_SLOT_END)
+				&& ! (slotIndex >= CUST_SLOT_START && slotIndex <= CUST_SLOT_END);
 	}
 
 	@Override

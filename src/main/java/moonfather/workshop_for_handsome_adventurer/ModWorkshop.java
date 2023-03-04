@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Mod(Constants.MODID)
 public class ModWorkshop
 {
-    //NOW              
+    //NOW   todo: return items to current chest or player
 
     //--all-- --MUST--
     //...
@@ -49,10 +49,8 @@ public class ModWorkshop
     //integration: crescent hammer (thermal) won't go onto the rack.  it's fine.
 
     //--simpletable--  --MUST--
-    //todo: shift+click in crafting table should consider access inven
     //todo: double chests
     //issue: on re-show tab isnt lit
-    //todo: return items to current chest or player
     //--simpletable--  --NTH--
     //consider: other crafting tables accessible?
     //todo: option to replace vanilla table
