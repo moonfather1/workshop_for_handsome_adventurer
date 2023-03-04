@@ -14,7 +14,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -218,7 +217,7 @@ public class PotionShelf extends ToolRack
         PotionShelfBlockEntity BE = ((PotionShelfBlockEntity)level.getBlockEntity(pos));
         if (BE == null || ! state.hasProperty(FACING)) { return Items.STICK.getDefaultInstance(); }
         BlockHitResult bhr = new BlockHitResult(target.getLocation(), state.getValue(FACING).getOpposite(), pos, true);
-        int slot = this.getTargetedSlot(bhr);
+        int slot = PotionShelf.getTargetedSlot(bhr);
         ItemStack existing = BE.GetItem(slot);
         if (! existing.isEmpty())
         {

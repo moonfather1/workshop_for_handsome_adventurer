@@ -59,8 +59,8 @@
 	"block.workshop_for_handsome_adventurer.potion_shelf_acacia": "Полица за напитке (од багрема)",
 	"block.workshop_for_handsome_adventurer.potion_shelf_jungle": "Полица за напитке (од прашумског дрвета)",
 	"block.workshop_for_handsome_adventurer.potion_shelf_birch": "Полица за напитке (од брезе)",
-	"block.workshop_for_handsome_adventurer.potion_shelf.tooltip1": "Holds 4 sets of potions.",
-	"block.workshop_for_handsome_adventurer.potion_shelf.tooltip2": "A few bottles can be stacked in each set.",
+	"block.workshop_for_handsome_adventurer.potion_shelf.tooltip1": "Држи 6 група флашица.",
+	"block.workshop_for_handsome_adventurer.potion_shelf.tooltip2": "У свакој групи има места за неколико бочица.",
 
 	"message.workshop_for_handsome_adventurer.no_room_for_workstation": "Ту нема места за радну станицу.",
 	"message.workshop_for_handsome_adventurer.workshop_table_obscured": "Не можеш прићи радној површини стола.",
@@ -70,6 +70,7 @@
 	"message.workshop_for_handsome_adventurer.shelf_remaining_room": "Преостали простор за бочице: ",
 	"message.workshop_for_handsome_adventurer.shelf_remaining_items": "Преостале бочице: ",
 	"message.workshop_for_handsome_adventurer.shelf_wrong_potion": "Није исти напитак. Стави овај на друго место.",
+	"message.workshop_for_handsome_adventurer.shelf_probe_tooltip": "Број бочица: %d, има места за %d укупно.",
 
 	"message.workshop_for_handsome_adventurer.extension_slot1": "Стави овде сандук или фиоку да \nомогућиш да стварчице остају у гриду. \n \nИли, стави [ITEM] овде\nза приступ суседним сандуцима.",
 	"message.workshop_for_handsome_adventurer.extension_slot2": "Стави овде сандук или фиоку да \nомогућиш да стварчице остају у гриду. \n \nИли, стави [ITEM] овде\nза приступ суседним сандуцима. \n(опционо још један за домет од два блока)\n \nИли светиљку да постане део радне станице\nи осветљава околину.",

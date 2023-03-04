@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import moonfather.workshop_for_handsome_adventurer.initialization.ClientSetup;
 import moonfather.workshop_for_handsome_adventurer.initialization.CommonSetup;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.integration.TOPRegistration;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
@@ -12,6 +13,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -27,7 +29,7 @@ import java.util.stream.Collectors;
 @Mod(Constants.MODID)
 public class ModWorkshop
 {
-    //NOW  wrench,         z-fighting on the big table,             potion count bug
+    //NOW              z-fighting on the big table,             potion count bug
 
     //--all-- --MUST--
     //...
@@ -45,7 +47,6 @@ public class ModWorkshop
     //.....
     //check offhand how feels -> not well
     //integration: crescent hammer (thermal) won't go onto the rack.  it's fine.
-    //integration: engineer's hammer (ie) rotates without checking.   fixed.
 
     //--simpletable--  --MUST--
     //todo: shift+click in crafting table should consider access inven
@@ -67,6 +68,7 @@ public class ModWorkshop
     //todo: BE stores items
     //todo: TC widget windows
     //todo: JEI places items
+    //todo: WTHIT is entirely unsupported, jei and top are fine ootb
     //--dualtable--  --NTH--
     //consider: right click top to turn lamps off/on
     //consider: nine storage slots, other than crafting slots
@@ -93,7 +95,6 @@ public class ModWorkshop
 
     private void enqueueIMC(final InterModEnqueueEvent event)
     {
-        InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":dual_table_primary");
         InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":dual_table_secondary");
         InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":dual_table_top");
         String[] woodTypes = {"oak", "spruce", "jungle", "birch", "dark_oak"};
@@ -103,6 +104,11 @@ public class ModWorkshop
             InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":tool_rack_framed_" + woodType);
             InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":tool_rack_pframed_" + woodType);
             InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":dual_table_primary_" + woodType);
+        }
+        /////
+        if (ModList.get().isLoaded("theoneprobe"))
+        {
+            InterModComms.sendTo("theoneprobe", "getTheOneProbe", TOPRegistration::instance);
         }
     } 
 }
