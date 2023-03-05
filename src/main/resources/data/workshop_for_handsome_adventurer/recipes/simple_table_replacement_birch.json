@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "",
+  "pattern": [
+    "pp",
+    "pp"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:birch_planks"
+    }
+  },
+  "result": {
+    "item": "workshop_for_handsome_adventurer:simple_table_birch",
+    "count": 1
+  },
+  "conditions":
+  [
+    {
+      "type": "workshop_for_handsome_adventurer:optional",
+      "flag_code": "replace_vanilla_crafting_table"
+    }
+  ]
+
+}

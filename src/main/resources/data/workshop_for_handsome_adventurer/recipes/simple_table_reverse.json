@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "",
+  "pattern": [
+    "t"
+  ],
+  "key": {
+    "t": {
+      "tag": "forge:workbench"
+    }
+  },
+  "result": {
+    "item": "minecraft:crafting_table",
+    "count": 1
+  },
+  "conditions":
+  [
+    {
+      "type": "workshop_for_handsome_adventurer:optional",
+      "flag_code": "replace_vanilla_crafting_table"
+    }
+  ]
+
+}
