@@ -8,10 +8,13 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockE
 import moonfather.workshop_for_handsome_adventurer.blocks.*;
 import moonfather.workshop_for_handsome_adventurer.items.BlockItemEx;
 import moonfather.workshop_for_handsome_adventurer.other.CreativeTab;
+import moonfather.workshop_for_handsome_adventurer.other.UnsupportedWoodRecipe;
 import moonfather.workshop_for_handsome_adventurer.other.WorkstationPlacerItem;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
@@ -26,6 +29,7 @@ public class Registration
 	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MODID);
 	private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Constants.MODID);
 	public static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, Constants.MODID);
+	public static final DeferredRegister<RecipeSerializer<?>> RECIPES = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Constants.MODID);
 
 	public static void init()
 	{
@@ -33,6 +37,7 @@ public class Registration
 		ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
 		BLOCK_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
 		CONTAINER_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+		RECIPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,4 +142,8 @@ public class Registration
 			POTION_SHELF_OAK.get(), POTION_SHELF_SPRUCE.get(), POTION_SHELF_JUNGLE.get(), POTION_SHELF_BIRCH.get(), POTION_SHELF_DARK_OAK.get()
 	).build(null));
 	public static final RegistryObject<MenuType<SimpleTableMenu>> CRAFTING_SINGLE_MENU_TYPE = CONTAINER_TYPES.register("crafting_single", () -> IForgeMenuType.create(SimpleTableMenu::new));
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public static final RegistryObject<RecipeSerializer<UnsupportedWoodRecipe>> TABLE_RECIPE = RECIPES.register("table_recipe_unknown_planks", ()-> new SimpleRecipeSerializer<UnsupportedWoodRecipe>(UnsupportedWoodRecipe::new));
 }

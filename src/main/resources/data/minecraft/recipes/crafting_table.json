@@ -1,23 +1,28 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "##",
-    "##"
-  ],
-  "key": {
-    "#": {
-      "tag": "minecraft:planks"
-    }
-  },
-  "result": {
-    "item": "minecraft:air"
-  },
-  "conditions":
-  [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "workshop_for_handsome_adventurer:optional",
-      "flag_code": "replace_vanilla_crafting_table"
+      "conditions": [
+        {
+          "type": "workshop_for_handsome_adventurer:optional",
+          "flag_code": "dont_replace_vanilla_crafting_table"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "##",
+          "##"
+        ],
+        "key": {
+          "#": {
+            "tag": "minecraft:planks"
+          }
+        },
+        "result": {
+          "item": "minecraft:crafting_table"
+        }
+      }
     }
   ]
-
 }

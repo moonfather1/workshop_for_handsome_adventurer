@@ -25,14 +25,14 @@ public class OptionsHolder
 		public Common(ForgeConfigSpec.Builder builder)
 		{
 			builder.push("Tables");
-			this.SimpleTableReplacesVanillaTable = builder.comment("If set to false (default), simple crafting table is craftable. If set to true (and no reason not to be), when you place vanilla crafting table, you'll get this mod's crafting table placed.").worldRestart()
-					.define("Simple table replaces vanilla table", defaultSimpleTableReplacesVanillaTable);
 			this.SimpleTableNumberOfSlots = builder.comment("Customization slots allow you to enable the table to hold items (author doesn't like that so it's optional) or access nearby chests.").worldRestart()
 					.defineInRange("Simple table - number of customization slots", defaultSimpleTableNumberOfSlots, 0, 2);
 			this.DualTableNumberOfSlots = builder.comment("Customization slots allow you to enable the table to hold items (author doesn't like that so it's optional) or access nearby chests, or have lanterns as part of the table.").worldRestart()
 					.defineInRange("Dual table - number of customization slots", defaultDualTableNumberOfSlots, 0, 4);
 			this.AccessCustomizationItem = builder.comment("Here you can set which item allows you to access nearby inventories from a workbench window. Frankly there is no correct item here - customizations aren't upgrades, they are options - like checkboxes. This may delay availability of this functionality - you can put a minecraft:amethyst_shard if you want it to be available later in the game or a good old minecraft:torch if you want it available right away.").worldRestart()
 					.define("Customization - item for inventory access", defaultAccessCustomizationItem);
+			this.SimpleTableReplacesVanillaTable = builder.comment("If set to false (default), simple crafting tables are craftable after you have vanilla crafting table. If set to true (not much reason not to be), this mod's crafting tables are craftable from four planks in 2x2 configuration.").worldRestart()
+					.define("Simple table replaces vanilla table", defaultSimpleTableReplacesVanillaTable);
 			builder.pop();
 			builder.push("PotionShelf");
 			this.SlotRoomMultiplier = builder.comment("This is a multiplier for the number of bottles that fit in a single potion shelf slot. Default 6 (unrelated to six slots) means each slot can fit 6 non-stackable potions or for example 24 potions that stack up to 4 in players inventory.")
