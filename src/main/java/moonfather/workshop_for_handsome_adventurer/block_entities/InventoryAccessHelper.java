@@ -136,6 +136,10 @@ public class InventoryAccessHelper
                         }else{
                             record.Name = record.ItemChest.getHoverName();
                         }
+                        if (this.addonContainer != null)
+                        {
+                            record.ItemChest.setCount(2); //double chest
+                        }
                         //ih.ifPresent(inventory -> record.ItemFirst = inventory.getStackInSlot(0) );
                         record.ItemFirst = this.chosenContainer.getItem(0);
                         record.x = pos2.getX(); record.y = pos2.getY(); record.z = pos2.getZ();

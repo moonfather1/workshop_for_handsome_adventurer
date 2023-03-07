@@ -29,6 +29,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     public static final int PANEL_HEIGHT_WITHOUT_TABS = 134;
     public static final int PANEL_HEIGHT_WITH_TABS = 166;
     protected static final ResourceLocation BG_CHEST_LOCATION_3_ROWS = new ResourceLocation("workshop_for_handsome_adventurer:textures/gui/left_panel_normal_chest.png");
+    protected static final ResourceLocation BG_CHEST_LOCATION_6_ROWS = new ResourceLocation("workshop_for_handsome_adventurer:textures/gui/left_panel_double_chest.png");
 
     private int xOffset;
     private final List<TabButton> tabButtons = Lists.newArrayList();
@@ -129,7 +130,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             poseStack.pushPose();
             poseStack.translate(0.0D, 0.0D, 100.0D);
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, BG_CHEST_LOCATION_3_ROWS);
+            RenderSystem.setShaderTexture(0, this.getBackground());
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             int x = (this.parent.width - PANEL_WIDTH - this.parent.getXSize()) / 2;
             int y = (this.parent.height - PANEL_HEIGHT_WITH_TABS) / 2;
@@ -149,6 +150,13 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             //this.recipeBookPage.render(p_100319_, i, j, p_100320_, p_100321_, p_100322_);
             poseStack.popPose();
         }
+    }
+
+    private ResourceLocation getBackground() {
+        if (this.selectedTab != null && this.selectedTab.itemMain.getCount() == 2){
+            return BG_CHEST_LOCATION_6_ROWS;
+        }
+        return BG_CHEST_LOCATION_3_ROWS;
     }
 
     public void renderTooltip(PoseStack poseStack, int p_100363_, int p_100364_, int p_100365_, int p_100366_)

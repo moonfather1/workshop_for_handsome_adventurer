@@ -256,7 +256,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 					}
 				}
 			} else if (slotIndex >= CRAFT_SLOT_START && slotIndex <= CRAFT_SLOT_END) { //from crafting
-				if (!this.moveItemStackToOccupiedSlotsOnly(itemstack1, ACCESS27_SLOT_START, ACCESS27_SLOT_END+1, false)) {
+				if (! this.showInventoryAccess() || ! this.moveItemStackToOccupiedSlotsOnly(itemstack1, ACCESS27_SLOT_START, ACCESS27_SLOT_END+1, false)) {
 					if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, HOTBAR_ROW_SLOT_END+1, false)) {
 						return ItemStack.EMPTY;
 					}
@@ -342,27 +342,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 				&& super.canTakeItemForPickAll(p_39381_, slot);
 	}
 
-	public int getResultSlotIndex() {
-		return RESULT_SLOT;
-	}
 
-	public int getGridWidth() {
-		return this.craftSlots.getWidth();
-	}
-
-	public int getGridHeight() {
-		return this.craftSlots.getHeight();
-	}
-
-	public RecipeBookType getRecipeBookType() {
-		return RecipeBookType.CRAFTING;
-	}
-
-	public boolean shouldMoveToInventory(int slotIndex) {
-		return slotIndex != RESULT_SLOT
-				&& ! (slotIndex >= TABS_SLOT_START && slotIndex <= TABS_SLOT_END)
-				&& ! (slotIndex >= CUST_SLOT_START && slotIndex <= CUST_SLOT_END);
-	}
 
 	@Override
 	protected void clearContainer(Player player, Container container)
@@ -380,7 +360,10 @@ public class SimpleTableMenu extends AbstractContainerMenu
 						}
 						if (! this.hasChestInCustomizationSlots())
 						{
-							super.clearContainer(player, container); // will place back
+							if (this.showInventoryAccess()) {
+								this.clearContainerWithInventoryAccess(player, container); // will place to chests
+							}
+							super.clearContainer(player, container); // will place to player
 							this.clearInWorld(level, pos);
 							return;
 						}
@@ -404,6 +387,22 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			// what container now?
 		}
 	}
+
+
+
+	protected void clearContainerWithInventoryAccess(Player player, Container container) {
+		if (!player.isAlive() || player instanceof ServerPlayer && ((ServerPlayer)player).hasDisconnected()) {
+			for(int j = 0; j < container.getContainerSize(); ++j) {
+				player.drop(container.removeItemNoUpdate(j), false);
+			}
+		} else {
+			for(int i = 0; i < container.getContainerSize(); ++i) {
+				moveItemStackToOccupiedSlotsOnly(container.getItem(i), ACCESS27_SLOT_START, ACCESS27_SLOT_END+1, false);
+			}
+		}
+	}
+
+
 
 	private boolean isCraftingGrid(Container container)
 	{

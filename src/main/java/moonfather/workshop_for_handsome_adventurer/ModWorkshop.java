@@ -29,16 +29,12 @@ import java.util.stream.Collectors;
 @Mod(Constants.MODID)
 public class ModWorkshop
 {
-    //NOW   todo: return items to current chest or player          check access om shift
+    //NOW
 
     //--all-- --MUST--
     //...
     //--all-- --NTH--
     //todo: woodcutter recipes
-    //todo: sword rack?
-    //consider renaming chests at the cost of 1 XPL
-    //nice to have: waila/top support for potions
-    //after 1.0: items on top of tables
 
     //--rack-- --MUST--
     //potion shelf shift for all
@@ -46,22 +42,17 @@ public class ModWorkshop
     //--rack-- --NTH--
     //.....
     //check offhand how feels -> not well
-    //integration: crescent hammer (thermal) won't go onto the rack.  it's fine.
 
     //--simpletable--  --MUST--
     //todo: double chests
+    //jei bookmarks observe screen.left
     //issue: on re-show tab isnt lit
     //--simpletable--  --NTH--
-    //consider: other crafting tables accessible?
-    //todo: option to replace vanilla table
-    //todo: covered shulker boxes still show in table
-    //--known issues
-    //jei bookmarks observe screen.left
+    //.....
 
     //--dualtable--  --MUST--
     //todo: customization slot, accepts chest/drawer / spyglass(?) / spyglass (2) / 1x lantern
     //todo: lantern gives both top blocks 10 light
-    //todo: inventory item transformations
     //todo: chest mode visible
     //todo: BE stores items
     //todo: TC widget windows
@@ -76,6 +67,11 @@ public class ModWorkshop
     //todo: printLn, CR in toml, ver
     //--known-- issues
     //when you have two-block rack and you're looking so that the top half isn't visible, items disappear.
+    //integration: crescent hammer (thermal) won't go onto the rack.  it's fine.
+    //--later--
+    //maybe after 1.1: sword rack?    todo list?
+    //after 1.0 rename chests at the cost of 1 XPL
+    //after 1.0: items on top of tables
 
 
     // Directly reference a slf4j logger
