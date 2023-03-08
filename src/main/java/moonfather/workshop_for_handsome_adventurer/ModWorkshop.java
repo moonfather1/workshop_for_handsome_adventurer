@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Mod(Constants.MODID)
 public class ModWorkshop
 {
-    //NOW         jei bookmarks observe screen.left
+    //NOW         starting double table
 
     //--all-- --MUST--
     //...
@@ -44,7 +44,7 @@ public class ModWorkshop
     //check offhand how feels -> not well
 
     //--simpletable--  --MUST--
-    //minor issue: on re-show tab isnt lit
+    //...
     //--simpletable--  --NTH--
     //.....
 

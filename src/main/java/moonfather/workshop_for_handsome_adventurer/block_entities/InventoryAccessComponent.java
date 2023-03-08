@@ -95,7 +95,8 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         this.updateTabs();
     }
 
-    private Boolean tabChanged(TabButton button)
+
+    private Boolean tabChanged(TabButton button, boolean dontSendToServer)
     {
         if (! button.equals(this.selectedTab)) {
             if (this.selectedTab != null) {
@@ -104,10 +105,17 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             button.setStateTriggered(true);
             this.selectedTab = button;
             this.parent.getMenu().selectedTab = button.chestIndex; // we separately set this here as we need it in listener. this value change only happens on client and is only needed here.
-            PacketSender.sendToServer(button.chestIndex);
+            if (! dontSendToServer) {
+                PacketSender.sendToServer(button.chestIndex);
+            }
             return true;
         }
         return false;
+    }
+
+    private Boolean tabChanged(TabButton button)
+    {
+        return  this.tabChanged(button, false);
     }
 
 
@@ -217,15 +225,19 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
 
     protected void setVisible(boolean value)
     {
+        boolean changeTab = value && ! this.visible;
         if (value) { this.initVisuals(); }
         this.visible = value;
         this.updateSlotPositions();
+        if (changeTab) {
+            this.tabChanged(this.tabButtons.get(0), true); // just to update visuals
+        }
     }
 
     public void tick()
     {
         this.tickCount++;
-        if (this.tickCount < 5 || this.tickCount % 20 == 6)
+        if (this.tickCount < 5 || this.tickCount % 10 == 6)
         {
             boolean flag = this.isVisibleAccordingToMenuData();
             if (this.visible != flag) {
