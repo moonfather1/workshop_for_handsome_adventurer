@@ -52,11 +52,13 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	public static final int TABS_SLOT_END = TABS_SLOT_START + TAB_SMUGGLING_CONTAINER_SIZE - 1;//81;
 	public static final int ACCESS27_SLOT_START = TABS_SLOT_END + 1;//82;
 	public static final int ACCESS27_SLOT_END = ACCESS27_SLOT_START + TEMP_CHEST_LIMIT - 1;//108;
+	public static final int ACCESS54_SLOT_START = ACCESS27_SLOT_END + 1;//109;
+	public static final int ACCESS54_SLOT_END = ACCESS54_SLOT_START + TEMP_CHEST_LIMIT - 1;//135;
 	private final CraftingContainer craftSlots = new CraftingContainer(this, 3, 3);
 	private final ResultContainer resultSlots = new ResultContainer();
 	private final SimpleContainer customizationSlots = new SimpleContainer(CUST_CONTAINER_SIZE);
 	private final Container tabElements = new SimpleContainer(TAB_SMUGGLING_CONTAINER_SIZE); // magic to transfer to client
-	private Container chestSlots = null;
+	private Container chestSlots, chestSlots2 = null;
 	private final ContainerLevelAccess access;
 	private final Player player;
 
@@ -123,8 +125,10 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 		if (this.inventoryAccessHelper.chosenContainer != null)	{
 			this.chestSlots = this.inventoryAccessHelper.chosenContainer;
+			if (this.inventoryAccessHelper.addonContainer != null)	{ this.chestSlots2 = this.inventoryAccessHelper.addonContainer; } else { this.chestSlots2 = new DisabledContainer(27); }
 		} else {
 			this.chestSlots = new DisabledContainer(27);
+			this.chestSlots2 = new DisabledContainer(27);
 		}
 		this.isValidAccessContainer = haveContainer.isPresent() && haveContainer.get();
 		for (int ver = 0; ver < this.chestSlots.getContainerSize()/9; ++ver)
@@ -132,6 +136,13 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			for (int hor = 0; hor < 9; ++hor)
 			{
 				this.addSlot(new OptionallyDrawnSlot2(this.chestSlots, ver*9+hor, 5 + hor * 18 - LEFT_PANEL_WIDTH, 30 + ver * 18));
+			}
+		}
+		for (int ver = 0; ver < this.chestSlots.getContainerSize()/9; ++ver)
+		{
+			for (int hor = 0; hor < 9; ++hor)
+			{
+				this.addSlot(new OptionallyDrawnSlot2(this.chestSlots2, ver*9+hor, 5 + hor * 18 - LEFT_PANEL_WIDTH, 30 + (ver + 3) * 18));
 			}
 		}
 		this.customizationSlots.setChanged();
@@ -515,17 +526,39 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		if (this.isValidAccessContainer)
 		{
 			this.chestSlots = this.inventoryAccessHelper.chosenContainer;
+			for (int i = ACCESS27_SLOT_START; i <= ACCESS27_SLOT_END; i++) {
+				this.getSlot(i).container = this.chestSlots;
+			}
+			if (this.inventoryAccessHelper.addonContainer != null)
+			{
+				this.chestSlots2 = this.inventoryAccessHelper.addonContainer;
+				for (int i = ACCESS54_SLOT_START; i <= ACCESS54_SLOT_END; i++) {
+					this.getSlot(i).container = this.chestSlots2;
+				}
+			}
 		}
 		else
 		{
-			if (this.chestSlots instanceof DisabledContainer) { return; }
-			this.chestSlots = new DisabledContainer(27);
+			if (! (this.chestSlots instanceof DisabledContainer)) {
+				this.chestSlots = new DisabledContainer(27);
+				for (int i = ACCESS27_SLOT_START; i <= ACCESS27_SLOT_END; i++) {
+					this.getSlot(i).container = this.chestSlots;
+				}
+				if (! (this.chestSlots2 instanceof DisabledContainer)) {
+					this.chestSlots2 = new DisabledContainer(27);
+					for (int i = ACCESS54_SLOT_START; i <= ACCESS54_SLOT_END; i++) {
+						this.getSlot(i).container = this.chestSlots2;
+					}
+				}
+			}
 		}
-		for (int i = ACCESS27_SLOT_START; i <= ACCESS27_SLOT_END; i++) {
-			this.getSlot(i).container = this.chestSlots;
-		}
+		this.selectedTab = index; //this only happens on server side. we need to separately set this value on client side. it is on client where i need it so this line is for academic purposes.
 		this.sendAllDataToRemote();
+		this.customizationSlots.setChanged(); // cheaty call to client to re-enable/hide bottom container
 	}
+
+	public int selectedTab = -1;
+
 	////////////////////////////////////////////
 
 	private class CustomizationSlot extends Slot
@@ -631,23 +664,36 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			// changing drawer state of block in world here causes duping (fixed onRemove, might work now)
 			// anyway we need to hide/show access slots here
 			if (this.parent.initialLoading == false && this.parent.showInventoryAccess() && this.parent.chestSlots.getMaxStackSize() == DisabledContainer.MARKER_FOR_DISABLED) {
-				this.parent.changeTabTo(0);
+				if (this.parent.selectedTab != 0) { this.parent.changeTabTo(0); }
 				if (this.parent.chestSlots.getMaxStackSize() == DisabledContainer.MARKER_FOR_DISABLED)
 				{
 					//happens on client
 					((DisabledContainer)this.parent.chestSlots).disabled = false;
+					if (! this.parent.tabElements.getItem(0).isEmpty() && this.parent.tabElements.getItem(0*2).getCount() == 2) {
+						((DisabledContainer) this.parent.chestSlots2).disabled = false;
+					}
 				}
 				this.parent.sendAllDataToRemote();
 			}
-			// and again
+			// and again, we hide/show access slots here (other direction)
 			if (this.parent.initialLoading == false && ! this.parent.showInventoryAccess() && this.parent.chestSlots.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED) {
-				this.parent.changeTabTo(0);
+				if (this.parent.selectedTab != 0) { this.parent.changeTabTo(0); }
 				if (this.parent.chestSlots instanceof DisabledContainer && this.parent.chestSlots.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED)
 				{
 					//happens on client
 					((DisabledContainer)this.parent.chestSlots).disabled = true;
+					((DisabledContainer)this.parent.chestSlots2).disabled = true;
 				}
 				this.parent.sendAllDataToRemote();
+			}
+			// more work to do: we need to enable/disable lower part of double chest here
+			if (this.parent.initialLoading == false && this.parent.showInventoryAccess() && this.parent.chestSlots2 instanceof DisabledContainer) { // 3rd condition means client
+				if (this.parent.chestSlots.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED) {
+					((DisabledContainer) this.parent.chestSlots2).disabled = this.parent.tabElements.getItem(this.parent.selectedTab*2).isEmpty() || this.parent.tabElements.getItem(this.parent.selectedTab*2).getCount() != 2;
+				}
+				else {
+					((DisabledContainer) this.parent.chestSlots2).disabled = true;
+				}
 			}
 		}
 	}
