@@ -44,7 +44,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     public void init(SimpleTableCraftingScreen parent, boolean widthTooNarrow)
     {
         this.parent = parent;
-        this.widthTooNarrow2 = widthTooNarrow;
+        updateWidth(widthTooNarrow);
         this.parent.getMinecraft().player.containerMenu = this.parent.getMenu();
         //this.timesInventoryChanged = minecraft.player.getInventory().getTimesChanged();
         this.visible = this.isVisibleAccordingToMenuData();
@@ -54,6 +54,8 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         }
         this.parent.getMinecraft().keyboardHandler.setSendRepeatsToGui(true);
     }
+
+
 
     public void initVisuals()
     {
@@ -108,17 +110,18 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         return false;
     }
 
-    public int preferredScreenPositionX(int totalWidth, int dialogWidth)
+
+
+    public int getWidth()
     {
-        int x;
         if (this.isVisibleAccordingToMenuData() && ! this.widthTooNarrow2 && (! this.tabsInitialized || this.tabButtons.size() > 0))
         {
-            x = (totalWidth - dialogWidth - PANEL_WIDTH) / 2 + PANEL_WIDTH + 2;
-        } else
-        {
-            x = (totalWidth - dialogWidth) / 2;
+            return PANEL_WIDTH;
         }
-        return x;
+        else
+        {
+            return 0;
+        }
     }
 
     /////////////////////////////////////////////////////////////////////
@@ -133,7 +136,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, this.getBackground());
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            int x = (this.parent.width - PANEL_WIDTH - this.parent.getXSize()) / 2;
+            int x = this.parent.getGuiLeft();
             int y = (this.parent.height - PANEL_HEIGHT_WITH_TABS) / 2;
             this.blit(poseStack, x, y, 0, 0, PANEL_WIDTH, PANEL_HEIGHT_WITH_TABS);
             //if (!this.searchBox.isFocused() && this.searchBox.getValue().isEmpty()) {
@@ -160,7 +163,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         return BG_CHEST_LOCATION_3_ROWS;
     }
 
-    public void renderTooltip(PoseStack poseStack, int p_100363_, int p_100364_, int p_100365_, int p_100366_)
+    public void renderTooltip(PoseStack poseStack, int p_100365_, int p_100366_)
     {
         if (this.isVisibleTotal()) {
             for(StateSwitchingButton tabButton : this.tabButtons)
@@ -207,17 +210,16 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     public boolean isVisible() {
         return this.visible && this.tabButtons.size() > 0;
     }
-    public boolean isVisibleTotal() {
-        return this.isVisible() && (! this.tabsInitialized || this.tabButtons.size() > 0) && ! this.widthTooNarrow2;
-    }
+    public boolean isVisibleTotal() { return this.isVisible() && (! this.tabsInitialized || this.tabButtons.size() > 0) && ! this.widthTooNarrow2;  }
     private boolean isVisibleAccordingToMenuData() { return this.parent.getMenu().showInventoryAccess(); }
+
+
 
     protected void setVisible(boolean value)
     {
         if (value) { this.initVisuals(); }
         this.visible = value;
-        //if (!value) { this.something.setInvisible(); }
-        //this.sendUpdateSettings();
+        this.updateSlotPositions();
     }
 
     public void tick()
@@ -228,7 +230,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             boolean flag = this.isVisibleAccordingToMenuData();
             if (this.visible != flag) {
                 this.setVisible(flag);
-                this.parent.setLeft(this.preferredScreenPositionX(this.parent.width, this.parent.getImageWidth()));
+                this.parent.setPositionsX();
             }
         }
         if (this.isVisibleTotal())
@@ -238,10 +240,35 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         }
     }
 
+    private void updateWidth(boolean widthTooNarrow) {
+        if (this.widthTooNarrow2 != widthTooNarrow) {
+            this.widthTooNarrow2 = widthTooNarrow;
+            this.updateSlotPositions();
+        }
+    }
+
+    private void updateSlotPositions() {
+        if (this.isVisibleTotal() && ! this.slotsMoved) {
+            for (int k = 0; k < this.parent.getMenu().slots.size(); k++) {
+                this.parent.getMenu().slots.get(k).x += PANEL_WIDTH + 2;
+            }
+            this.slotsMoved = true;
+        }
+        else if (! this.isVisibleTotal() && this.slotsMoved) {
+            for (int k = 0; k < this.parent.getMenu().slots.size(); k++) {
+                this.parent.getMenu().slots.get(k).x -= PANEL_WIDTH + 2;
+            }
+            this.slotsMoved = false;
+        }
+    }
+    private boolean slotsMoved = false;
+
+
+
     private void updateTabs()
     {
-        int startx = this.xOffset + 3;//(this.width - 147) / 2 - this.xOffset - 30;
-        int starty = (this.parent.height - PANEL_HEIGHT_WITH_TABS) / 2; //(this.height - 166) / 2 + 3;
+        int startx = this.xOffset + 3;
+        int starty = (this.parent.height - PANEL_HEIGHT_WITH_TABS) / 2;
         int counter = 0;
         for(StateSwitchingButton tabButton : this.tabButtons)
         {
@@ -256,15 +283,15 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         System.out.println("~~~ slot clicked~ " + (slot == null ? "NULL" : (slot.index)));
     }
 
-    public boolean hasClickedOutside(double mouseX, double mouseY, int rightPartLeftPos, int rightPartTopPos, int rightPartWidth, int rightPartHeight, int mouseButton)
+    public boolean hasClickedOutside(double mouseX, double mouseY, int leftPos, int topPos, int width, int height, int mouseButton)
     {
         if (! this.isVisibleTotal()) {
             return true;
         } else {
-            return mouseX < rightPartLeftPos - PANEL_WIDTH
-                || mouseX > rightPartLeftPos + rightPartWidth
-                || mouseY < rightPartTopPos
-                || mouseY > rightPartTopPos + rightPartHeight;
+            return mouseX < leftPos
+                || mouseX > leftPos + PANEL_WIDTH
+                || mouseY < topPos
+                || mouseY > topPos + height;
         }
     }
 
@@ -316,7 +343,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         {
             itemRenderer.renderAndDecorateFakeItem(itemMain, this.x + 1, this.y + 2);
 
-            int x = (this.parent.parent.width - PANEL_WIDTH - this.parent.parent.getXSize()) / 2;
+            int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
             int y = (this.parent.parent.height - PANEL_HEIGHT_WITH_TABS) / 2;
             PoseStack posestack = RenderSystem.getModelViewStack();
             posestack.pushPose();

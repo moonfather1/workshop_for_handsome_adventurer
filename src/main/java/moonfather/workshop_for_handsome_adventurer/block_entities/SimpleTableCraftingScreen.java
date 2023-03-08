@@ -32,6 +32,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	private final InventoryAccessComponent inventoryComponent = new InventoryAccessComponent();
 	private boolean widthTooNarrow1;
 	private ImageButton buttonBook, buttonChest;
+	protected int renderLeftPos;
 
 	public SimpleTableCraftingScreen(SimpleTableMenu p_98448_, Inventory p_98449_, Component p_98450_) {
 		super(p_98448_, p_98449_, p_98450_);
@@ -41,7 +42,8 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		super.init();
 		this.widthTooNarrow1 = this.width < 400;
 		this.inventoryComponent.init(this, this.widthTooNarrow1);
-		this.leftPos = this.inventoryComponent.preferredScreenPositionX(this.width, this.imageWidth);
+		this.setPositionsX();
+
 		//this.buttonBook = this.addRenderableWidget(new ImageButton(this.leftPos + 148, this.height / 2 - 49+25, 20, 18, 0, 0, 19, RECIPE_BUTTON_LOCATION, (button) -> {
 		//	this.recipeBookComponent.toggleVisibility();
 		//	this.leftPos = this.recipeBookComponent.updateScreenPosition(this.width, this.imageWidth);
@@ -50,7 +52,21 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		//}));
 		this.addWidget(this.inventoryComponent);
 		//this.setInitialFocus(this.recipeBookComponent);
-		this.titleLabelX = 29-12;
+	}
+
+	public void setPositionsX()
+	{
+		int leftPanel = this.inventoryComponent.getWidth();
+		this.leftPos = (this.width - this.imageWidth - leftPanel) / 2;
+		this.renderLeftPos = this.leftPos + leftPanel + (leftPanel > 0 ? 2 : 0);
+		this.titleLabelX = 17 + this.renderLeftPos - this.leftPos;
+		this.inventoryLabelX = 8 + this.renderLeftPos - this.leftPos;
+	}
+
+	@Override
+	public int getXSize() {
+		int leftPanel = this.inventoryComponent.getWidth();
+		return imageWidth + leftPanel + (leftPanel > 0 ? 2 : 0);
 	}
 
 	public void containerTick()
@@ -68,16 +84,16 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		super.render(poseStack, p_98480_, p_98481_, p_98482_);
 
 		this.renderTooltip(poseStack, p_98480_, p_98481_);
-		this.inventoryComponent.renderTooltip(poseStack, this.leftPos, this.topPos, p_98480_, p_98481_);
+		this.inventoryComponent.renderTooltip(poseStack, p_98480_, p_98481_);
 		this.renderCustomizationTooltips(poseStack, p_98480_, p_98481_);
 	}
 
 	@Override
 	public void renderSlot(PoseStack poseStack, Slot slot)
 	{
-		if (! this.inventoryComponent.isVisibleTotal() && /*slot instanceof SimpleTableMenu.OptionallyDrawnSlot2*/ slot.x < 0)
+		if (! this.inventoryComponent.isVisibleTotal() && slot.x < 0) // see comment below
 		{
-			return;  //todo: if we ever change the meaning of leftpos to fix the JEI bookmarks issue, fix this
+			return;
 		}
 		super.renderSlot(poseStack, slot);
 	}
@@ -86,14 +102,14 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	public boolean isHovering(Slot slot, double x, double y) {
 		if (! this.inventoryComponent.isVisibleTotal() && /*slot instanceof SimpleTableMenu.OptionallyDrawnSlot2*/ slot.x < 0)
 		{
-			return false; //todo: if we ever change the meaning of leftpos to fix the JEI bookmarks issue, fix this
+			return false; //leaving 0 above even though we move slots. tried  this.renderLeftPos briefly.
 		}
 		return this.isHovering(slot.x, slot.y, 16, 16, x, y);
 	}
 
 	private void renderCustomizationTooltips(PoseStack poseStack, int mouseX, int mouseY)
 	{
-		if (this.hoveredSlot != null && this.hoveredSlot.hasItem())
+		if (this.hoveredSlot == null || this.hoveredSlot.hasItem())
 		{
 			return; //only over empty slots
 		}
@@ -126,7 +142,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		this.checkPaths();
 		RenderSystem.setShaderTexture(0, CRAFTING_TABLE_LOCATION[OptionsHolder.COMMON.SimpleTableNumberOfSlots.get()]);
-		int i = this.leftPos;
+		int i = this.renderLeftPos;
 		int j = (this.height - this.imageHeight) / 2;
 		this.blit(p_98474_, i, j, 0, 0, this.imageWidth, this.imageHeight);
 	}
@@ -141,9 +157,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		}
 	}
 
-	//protected boolean isHovering(int p_98462_, int p_98463_, int p_98464_, int p_98465_, double p_98466_, double p_98467_) {
-	//	return (this.widthTooNarrow1 || !this.inventoryComponent.isVisible()) && super.isHovering(p_98462_, p_98463_, p_98464_, p_98465_, p_98466_, p_98467_);
-	//}
+
 
 	public boolean mouseClicked(double p_98452_, double p_98453_, int p_98454_) {
 		//System.out.println("~~~mouseclii  " + p_98452_ + "   " + p_98453_ + "    " + p_98454_);ppp
@@ -158,7 +172,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 
 	protected boolean hasClickedOutside(double mouseX, double mouseY, int left, int top, int button) {
 		boolean flag = mouseX < (double)left || mouseY < (double)top || mouseX >= (double)(left + this.imageWidth) || mouseY >= (double)(top + this.imageHeight);
-		return this.inventoryComponent.hasClickedOutside(mouseX, mouseY, this.leftPos, this.topPos, this.imageWidth, this.imageHeight, button) && flag;
+		return this.inventoryComponent.hasClickedOutside(mouseX, mouseY, this.leftPos, this.topPos, this.imageWidth + this.inventoryComponent.getWidth() + 1, this.imageHeight, button) && flag;
 	}
 
 	protected void slotClicked(Slot p_98469_, int p_98470_, int p_98471_, ClickType p_98472_) {
@@ -174,9 +188,5 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	public int getImageWidth()
 	{
 		return this.imageWidth;
-	}
-
-	public void setLeft(int newX) {
-		this.leftPos = newX;
 	}
 }
