@@ -1,6 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.initialization;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
+import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableCraftingScreen;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableCraftingScreen;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackTESR;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -23,6 +24,7 @@ public class ClientSetup
 	public static void Initialize(FMLClientSetupEvent event)
 	{
 		event.enqueueWork(() -> MenuScreens.register(Registration.CRAFTING_SINGLE_MENU_TYPE.get(), SimpleTableCraftingScreen::new));
+		event.enqueueWork(() -> MenuScreens.register(Registration.CRAFTING_DUAL_MENU_TYPE.get(), DualTableCraftingScreen::new));
 		//ItemBlockRenderTypes.setRenderLayer(Registration.SIMPLE_TABLE.get(), RenderType.cutoutMipped()); // apparently unnecessary.
 		//BlockEntityRenderers.register(Registration.TOOL_RACK.get(), ToolRackTESR::new); //maybe this would be ok too
 	}

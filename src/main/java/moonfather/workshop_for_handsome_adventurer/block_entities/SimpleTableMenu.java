@@ -28,6 +28,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -54,23 +55,24 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	public static final int ACCESS27_SLOT_END = ACCESS27_SLOT_START + TEMP_CHEST_LIMIT - 1;//108;
 	public static final int ACCESS54_SLOT_START = ACCESS27_SLOT_END + 1;//109;
 	public static final int ACCESS54_SLOT_END = ACCESS54_SLOT_START + TEMP_CHEST_LIMIT - 1;//135;
-	private final CraftingContainer craftSlots = new CraftingContainer(this, 3, 3);
-	private final ResultContainer resultSlots = new ResultContainer();
+	protected final CraftingContainer craftSlots = new CraftingContainer(this, 3, 3);
+	protected final ResultContainer resultSlots = new ResultContainer();
+	protected final Player player;
+	protected final ContainerLevelAccess access;
 	private final SimpleContainer customizationSlots = new SimpleContainer(CUST_CONTAINER_SIZE);
 	private final Container tabElements = new SimpleContainer(TAB_SMUGGLING_CONTAINER_SIZE); // magic to transfer to client
 	private Container chestSlots, chestSlots2 = null;
-	private final ContainerLevelAccess access;
-	private final Player player;
-
-	private boolean initialLoading = true;
+	protected boolean initialLoading = true;
 	private boolean isValidAccessContainer = true;
 
-	public SimpleTableMenu(int containerId, Inventory inventory) {
-		this(containerId, inventory, ContainerLevelAccess.NULL);
+
+	public SimpleTableMenu(int containerId, Inventory inventory, FriendlyByteBuf friendlyByteBuf)
+	{
+		this(containerId, inventory, ContainerLevelAccess.NULL, Registration.CRAFTING_SINGLE_MENU_TYPE.get());
 	}
 
-	public SimpleTableMenu(int containerId, Inventory inventory, ContainerLevelAccess levelAccess) {
-		super(Registration.CRAFTING_SINGLE_MENU_TYPE.get(), containerId);
+	public SimpleTableMenu(int containerId, Inventory inventory, ContainerLevelAccess levelAccess, @Nullable MenuType<?> menuType) {
+		super(menuType, containerId);
 		this.access = levelAccess;
 		this.player = inventory.player;
 		//---crafting result slot---
@@ -150,13 +152,9 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	}
 
 
-	//todo:override
+
 	protected int getCustomizationSlotCount()	{ return OptionsHolder.COMMON.SimpleTableNumberOfSlots.get(); }
 
-	public SimpleTableMenu(int containerId, Inventory inventory, FriendlyByteBuf friendlyByteBuf)
-	{
-		this(containerId, inventory, ContainerLevelAccess.NULL);
-	}
 
 	protected static void slotChangedCraftingGrid(AbstractContainerMenu p_150547_, Level p_150548_, Player p_150549_, CraftingContainer p_150550_, ResultContainer p_150551_) {
 		if (!p_150548_.isClientSide) {
@@ -192,34 +190,18 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 	}
 
-	public void fillCraftSlotsStackedContents(StackedContents contents) {
-		this.craftSlots.fillStackedContents(contents);
-	}
-
-	public void clearCraftingContent()
-	{
-		this.craftSlots.clearContent();
-		this.resultSlots.clearContent();
-	}
-
-	public boolean recipeMatches(Recipe<? super CraftingContainer> recipe) {
-		return recipe.matches(this.craftSlots, this.player.level);
-	}
+	protected void clearAdditional()  {}
 
 	public void removed(Player player) {
 		super.removed(player);
 		boolean hasDrawer = hasChestInCustomizationSlots();
 		this.clearContainer(player, this.craftSlots);
-		this.clearContainer(player, this.customizationSlots);
-		this.access.execute((level, pos) -> updateDrawerInWorld(level, pos, hasDrawer));
+		this.clearAdditional();
+		this.access.execute( (level, pos) -> this.storeCustomizationsToWorld(this.customizationSlots, level, pos));
+		this.access.execute( (level, pos) -> updateDrawerInWorld(level, pos, hasDrawer));
 	}
 
 	public boolean stillValid(Player player)
-	{
-		return stillValidInstanceOf(this.access, player);
-	}
-
-	protected static boolean stillValidInstanceOf(ContainerLevelAccess access, Player player)
 	{
 		return access.evaluate((level, pos) ->
 		{
@@ -227,6 +209,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			return player.distanceToSqr((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D) <= 64.0D;
 		}, true);
 	}
+
 
 
 	public ItemStack quickMoveStack(Player player, int slotIndex) {
@@ -387,12 +370,6 @@ public class SimpleTableMenu extends AbstractContainerMenu
 					}
 			);
 		}
-		else if (isCustomizationContainer(container))
-		{
-			this.access.execute(
-					(level, pos) -> this.storeCustomizationsToWorld(container, level, pos)
-			);
-		}
 		else
 		{
 			// what container now?
@@ -420,9 +397,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		return container.getContainerSize() == 3*3;
 	}
 
-	private boolean isCustomizationContainer(Container container)
-	{
-		return container.getContainerSize() == CUST_CONTAINER_SIZE;
+	protected int getSlotOffsetInDataStorage(Container container) {
+		return 0;
 	}
 
 	private void storeCraftingGridToWorld(Container container, Level level, BlockPos pos)
@@ -430,7 +406,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		SimpleTableBlockEntity be = (SimpleTableBlockEntity) level.getBlockEntity(pos);  assert be != null;
 		for(int i = 0; i < container.getContainerSize(); i++)
 		{
-			be.DepositItem(i, container.removeItemNoUpdate(i));
+			be.DepositItem(this.getSlotOffsetInDataStorage(container) + i, container.removeItemNoUpdate(i));
 		}
 	}
 
@@ -444,7 +420,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 	}
 
-	private void loadFromWorld(Level level, BlockPos pos)
+	protected void loadFromWorld(Level level, BlockPos pos)
 	{
 		SimpleTableBlockEntity be = (SimpleTableBlockEntity) level.getBlockEntity(pos);  assert be != null;
 		for(int i = 0; i < this.craftSlots.getContainerSize(); i++)
@@ -561,7 +537,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	////////////////////////////////////////////
 
-	private class CustomizationSlot extends Slot
+	public class CustomizationSlot extends Slot
 	{
 		public static final ResourceLocation EMPTY_SLOT_BG = new ResourceLocation(Constants.MODID, "gui/c_slot");
 

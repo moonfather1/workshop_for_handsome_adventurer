@@ -1,10 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.initialization;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
-import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableBlockEntity;
-import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
-import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
+import moonfather.workshop_for_handsome_adventurer.block_entities.*;
 import moonfather.workshop_for_handsome_adventurer.blocks.*;
 import moonfather.workshop_for_handsome_adventurer.items.BlockItemEx;
 import moonfather.workshop_for_handsome_adventurer.other.CreativeTab;
@@ -138,10 +135,13 @@ public class Registration
 			).build(null));
 	public static final RegistryObject<BlockEntityType<SimpleTableBlockEntity>> SIMPLE_TABLE_BE = BLOCK_ENTITIES.register("simple_table_be", () -> BlockEntityType.Builder.of(SimpleTableBlockEntity::new,
 			SIMPLE_TABLE_OAK.get(), SIMPLE_TABLE_SPRUCE.get(), SIMPLE_TABLE_BIRCH.get(), SIMPLE_TABLE_JUNGLE.get(), SIMPLE_TABLE_DARK_OAK.get()).build(null));
+	public static final RegistryObject<BlockEntityType<DualTableBlockEntity>> DUAL_TABLE_BE = BLOCK_ENTITIES.register("dual_table_be", () -> BlockEntityType.Builder.of(DualTableBlockEntity::new,
+			DUAL_TABLE_PRIMARY_OAK.get(), DUAL_TABLE_PRIMARY_SPRUCE.get(), DUAL_TABLE_PRIMARY_BIRCH.get(), DUAL_TABLE_PRIMARY_JUNGLE.get(), DUAL_TABLE_PRIMARY_DARK_OAK.get()).build(null));
 	public static final RegistryObject<BlockEntityType<PotionShelfBlockEntity>> POTION_SHELF_BE = BLOCK_ENTITIES.register("potion_shelf_be", () -> BlockEntityType.Builder.of(PotionShelfBlockEntity::new,
 			POTION_SHELF_OAK.get(), POTION_SHELF_SPRUCE.get(), POTION_SHELF_JUNGLE.get(), POTION_SHELF_BIRCH.get(), POTION_SHELF_DARK_OAK.get()
 	).build(null));
 	public static final RegistryObject<MenuType<SimpleTableMenu>> CRAFTING_SINGLE_MENU_TYPE = CONTAINER_TYPES.register("crafting_single", () -> IForgeMenuType.create(SimpleTableMenu::new));
+	public static final RegistryObject<MenuType<DualTableMenu>> CRAFTING_DUAL_MENU_TYPE = CONTAINER_TYPES.register("crafting_dual", () -> IForgeMenuType.create(DualTableMenu::new));
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

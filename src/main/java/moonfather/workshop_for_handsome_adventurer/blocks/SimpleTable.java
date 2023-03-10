@@ -179,7 +179,7 @@ public class SimpleTable extends Block implements EntityBlock
 	{
 		return new SimpleMenuProvider((containerId, inventory, p_52231_) ->
 		{
-			return new SimpleTableMenu(containerId, inventory, ContainerLevelAccess.create(level, blockPos));
+			return new SimpleTableMenu(containerId, inventory, ContainerLevelAccess.create(level, blockPos), Registration.CRAFTING_SINGLE_MENU_TYPE.get());
 		}, CONTAINER_TITLE);
 	}
 
