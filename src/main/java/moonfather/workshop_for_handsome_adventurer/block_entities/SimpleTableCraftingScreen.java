@@ -111,7 +111,6 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		{
 			return; //only over empty slots
 		}
-
 		if (this.hoveredSlot instanceof SimpleTableMenu.CustomizationSlot && this.hoveredSlot.getSlotIndex() < this.getMenu().getCustomizationSlotCount())
 		{
 			if (this.minecraft.screen != null)

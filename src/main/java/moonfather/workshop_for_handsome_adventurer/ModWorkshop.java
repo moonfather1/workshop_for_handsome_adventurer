@@ -5,31 +5,22 @@ import moonfather.workshop_for_handsome_adventurer.initialization.ClientSetup;
 import moonfather.workshop_for_handsome_adventurer.initialization.CommonSetup;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.integration.TOPRegistration;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
-import java.util.stream.Collectors;
 
 @Mod(Constants.MODID)
 public class ModWorkshop
 {
-    //NOW         starting double table
+    //NOW           refactoring events.          chest mode visible
 
     //--all-- --MUST--
     //...
@@ -47,16 +38,16 @@ public class ModWorkshop
     //...
     //--simpletable--  --NTH--
     //.....
+    //crates from create, maybe in 1.2
 
     //--dualtable--  --MUST--
-    //todo: customization slot, accepts chest/drawer / spyglass(?) / spyglass (2) / 1x lantern
     //todo: lantern gives both top blocks 10 light
     //todo: chest mode visible
-    //todo: BE stores items
-    //todo: TC widget windows
     //todo: JEI places items
+    //todo: shift clicking and returning from C2
     //todo: WTHIT is entirely unsupported, jei and top are fine ootb
     //--dualtable--  --NTH--
+    //more than 8 chests; not necessary for 1.0
     //consider: right click top to turn lamps off/on
     //consider: nine storage slots, other than crafting slots
     //issue: Rubidium causes z-fighting (confirmed it's not any other mod)
@@ -67,9 +58,14 @@ public class ModWorkshop
     //when you have two-block rack and you're looking so that the top half isn't visible, items disappear.
     //integration: crescent hammer (thermal) won't go onto the rack.  it's fine.
     //--later--
-    //maybe after 1.1: sword rack?    todo list?
-    //after 1.0 rename chests at the cost of 1 XPL
-    //after 1.0: items on top of tables
+    //last thing in 1.0 rename chests at the cost of 1 XPL
+    //after 1.0: render items on top of tables
+    //after 1.0: todo list similar to one in BiblioCraft
+    //after 1.0: bookshelf like the one in BiblioCraft; no gui
+    //maybe after 1.1: storage drawer support. maybe.
+    //maybe after 1.1: sword rack? maybe. decorative, single sword, horizontal, no gui
+    //maybe after 1.1: chest markers (similar to item frames); maybe? no gui, pull items from chest
+    //probably not: weapon rack (vertical weapons),  sword and shield on wall...
 
 
     // Directly reference a slf4j logger

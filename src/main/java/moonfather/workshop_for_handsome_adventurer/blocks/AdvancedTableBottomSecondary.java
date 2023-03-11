@@ -3,6 +3,8 @@ package moonfather.workshop_for_handsome_adventurer.blocks;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -17,6 +19,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -94,5 +97,16 @@ public class AdvancedTableBottomSecondary extends DualTableBaseBlock
 		BlockState stateMain = level.getBlockState(posMain);
 		Block blockMain = stateMain.getBlock();
 		return blockMain.getCloneItemStack(stateMain, target, level, posMain, player);
+	}
+
+
+
+	@Override
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult bhr1)
+	{
+		BlockPos posMain = pos.relative(state.getValue(BlockStateProperties.HORIZONTAL_FACING).getClockWise());
+		BlockState stateMain = level.getBlockState(posMain);
+		BlockHitResult bhr2 = new BlockHitResult(bhr1.getLocation(), bhr1.getDirection(), posMain, bhr1.isInside());
+		return stateMain.getBlock().use(stateMain, level, posMain, player,hand, bhr2);
 	}
 }

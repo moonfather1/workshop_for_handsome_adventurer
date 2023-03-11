@@ -16,13 +16,11 @@ import net.minecraft.world.ContainerListener;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -39,7 +37,6 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	public static final int TAB_SMUGGLING_SOFT_LIMIT = 8; // that much fits above dialog
 	public static final int TEMP_CHEST_LIMIT = 27;//todo:rework
 	public static final int LEFT_PANEL_WIDTH = 176;
-	private static final TagKey<Item> ChestTag = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge:chests"));
 	public static final int RESULT_SLOT = 0;
 	public static final int CRAFT_SLOT_START = 1;
 	public static final int CRAFT_SLOT_END = CRAFT_SLOT_START + 9 - 1;//9
@@ -109,8 +106,11 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		this.addSlot(new CustomizationSlot(this.customizationSlots, 2, 152, 17 + 2*22 + ((2 < custSlotCount) ? 0 : 9009)));
 		this.addSlot(new CustomizationSlot(this.customizationSlots, 3, 152, 17 + 3*22 + ((3 < custSlotCount) ? 0 : 9009)));
 		this.access.execute(this::loadFromWorld);
-		this.customizationSlots.addListener(new CustomizationListener(this));
-		((SimpleContainer)this.tabElements).addListener(new CustomizationListener(this));
+		if (! this.player.level.isClientSide) {
+			this.customizationSlots.addListener(new CustomizationListenerServer(this));
+		} //todo: else below??
+		this.customizationSlots.addListener(new CustomizationListenerClient(this));
+		((SimpleContainer)this.tabElements).addListener(new CustomizationListenerClient(this));
 
 		//---slots to sneak tab images to the client---
 		for (int i = 0; i < this.tabElements.getContainerSize(); i++)
@@ -346,8 +346,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			this.access.execute(
 					(level, pos) ->
 					{
-						BlockState state = level.getBlockState(pos);
-						if (! (state.getBlock() instanceof SimpleTable))
+						if (! (level.getBlockEntity(pos) instanceof SimpleTableBlockEntity))
 						{
 							super.clearContainer(player, container);
 							return;
@@ -461,7 +460,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	{
 		for (int i = 0; i < this.customizationSlots.getContainerSize(); i++)
 		{
-			if (this.customizationSlots.getItem(i).is(ChestTag))
+			if (this.customizationSlots.getItem(i).is(CustomizationSlot.ChestTag))
 			{
 				return true;
 			}
@@ -486,13 +485,30 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		return false;
 	}
 
-	private void storeAdjacentInventoriesInSlots()
-	{
-		this.access.execute((level, pos) -> this.inventoryAccessHelper.loadAdjacentInventories(level, pos, this.player));
-		this.inventoryAccessHelper.putInventoriesIntoAContainerForTransferToClient(this.tabElements, TAB_SMUGGLING_CONTAINER_SIZE/2);
-		this.tabElements.setChanged();
+	public int getInventoryAccessRange() {
+		int result = 0;
+		for (int i = 0; i < this.customizationSlots.getContainerSize(); i++)
+		{
+			if (this.customizationSlots.getItem(i).is(CustomizationSlot.getAccessItem()))
+			{
+				result += 1;
+			}
+		}
+		if (result > 2) result = 2;
+		return result;
 	}
 
+	private void storeAdjacentInventoriesInSlots()
+	{
+		int range = this.getInventoryAccessRange();
+		this.access.execute((level, pos) -> this.inventoryAccessHelper.loadAdjacentInventories(level, pos, this.player, range));
+		this.lastInventoryAccessRange = range;
+		this.inventoryAccessHelper.putInventoriesIntoAContainerForTransferToClient(this.tabElements, TAB_SMUGGLING_CONTAINER_SIZE/2);
+		this.tabElements.setChanged();
+		this.lastInventoryAccessRange = range;
+	}
+
+	private int lastInventoryAccessRange = 0;
 	private final InventoryAccessHelper inventoryAccessHelper = new InventoryAccessHelper();
 
 	public void changeTabTo(int index)
@@ -539,6 +555,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	public class CustomizationSlot extends Slot
 	{
+		private static final TagKey<Item> ChestTag = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge:chests"));
+		private static final TagKey<Item> LanternTag = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(Constants.MODID, "lanterns"));
 		public static final ResourceLocation EMPTY_SLOT_BG = new ResourceLocation(Constants.MODID, "gui/c_slot");
 
 		public CustomizationSlot(Container p_39521_, int p_39522_, int p_39523_, int p_39524_)
@@ -549,7 +567,9 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 		public boolean mayPlace(ItemStack itemStack)
 		{
-			return itemStack.is(ChestTag) || itemStack.is(CustomizationSlot.getAccessItem());
+			return itemStack.is(ChestTag)
+					|| itemStack.is(CustomizationSlot.getAccessItem())
+					|| this.acceptsLanterns && itemStack.is(LanternTag);
 		}
 
 		public int getMaxStackSize(ItemStack itemStack) {
@@ -566,6 +586,9 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			}
 			return accessItem;
 		}
+
+		private boolean acceptsLanterns = false;
+		public void setAcceptsLanterns(boolean value) { this.acceptsLanterns = value; }
 	}
 
 	//////////////////////////////////////////////////////////////
@@ -629,9 +652,9 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	/////////////////////////////////////////////////////////////////////////
 
-	private class CustomizationListener implements ContainerListener {
+	private class CustomizationListenerClient implements ContainerListener {
 		private final SimpleTableMenu parent;
-		public CustomizationListener(SimpleTableMenu simpleTableMenu) {
+		public CustomizationListenerClient(SimpleTableMenu simpleTableMenu) {
 			this.parent = simpleTableMenu;
 		}
 
@@ -670,6 +693,22 @@ public class SimpleTableMenu extends AbstractContainerMenu
 				else {
 					((DisabledContainer) this.parent.chestSlots2).disabled = true;
 				}
+			}
+		}
+	}
+
+	private class CustomizationListenerServer implements ContainerListener {
+		private final SimpleTableMenu parent;
+		public CustomizationListenerServer(SimpleTableMenu simpleTableMenu) {
+			this.parent = simpleTableMenu;
+		}
+		@Override
+		public void containerChanged(Container container) {
+			int range = this.parent.getInventoryAccessRange();
+			if (range != this.parent.lastInventoryAccessRange)
+			{
+				this.parent.storeAdjacentInventoriesInSlots();
+				this.parent.lastInventoryAccessRange = range;
 			}
 		}
 	}

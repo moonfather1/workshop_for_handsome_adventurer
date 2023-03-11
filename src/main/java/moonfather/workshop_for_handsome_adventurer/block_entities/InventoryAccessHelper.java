@@ -1,5 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
+import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
@@ -16,11 +17,8 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.entity.EnderChestBlockEntity;
 import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,12 +97,26 @@ public class InventoryAccessHelper
 
     private List<InventoryAccessHelper.InventoryAccessRecord> adjacentInventories = null;
 
-    public void loadAdjacentInventories(Level level, BlockPos pos, Player player)
+    public void loadAdjacentInventories(Level level, BlockPos pos, Player player, int inventoryAccessRange)
     {
         if (this.adjacentInventories == null)
         {
             this.adjacentInventories = new ArrayList<>();
         }
+        this.adjacentInventories.clear();
+        this.loadAdjacentInventoriesCore(level, pos, player, inventoryAccessRange);
+        BlockState statePrimary = level.getBlockState(pos);
+        BlockPos posSecondary = null;
+        if (statePrimary.getBlock() instanceof AdvancedTableBottomPrimary)
+        {
+            posSecondary = pos.relative(statePrimary.getValue(BlockStateProperties.HORIZONTAL_FACING).getCounterClockWise());
+            this.loadAdjacentInventoriesCore(level, posSecondary, player, inventoryAccessRange);
+        }
+        this.sort(pos, posSecondary);
+    }
+
+    private void loadAdjacentInventoriesCore(Level level, BlockPos pos, Player player, int range)
+    {
         BlockPos.MutableBlockPos pos2 = new BlockPos.MutableBlockPos();
         for (int dy = 1; dy >= 0; dy--)
         {
@@ -112,14 +124,15 @@ public class InventoryAccessHelper
             {
                 continue;
             }
-            for (int dx = -1; dx <= 1; dx++)
+            for (int dx = -range; dx <= range; dx++)
             {
-                for (int dz = -1; dz <= 1; dz++)
+                for (int dz = -range; dz <= range; dz++)
                 {
-                    if (dx * dz != 0 || dx + dz == 0)
+                    if (! this.isInRange(dx, dz, range))
                     {
-                        continue; //corners or center, range 1
+                        continue;
                     }
+                    if (this.adjacentInventories.size() == SimpleTableMenu.TAB_SMUGGLING_SOFT_LIMIT) { return; }
                     pos2.set(pos.getX() + dx, pos.getY() + dy, pos.getZ() + dz);
                     BlockEntity be = level.getBlockEntity(pos2);
                     this.resolveContainer(be, player, pos2, level);
@@ -145,11 +158,17 @@ public class InventoryAccessHelper
                         record.x = pos2.getX(); record.y = pos2.getY(); record.z = pos2.getZ();
                         record.Index = this.adjacentInventories.size();
                         this.adjacentInventories.add(record);
-                        if (this.adjacentInventories.size() == SimpleTableMenu.TAB_SMUGGLING_SOFT_LIMIT) { return; }
                     }
                 }
             }
         }
+    }
+
+
+    private boolean isInRange(int dx, int dz, int range)
+    {
+        if (dx == 0 && dz == 0) return false;
+        return Math.abs(dx) + Math.abs(dz) <= range;
     }
 
     ////////////////////////////////////////////
@@ -178,6 +197,11 @@ public class InventoryAccessHelper
             tabElements.setItem(i*2, chest);
             tabElements.setItem(i*2+1, suff);
         }
+        for (int i = max * 2; i < tabElements.getContainerSize(); i++) {
+            if (! tabElements.getItem(i).isEmpty()) {
+                tabElements.setItem(i, ItemStack.EMPTY);
+            }
+        }
     }
 
 
@@ -192,6 +216,61 @@ public class InventoryAccessHelper
         resolveContainer(be, player, pos, level);
         return this.chosenContainer != null;
     }
+
+    ///////////////////////////////////////////////////////
+
+    private void sort(BlockPos pos, BlockPos posSecondary) {
+        InventoryAccessRecord left, right;
+        for (int i = 0; i < this.adjacentInventories.size()-1; i++) {
+            for (int k = i + 1; k < this.adjacentInventories.size(); k++) {
+                left = this.adjacentInventories.get(i);
+                right = this.adjacentInventories.get(k);
+                if (left.x == right.x && left.y == right.y && left.z == right.z)
+                {   // same location? remove.
+                    this.adjacentInventories.remove(k);
+                    k--;
+                }
+            }
+        }
+        for (int i = 0; i < this.adjacentInventories.size()-1; i++) {
+            for (int k = i+1; k < this.adjacentInventories.size(); k++) {
+                left = this.adjacentInventories.get(i);
+                right = this.adjacentInventories.get(k);
+                if (left.y < right.y)
+                {   // right from upper level, left from floor level? swap.
+                    this.adjacentInventories.set(i, right);
+                    this.adjacentInventories.set(k, left);
+                    continue;
+                }
+                if (posSecondary != null && left.y == right.y) {
+                    if (pos.getX() == posSecondary.getX() && pos.getZ() < posSecondary.getZ()) {
+                        if (left.z > right.z) {
+                            this.adjacentInventories.set(i, right);
+                            this.adjacentInventories.set(k, left);
+                        }
+                    } else if (pos.getX() == posSecondary.getX() && pos.getZ() > posSecondary.getZ()) {
+                        if (left.z < right.z) {
+                            this.adjacentInventories.set(i, right);
+                            this.adjacentInventories.set(k, left);
+                        }
+                    } else if (pos.getZ() == posSecondary.getZ() && pos.getX() < posSecondary.getX()) {
+                        // player facing north, table facing south. sort.
+                        if (left.x > right.x) {
+                            this.adjacentInventories.set(i, right);
+                            this.adjacentInventories.set(k, left);
+                        }
+                    } else if (pos.getZ() == posSecondary.getZ() && pos.getX() > posSecondary.getX()) {
+                        // player facing south, table facing north. sort.
+                        if (left.x < right.x) {
+                            this.adjacentInventories.set(i, right);
+                            this.adjacentInventories.set(k, left);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     ////////////////////////////////////////////
 
     static class InventoryAccessRecord

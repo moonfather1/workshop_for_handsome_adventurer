@@ -88,6 +88,7 @@ public class DualTableMenu extends SimpleTableMenu
 		for (int k = CUST_SLOT_START; k <= CUST_SLOT_END; k++)
 		{
 			current = this.slots.get(k);
+			((CustomizationSlot)current).setAcceptsLanterns(true);
 			if (k == CUST_SLOT_START) { y0 = current.y - 9; };
 			if ((k - CUST_SLOT_START) >= this.getCustomizationSlotCount()) { continue; } // leave them off-screen
 			current.y = y0 + (k - CUST_SLOT_START) * (18 + 4);
