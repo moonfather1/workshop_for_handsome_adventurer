@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 @Mod(Constants.MODID)
 public class ModWorkshop
 {
-    //NOW           refactoring events.          chest mode visible
+    //NOW           refactoring events.
 
     //--all-- --MUST--
     //...

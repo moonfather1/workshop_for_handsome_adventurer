@@ -77,7 +77,7 @@ public class AdvancedTableBottomSecondary extends DualTableBaseBlock
 			return true; //canSurvive is disabled until we place the multiblock
 		}
 		Block above = world.getBlockState(pos.above()).getBlock();
-		if (! above.equals(Registration.DUAL_TABLE_TOP.get()))
+		if (! (above instanceof AdvancedTableTopSecondary))
 		{
 			return false;
 		}
@@ -108,5 +108,12 @@ public class AdvancedTableBottomSecondary extends DualTableBaseBlock
 		BlockState stateMain = level.getBlockState(posMain);
 		BlockHitResult bhr2 = new BlockHitResult(bhr1.getLocation(), bhr1.getDirection(), posMain, bhr1.isInside());
 		return stateMain.getBlock().use(stateMain, level, posMain, player,hand, bhr2);
+	}
+
+	@Override
+	protected void toggleLights(BlockState state, Level level, BlockPos pos) {
+		BlockPos posMain = pos.relative(state.getValue(BlockStateProperties.HORIZONTAL_FACING).getClockWise());
+		BlockState stateMain = level.getBlockState(posMain);
+		((DualTableBaseBlock) stateMain.getBlock()).toggleLights(stateMain, level, posMain);
 	}
 }

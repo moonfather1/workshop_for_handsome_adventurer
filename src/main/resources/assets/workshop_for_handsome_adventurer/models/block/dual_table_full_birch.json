@@ -1,5 +1,5 @@
 {
-    "parent": "workshop_for_handsome_adventurer:block/dual_table",
+    "parent": "workshop_for_handsome_adventurer:block/dual_table_full",
     "textures": {
         "particle": "minecraft:block/stripped_birch_log",
         "stripped_oak_log": "minecraft:block/stripped_birch_log",

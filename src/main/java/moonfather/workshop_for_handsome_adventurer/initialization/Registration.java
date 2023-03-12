@@ -50,19 +50,32 @@ public class Registration
 	public static final RegistryObject<Block> SIMPLE_TABLE_DARK_OAK = BLOCKS.register("simple_table_dark_oak", () -> new SimpleTable());
 	public static final RegistryObject<Item> SIMPLE_TABLE_ITEM_DARK_OAK = FromBlock(SIMPLE_TABLE_DARK_OAK);
 
-	public static final RegistryObject<Block> DUAL_TABLE_PRIMARY_OAK = BLOCKS.register("dual_table_primary_oak", () -> new AdvancedTableBottomPrimary());
-	public static final RegistryObject<Block> DUAL_TABLE_PRIMARY_SPRUCE = BLOCKS.register("dual_table_primary_spruce", () -> new AdvancedTableBottomPrimary());
-	public static final RegistryObject<Block> DUAL_TABLE_PRIMARY_BIRCH = BLOCKS.register("dual_table_primary_birch", () -> new AdvancedTableBottomPrimary());
-	public static final RegistryObject<Block> DUAL_TABLE_PRIMARY_JUNGLE = BLOCKS.register("dual_table_primary_jungle", () -> new AdvancedTableBottomPrimary());
-	public static final RegistryObject<Block> DUAL_TABLE_PRIMARY_DARK_OAK = BLOCKS.register("dual_table_primary_dark_oak", () -> new AdvancedTableBottomPrimary());
-	public static final RegistryObject<Block> DUAL_TABLE_SECONDARY = BLOCKS.register("dual_table_secondary", () -> new AdvancedTableBottomSecondary());
-	public static final RegistryObject<Block> DUAL_TABLE_TOP = BLOCKS.register("dual_table_top", () -> new AdvancedTableTopSecondary());
+	public static final RegistryObject<Block> DUAL_TABLE_PRIMARY_OAK = BLOCKS.register("dual_table_bottom_left_oak", () -> new AdvancedTableBottomPrimary());
+	public static final RegistryObject<Block> DUAL_TABLE_PRIMARY_SPRUCE = BLOCKS.register("dual_table_bottom_left_spruce", () -> new AdvancedTableBottomPrimary());
+	public static final RegistryObject<Block> DUAL_TABLE_PRIMARY_BIRCH = BLOCKS.register("dual_table_bottom_left_birch", () -> new AdvancedTableBottomPrimary());
+	public static final RegistryObject<Block> DUAL_TABLE_PRIMARY_JUNGLE = BLOCKS.register("dual_table_bottom_left_jungle", () -> new AdvancedTableBottomPrimary());
+	public static final RegistryObject<Block> DUAL_TABLE_PRIMARY_DARK_OAK = BLOCKS.register("dual_table_bottom_left_dark_oak", () -> new AdvancedTableBottomPrimary());
+	public static final RegistryObject<Block> DUAL_TABLE_SECONDARY_OAK = BLOCKS.register("dual_table_bottom_right_oak", () -> new AdvancedTableBottomSecondary());
+	public static final RegistryObject<Block> DUAL_TABLE_SECONDARY_SPRUCE = BLOCKS.register("dual_table_bottom_right_spruce", () -> new AdvancedTableBottomSecondary());
+	public static final RegistryObject<Block> DUAL_TABLE_SECONDARY_BIRCH = BLOCKS.register("dual_table_bottom_right_birch", () -> new AdvancedTableBottomSecondary());
+	public static final RegistryObject<Block> DUAL_TABLE_SECONDARY_JUNGLE = BLOCKS.register("dual_table_bottom_right_jungle", () -> new AdvancedTableBottomSecondary());
+	public static final RegistryObject<Block> DUAL_TABLE_SECONDARY_DARK_OAK = BLOCKS.register("dual_table_bottom_right_dark_oak", () -> new AdvancedTableBottomSecondary());
+	public static final RegistryObject<Block> DUAL_TABLE_TOP_LEFT_OAK = BLOCKS.register("dual_table_top_left_oak", () -> new AdvancedTableTopSecondary());
+	public static final RegistryObject<Block> DUAL_TABLE_TOP_LEFT_SPRUCE = BLOCKS.register("dual_table_top_left_spruce", () -> new AdvancedTableTopSecondary());
+	public static final RegistryObject<Block> DUAL_TABLE_TOP_LEFT_BIRCH = BLOCKS.register("dual_table_top_left_birch", () -> new AdvancedTableTopSecondary());
+	public static final RegistryObject<Block> DUAL_TABLE_TOP_LEFT_JUNGLE = BLOCKS.register("dual_table_top_left_jungle", () -> new AdvancedTableTopSecondary());
+	public static final RegistryObject<Block> DUAL_TABLE_TOP_LEFT_DARK_OAK = BLOCKS.register("dual_table_top_left_dark_oak", () -> new AdvancedTableTopSecondary());
+	public static final RegistryObject<Block> DUAL_TABLE_TOP_RIGHT_OAK = BLOCKS.register("dual_table_top_right_oak", () -> new AdvancedTableTopSecondary());
+	public static final RegistryObject<Block> DUAL_TABLE_TOP_RIGHT_SPRUCE = BLOCKS.register("dual_table_top_right_spruce", () -> new AdvancedTableTopSecondary());
+	public static final RegistryObject<Block> DUAL_TABLE_TOP_RIGHT_BIRCH = BLOCKS.register("dual_table_top_right_birch", () -> new AdvancedTableTopSecondary());
+	public static final RegistryObject<Block> DUAL_TABLE_TOP_RIGHT_JUNGLE = BLOCKS.register("dual_table_top_right_jungle", () -> new AdvancedTableTopSecondary());
+	public static final RegistryObject<Block> DUAL_TABLE_TOP_RIGHT_DARK_OAK = BLOCKS.register("dual_table_top_right_dark_oak", () -> new AdvancedTableTopSecondary());
 
-	public static final RegistryObject<Item> DUAL_TABLE_PLACER_ITEM_OAK = ITEMS.register("workstation_placer_oak", () -> new WorkstationPlacerItem(DUAL_TABLE_PRIMARY_OAK.get()));
-	public static final RegistryObject<Item> DUAL_TABLE_PLACER_ITEM_SPRUCE = ITEMS.register("workstation_placer_spruce", () -> new WorkstationPlacerItem(DUAL_TABLE_PRIMARY_SPRUCE.get()));
-	public static final RegistryObject<Item> DUAL_TABLE_PLACER_ITEM_BIRCH = ITEMS.register("workstation_placer_birch", () -> new WorkstationPlacerItem(DUAL_TABLE_PRIMARY_BIRCH.get()));
-	public static final RegistryObject<Item> DUAL_TABLE_PLACER_ITEM_JUNGLE = ITEMS.register("workstation_placer_jungle", () -> new WorkstationPlacerItem(DUAL_TABLE_PRIMARY_JUNGLE.get()));
-	public static final RegistryObject<Item> DUAL_TABLE_PLACER_ITEM_DARK_OAK = ITEMS.register("workstation_placer_dark_oak", () -> new WorkstationPlacerItem(DUAL_TABLE_PRIMARY_DARK_OAK.get()));
+	public static final RegistryObject<Item> DUAL_TABLE_PLACER_ITEM_OAK = ITEMS.register("workstation_placer_oak", () -> new WorkstationPlacerItem("oak"));
+	public static final RegistryObject<Item> DUAL_TABLE_PLACER_ITEM_SPRUCE = ITEMS.register("workstation_placer_spruce", () -> new WorkstationPlacerItem("spruce"));
+	public static final RegistryObject<Item> DUAL_TABLE_PLACER_ITEM_BIRCH = ITEMS.register("workstation_placer_birch", () -> new WorkstationPlacerItem("birch"));
+	public static final RegistryObject<Item> DUAL_TABLE_PLACER_ITEM_JUNGLE = ITEMS.register("workstation_placer_jungle", () -> new WorkstationPlacerItem("jungle"));
+	public static final RegistryObject<Item> DUAL_TABLE_PLACER_ITEM_DARK_OAK = ITEMS.register("workstation_placer_dark_oak", () -> new WorkstationPlacerItem("dark_oak"));
 
 	public static final RegistryObject<Block> MINI_TOOL_RACK_OAK = BLOCKS.register("tool_rack_single_oak", () -> new ToolRack(2, "single"));
 	public static final RegistryObject<Item> MINI_TOOL_RACK_ITEM_OAK = FromBlock(MINI_TOOL_RACK_OAK);

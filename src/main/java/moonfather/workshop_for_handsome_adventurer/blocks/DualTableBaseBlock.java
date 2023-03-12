@@ -3,6 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.blocks;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -17,13 +18,14 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
 public abstract class DualTableBaseBlock extends Block
 {
 	public DualTableBaseBlock()
 	{
-		super(Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2f, 3f).sound(SoundType.WOOD));
+		super(Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2f, 3f).sound(SoundType.WOOD).lightLevel(DualTableBaseBlock::getLightLevel));
 		registerDefaultState(this.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
 	}
 
@@ -49,6 +51,8 @@ public abstract class DualTableBaseBlock extends Block
 
 
 	public static final BooleanProperty BEING_PLACED = BooleanProperty.create("being_placed"); // ignore blocks around it not matching multiblock
+
+
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
@@ -71,6 +75,19 @@ public abstract class DualTableBaseBlock extends Block
 
 
 
+	private static int getLightLevel(BlockState state) {
+		if (state.hasProperty(AdvancedTableBottomPrimary.LIGHTS_ON)) {
+			if (state.getValue(AdvancedTableBottomPrimary.LIGHTS_ON) && state.getValue(AdvancedTableBottomPrimary.HAS_LANTERNS)) {
+				return 10;
+			}
+		}
+		return 0;
+	}
+
+
+
 	@Override
 	public abstract ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player);
+
+	protected abstract void toggleLights(BlockState state, Level level, BlockPos pos);
 }

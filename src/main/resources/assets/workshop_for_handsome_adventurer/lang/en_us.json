@@ -71,7 +71,7 @@
 	"message.workshop_for_handsome_adventurer.shelf_probe_tooltip": "Number of bottles: %d, can fit %d.",
 
 	"message.workshop_for_handsome_adventurer.extension_slot1": "Put a chest or a storage drawer here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests.",
-	"message.workshop_for_handsome_adventurer.extension_slot2": "Put a chest or a storage drawer here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests. \n(optionally one more [ITEM] for a range of two blocks)\n \nOr a lantern to make it a part of the workstation \nand light up the surroundings.",
+	"message.workshop_for_handsome_adventurer.extension_slot2": "Put a chest or a storage drawer here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests. \n(optionally one more [ITEM] for a range of two blocks)\n \nOr two lanterns to make them part of the workstation \nand light up the surroundings (put two in one slot).",
 	"message.workshop_for_handsome_adventurer.extension_slotT": "Customization slot",
 	"message.workshop_for_handsome_adventurer.extension_slotS": "(shift for more)",
 

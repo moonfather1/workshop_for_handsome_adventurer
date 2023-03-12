@@ -1,0 +1,13 @@
+{
+    "variants":
+    {
+        "facing=north,has_lanterns=false": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_right_birch", "y": 180 },
+        "facing=east,has_lanterns=false": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_right_birch", "y": -90 },
+        "facing=south,has_lanterns=false": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_right_birch", "y": 0 },
+        "facing=west,has_lanterns=false": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_right_birch", "y": 90 },
+        "facing=north,has_lanterns=true": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_right2_birch", "y": 180 },
+        "facing=east,has_lanterns=true": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_right2_birch", "y": -90 },
+        "facing=south,has_lanterns=true": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_right2_birch", "y": 0 },
+        "facing=west,has_lanterns=true": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_right2_birch", "y": 90 }
+    }
+}

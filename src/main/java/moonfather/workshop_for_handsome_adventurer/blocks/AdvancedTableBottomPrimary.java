@@ -3,8 +3,6 @@ package moonfather.workshop_for_handsome_adventurer.blocks;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableMenu;
-import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableBlockEntity;
-import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -24,8 +22,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -33,9 +29,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -49,7 +42,9 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements En
 	public AdvancedTableBottomPrimary()
 	{
 		super();
-		registerDefaultState(this.defaultBlockState().setValue(SimpleTable.HAS_INVENTORY, false).setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
+		registerDefaultState(this.defaultBlockState().setValue(SimpleTable.HAS_INVENTORY, false)
+		                                             .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
+		                                             .setValue(HAS_LANTERNS, false));
 	}
 
 	/////////////////////////////////////////////////////////////////////////
@@ -102,12 +97,12 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements En
 			return true; //canSurvive is disabled until we place the multiblock
 		}
 		Block above = world.getBlockState(pos.above()).getBlock();
-		if (! above.equals(Registration.DUAL_TABLE_TOP.get()))
+		if (! (above instanceof AdvancedTableTopSecondary))
 		{
 			return false;
 		}
 		Block right = world.getBlockState(pos.relative(state.getValue(BlockStateProperties.HORIZONTAL_FACING).getCounterClockWise())).getBlock();
-		if (! right.equals(Registration.DUAL_TABLE_SECONDARY.get()))
+		if (! (right instanceof AdvancedTableBottomSecondary))
 		{
 			return false;
 		}
@@ -120,7 +115,7 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements En
 	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
 	{
 		String wood = this.getRegistryName().getPath();
-		wood = wood.substring(wood.indexOf("_", 12) + 1);
+		wood = wood.substring(wood.indexOf("_", 20) + 1);
 		return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MODID, "workstation_placer_" + wood)));
 	}
 
@@ -186,5 +181,31 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements En
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(SimpleTable.HAS_INVENTORY);
+		builder.add(HAS_LANTERNS);
+	}
+	public static final BooleanProperty HAS_LANTERNS = BooleanProperty.create("has_lanterns"); // has lamps
+	public static final BooleanProperty LIGHTS_ON = BooleanProperty.create("is_lit"); // on/off
+
+	public void setLanternState(Level level, BlockPos pos, boolean value) {
+		BlockState state1 = level.getBlockState(pos);
+		BlockPos pos2 = pos.above();
+		BlockState state2 = level.getBlockState(pos2);
+		BlockPos pos3 = pos2.relative(state2.getValue(BlockStateProperties.HORIZONTAL_FACING).getCounterClockWise());
+		BlockState state3 = level.getBlockState(pos3);
+		if (state2.getValue(HAS_LANTERNS) == value && state3.getValue(HAS_LANTERNS) == value && state1.getValue(HAS_LANTERNS) == value) { return; }
+		level.setBlockAndUpdate(pos, state1.setValue(HAS_LANTERNS, value)); // self (primary)
+		level.setBlockAndUpdate(pos2, state2.setValue(HAS_LANTERNS, value).setValue(LIGHTS_ON, value)); // top above
+		level.setBlockAndUpdate(pos3, state3.setValue(HAS_LANTERNS, value).setValue(LIGHTS_ON, value)); // top to the right
+	}
+
+	@Override
+	protected void toggleLights(BlockState state, Level level, BlockPos pos)
+	{
+		BlockPos pos2 = pos.above();
+		BlockState state2 = level.getBlockState(pos2);
+		level.setBlockAndUpdate(pos2, state2.setValue(LIGHTS_ON, ! state2.getValue(LIGHTS_ON)));
+		pos2 = pos2.relative(state.getValue(BlockStateProperties.HORIZONTAL_FACING).getCounterClockWise());
+		state2 = level.getBlockState(pos2);
+		level.setBlockAndUpdate(pos2, state2.setValue(LIGHTS_ON, ! state2.getValue(LIGHTS_ON)));
 	}
 }

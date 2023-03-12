@@ -1,9 +1,0 @@
-{
-    "variants":
-    {
-        "facing=north": { "model": "workshop_for_handsome_adventurer:block/dual_table_spruce", "y": 180 },
-        "facing=east": { "model": "workshop_for_handsome_adventurer:block/dual_table_spruce", "y":  -90 },
-        "facing=south": { "model": "workshop_for_handsome_adventurer:block/dual_table_spruce", "y": 0 },
-        "facing=west": { "model": "workshop_for_handsome_adventurer:block/dual_table_spruce", "y": 90 }
-    }
-}

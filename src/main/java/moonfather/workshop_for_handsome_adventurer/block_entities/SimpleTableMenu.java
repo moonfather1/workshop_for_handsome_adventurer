@@ -2,6 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
+import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
 import moonfather.workshop_for_handsome_adventurer.blocks.SimpleTable;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
@@ -498,6 +499,29 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		return result;
 	}
 
+	public int getLanternCount() {
+		int result = 0;
+		for (int i = 0; i < this.customizationSlots.getContainerSize(); i++)
+		{
+			ItemStack stack = this.customizationSlots.getItem(i);
+			if (stack.is(CustomizationSlot.LanternTag))
+			{
+				if (stack.getCount() > result) {
+					result = stack.getCount();
+				}
+			}
+		}
+		return result;
+	}
+
+	private void setLanternState(Level level, BlockPos pos, boolean value) {
+		if (level.getBlockState(pos).getBlock() instanceof AdvancedTableBottomPrimary block) {
+			block.setLanternState(level, pos, value);
+		}
+	}
+
+	////////////////////////////////////////
+
 	private void storeAdjacentInventoriesInSlots()
 	{
 		int range = this.getInventoryAccessRange();
@@ -509,6 +533,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	}
 
 	private int lastInventoryAccessRange = 0;
+	private int lastLanternCount = 0;
 	private final InventoryAccessHelper inventoryAccessHelper = new InventoryAccessHelper();
 
 	public void changeTabTo(int index)
@@ -573,7 +598,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 
 		public int getMaxStackSize(ItemStack itemStack) {
-			return 1;
+			return itemStack.is(LanternTag) ? 2 : 1;
 		}
 
 		private static Item accessItem = null;
@@ -704,11 +729,24 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 		@Override
 		public void containerChanged(Container container) {
+			// name tags
 			int range = this.parent.getInventoryAccessRange();
 			if (range != this.parent.lastInventoryAccessRange)
 			{
 				this.parent.storeAdjacentInventoriesInSlots();
 				this.parent.lastInventoryAccessRange = range;
+			}
+			// lanterns
+			int lanternCount = this.parent.getLanternCount();
+			if (lanternCount == 2 && this.parent.lastLanternCount != 2)
+			{
+				this.parent.access.execute( (l, p) -> this.parent.setLanternState(l, p, true) );
+				this.parent.lastLanternCount = lanternCount;
+			}
+			else if (lanternCount != 2 && this.parent.lastLanternCount == 2)
+			{
+				this.parent.access.execute( (l, p) -> this.parent.setLanternState(l, p, false) );
+				this.parent.lastLanternCount = lanternCount;
 			}
 		}
 	}
