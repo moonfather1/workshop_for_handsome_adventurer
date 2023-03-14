@@ -18,14 +18,21 @@ public class PacketSender
             PROTOCOL_VERSION::equals
     );
 
-    public static void sendToServer(int newTab)
+    public static void sendTabChangeToServer(int newTab)
     {
         TabChangeMessage message = new TabChangeMessage(newTab);
         CHANNEL_INSTANCE.sendToServer(message);
     }
 
+    public static void sendDestinationGridChangeToServer(int newDestination)
+    {
+        GridChangeMessage message = new GridChangeMessage(newDestination);
+        CHANNEL_INSTANCE.sendToServer(message);
+    }
+
     public static void registerMessage() {
-        CHANNEL_INSTANCE.registerMessage(discriminator++, TabChangeMessage.class, TabChangeMessage::encode, TabChangeMessage::decode, PacketHandler::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL_INSTANCE.registerMessage(discriminator++, TabChangeMessage.class, TabChangeMessage::encode, TabChangeMessage::decode, PacketHandler::handleTabChange, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL_INSTANCE.registerMessage(discriminator++, GridChangeMessage.class, GridChangeMessage::encode, GridChangeMessage::decode, PacketHandler::handleGridChange, Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
     private static int discriminator = 123;
 }

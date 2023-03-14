@@ -109,7 +109,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             this.selectedTab = button;
             this.parent.getMenu().selectedTab = button.chestIndex; // we separately set this here as we need it in listener. this value change only happens on client and is only needed here.
             if (! dontSendToServer) {
-                PacketSender.sendToServer(button.chestIndex);
+                PacketSender.sendTabChangeToServer(button.chestIndex);
             }
             return true;
         }

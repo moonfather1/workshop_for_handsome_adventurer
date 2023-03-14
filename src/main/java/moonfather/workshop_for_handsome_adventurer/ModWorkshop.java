@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 @Mod(Constants.MODID)
 public class ModWorkshop
 {
-    //NOW           refactoring events.
+    //NOW       JEI places items                     LATER refactoring events.
 
     //--all-- --MUST--
     //...
@@ -41,14 +41,11 @@ public class ModWorkshop
     //crates from create, maybe in 1.2
 
     //--dualtable--  --MUST--
-    //todo: lantern gives both top blocks 10 light
-    //todo: chest mode visible
     //todo: JEI places items
     //todo: shift clicking and returning from C2
     //todo: WTHIT is entirely unsupported, jei and top are fine ootb
     //--dualtable--  --NTH--
     //more than 8 chests; not necessary for 1.0
-    //consider: right click top to turn lamps off/on
     //consider: nine storage slots, other than crafting slots
     //issue: Rubidium causes z-fighting (confirmed it's not any other mod)
 

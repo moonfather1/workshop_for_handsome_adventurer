@@ -1,8 +1,8 @@
-package moonfather.workshop_for_handsome_adventurer.other;
+package moonfather.workshop_for_handsome_adventurer.items;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.other.CreativeTab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;

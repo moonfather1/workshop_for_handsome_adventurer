@@ -101,6 +101,15 @@ public class DualTableMenu extends SimpleTableMenu
 			current.y = primary.y;
 			primary.y = primary.y + 3 * 18 + 13; // labels are 13px
 		}
+
+		for (int k = CRAFT_TERTIARY_SLOT_START; k <= CRAFT_TERTIARY_SLOT_END; k++)
+		{
+			Slot primary = this.slots.get(k - CRAFT_TERTIARY_SLOT_START + CRAFT_SLOT_START);
+			current = this.slots.get(k);
+			current.y = primary.y;
+			current.x = primary.x + 130;
+		}
+
 		Slot primary = this.slots.get(RESULT_SLOT);
 		this.slots.get(SECONDARY_RESULT_SLOT).y = primary.y;
 		primary.y = primary.y + 3 * 18 + 13;
@@ -145,7 +154,31 @@ public class DualTableMenu extends SimpleTableMenu
 	}
 
 	private void slotChangedCraftingGridJEI(DualTableMenu dualTableMenu, Level level, Player player, CraftingContainer craftSlots) {
-		System.out.println("~~~ tertiary grid changed");
+		for (int k = CRAFT_TERTIARY_SLOT_START; k <= CRAFT_TERTIARY_SLOT_END; k++)
+		{
+			Slot current = this.slots.get(k);
+			if (current.getItem().isEmpty()) { continue; }
+			Slot target = this.slots.get(k - CRAFT_TERTIARY_SLOT_START + (this.recipeTargetGrid == 1 ? CRAFT_SLOT_START : CRAFT_SECONDARY_SLOT_START));
+			if (target.getItem().isEmpty())	{
+			//	target.set(current.getItem());
+			//	current.set(ItemStack.EMPTY);
+			}
+			else {
+			//	player.getInventory().placeItemBackInInventory(target.getItem()); // could have called grid.removeItemNoUpdate
+			//	target.set(current.getItem());
+			//	current.set(ItemStack.EMPTY);
+			}
+		}
+		System.out.println("~~~tert grid ch ");
+	}
+
+
+	private int recipeTargetGrid = 1;
+	public void changeRecipeTargetGridTo(int grid) {
+		if (grid >= 1 && grid <= 2 ) {
+			this.recipeTargetGrid = grid;
+			System.out.println("~~~tert grid redirected to " + grid);
+		}
 	}
 
 

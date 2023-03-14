@@ -2,10 +2,10 @@ package moonfather.workshop_for_handsome_adventurer.block_entities.messaging;
 
 import net.minecraft.network.FriendlyByteBuf;
 
-public class TabChangeMessage
+public class GridChangeMessage
 {
     private int value = -1;
-    public TabChangeMessage(int value)
+    public GridChangeMessage(int value)
     {
         this.value = value;
     }
@@ -14,17 +14,13 @@ public class TabChangeMessage
         buffer.writeInt(value);
     }
 
-    public static TabChangeMessage decode(FriendlyByteBuf buffer) {
-        TabChangeMessage result = new TabChangeMessage(-1);
+    public static GridChangeMessage decode(FriendlyByteBuf buffer) {
+        GridChangeMessage result = new GridChangeMessage(-1);
         result.value = buffer.readInt();
         return result;
     }
 
-    public int getValue() {
-        return this.value;
-    }
-
-    public int getTab() {
+    public int getDestinationGrid() {
         return this.value;
     }
 }

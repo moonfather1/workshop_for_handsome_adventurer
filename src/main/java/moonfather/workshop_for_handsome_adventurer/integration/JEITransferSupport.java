@@ -4,6 +4,7 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
+import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import net.minecraft.resources.ResourceLocation;
 
@@ -12,7 +13,8 @@ public class JEITransferSupport implements IModPlugin
 {
 	public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration)
 	{
-		registration.addRecipeTransferHandler(SimpleTableMenu.class, VanillaRecipeCategoryUid.CRAFTING, 1, 9, 10, 36);
+		registration.addRecipeTransferHandler(SimpleTableMenu.class, VanillaRecipeCategoryUid.CRAFTING, SimpleTableMenu.CRAFT_SLOT_START, 9, SimpleTableMenu.INV_SLOT_START, 9*4);
+		registration.addRecipeTransferHandler(DualTableMenu.class, VanillaRecipeCategoryUid.CRAFTING, DualTableMenu.CRAFT_TERTIARY_SLOT_START, 9, DualTableMenu.INV_SLOT_START, 9*4);
 	}
 
 	@Override
