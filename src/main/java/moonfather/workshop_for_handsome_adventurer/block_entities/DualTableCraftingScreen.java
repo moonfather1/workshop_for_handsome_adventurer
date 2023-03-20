@@ -7,6 +7,9 @@ import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.ModList;
@@ -56,7 +59,14 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 	@Override
 	protected void init() {
 		super.init();
+		((DualTableMenu) this.menu).registerClientHandlerForDataSlotChange(this::recipeTargetButtonChangeHandler);
+		//PacketSender.sendRemoteUpdateRequestToServer();
 		this.createJeiButton();
+	}
+
+	private void recipeTargetButtonChangeHandler(Integer value) {
+		lastDestinationGrid = value;
+		this.jeiButton.setStateTriggered(value == 2);
 	}
 
 	@Override
@@ -73,6 +83,7 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 			this.jeiButton = new DestinationPickerButton(0, 0, DestinationPickerButton.JEI_BUTTON_WIDTH, DestinationPickerButton.JEI_BUTTON_HEIGTH, false);  // last par is initial state
 			this.jeiButton.initTextureValues(DestinationPickerButton.JEI_BUTTON_POSX, DestinationPickerButton.JEI_BUTTON_POSY, DestinationPickerButton.JEI_BUTTON_WIDTH + DestinationPickerButton.JEI_BUTTON_MARGIN, DestinationPickerButton.JEI_BUTTON_HEIGTH + DestinationPickerButton.JEI_BUTTON_MARGIN, BACKGROUND_LOCATION[0]);
 			this.jeiButton.setPosition(DestinationPickerButton.JEI_BUTTON_RENDERX + this.renderLeftPos, DestinationPickerButton.JEI_BUTTON_RENDERY + this.topPos);
+			this.jeiButton.setStateTriggered(((DualTableMenu) this.menu).getRecipeTargetGrid() == 2);
 			this.addRenderableWidget(this.jeiButton);
 		}
 	}
@@ -98,18 +109,28 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 		}
 
 		@Override
-		public boolean mouseClicked(double p_93641_, double p_93642_, int p_93643_) {
-			if (p_93641_ >= this.x && p_93641_ <= this.x + JEI_BUTTON_WIDTH
-				&& p_93642_ >= this.y && p_93642_ <= this.y + JEI_BUTTON_HEIGTH) {
-				this.setStateTriggered(! this.isStateTriggered);
-				int destination = this.isStateTriggered ? 2 : 1;
-				if (destination != lastDestinationGrid) {
-					lastDestinationGrid = destination;
-					PacketSender.sendDestinationGridChangeToServer(destination);
+		public boolean mouseClicked(double x, double y, int p_93643_) {
+			double localX = x - this.x;
+			double localY = y - this.y;
+			if (localX >= 10 && localX <= 20 && localY >= 4 && localY <= 14) {
+				if (lastDestinationGrid != 2)
+				{
+					PacketSender.sendDestinationGridChangeToServer(2);
+					lastDestinationGrid = 2;
+					this.setStateTriggered(true);
 				}
 				return true;
 			}
-			return super.mouseClicked(p_93641_, p_93642_, p_93643_);
+			else if (localX >= 10 && localX <= 20 && localY >= 14 && localY <= 24) {
+				if (lastDestinationGrid != 1)
+				{
+					PacketSender.sendDestinationGridChangeToServer(1);
+					lastDestinationGrid = 1;
+					this.setStateTriggered(false);
+				}
+				return true;
+			}
+			return super.mouseClicked(x, y, p_93643_);
 		}
 	}
 }

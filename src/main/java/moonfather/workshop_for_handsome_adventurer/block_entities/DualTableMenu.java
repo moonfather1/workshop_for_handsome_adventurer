@@ -1,46 +1,31 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
-import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.blocks.DualTableBaseBlock;
-import moonfather.workshop_for_handsome_adventurer.blocks.SimpleTable;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
-import net.minecraft.world.ContainerListener;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.function.Consumer;
 
 public class DualTableMenu extends SimpleTableMenu
 {
-	public static final int LEFT_PANEL_WIDTH = 176;
 	public static final int CRAFT_SECONDARY_SLOT_START = ACCESS54_SLOT_END + 1; //136
 	public static final int CRAFT_SECONDARY_SLOT_END = CRAFT_SECONDARY_SLOT_START + 9 - 1; // 144
 	public static final int CRAFT_TERTIARY_SLOT_START = CRAFT_SECONDARY_SLOT_END + 1; // 145
-	public static final int CRAFT_TERTIARY_SLOT_END = CRAFT_TERTIARY_SLOT_START + 9 - 1; // 153
+	public static final int CRAFT_TERTIARY_SLOT_END = CRAFT_TERTIARY_SLOT_START + 9 + 1 - 1; // 153
 	public static final int SECONDARY_RESULT_SLOT = CRAFT_TERTIARY_SLOT_END + 1; // 154
 	private final CraftingContainer craftSlotsSecondary = new CraftingContainer(this, 3, 3);
-	private final CraftingContainer craftSlotsTertiary = new CraftingContainer(this, 3, 3);
+	private final CraftingContainer craftSlotsTertiary = new CraftingContainer(this, 3, 4);
 	private final ResultContainer resultSlotsSecondary = new ResultContainer();
 
 	public DualTableMenu(int containerId, Inventory inventory, FriendlyByteBuf friendlyByteBuf)
@@ -51,6 +36,7 @@ public class DualTableMenu extends SimpleTableMenu
 	public DualTableMenu(int containerId, Inventory inventory, ContainerLevelAccess levelAccess, @Nullable MenuType<?> menuType) {
 		super(containerId, inventory, levelAccess, menuType);
 		this.initialLoading = true;
+		this.addDataSlot(this.recipeTargetGridSlot);
 		this.access.execute(this::loadFromWorldPartTwo);
 
 		//---crafting grid slots 2---
@@ -70,6 +56,7 @@ public class DualTableMenu extends SimpleTableMenu
 				this.addSlot(new Slot(this.craftSlotsTertiary, hor + ver * 3, -20000 + hor * 18, 17 + ver * 18));
 			}
 		}
+		this.addSlot(new SlotWithNotification(this.craftSlotsTertiary, 9, -20000 + 3 * 18, 17 + 1 * 18, (s) -> this.onDustSlotChanged(s)));
 
 		//---crafting result slot 2---
 		this.addSlot(new ResultSlot(inventory.player, this.craftSlotsSecondary, this.resultSlotsSecondary, 0, 124-12, 35+18));
@@ -101,19 +88,23 @@ public class DualTableMenu extends SimpleTableMenu
 			current.y = primary.y;
 			primary.y = primary.y + 3 * 18 + 13; // labels are 13px
 		}
-
-		for (int k = CRAFT_TERTIARY_SLOT_START; k <= CRAFT_TERTIARY_SLOT_END; k++)
+////////*********************************************
+		for (int k = CRAFT_TERTIARY_SLOT_START; k <= CRAFT_TERTIARY_SLOT_END - 1; k++)
 		{
 			Slot primary = this.slots.get(k - CRAFT_TERTIARY_SLOT_START + CRAFT_SLOT_START);
 			current = this.slots.get(k);
 			current.y = primary.y;
 			current.x = primary.x + 130;
 		}
-
+		Slot slot10 = this.slots.get(CRAFT_TERTIARY_SLOT_END);
+		Slot slot08 = this.slots.get(CRAFT_TERTIARY_SLOT_END-2);
+		slot10.x = slot08.x;   slot10.y = slot08.y + 18;
+//////*********************************************
 		Slot primary = this.slots.get(RESULT_SLOT);
 		this.slots.get(SECONDARY_RESULT_SLOT).y = primary.y;
 		primary.y = primary.y + 3 * 18 + 13;
 
+		this.slots.get(CRAFT_TERTIARY_SLOT_END).set(Registration.USELESS_DUST.get().getDefaultInstance());
 		this.initialLoading = false;
 	}
 
@@ -141,10 +132,7 @@ public class DualTableMenu extends SimpleTableMenu
 		}
 		else if (container.equals(this.craftSlotsTertiary))
 		{
-			this.access.execute( (level, pos) ->
-			{
-				slotChangedCraftingGridJEI(this, level, this.player, this.craftSlotsTertiary);
-			});
+			slotChangedCraftingGridJEI();
 		}
 		else
 		{
@@ -153,31 +141,41 @@ public class DualTableMenu extends SimpleTableMenu
 		}
 	}
 
-	private void slotChangedCraftingGridJEI(DualTableMenu dualTableMenu, Level level, Player player, CraftingContainer craftSlots) {
-		for (int k = CRAFT_TERTIARY_SLOT_START; k <= CRAFT_TERTIARY_SLOT_END; k++)
+	private void slotChangedCraftingGridJEI() {
+		if (this.slots.get(CRAFT_TERTIARY_SLOT_END).getItem().isEmpty()) {
+			this.onDustSlotChanged((SlotWithNotification) this.slots.get(CRAFT_TERTIARY_SLOT_END));
+		}
+		for (int k = CRAFT_TERTIARY_SLOT_START; k <= CRAFT_TERTIARY_SLOT_START + 9 - 1; k++)
 		{
 			Slot current = this.slots.get(k);
 			if (current.getItem().isEmpty()) { continue; }
-			Slot target = this.slots.get(k - CRAFT_TERTIARY_SLOT_START + (this.recipeTargetGrid == 1 ? CRAFT_SLOT_START : CRAFT_SECONDARY_SLOT_START));
+			Slot target = this.slots.get(k - CRAFT_TERTIARY_SLOT_START + (this.getRecipeTargetGrid() == 1 ? CRAFT_SLOT_START : CRAFT_SECONDARY_SLOT_START));
 			if (target.getItem().isEmpty())	{
-			//	target.set(current.getItem());
-			//	current.set(ItemStack.EMPTY);
+				target.set(current.getItem());
+				current.set(ItemStack.EMPTY);
 			}
 			else {
-			//	player.getInventory().placeItemBackInInventory(target.getItem()); // could have called grid.removeItemNoUpdate
-			//	target.set(current.getItem());
-			//	current.set(ItemStack.EMPTY);
+				System.out.println("~~~tert grid ch - this branch should not happen ");
+				this.player.getInventory().placeItemBackInInventory(target.getItem()); // could have called grid.removeItemNoUpdate
+				target.set(current.getItem());
+				current.set(ItemStack.EMPTY);
 			}
 		}
-		System.out.println("~~~tert grid ch ");
 	}
 
 
-	private int recipeTargetGrid = 1;
+	public int getRecipeTargetGrid() {
+		return this.recipeTargetGridSlot.get();
+	}
+	private DataSlotWithNotification recipeTargetGridSlot = new DataSlotWithNotification();
+	public void registerClientHandlerForDataSlotChange(Consumer<Integer> event)	{
+		this.recipeTargetGridSlot.setEvent(event);
+	}
+
 	public void changeRecipeTargetGridTo(int grid) {
 		if (grid >= 1 && grid <= 2 ) {
-			this.recipeTargetGrid = grid;
-			System.out.println("~~~tert grid redirected to " + grid);
+			this.setData(0, grid);
+			this.sendAllDataToRemote();
 		}
 	}
 
@@ -189,7 +187,7 @@ public class DualTableMenu extends SimpleTableMenu
 	}
 
 	private void verifyEmpty(Player player, CraftingContainer container) {
-		for (int i = 0; i < container.getContainerSize(); i++) {
+		for (int i = 0; i < 9; i++) {
 			if (! container.getItem(i).isEmpty()) {
 				System.out.println("!!! ERROR  NON EMPTY IN SLOT " + i + ":   " + container.getItem(i));
 			}
@@ -291,16 +289,94 @@ public class DualTableMenu extends SimpleTableMenu
 		else if (container.equals(this.craftSlotsSecondary))
 			return 9 + 4;
 		else
-			return 0; // error
+			return 101; // error
 	}
 
 	protected void loadFromWorldPartTwo(Level level, BlockPos pos)
 	{
-		SimpleTableBlockEntity be = (SimpleTableBlockEntity) level.getBlockEntity(pos);  assert be != null;
-		for(int i = 0; i < this.craftSlotsSecondary.getContainerSize(); i++)
+		DualTableBlockEntity be = (DualTableBlockEntity) level.getBlockEntity(pos);  assert be != null;
+		for (int i = 0; i < this.craftSlotsSecondary.getContainerSize(); i++)
 		{
 			this.craftSlotsSecondary.setItem(i, be.GetItem(this.getSlotOffsetInDataStorage(this.craftSlotsSecondary) + i));
 		}
 		this.craftSlotsSecondary.setChanged();
+		this.changeRecipeTargetGridTo(be.GetIntegerData(0));
+	}
+
+	@Override
+	protected void storeDataValues(Level level, BlockPos pos) {
+		DualTableBlockEntity be = (DualTableBlockEntity) level.getBlockEntity(pos);  assert be != null;
+		be.StoreIntegerData(0, this.getRecipeTargetGrid());
+	}
+
+	private void onDustSlotChanged(SlotWithNotification slot) {
+		if (slot.getItem().is(Registration.USELESS_DUST.get())) {
+			return;
+		}
+		if (slot.getItem().isEmpty()) {
+			slot.set(Registration.USELESS_DUST.get().getDefaultInstance());
+
+			if (this.player instanceof ServerPlayer) {
+				Container containerToClear = (this.getRecipeTargetGrid() == 1 ? this.craftSlots : this.craftSlotsSecondary);
+				if (this.showInventoryAccess()) {
+					this.clearContainerWithInventoryAccess(player, containerToClear); // will place to chests
+				}
+				for (int i = 0; i < containerToClear.getContainerSize(); ++i) {
+					this.player.getInventory().placeItemBackInInventory(containerToClear.removeItemNoUpdate(i));
+				}
+			}
+		}
+		else {
+			System.out.println("!!!dust slot ch - this branch should not happen ");
+			this.player.getInventory().placeItemBackInInventory(slot.getItem());
+			slot.set(Registration.USELESS_DUST.get().getDefaultInstance());
+		}
+	}
+	//////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
+
+	private static class SlotWithNotification extends Slot {
+		private final Consumer<SlotWithNotification> changeEvent;
+
+		public SlotWithNotification(CraftingContainer container, int slotIndex, int x, int y, Consumer<SlotWithNotification> event) {
+			super(container, slotIndex, x, y);
+			this.changeEvent = event;
+		}
+
+		@Override
+		public Optional<ItemStack> tryRemove(int p_150642_, int p_150643_, Player player) {
+			//System.out.println("~~~slot.tryRemove");
+			return super.tryRemove(p_150642_, p_150643_, player);
+		}
+
+		@Override
+		public void set(ItemStack itemStack) {
+			super.set(itemStack);
+			if (this.changeEvent != null) {
+				this.changeEvent.accept(this);
+			}
+		}
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////
+
+	public class DataSlotWithNotification extends DataSlot
+	{
+		private int recipeTargetGrid = 1;
+		private Consumer<Integer> event = null;
+		@Override
+		public int get() { return this.recipeTargetGrid; }
+
+		@Override
+		public void set(int v) {
+			this.recipeTargetGrid = v;
+			if (event != null) {
+				event.accept(v);
+			}
+		}
+
+		public void setEvent(Consumer<Integer> newEvent) {
+			this.event = newEvent;
+		}
 	}
 }

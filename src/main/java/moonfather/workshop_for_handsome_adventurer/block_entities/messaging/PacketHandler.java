@@ -34,4 +34,20 @@ public class PacketHandler
         });
         contextSupplier.get().setPacketHandled(true);
     }
+
+    public static void handleClientRequest(ClientRequestMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
+        contextSupplier.get().enqueueWork(() -> {
+            // Work that needs to be threadsafe (most work)
+            ServerPlayer player = contextSupplier.get().getSender(); // the client that sent this packet
+            // do stuff
+            if (player.containerMenu instanceof SimpleTableMenu menu)
+            {
+                if (msg.isRemoteUpdateRequest()) {
+                    menu.sendAllDataToRemote();
+                    menu.broadcastChanges();
+                }
+            }
+        });
+        contextSupplier.get().setPacketHandled(true);
+    }
 }

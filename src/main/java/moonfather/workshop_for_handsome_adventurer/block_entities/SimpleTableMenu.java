@@ -198,9 +198,12 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		boolean hasDrawer = hasChestInCustomizationSlots();
 		this.clearContainer(player, this.craftSlots);
 		this.clearAdditional();
+		this.access.execute( (level, pos) -> this.storeDataValues(level, pos));
 		this.access.execute( (level, pos) -> this.storeCustomizationsToWorld(this.customizationSlots, level, pos));
 		this.access.execute( (level, pos) -> updateDrawerInWorld(level, pos, hasDrawer));
 	}
+
+	protected void storeDataValues(Level level, BlockPos pos) { }
 
 	public boolean stillValid(Player player)
 	{
@@ -358,7 +361,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 								this.clearContainerWithInventoryAccess(player, container); // will place to chests
 							}
 							super.clearContainer(player, container); // will place to player
-							this.clearInWorld(level, pos);
+							this.clearInWorld(container, level, pos);
 							return;
 						}
 						//if (!player.isAlive() || player instanceof ServerPlayer && ((ServerPlayer) player).hasDisconnected()) {
@@ -380,12 +383,15 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	protected void clearContainerWithInventoryAccess(Player player, Container container) {
 		if (!player.isAlive() || player instanceof ServerPlayer && ((ServerPlayer)player).hasDisconnected()) {
-			for(int j = 0; j < container.getContainerSize(); ++j) {
+			for (int j = 0; j < container.getContainerSize(); ++j) {
 				player.drop(container.removeItemNoUpdate(j), false);
 			}
 		} else {
-			for(int i = 0; i < container.getContainerSize(); ++i) {
+			for (int i = 0; i < container.getContainerSize(); ++i) {
 				moveItemStackToOccupiedSlotsOnly(container.getItem(i), ACCESS27_SLOT_START, ACCESS27_SLOT_END+1, false);
+				if (this.inventoryAccessHelper.addonContainer != null) {
+					moveItemStackToOccupiedSlotsOnly(container.getItem(i), ACCESS54_SLOT_START, ACCESS54_SLOT_END+1, false);
+				}
 			}
 		}
 	}
@@ -394,7 +400,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	private boolean isCraftingGrid(Container container)
 	{
-		return container.getContainerSize() == 3*3;
+		return container.getContainerSize() == 3*3 || container.getContainerSize() == 3*4; // tertiary is 12
 	}
 
 	protected int getSlotOffsetInDataStorage(Container container) {
@@ -434,14 +440,18 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 	}
 
-	private void clearInWorld(Level level, BlockPos pos)
+
+
+	private void clearInWorld(Container container, Level level, BlockPos pos)
 	{
 		BaseContainerBlockEntity be = (BaseContainerBlockEntity) level.getBlockEntity(pos);
-		for(int i = 0; i < this.craftSlots.getContainerSize(); i++)
+		for(int i = 0; i < container.getContainerSize(); i++)
 		{
-			be.ClearItem(i);
+			be.ClearItem(this.getSlotOffsetInDataStorage(container) + i);
 		}
-	}
+	} // container.getContainerSize would be wrong for tertiary grid, but we are not storing it; only the first two.
+
+
 
 	private void updateDrawerInWorld(Level level, BlockPos pos, boolean hasDrawer)
 	{
