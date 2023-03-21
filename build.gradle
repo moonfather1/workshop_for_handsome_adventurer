@@ -16,7 +16,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 
 
-version = '0.82'
+version = '0.92'
 group = 'moonfather.workshop_for_handsome_adventurer' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'workshop_for_handsome_adventurer'
 
@@ -153,6 +153,10 @@ repositories {
     maven {
         url = "https://www.cursemaven.com"
     }
+    //maven {
+    //    // wthit
+    //    url = "https://maven.bai.lol"
+    //}
 }
 
 dependencies {
@@ -178,6 +182,9 @@ dependencies {
 
     implementation fg.deobf("curse.maven:jade-324717:3865918")
     implementation fg.deobf("curse.maven:the-one-probe-245211:3671753")
+
+    //// compile against the API        do 5.14.1 on 1.19.2     7.1.1 on 1.19.4
+    //compileOnly fg.deobf("mcp.mobius.waila:wthit-api:forge-4.13.6")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

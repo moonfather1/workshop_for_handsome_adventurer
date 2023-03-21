@@ -88,18 +88,6 @@ public class DualTableMenu extends SimpleTableMenu
 			current.y = primary.y;
 			primary.y = primary.y + 3 * 18 + 13; // labels are 13px
 		}
-////////*********************************************
-		for (int k = CRAFT_TERTIARY_SLOT_START; k <= CRAFT_TERTIARY_SLOT_END - 1; k++)
-		{
-			Slot primary = this.slots.get(k - CRAFT_TERTIARY_SLOT_START + CRAFT_SLOT_START);
-			current = this.slots.get(k);
-			current.y = primary.y;
-			current.x = primary.x + 130;
-		}
-		Slot slot10 = this.slots.get(CRAFT_TERTIARY_SLOT_END);
-		Slot slot08 = this.slots.get(CRAFT_TERTIARY_SLOT_END-2);
-		slot10.x = slot08.x;   slot10.y = slot08.y + 18;
-//////*********************************************
 		Slot primary = this.slots.get(RESULT_SLOT);
 		this.slots.get(SECONDARY_RESULT_SLOT).y = primary.y;
 		primary.y = primary.y + 3 * 18 + 13;
@@ -204,77 +192,16 @@ public class DualTableMenu extends SimpleTableMenu
 		}, true);
 	}
 
-
-
-	public ItemStack quickMoveStack(Player player, int slotIndex) {
-		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = this.slots.get(slotIndex);
-		if (slot != null && slot.hasItem()) {
-			ItemStack itemstack1 = slot.getItem();
-			itemstack = itemstack1.copy();
-			if (slotIndex == 0) { //shift on result
-				this.access.execute((level, p_39379_) -> {
-					itemstack1.getItem().onCraftedBy(itemstack1, level, player);
-				});
-				//reverse: hotbar first, then inv
-				if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, HOTBAR_ROW_SLOT_END+1, true)) {
-					return ItemStack.EMPTY;
-				}
-				slot.onQuickCraft(itemstack1, itemstack);
-			} else if (slotIndex >= INV_SLOT_START && slotIndex <= HOTBAR_ROW_SLOT_END) { //from player
-				if (!this.moveItemStackTo(itemstack1, CRAFT_SLOT_START, CRAFT_SLOT_END+1, false)) {
-					// no room on crafting grid, try chest
-					if (!this.moveItemStackToOccupiedSlotsOnly(itemstack1, ACCESS27_SLOT_START, ACCESS27_SLOT_END+1, false)) {
-						// try inv->hotbar or hotbar->inv
-						if (slotIndex < HOTBAR_ROW_SLOT_START) {
-							if (!this.moveItemStackTo(itemstack1, HOTBAR_ROW_SLOT_START, HOTBAR_ROW_SLOT_END + 1, false)) {
-								return ItemStack.EMPTY;
-							}
-						} else if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, INV_SLOT_END + 1, false)) {
-							return ItemStack.EMPTY;
-						}
-					}
-				}
-			} else if (slotIndex >= ACCESS27_SLOT_START && slotIndex <= ACCESS27_SLOT_END) { //from chest
-				if (!this.moveItemStackTo(itemstack1, CRAFT_SLOT_START, CRAFT_SLOT_END+1, false)) {
-					if (!this.moveItemStackTo(itemstack1, HOTBAR_ROW_SLOT_START, HOTBAR_ROW_SLOT_END + 1, true)) {
-						if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, INV_SLOT_END + 1, false)) {
-							return ItemStack.EMPTY;
-						}
-					}
-				}
-			} else if (slotIndex >= CRAFT_SLOT_START && slotIndex <= CRAFT_SLOT_END) { //from crafting
-				if (! this.showInventoryAccess() || ! this.moveItemStackToOccupiedSlotsOnly(itemstack1, ACCESS27_SLOT_START, ACCESS27_SLOT_END+1, false)) {
-					if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, HOTBAR_ROW_SLOT_END+1, false)) {
-						return ItemStack.EMPTY;
-					}
-				}
-			}
-
-			if (itemstack1.isEmpty()) {
-				slot.set(ItemStack.EMPTY);
-			} else {
-				slot.setChanged();
-			}
-
-			if (itemstack1.getCount() == itemstack.getCount()) {
-				return ItemStack.EMPTY;
-			}
-
-			slot.onTake(player, itemstack1);
-			if (slotIndex == 0) {
-				player.drop(itemstack1, false);
-			}
-		}
-
-		return itemstack;
+	@Override
+	protected boolean isSlotACraftingResultSlot(int index) { return index == RESULT_SLOT || index == SECONDARY_RESULT_SLOT; }
+	@Override
+	protected boolean isSlotACraftingGridSlot(int index) { return index >= CRAFT_SLOT_START && index <= CRAFT_SLOT_END
+			|| index >= CRAFT_SECONDARY_SLOT_START && index <= CRAFT_SECONDARY_SLOT_END; }
+	@Override
+	protected boolean moveItemStackToCraftingGrid(ItemStack itemstack1) {
+		return this.moveItemStackToOccupiedSlotsOnly(itemstack1, CRAFT_SLOT_START, CRAFT_SLOT_END+1, false)
+				|| this.moveItemStackToOccupiedSlotsOnly(itemstack1, CRAFT_SECONDARY_SLOT_START, CRAFT_SECONDARY_SLOT_END+1, false);
 	}
-
-
-
-
-
-
 
 
 

@@ -214,7 +214,12 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}, true);
 	}
 
+	protected boolean isSlotACraftingResultSlot(int index) { return index == RESULT_SLOT; }
+	protected boolean isSlotACraftingGridSlot(int index) { return index >= CRAFT_SLOT_START && index <= CRAFT_SLOT_END; }
 
+	protected boolean moveItemStackToCraftingGrid(ItemStack itemstack1) {
+		return this.moveItemStackToOccupiedSlotsOnly(itemstack1, CRAFT_SLOT_START, CRAFT_SLOT_END+1, false);
+	}
 
 	public ItemStack quickMoveStack(Player player, int slotIndex) {
 		ItemStack itemstack = ItemStack.EMPTY;
@@ -222,7 +227,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		if (slot != null && slot.hasItem()) {
 			ItemStack itemstack1 = slot.getItem();
 			itemstack = itemstack1.copy();
-			if (slotIndex == 0) { //shift on result
+			if (this.isSlotACraftingResultSlot(slotIndex)) { //shift on result
 				this.access.execute((level, p_39379_) -> {
 					itemstack1.getItem().onCraftedBy(itemstack1, level, player);
 				});
@@ -232,31 +237,38 @@ public class SimpleTableMenu extends AbstractContainerMenu
 				}
 				slot.onQuickCraft(itemstack1, itemstack);
 			} else if (slotIndex >= INV_SLOT_START && slotIndex <= HOTBAR_ROW_SLOT_END) { //from player
-				if (!this.moveItemStackTo(itemstack1, CRAFT_SLOT_START, CRAFT_SLOT_END+1, false)) {
-					// no room on crafting grid, try chest
-					if (!this.moveItemStackToOccupiedSlotsOnly(itemstack1, ACCESS27_SLOT_START, ACCESS27_SLOT_END+1, false)) {
-						// try inv->hotbar or hotbar->inv
-						if (slotIndex < HOTBAR_ROW_SLOT_START) {
-							if (!this.moveItemStackTo(itemstack1, HOTBAR_ROW_SLOT_START, HOTBAR_ROW_SLOT_END + 1, false)) {
+				if (!this.moveItemStackToCraftingGrid(itemstack1)) {
+					// not prioritizing crafting grid anymore (or unlikely no room), try chest
+					if (! this.showInventoryAccess() || ! this.moveItemStackToOccupiedSlotsOnly(itemstack1, ACCESS27_SLOT_START, ACCESS27_SLOT_END+1, false)) {
+						if (! this.showInventoryAccess() || this.inventoryAccessHelper.addonContainer == null || ! this.moveItemStackToOccupiedSlotsOnly(itemstack1, ACCESS54_SLOT_START, ACCESS54_SLOT_END+1, false)) {
+							// try inv->hotbar or hotbar->inv
+							if (slotIndex < HOTBAR_ROW_SLOT_START) {
+								if (!this.moveItemStackTo(itemstack1, HOTBAR_ROW_SLOT_START, HOTBAR_ROW_SLOT_END + 1, false)) {
+									return ItemStack.EMPTY;
+								}
+							} else if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, INV_SLOT_END + 1, false)) {
 								return ItemStack.EMPTY;
 							}
-						} else if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, INV_SLOT_END + 1, false)) {
-							return ItemStack.EMPTY;
 						}
 					}
 				}
-			} else if (slotIndex >= ACCESS27_SLOT_START && slotIndex <= ACCESS27_SLOT_END) { //from chest
-				if (!this.moveItemStackTo(itemstack1, CRAFT_SLOT_START, CRAFT_SLOT_END+1, false)) {
-					if (!this.moveItemStackTo(itemstack1, HOTBAR_ROW_SLOT_START, HOTBAR_ROW_SLOT_END + 1, true)) {
-						if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, INV_SLOT_END + 1, false)) {
-							return ItemStack.EMPTY;
+			} else if (slotIndex >= ACCESS27_SLOT_START && slotIndex <= ACCESS27_SLOT_END
+					|| slotIndex >= ACCESS54_SLOT_START && slotIndex <= ACCESS54_SLOT_END) { //from chest
+				if (!this.moveItemStackToCraftingGrid(itemstack1)) {
+					if (!this.moveItemStackToOccupiedSlotsOnly(itemstack1, INV_SLOT_START, INV_SLOT_END + 1, false)) {
+						if (!this.moveItemStackTo(itemstack1, HOTBAR_ROW_SLOT_START, HOTBAR_ROW_SLOT_END + 1, true)) {
+							if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, INV_SLOT_END + 1, false)) {
+								return ItemStack.EMPTY;
+							}
 						}
 					}
 				}
-			} else if (slotIndex >= CRAFT_SLOT_START && slotIndex <= CRAFT_SLOT_END) { //from crafting
+			} else if (isSlotACraftingGridSlot(slotIndex)) { //from crafting
 				if (! this.showInventoryAccess() || ! this.moveItemStackToOccupiedSlotsOnly(itemstack1, ACCESS27_SLOT_START, ACCESS27_SLOT_END+1, false)) {
-					if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, HOTBAR_ROW_SLOT_END+1, false)) {
-						return ItemStack.EMPTY;
+					if (! this.showInventoryAccess() || this.inventoryAccessHelper.addonContainer == null || ! this.moveItemStackToOccupiedSlotsOnly(itemstack1, ACCESS54_SLOT_START, ACCESS54_SLOT_END+1, false)) {
+						if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, HOTBAR_ROW_SLOT_END + 1, false)) {
+							return ItemStack.EMPTY;
+						}
 					}
 				}
 			}

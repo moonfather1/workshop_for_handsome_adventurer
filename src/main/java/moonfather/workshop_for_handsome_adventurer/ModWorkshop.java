@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 @Mod(Constants.MODID)
 public class ModWorkshop
 {
-    //NOW       JEI places items                     LATER refactoring events.
+    //NOW                        LATER refactoring events.
 
     //--all-- --MUST--
     //...
@@ -38,12 +38,10 @@ public class ModWorkshop
     //...
     //--simpletable--  --NTH--
     //.....
-    //crates from create, maybe in 1.2
+
 
     //--dualtable--  --MUST--
-    //todo: JEI places items
-    //todo: shift clicking and returning from C2
-    //todo: WTHIT is entirely unsupported, jei and top are fine ootb
+    //...
     //--dualtable--  --NTH--
     //more than 8 chests; not necessary for 1.0
     //consider: nine storage slots, other than crafting slots
@@ -52,11 +50,13 @@ public class ModWorkshop
     //--before--pub--
     //todo: printLn, CR in toml, ver
     //--known-- issues
-    //when you have two-block rack and you're looking so that the top half isn't visible, items disappear.
+    //integration: WTHIT is entirely unsupported, Jade and TOP are fine. it's not my fault, i wanted to add support but i can not. blame wthit author while switching to an alternative.
+    //vanilla behavior: when you have two-block rack and you're looking so that the top half isn't visible, items disappear. i think it's not that much of a problem.
     //integration: crescent hammer (thermal) won't go onto the rack.  it's fine.
     //--later--
     //last thing in 1.0 rename chests at the cost of 1 XPL
     //after 1.0: render items on top of tables
+    //after 1.0: crates from create, maybe in 1.2
     //after 1.0: todo list similar to one in BiblioCraft
     //after 1.0: bookshelf like the one in BiblioCraft; no gui
     //maybe after 1.1: storage drawer support. maybe.
@@ -81,15 +81,16 @@ public class ModWorkshop
 
     private void enqueueIMC(final InterModEnqueueEvent event)
     {
-        InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":dual_table_secondary");
-        InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":dual_table_top");
         String[] woodTypes = {"oak", "spruce", "jungle", "birch", "dark_oak"};
         for (String woodType: woodTypes)
         {
             InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":tool_rack_double_" + woodType);
             InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":tool_rack_framed_" + woodType);
             InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":tool_rack_pframed_" + woodType);
-            InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":dual_table_primary_" + woodType);
+            InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":dual_table_bottom_left_" + woodType);
+            InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":dual_table_bottom_right_" + woodType);
+            InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":dual_table_top_left_" + woodType);
+            InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":dual_table_top_right_" + woodType);
         }
         /////
         if (ModList.get().isLoaded("theoneprobe"))
