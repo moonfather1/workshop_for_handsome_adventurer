@@ -7,9 +7,6 @@ import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerListener;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.ModList;
@@ -88,13 +85,7 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 		}
 	}
 
-	@Override
-	public void render(PoseStack poseStack, int p_98480_, int p_98481_, float p_98482_) {
-		super.render(poseStack, p_98480_, p_98481_, p_98482_);
-		if (this.jeiButton != null) {
-		//	this.jeiButton.render(poseStack,p_98480_, p_98481_, p_98482_);
-		}
-	}
+
 
 	private class DestinationPickerButton extends StateSwitchingButton
 	{
@@ -104,9 +95,6 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 			super(p_94615_, p_94616_, p_94617_, p_94618_, p_94619_);
 		}
 
-		@Override
-		public void onClick(double p_93634_, double p_93635_) {
-		}
 
 		@Override
 		public boolean mouseClicked(double x, double y, int p_93643_) {

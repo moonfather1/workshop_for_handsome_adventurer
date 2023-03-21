@@ -1,7 +1,0 @@
-{
-	"parent": "item/generated",
-	"textures": 
-	{
-		"layer0": "workshop_for_handsome_adventurer:items/table_dust"
-	}
-}

@@ -598,6 +598,10 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	public int selectedTab = -1;
 
+	public boolean showingDoubleChest() {
+		return this.showInventoryAccess() && this.chestSlots2 != null && this.chestSlots2.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED; // client-side check
+	}
+
 	////////////////////////////////////////////
 
 	public class CustomizationSlot extends Slot
