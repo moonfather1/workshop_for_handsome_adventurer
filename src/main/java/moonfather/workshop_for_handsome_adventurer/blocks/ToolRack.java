@@ -1,12 +1,14 @@
 package moonfather.workshop_for_handsome_adventurer.blocks;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
+import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.*;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -30,6 +32,8 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.ToolActions;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -211,22 +215,16 @@ public class ToolRack extends Block implements EntityBlock
 	@Override
 	public InteractionResult use(BlockState blockState, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult blockHitResult)
 	{
-		if (hand == InteractionHand.OFF_HAND)
-		{
-			return InteractionResult.PASS;
-		}
-		if (!this.canDepositItem(player.getMainHandItem()))
-		{
-			player.displayClientMessage(RackMessage, true);
-			return InteractionResult.sidedSuccess(level.isClientSide);
-		}
-
 		if (blockState.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF) && blockState.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.LOWER)
 		{
 			BlockPos above = pos.above();
 			return this.use(level.getBlockState(above), level, above, player, hand, blockHitResult.withPosition(above));
 		}
-
+		boolean doOffhand = OptionsHolder.COMMON.OffhandInteractsWithToolRack.get();
+		if (hand == InteractionHand.OFF_HAND)
+		{
+			return InteractionResult.PASS;
+		}
 
 		int slot = this.getTargetedSlot(blockHitResult);
 		if (slot >= this.itemCount)
@@ -235,24 +233,61 @@ public class ToolRack extends Block implements EntityBlock
 		}
 		ToolRackBlockEntity BE = ((ToolRackBlockEntity)level.getBlockEntity(pos));
 		ItemStack existing = BE.GetItem(slot);
-		if (existing.isEmpty() && !player.getMainHandItem().isEmpty())
+		ItemStack itemInMainHand = player.getMainHandItem();
+		ItemStack itemInOffHand = player.getOffhandItem();
+		if (existing.isEmpty() && ! itemInMainHand.isEmpty())
 		{
-			//System.out.println("~~~~~ADDED");
-			ItemStack toStore = player.getMainHandItem().copy();
+			if (! this.canDepositItem(itemInMainHand))
+			{
+				player.displayClientMessage(RackMessage, true);
+				return InteractionResult.sidedSuccess(level.isClientSide);
+			}
+			//System.out.println("~~~~~ADDED FROM MAIN");
+			ItemStack toStore = itemInMainHand.copy();
 			toStore.setCount(1);
 			BE.DepositItem(slot, toStore);
-			player.getMainHandItem().shrink(1);
+			itemInMainHand.shrink(1);
 			player.playSound(SoundEvents.WOOD_PLACE, 0.5f, 0.7f);
 		}
-		else if (existing.isEmpty() && player.getMainHandItem().isEmpty())
+		else if (existing.isEmpty() && itemInMainHand.isEmpty() && (! doOffhand || itemInOffHand.isEmpty()))
 		{
 			//System.out.println("~~~~~EMPTY TO EMPTY");
 		}
-		else if (!existing.isEmpty() && player.getMainHandItem().isEmpty())
+		else if (existing.isEmpty() && itemInMainHand.isEmpty() && doOffhand && ! itemInOffHand.isEmpty())
 		{
-			//System.out.println("~~~~~TAKEN");
+			if (! this.canDepositItem(itemInOffHand))
+			{
+				player.displayClientMessage(RackMessage, true);
+				return InteractionResult.sidedSuccess(level.isClientSide);
+			}
+			//System.out.println("~~~~~ADDED FROM OFFHAND");
+			ItemStack toStore = itemInOffHand.copy();
+			toStore.setCount(1);
+			BE.DepositItem(slot, toStore);
+			itemInOffHand.shrink(1);
+			player.playSound(SoundEvents.WOOD_PLACE, 0.5f, 0.7f);
+		}
+		else if (! existing.isEmpty() && itemInMainHand.isEmpty() && itemInOffHand.isEmpty() && existing.canPerformAction(ToolActions.SHIELD_BLOCK))
+		{
+			//System.out.println("~~~~~TAKEN SHIELD");
+			//player.addItem(existing);
+			player.setItemInHand(InteractionHand.OFF_HAND, existing);
+			BE.ClearItem(slot);
+			player.playSound(SoundEvents.ITEM_PICKUP, 0.5f, 1);
+		}
+		else if (! existing.isEmpty() && itemInMainHand.isEmpty())
+		{
+			//System.out.println("~~~~~TAKEN WITH MAIN");
 			//player.addItem(existing);
 			player.setItemInHand(InteractionHand.MAIN_HAND, existing);
+			BE.ClearItem(slot);
+			player.playSound(SoundEvents.ITEM_PICKUP, 0.5f, 1);
+		}
+		else if (! existing.isEmpty() && ! itemInMainHand.isEmpty() && doOffhand && itemInOffHand.isEmpty())
+		{
+			//System.out.println("~~~~~TAKEN WITH OFFHAND");
+			//player.addItem(existing);
+			player.setItemInHand(InteractionHand.OFF_HAND, existing);
 			BE.ClearItem(slot);
 			player.playSound(SoundEvents.ITEM_PICKUP, 0.5f, 1);
 		}

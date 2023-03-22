@@ -15,12 +15,16 @@ public class OptionsHolder
 
 		private static final int defaultSlotRoomMultiplier = 6;
 
+		private static final boolean defaultOffhandInteractsWithToolRack = false;
+
 		public final ConfigValue<Boolean> SimpleTableReplacesVanillaTable;
 		public final ConfigValue<Integer> SimpleTableNumberOfSlots;
 		public final ConfigValue<Integer> DualTableNumberOfSlots;
 		public final ConfigValue<String> AccessCustomizationItem;
 
 		public final ConfigValue<Integer> SlotRoomMultiplier;
+
+		public final ConfigValue<Boolean> OffhandInteractsWithToolRack;
 
 		public Common(ForgeConfigSpec.Builder builder)
 		{
@@ -37,6 +41,10 @@ public class OptionsHolder
 			builder.push("PotionShelf");
 			this.SlotRoomMultiplier = builder.comment("This is a multiplier for the number of bottles that fit in a single potion shelf slot. Default 6 (unrelated to six slots) means each slot can fit 6 non-stackable potions or for example 24 potions that stack up to 4 in players inventory.")
 					.defineInRange("Room in one potion shelf slot", defaultSlotRoomMultiplier, 1, 12);
+			builder.pop();
+			builder.push("ToolRack");
+			this.OffhandInteractsWithToolRack = builder.comment("If set to false (default), you need to move a tool from off-hand to main hand (F) before putting it onto a toolrack, it's simpler but needs extra actions. If you set this to true you can put tools from off-hand to toolrack directly and you can take items directly; quicker but possible unintended interactions with the toolrack.")
+					.define("Offhand interacts with tool rack directly", defaultOffhandInteractsWithToolRack);
 			builder.pop();
 		}
 	}

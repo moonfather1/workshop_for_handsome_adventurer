@@ -25,7 +25,7 @@ public class ModWorkshop
     //--all-- --MUST--
     //...
     //--all-- --NTH--
-    //todo: woodcutter recipes
+    //...
 
     //--rack-- --MUST--
     //potion shelf shift for all
@@ -43,9 +43,7 @@ public class ModWorkshop
     //--dualtable--  --MUST--
     //...
     //--dualtable--  --NTH--
-    //more than 8 chests; not necessary for 1.0
-    //consider: nine storage slots, other than crafting slots
-    //issue: Rubidium causes z-fighting (confirmed it's not any other mod)
+    //...
 
     //--before--pub--
     //todo: printLn, CR in toml, ver
@@ -58,10 +56,12 @@ public class ModWorkshop
     //after 1.0: render items on top of tables
     //after 1.0: crates from create, maybe in 1.2
     //after 1.0: todo list similar to one in BiblioCraft
-    //after 1.0: bookshelf like the one in BiblioCraft; no gui
+    //after 1.0: bookshelf like the one in BiblioCraft; no gui; oh and apparently exactly that is coming in 1.20
+    //after 1.0: more than 8 chests
     //maybe after 1.1: storage drawer support. maybe.
     //maybe after 1.1: sword rack? maybe. decorative, single sword, horizontal, no gui
     //maybe after 1.1: chest markers (similar to item frames); maybe? no gui, pull items from chest
+    //maybe after 1.1: nine extra storage slots in dual table
     //probably not: weapon rack (vertical weapons),  sword and shield on wall...
 
 
