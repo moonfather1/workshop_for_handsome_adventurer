@@ -15,6 +15,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -60,16 +61,16 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     public void initVisuals()
     {
         this.xOffset = (this.parent.width - this.parent.getImageWidth() - PANEL_WIDTH) / 2;
-        //int i = (this.width - 147) / 2 - this.xOffset;
-        //int j = (this.height - 166) / 2;
-        //String s = this.searchBox != null ? this.searchBox.getValue() : "";
-        //this.searchBox = new EditBox(this.minecraft.font, i + 25, j + 14, 80, 9 + 5, new TranslatableComponent("itemGroup.search"));
-        //this.searchBox.setMaxLength(50);
-        //this.searchBox.setBordered(false);
-        //this.searchBox.setVisible(true);
-        //this.searchBox.setTextColor(16777215);
-        //this.searchBox.setValue(s);
-        //this.filterButton = new StateSwitchingButton(i + 110, j + 12, 26, 16, this.book.isFiltering(this.menu));
+        if (this.renameBox == null) {
+            this.renameBox = new EditBox(this.parent.getMinecraft().font, this.xOffset + 7, 120, 120, 9 + 5, new TextComponent(""));
+            this.renameBox.setMaxLength(50);
+            this.renameBox.setBordered(false);
+            this.renameBox.setVisible(true);
+            this.renameBox.setTextColor(0xcccccc);
+            this.parent.renderables.add(this.renameBox);
+        }
+        this.renameBox.x = this.xOffset + 7;
+        this.renameBox.y = (this.parent.height - parent.getYSize()) / 2 + PANEL_HEIGHT_WITH_TABS - 21;
 
         this.tabButtons.clear();
         for (int i = SimpleTableMenu.TABS_SLOT_START; i < SimpleTableMenu.TABS_SLOT_END; i+=2)
@@ -150,19 +151,18 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             int x = this.parent.getGuiLeft();
             int y = (this.parent.height - parent.getYSize()) / 2;
             this.blit(poseStack, x, y, 0, 0, PANEL_WIDTH, PANEL_HEIGHT_WITH_TABS);
-            //if (!this.searchBox.isFocused() && this.searchBox.getValue().isEmpty()) {
-            //    drawString(poseStack, this.minecraft.font, SEARCH_HINT, i + 25, j + 14, -1);
-            //} else {
-            //    this.searchBox.render(poseStack, p_100320_, p_100321_, p_100322_);
-            //}
+
+            // render background manually:
+            int textboxBorderColor = this.renameBox.isHoveredOrFocused() ? 0xffffff : 0x8b8b8b;
+            int textboxBgColor = this.renameBox.isFocused() ? 0x8b8b8b : 0x666666;
+            fill(poseStack, this.renameBox.x - 1, this.renameBox.y - 1, this.renameBox.x + this.renameBox.getWidth() + 1, this.renameBox.y + this.renameBox.getHeight() + 1, textboxBorderColor);
+            fill(poseStack, this.renameBox.x, this.renameBox.y, this.renameBox.x + this.renameBox.getWidth(), this.renameBox.y + this.renameBox.getHeight(), textboxBgColor);
+            //this.renameBox.render(poseStack, p_100320_, p_100321_, p_100322_);
 
             for(StateSwitchingButton tabButton : this.tabButtons)
             {
                 tabButton.render(poseStack, p_100320_, p_100321_, p_100322_);
             }
-
-            //this.filterButton.render(p_100319_, p_100320_, p_100321_, p_100322_);
-            //this.recipeBookPage.render(p_100319_, i, j, p_100320_, p_100321_, p_100322_);
             poseStack.popPose();
         }
     }
@@ -257,12 +257,35 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
                 this.lastInventoryAccessRange = range;
             }
         }
-        if (this.isVisibleTotal())
+        if (this.isVisibleTotal() && this.renameBox != null)
         {
-            if (this.renameBox != null) //todo:remove later
             this.renameBox.tick();
         }
     }
+
+    @Override
+    public boolean keyPressed(int p_94745_, int p_94746_, int p_94747_) {
+        if (this.renameBox.isFocused()) {
+            if (this.renameBox.keyPressed(p_94745_, p_94746_, p_94747_) || this.renameBox.canConsumeInput()) {
+                return true;
+            }
+        }
+
+        return GuiEventListener.super.keyPressed(p_94745_, p_94746_, p_94747_);
+    }
+
+    @Override
+    public boolean charTyped(char p_94732_, int p_94733_) {
+        if (this.renameBox.isFocused()) {
+            if (this.renameBox.charTyped(p_94732_, p_94733_)) {
+                return true;
+            }
+        }
+        return GuiEventListener.super.charTyped(p_94732_, p_94733_);
+    }
+
+    ////////////////////////////////////////
+
     private int lastInventoryAccessRange = 0;
 
     private void updateWidth(boolean widthTooNarrow) {
@@ -323,13 +346,21 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     public boolean mouseClicked(double v1, double v2, int mouseButton) {
         for(TabButton tabButton : this.tabButtons)
         {
-            if (tabButton.isMouseOver(v1,v2))
+            if (tabButton.isMouseOver(v1, v2))
             {
                 this.tabChanged(tabButton);
                 return true;
             }
         }
-        System.out.println("~~~mousecl  " + v1 + "   " + v2 + "    " + mouseButton);
+        if (this.renameBox.isMouseOver(v1, v2)) {
+            System.out.println("~~~mousecl E  " + this.renameBox.isFocused() + "/" + this.renameBox.isHoveredOrFocused());
+            this.renameBox.setFocus(true);
+            return true;
+        }
+        else {
+            this.renameBox.setFocus(false);
+        }
+        System.out.println("~~~mousecl  " + v1 + "   " + v2 + "    " + mouseButton + "/" + this.renameBox.isFocused());
         return false;
     }
     ///////////////////////////////////////////////////////

@@ -1,11 +1,14 @@
 package moonfather.workshop_for_handsome_adventurer;
 
 import com.mojang.logging.LogUtils;
+import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
 import moonfather.workshop_for_handsome_adventurer.initialization.ClientSetup;
 import moonfather.workshop_for_handsome_adventurer.initialization.CommonSetup;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.integration.TOPRegistration;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
@@ -14,6 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
 
@@ -32,7 +36,6 @@ public class ModWorkshop
     //...
     //--rack-- --NTH--
     //.....
-    //check offhand how feels -> not well
 
     //--simpletable--  --MUST--
     //...
@@ -77,11 +80,13 @@ public class ModWorkshop
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::RegisterRenderers));
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::StitchTextures));
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
+        MinecraftForge.EVENT_BUS.addListener(PotionShelf::onRightClickBlock);
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event)
     {
         String[] woodTypes = {"oak", "spruce", "jungle", "birch", "dark_oak"};
+
         for (String woodType: woodTypes)
         {
             InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":tool_rack_double_" + woodType);
@@ -92,7 +97,7 @@ public class ModWorkshop
             InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":dual_table_top_left_" + woodType);
             InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":dual_table_top_right_" + woodType);
         }
-        /////
+        //System.out.println("test imc " + Constants.MODID + ":dual_table_bottom_left_" + "oak   " + ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Constants.MODID + ":dual_table_bottom_left_" + "oak")).getCloneItemStack(null, null, null, null, null));
         if (ModList.get().isLoaded("theoneprobe"))
         {
             InterModComms.sendTo("theoneprobe", "getTheOneProbe", TOPRegistration::instance);

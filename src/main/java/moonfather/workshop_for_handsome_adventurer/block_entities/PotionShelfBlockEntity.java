@@ -110,6 +110,50 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
     }
 
 
+    public void DepositPotionStack(int slot, ItemStack itemStack)
+    {
+        this.VerifyCapacity();
+        int count = Math.min(itemStack.getCount(), this.GetRemainingRoom(slot));
+        if (this.itemCounts.get(slot) == 0) {
+            count = itemStack.getCount(); // GetRemainingRoom doesn't work on empty slots
+            ItemStack copy = itemStack.copy();
+            copy.setCount(1);
+            itemStack.shrink(count);
+            this.DepositItem(slot, copy);
+            this.itemCounts.set(slot, count);
+        }
+        else {
+            itemStack.shrink(count);
+            this.itemCounts.set(slot, this.itemCounts.get(slot) + count);
+        }
+        this.setChanged();
+    }
+
+    public ItemStack TakeOutPotionStack(int slot)
+    {
+        this.VerifyCapacity();
+        int count = Math.min(this.GetItem(slot).getMaxStackSize(), this.itemCounts.get(slot));
+        if (this.itemCounts.get(slot) == 0) {
+            return ItemStack.EMPTY; // shouln't be possible
+        }
+        else if (this.itemCounts.get(slot) == count) {
+            ItemStack result = this.GetItem(slot);
+            result.setCount(count);
+            this.ClearItem(slot);
+            this.itemCounts.set(slot, 0);
+            this.setChanged();
+            return result;
+        }
+        else { // max stack < what we have
+            ItemStack result = this.GetItem(slot).copy();
+            result.setCount(count);
+            this.itemCounts.set(slot, this.itemCounts.get(slot) - count);
+            this.setChanged();
+            return result;
+        }
+    }
+
+
     public boolean IsSlotMaxed(int slot)
     {
         this.VerifyCapacity();

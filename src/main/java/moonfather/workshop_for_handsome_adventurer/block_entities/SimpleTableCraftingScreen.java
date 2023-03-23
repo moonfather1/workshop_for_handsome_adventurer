@@ -24,6 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.mojang.blaze3d.platform.InputConstants.KEY_ESCAPE;
+
 @OnlyIn(Dist.CLIENT)
 public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTableMenu>
 {
@@ -194,6 +196,17 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	public void removed() {
 		this.inventoryComponent.removed();
 		super.removed();
+	}
+
+	public boolean keyPressed(int p_97878_, int p_97879_, int p_97880_) {
+		if (p_97878_ == KEY_ESCAPE) {
+			this.minecraft.player.closeContainer(); // esc
+		}
+		if (this.inventoryComponent.isVisibleTotal()
+				&& this.inventoryComponent.keyPressed(p_97878_, p_97879_, p_97880_)) {
+			return true;
+		}
+		return super.keyPressed(p_97878_, p_97879_, p_97880_);
 	}
 
 	public int getImageWidth()

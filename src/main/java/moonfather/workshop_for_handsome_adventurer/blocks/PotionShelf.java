@@ -23,6 +23,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
@@ -106,7 +108,7 @@ public class PotionShelf extends ToolRack
         {
             return InteractionResult.PASS;
         }
-        if (!this.canDepositItem(player.getMainHandItem()))
+        if (! this.canDepositItem(player.getMainHandItem()))
         {
             player.displayClientMessage(ShelfMessage, true);
             return InteractionResult.sidedSuccess(level.isClientSide);
@@ -119,10 +121,15 @@ public class PotionShelf extends ToolRack
         }
         PotionShelfBlockEntity BE = ((PotionShelfBlockEntity)level.getBlockEntity(pos));
         ItemStack existing = BE.GetItem(slot);
-        if (existing.isEmpty() && !player.getMainHandItem().isEmpty())
+        if (existing.isEmpty() && ! player.getMainHandItem().isEmpty())
         {
             //System.out.println("~~~~~DEPOSIT TO EMPTY");
-            BE.DepositPotion(slot, player.getMainHandItem());
+            if (player.getMainHandItem().getMaxStackSize() > 1 && player.isCrouching()) {
+                BE.DepositPotionStack(slot, player.getMainHandItem());
+            }
+            else {
+                BE.DepositPotion(slot, player.getMainHandItem());
+            }
             player.playSound(SoundEvents.WOOD_PLACE, 0.5f, 0.7f);
             TranslatableComponent remainingRoomMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_remaining_room");
             player.displayClientMessage(remainingRoomMessage.append(BE.GetRemainingRoom(slot).toString()), true);
@@ -131,10 +138,16 @@ public class PotionShelf extends ToolRack
         {
             //System.out.println("~~~~~EMPTY TO EMPTY");
         }
-        else if (!existing.isEmpty() && player.getMainHandItem().isEmpty())
+        else if (! existing.isEmpty() && player.getMainHandItem().isEmpty())
         {
-            //System.out.println("~~~~~TAKEN");
-            player.setItemInHand(InteractionHand.MAIN_HAND, BE.TakeOutPotion(slot));
+            if (existing.getMaxStackSize() > 1 && player.isCrouching()) {
+                //System.out.println("~~~~~TAKEN STACK");
+                player.setItemInHand(InteractionHand.MAIN_HAND, BE.TakeOutPotionStack(slot));
+            }
+            else {
+                //System.out.println("~~~~~TAKEN");
+                player.setItemInHand(InteractionHand.MAIN_HAND, BE.TakeOutPotion(slot));
+            }
             player.playSound(SoundEvents.ITEM_PICKUP, 0.5f, 1);
             if (BE.GetRemainingItems(slot) > 0) {
                 TranslatableComponent remainingItemsMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_remaining_items");
@@ -151,7 +164,12 @@ public class PotionShelf extends ToolRack
                     player.displayClientMessage(MaxedMessage, true);
                     return InteractionResult.sidedSuccess(level.isClientSide);
                 }
-                BE.DepositPotion(slot, player.getMainHandItem());
+                if (player.getMainHandItem().getMaxStackSize() > 1 && player.isCrouching()) {
+                    BE.DepositPotionStack(slot, player.getMainHandItem());
+                }
+                else {
+                    BE.DepositPotion(slot, player.getMainHandItem());
+                }
                 player.playSound(SoundEvents.WOOD_PLACE, 0.5f, 0.7f);
                 TranslatableComponent remainingRoomMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_remaining_room");
                 player.displayClientMessage(remainingRoomMessage.append(BE.GetRemainingRoom(slot).toString()), true);
@@ -163,6 +181,16 @@ public class PotionShelf extends ToolRack
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
+    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+        if (event.getPlayer().isCrouching()) {
+            BlockState state = event.getWorld().getBlockState(event.getPos());
+            if (state.getBlock() instanceof PotionShelf && event.getFace() == state.getValue(FACING).getOpposite()) {
+                if (! event.getPlayer().getMainHandItem().isEmpty()) {
+                    event.setUseBlock(Event.Result.ALLOW);
+                }
+            }
+        }
+    }
     /////////////////////////////////////
 
     private static final VoxelShape SHAPE_FRAME1N = Block.box(1.0D, 1.0D, 0.0D, 15.0D, 15.0D, 3.0D);

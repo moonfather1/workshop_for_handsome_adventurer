@@ -15,7 +15,7 @@ public class OptionsHolder
 
 		private static final int defaultSlotRoomMultiplier = 6;
 
-		private static final boolean defaultOffhandInteractsWithToolRack = false;
+		private static final boolean defaultOffhandInteractsWithToolRack = true;
 
 		public final ConfigValue<Boolean> SimpleTableReplacesVanillaTable;
 		public final ConfigValue<Integer> SimpleTableNumberOfSlots;
@@ -43,7 +43,7 @@ public class OptionsHolder
 					.defineInRange("Room in one potion shelf slot", defaultSlotRoomMultiplier, 1, 12);
 			builder.pop();
 			builder.push("ToolRack");
-			this.OffhandInteractsWithToolRack = builder.comment("If set to false (default), you need to move a tool from off-hand to main hand (F) before putting it onto a toolrack, it's simpler but needs extra actions. If you set this to true you can put tools from off-hand to toolrack directly and you can take items directly; quicker but possible unintended interactions with the toolrack.")
+			this.OffhandInteractsWithToolRack = builder.comment("If set to false, you need to move a tool from off-hand to main hand (F) before putting it onto a toolrack, it's simpler but needs extra actions. If you set this to true you can put tools from off-hand to toolrack directly and you can take items directly; quicker but there might be possible unintended interactions with the toolrack.")
 					.define("Offhand interacts with tool rack directly", defaultOffhandInteractsWithToolRack);
 			builder.pop();
 		}
