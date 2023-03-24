@@ -1,8 +1,9 @@
-package moonfather.workshop_for_handsome_adventurer.block_entities;
+package moonfather.workshop_for_handsome_adventurer.block_entities.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
+import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;

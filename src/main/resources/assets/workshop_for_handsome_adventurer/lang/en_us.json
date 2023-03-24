@@ -74,6 +74,7 @@
 	"message.workshop_for_handsome_adventurer.extension_slot2": "Put a chest or a storage drawer here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests. \n(optionally one more [ITEM] for a range of two blocks)\n \nOr two lanterns to make them part of the workstation \nand light up the surroundings (put two in one slot).",
 	"message.workshop_for_handsome_adventurer.extension_slotT": "Customization slot",
 	"message.workshop_for_handsome_adventurer.extension_slotS": "(shift for more)",
+	"message.workshop_for_handsome_adventurer.rename": "Rename container %s \nfor the cost of 1 XP level.",
 
 	"itemGroup.workshop_for_handsome_adventurer": "Workshop for handsome adventurer"
 }

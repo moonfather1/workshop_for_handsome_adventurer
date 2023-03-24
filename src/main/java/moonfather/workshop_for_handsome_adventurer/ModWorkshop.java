@@ -17,40 +17,16 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
 
 @Mod(Constants.MODID)
 public class ModWorkshop
 {
-    //NOW                        LATER refactoring events.
-
-    //--all-- --MUST--
-    //...
-    //--all-- --NTH--
-    //...
-
-    //--rack-- --MUST--
-    //potion shelf shift for all
-    //...
-    //--rack-- --NTH--
-    //.....
-
-    //--simpletable--  --MUST--
-    //...
-    //--simpletable--  --NTH--
-    //.....
-
-
-    //--dualtable--  --MUST--
-    //...
-    //--dualtable--  --NTH--
-    //...
-
     //--before--pub--
     //todo: printLn, CR in toml, ver
     //--known-- issues
+    //integration: Carry On blacklist is broken in 1.17.0.8 and a few older versions. do not pick up big tables and racks, if you do, type /kill. (actually works on dedicated servers but broken on integrated.)  Carry On developer will fix the blacklist eventually.
     //integration: WTHIT is entirely unsupported, Jade and TOP are fine. it's not my fault, i wanted to add support but i can not. blame wthit author while switching to an alternative.
     //vanilla behavior: when you have two-block rack and you're looking so that the top half isn't visible, items disappear. i think it's not that much of a problem.
     //integration: crescent hammer (thermal) won't go onto the rack.  it's fine.

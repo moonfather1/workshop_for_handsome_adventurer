@@ -16,7 +16,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 
 
-version = '0.92'
+version = '1.00'
 group = 'moonfather.workshop_for_handsome_adventurer' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'workshop_for_handsome_adventurer'
 
@@ -195,7 +195,7 @@ jar {
                 "Specification-Vendor"    : "MoonFather",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Version"  : "${mod_version}",
                 "Implementation-Vendor"   : "MoonFather",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])

@@ -144,14 +144,17 @@ public class InventoryAccessHelper
                         }
                         InventoryAccessRecord record = new InventoryAccessRecord();
                         record.ItemChest = be.getBlockState().getBlock().asItem().getDefaultInstance();
-                        if (be instanceof Nameable nameable) {
+                        if (this.chosenContainer instanceof Nameable nameable) {
                             record.Name = nameable.getName();
-                        }else{
+                            record.Nameable = true;
+                        }
+                        else {
                             record.Name = record.ItemChest.getHoverName();
+                            record.Nameable = false;
                         }
                         if (this.addonContainer != null)
                         {
-                            record.ItemChest.setCount(2); //double chest
+                            record.HasDoubleInventory = true;
                         }
                         //ih.ifPresent(inventory -> record.ItemFirst = inventory.getStackInSlot(0) );
                         record.ItemFirst = this.chosenContainer.getItem(0);
@@ -193,6 +196,8 @@ public class InventoryAccessHelper
             InventoryAccessHelper.InventoryAccessRecord current = this.adjacentInventories.get(i);
             ItemStack chest = current.ItemChest.copy();
             chest.setHoverName(current.Name);
+            if (current.HasDoubleInventory) { chest.setCount(2); }
+            if (! current.Nameable) { chest.setCount(chest.getCount() | 4); }
             ItemStack suff = current.ItemFirst.copy();
             tabElements.setItem(i*2, chest);
             tabElements.setItem(i*2+1, suff);
@@ -279,5 +284,6 @@ public class InventoryAccessHelper
         public ItemStack ItemChest = ItemStack.EMPTY;
         public ItemStack ItemFirst = ItemStack.EMPTY;
         public int Index, x, y, z;
+        public boolean HasDoubleInventory = false, Nameable = false;
     }
 }

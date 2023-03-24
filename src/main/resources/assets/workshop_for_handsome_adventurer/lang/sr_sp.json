@@ -76,6 +76,7 @@
 	"message.workshop_for_handsome_adventurer.extension_slot2": "Стави овде сандук или фиоку да \nомогућиш да стварчице остају у гриду. \n \nИли, стави [ITEM] овде\nза приступ суседним сандуцима. \n(опционо још један за домет од два блока)\n \nИли две светиљке да постану део радне станице\nи осветљавају околину.",
 	"message.workshop_for_handsome_adventurer.extension_slotT": "Прилагођавање стола",
 	"message.workshop_for_handsome_adventurer.extension_slotS": "(shift за детаље)",
+	"message.workshop_for_handsome_adventurer.rename": "Промени назив контејнера %s \nза цену 1 нивоа искуства.",
 
 	"itemGroup.workshop_for_handsome_adventurer": "Радионица за згодног авантуристу"
 }

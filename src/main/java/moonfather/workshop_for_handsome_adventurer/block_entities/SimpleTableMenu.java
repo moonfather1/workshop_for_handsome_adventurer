@@ -8,12 +8,14 @@ import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerListener;
+import net.minecraft.world.Nameable;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -154,7 +156,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 
 
-	protected int getCustomizationSlotCount()	{ return OptionsHolder.COMMON.SimpleTableNumberOfSlots.get(); }
+	public int getCustomizationSlotCount()	{ return OptionsHolder.COMMON.SimpleTableNumberOfSlots.get(); }
 
 
 	protected static void slotChangedCraftingGrid(AbstractContainerMenu p_150547_, Level p_150548_, Player p_150549_, CraftingContainer p_150550_, ResultContainer p_150551_) {
@@ -600,6 +602,20 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	public boolean showingDoubleChest() {
 		return this.showInventoryAccess() && this.chestSlots2 != null && this.chestSlots2.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED; // client-side check
+	}
+
+	public void renameChest(String newName) {
+		System.out.println("rename on server");
+		if (this.player.experienceLevel == 0 && ! this.player.isCreative()) {
+			return;
+		}
+		if (newName.equals("")) { return; }
+		if (this.inventoryAccessHelper.chosenContainer instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity bcbe) {
+			if (! bcbe.hasCustomName() || ! bcbe.getCustomName().getString().equals(newName)) {
+				bcbe.setCustomName(new TextComponent(newName));
+				player.giveExperienceLevels(-1);
+			}
+		}
 	}
 
 	////////////////////////////////////////////

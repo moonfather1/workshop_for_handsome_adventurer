@@ -1,7 +1,9 @@
-package moonfather.workshop_for_handsome_adventurer.block_entities;
+package moonfather.workshop_for_handsome_adventurer.block_entities.screens;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
+import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableMenu;
+import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
 import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.minecraft.network.chat.Component;
@@ -70,7 +72,7 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 	public void setPositionsX() {
 		super.setPositionsX();
 		if (this.jeiButton != null) {
-			this.jeiButton.setPosition(DestinationPickerButton.JEI_BUTTON_RENDERX + this.renderLeftPos, DestinationPickerButton.JEI_BUTTON_RENDERY);
+			this.jeiButton.setPosition(DestinationPickerButton.JEI_BUTTON_RENDERX + this.renderLeftPos, DestinationPickerButton.JEI_BUTTON_RENDERY + this.topPos);
 		}
 	}
 

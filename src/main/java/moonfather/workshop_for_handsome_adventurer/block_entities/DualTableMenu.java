@@ -81,7 +81,7 @@ public class DualTableMenu extends SimpleTableMenu
 
 
 	@Override
-	protected int getCustomizationSlotCount()	{ return OptionsHolder.COMMON.DualTableNumberOfSlots.get(); }
+	public int getCustomizationSlotCount()	{ return OptionsHolder.COMMON.DualTableNumberOfSlots.get(); }
 
 
 	@Override

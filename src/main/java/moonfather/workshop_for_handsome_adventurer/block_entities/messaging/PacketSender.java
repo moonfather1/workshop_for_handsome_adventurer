@@ -36,9 +36,16 @@ public class PacketSender
         CHANNEL_INSTANCE.sendToServer(message);
     }
 
+    public static void sendRenameRequestToServer(String newName)
+    {
+        ChestRenameMessage message = new ChestRenameMessage(newName);
+        CHANNEL_INSTANCE.sendToServer(message);
+    }
+
     public static void registerMessage() {
         CHANNEL_INSTANCE.registerMessage(discriminator++, TabChangeMessage.class, TabChangeMessage::encode, TabChangeMessage::decode, PacketHandler::handleTabChange, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL_INSTANCE.registerMessage(discriminator++, GridChangeMessage.class, GridChangeMessage::encode, GridChangeMessage::decode, PacketHandler::handleGridChange, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL_INSTANCE.registerMessage(discriminator++, ChestRenameMessage.class, ChestRenameMessage::encode, ChestRenameMessage::decode, PacketHandler::handleChestRename, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL_INSTANCE.registerMessage(discriminator++, ClientRequestMessage.class, ClientRequestMessage::encode, ClientRequestMessage::decode, PacketHandler::handleClientRequest, Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
     private static int discriminator = 123;

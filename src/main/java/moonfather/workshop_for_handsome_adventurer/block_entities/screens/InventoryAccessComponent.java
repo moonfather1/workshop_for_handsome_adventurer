@@ -1,14 +1,15 @@
-package moonfather.workshop_for_handsome_adventurer.block_entities;
+package moonfather.workshop_for_handsome_adventurer.block_entities.screens;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
+import moonfather.workshop_for_handsome_adventurer.block_entities.screen_components.SimpleButton;
+import moonfather.workshop_for_handsome_adventurer.block_entities.screen_components.SlightlyNicerEditBox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.StateSwitchingButton;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -16,6 +17,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -31,11 +33,13 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     public static final int PANEL_HEIGHT_WITH_TABS = 166;
     protected static final ResourceLocation BG_CHEST_LOCATION_3_ROWS = new ResourceLocation("workshop_for_handsome_adventurer:textures/gui/left_panel_normal_chest.png");
     protected static final ResourceLocation BG_CHEST_LOCATION_6_ROWS = new ResourceLocation("workshop_for_handsome_adventurer:textures/gui/left_panel_double_chest.png");
+    private final TranslatableComponent renameTooltip = new TranslatableComponent("message.workshop_for_handsome_adventurer.rename");
 
     private int xOffset;
     private final List<TabButton> tabButtons = Lists.newArrayList();
     private TabButton selectedTab;
     private EditBox renameBox;
+    private SimpleButton renameButton;
     private boolean visible;
     private int tickCount = 0;
     private boolean widthTooNarrow2 = false;
@@ -61,43 +65,53 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     public void initVisuals()
     {
         this.xOffset = (this.parent.width - this.parent.getImageWidth() - PANEL_WIDTH) / 2;
+        int bottomY = (this.parent.height - parent.getYSize()) / 2 + PANEL_HEIGHT_WITH_TABS;
         if (this.renameBox == null) {
-            this.renameBox = new EditBox(this.parent.getMinecraft().font, this.xOffset + 7, 120, 120, 9 + 5, new TextComponent(""));
+            this.renameBox = new SlightlyNicerEditBox(this.parent.getMinecraft().font, this.xOffset, bottomY - 18, 120, 9 + 5, new TextComponent("Input box for new name for container"));
             this.renameBox.setMaxLength(50);
-            this.renameBox.setBordered(false);
+            this.renameBox.setBordered(false);  // draw bg myself because some dumbass hardcoded black as background
             this.renameBox.setVisible(true);
             this.renameBox.setTextColor(0xcccccc);
             this.parent.renderables.add(this.renameBox);
+            this.renameButton = new SimpleButton(this.xOffset, bottomY - 23, 25, 18, 181, 105, 18+1, BG_CHEST_LOCATION_3_ROWS, 256, 256, p_93751_ -> this.renameButtonClicked(), new TextComponent("Rename container"));
+            this.renameButton.setTooltipBase(renameTooltip);
+            this.renameButton.setTooltipInset(new TextComponent(""));
+            this.renameButton.active = false;
         }
-        this.renameBox.x = this.xOffset + 7;
-        this.renameBox.y = (this.parent.height - parent.getYSize()) / 2 + PANEL_HEIGHT_WITH_TABS - 21;
+        this.renameBox.x = this.xOffset + 9;
+        this.renameBox.y = bottomY - 18;
+        this.renameButton.x = this.xOffset + 7 + this.renameBox.getWidth() + 7;
+        this.renameButton.y = bottomY - 23;
 
-        this.tabButtons.clear();
-        for (int i = SimpleTableMenu.TABS_SLOT_START; i < SimpleTableMenu.TABS_SLOT_END; i+=2)
-        {
-            ItemStack stack = this.parent.getMenu().slots.get(i).getItem();
-            if (stack.isEmpty())
-            {
-                break;
+        if (! this.tabsInitialized) {
+            this.tabButtons.clear();
+            this.selectedTab = null;
+            for (int i = SimpleTableMenu.TABS_SLOT_START; i < SimpleTableMenu.TABS_SLOT_END; i += 2) {
+                ItemStack stack = this.parent.getMenu().slots.get(i).getItem();
+                if (stack.isEmpty()) {
+                    break;
+                }
+                TabButton button = new TabButton();
+                button.setMessage(stack.getHoverName());
+                button.itemMain = stack;
+                button.itemSub = this.parent.getMenu().slots.get(i + 1).getItem();
+                button.chestIndex = (i - SimpleTableMenu.TABS_SLOT_START) / 2;
+                button.parent = this;
+                //button.setClickHandler( this::tabChanged ); //doesn't work
+                this.tabButtons.add(button);
+                if (button.chestIndex == this.parent.getMenu().selectedTab) {
+                    this.tabChanged(button, true);
+                }
             }
-            TabButton button = new TabButton();
-            button.setMessage(stack.getHoverName());
-            button.itemMain = stack;
-            button.itemSub = this.parent.getMenu().slots.get(i+1).getItem();
-            button.chestIndex = (i - SimpleTableMenu.TABS_SLOT_START) / 2;
-            button.parent = this;
-            //button.setClickHandler( this::tabChanged ); //doesn't work
-            this.tabButtons.add(button);
         }
         this.tabsInitialized = true;
 
         if (this.selectedTab == null && this.tabButtons.size() > 0) {
-            this.selectedTab = this.tabButtons.get(0);
-            this.parent.getMenu().selectedTab = 0;
+            this.tabChanged(this.tabButtons.get(0), true);
         }
-        if (this.selectedTab != null) { this.selectedTab.setStateTriggered(true); }
-        this.updateTabs();
+        this.updateTabLocations();
     }
+
 
 
     private Boolean tabChanged(TabButton button, boolean dontSendToServer)
@@ -112,6 +126,11 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             if (! dontSendToServer) {
                 PacketSender.sendTabChangeToServer(button.chestIndex);
             }
+            this.renameButton.setTooltipInset(button.itemMain.getHoverName());
+            this.renameBox.setValue("");
+            boolean canRenameContainer = (button.itemMain.getCount() & 4) == 0;
+            this.renameBox.visible = canRenameContainer;
+            this.renameButton.visible = canRenameContainer;
             return true;
         }
         return false;
@@ -152,14 +171,10 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             int y = (this.parent.height - parent.getYSize()) / 2;
             this.blit(poseStack, x, y, 0, 0, PANEL_WIDTH, PANEL_HEIGHT_WITH_TABS);
 
-            // render background manually:
-            int textboxBorderColor = this.renameBox.isHoveredOrFocused() ? 0xffffff : 0x8b8b8b;
-            int textboxBgColor = this.renameBox.isFocused() ? 0x8b8b8b : 0x666666;
-            fill(poseStack, this.renameBox.x - 1, this.renameBox.y - 1, this.renameBox.x + this.renameBox.getWidth() + 1, this.renameBox.y + this.renameBox.getHeight() + 1, textboxBorderColor);
-            fill(poseStack, this.renameBox.x, this.renameBox.y, this.renameBox.x + this.renameBox.getWidth(), this.renameBox.y + this.renameBox.getHeight(), textboxBgColor);
-            //this.renameBox.render(poseStack, p_100320_, p_100321_, p_100322_);
+            this.renameBox.render(poseStack, p_100320_, p_100321_, p_100322_);
+            this.renameButton.render(poseStack, p_100320_, p_100321_, p_100322_);
 
-            for(StateSwitchingButton tabButton : this.tabButtons)
+            for (StateSwitchingButton tabButton : this.tabButtons)
             {
                 tabButton.render(poseStack, p_100320_, p_100321_, p_100322_);
             }
@@ -168,7 +183,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     }
 
     private ResourceLocation getBackground() {
-        if (this.selectedTab != null && this.selectedTab.itemMain.getCount() == 2){
+        if (this.selectedTab != null && this.selectedTab.itemMain.getCount() == 2) {
             return BG_CHEST_LOCATION_6_ROWS;
         }
         return BG_CHEST_LOCATION_3_ROWS;
@@ -260,6 +275,10 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         if (this.isVisibleTotal() && this.renameBox != null)
         {
             this.renameBox.tick();
+            if (this.tickCount % 10 == 5) {
+                this.suppressRenameButton = false;
+                this.renameButton.active = !this.renameBox.getValue().isEmpty() && (this.parent.getMinecraft().player.experienceLevel > 0 || this.parent.getMinecraft().player.isCreative());
+            }
         }
     }
 
@@ -313,7 +332,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
 
 
 
-    private void updateTabs()
+    private void updateTabLocations()
     {
         int startx = this.xOffset + 3;
         int starty = (this.parent.height - this.parent.getYSize()) / 2;
@@ -344,14 +363,6 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     }
 
     public boolean mouseClicked(double v1, double v2, int mouseButton) {
-        for(TabButton tabButton : this.tabButtons)
-        {
-            if (tabButton.isMouseOver(v1, v2))
-            {
-                this.tabChanged(tabButton);
-                return true;
-            }
-        }
         if (this.renameBox.isMouseOver(v1, v2)) {
             System.out.println("~~~mousecl E  " + this.renameBox.isFocused() + "/" + this.renameBox.isHoveredOrFocused());
             this.renameBox.setFocus(true);
@@ -360,9 +371,30 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         else {
             this.renameBox.setFocus(false);
         }
+        for(TabButton tabButton : this.tabButtons)
+        {
+            if (tabButton.isMouseOver(v1, v2))
+            {
+                this.tabChanged(tabButton);
+                return true;
+            }
+        }
+        if (this.renameButton.active && ! this.suppressRenameButton && this.renameButton.isMouseOver(v1, v2)) {
+            this.suppressRenameButton = true;
+            this.renameButton.mouseClicked(v1, v2, mouseButton);
+            return true;
+        }
         System.out.println("~~~mousecl  " + v1 + "   " + v2 + "    " + mouseButton + "/" + this.renameBox.isFocused());
         return false;
     }
+    private boolean suppressRenameButton = false;
+
+    private void renameButtonClicked() {
+        PacketSender.sendRenameRequestToServer(this.renameBox.getValue());
+        this.selectedTab.setMessage(new TextComponent(this.renameBox.getValue())); // fake it
+        this.renameBox.setValue("");
+    }
+
     ///////////////////////////////////////////////////////
 
     private class TabButton extends StateSwitchingButton
