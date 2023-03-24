@@ -51,7 +51,7 @@ public class InventoryAccessHelper
                     this.chosenContainer = (Container)be;
                     this.addonContainer = (Container)be2;
                 } else {
-                    System.out.println("~~~WTF2");
+                    //System.out.println("~~~WTF2");
                     return;
                 }
             }
@@ -66,7 +66,7 @@ public class InventoryAccessHelper
                     this.addonContainer = (Container)be;
                     this.chosenContainer = (Container)be2;
                 } else {
-                    System.out.println("~~~WTF");
+                    //System.out.println("~~~WTF");
                     return;
                 }
             }

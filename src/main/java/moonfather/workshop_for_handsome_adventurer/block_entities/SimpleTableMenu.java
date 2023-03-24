@@ -605,7 +605,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	}
 
 	public void renameChest(String newName) {
-		System.out.println("rename on server");
+		//System.out.println("rename on server");
 		if (this.player.experienceLevel == 0 && ! this.player.isCreative()) {
 			return;
 		}

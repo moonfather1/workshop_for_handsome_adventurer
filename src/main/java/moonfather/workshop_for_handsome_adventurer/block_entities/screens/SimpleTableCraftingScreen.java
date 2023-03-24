@@ -33,7 +33,6 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	private static final ResourceLocation[] CRAFTING_TABLE_LOCATION = new ResourceLocation[3];
 	private List<Component> tooltipCustomizationsFull = null, tooltipCustomizationsBrief = null;
 	private final InventoryAccessComponent inventoryComponent = new InventoryAccessComponent();
-	//private ImageButton buttonBook, buttonChest;
 	protected int renderLeftPos;
 
 	public SimpleTableCraftingScreen(SimpleTableMenu p_98448_, Inventory p_98449_, Component p_98450_) {
@@ -44,15 +43,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		super.init();
 		this.inventoryComponent.init(this, this.width < 400);
 		this.setPositionsX();
-
-		//this.buttonBook = this.addRenderableWidget(new ImageButton(this.leftPos + 148, this.height / 2 - 49+25, 20, 18, 0, 0, 19, RECIPE_BUTTON_LOCATION, (button) -> {
-		//	this.recipeBookComponent.toggleVisibility();
-		//	this.leftPos = this.recipeBookComponent.updateScreenPosition(this.width, this.imageWidth);
-		//	this.buttonBook.setPosition(this.leftPos + 148, this.height / 2 - 49+25);
-		//	this.buttonChest.setPosition(this.leftPos + 148-22, this.height / 2 - 49+25);
-		//}));
 		this.addWidget(this.inventoryComponent);
-		//this.setInitialFocus(this.recipeBookComponent);
 	}
 
 	public void setPositionsX()
@@ -172,17 +163,6 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	}
 
 
-
-	public boolean mouseClicked(double p_98452_, double p_98453_, int p_98454_) {
-		//System.out.println("~~~mouseclii  " + p_98452_ + "   " + p_98453_ + "    " + p_98454_);ppp
-		//if (this.inventoryComponent.mouseClicked(p_98452_, p_98453_, p_98454_)) {
-		//	this.setFocused(this.inventoryComponent);
-		//	return true;
-		//} else {
-		//	return this.widthTooNarrow && this.inventoryComponent.isVisible() ? true : super.mouseClicked(p_98452_, p_98453_, p_98454_);
-		//}
-		return super.mouseClicked(p_98452_, p_98453_, p_98454_);
-	}
 
 	protected boolean hasClickedOutside(double mouseX, double mouseY, int left, int top, int button) {
 		boolean flag = mouseX < (double)left || mouseY < (double)top || mouseX >= (double)(left + this.imageWidth) || mouseY >= (double)(top + this.imageHeight);

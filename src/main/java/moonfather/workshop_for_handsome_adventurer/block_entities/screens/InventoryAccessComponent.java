@@ -347,7 +347,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
 
     public void slotClicked(@Nullable Slot slot)
     {
-        System.out.println("~~~ slot clicked~ " + (slot == null ? "NULL" : (slot.index)));
+        //System.out.println("~~~ slot clicked~ " + (slot == null ? "NULL" : (slot.index)));
     }
 
     public boolean hasClickedOutside(double mouseX, double mouseY, int leftPos, int topPos, int width, int height, int mouseButton)
@@ -364,7 +364,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
 
     public boolean mouseClicked(double v1, double v2, int mouseButton) {
         if (this.renameBox.isMouseOver(v1, v2)) {
-            System.out.println("~~~mousecl E  " + this.renameBox.isFocused() + "/" + this.renameBox.isHoveredOrFocused());
+            //System.out.println("~~~mousecl E  " + this.renameBox.isFocused() + "/" + this.renameBox.isHoveredOrFocused());
             this.renameBox.setFocus(true);
             return true;
         }
@@ -384,7 +384,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             this.renameButton.mouseClicked(v1, v2, mouseButton);
             return true;
         }
-        System.out.println("~~~mousecl  " + v1 + "   " + v2 + "    " + mouseButton + "/" + this.renameBox.isFocused());
+        //System.out.println("~~~mousecl  " + v1 + "   " + v2 + "    " + mouseButton + "/" + this.renameBox.isFocused());
         return false;
     }
     private boolean suppressRenameButton = false;

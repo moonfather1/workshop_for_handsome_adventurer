@@ -148,7 +148,7 @@ public class SimpleTable extends Block implements EntityBlock
 	@Override
 	public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 	{
-		System.out.println("onRemove");
+		//System.out.println("onRemove");
 		if (state.getBlock() != newState.getBlock())
 		{
 			BlockEntity te = worldIn.getBlockEntity(pos);
