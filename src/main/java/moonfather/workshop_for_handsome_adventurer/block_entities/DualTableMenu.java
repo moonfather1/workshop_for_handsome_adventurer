@@ -113,14 +113,14 @@ public class DualTableMenu extends SimpleTableMenu
 	public int getRecipeTargetGrid() {
 		return this.recipeTargetGridSlot.get();
 	}
-	private final DataSlotWithNotification recipeTargetGridSlot = new DataSlotWithNotification();
+	private final DataSlotWithNotification recipeTargetGridSlot = new DataSlotWithNotification(1);
 	public void registerClientHandlerForDataSlotChange(Consumer<Integer> event)	{
 		this.recipeTargetGridSlot.setEvent(event);
 	}
 
 	public void changeRecipeTargetGridTo(int grid) {
 		if (grid >= 1 && grid <= 2 ) {
-			this.setData(0, grid);
+			this.recipeTargetGridSlot.set(grid);
 			this.sendAllDataToRemote();
 		}
 	}
@@ -188,16 +188,19 @@ public class DualTableMenu extends SimpleTableMenu
 	//////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////
 
-	public class DataSlotWithNotification extends DataSlot
+	public static class DataSlotWithNotification extends DataSlot
 	{
-		private int recipeTargetGrid = 1;
+		private int value = 0;
 		private Consumer<Integer> event = null;
+
+		public DataSlotWithNotification(int startingValue) { this.value = startingValue; }
+
 		@Override
-		public int get() { return this.recipeTargetGrid; }
+		public int get() { return this.value; }
 
 		@Override
 		public void set(int v) {
-			this.recipeTargetGrid = v;
+			this.value = v;
 			if (event != null) {
 				event.accept(v);
 			}

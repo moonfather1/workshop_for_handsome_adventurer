@@ -9,13 +9,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.protocol.game.ClientboundContainerSetDataPacket;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerListener;
-import net.minecraft.world.Nameable;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -31,6 +31,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class SimpleTableMenu extends AbstractContainerMenu
@@ -151,6 +152,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			}
 		}
 		this.customizationSlots.setChanged();
+		this.addDataSlot(this.tabsNeedingUpdateClientFlagSlot);
 		this.initialLoading = false;
 	}
 
@@ -553,7 +555,6 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		this.lastInventoryAccessRange = range;
 		this.inventoryAccessHelper.putInventoriesIntoAContainerForTransferToClient(this.tabElements, TAB_SMUGGLING_CONTAINER_SIZE/2);
 		this.tabElements.setChanged();
-		this.lastInventoryAccessRange = range;
 	}
 
 	private int lastInventoryAccessRange = 0;
@@ -594,6 +595,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			}
 		}
 		this.selectedTab = index; //this only happens on server side. we need to separately set this value on client side. it is on client where i need it so this line is for academic purposes.
+		this.resetTabsNeedingUpdateClientFlag(); // 1->0 because change in tab list invokes tab change call
 		this.sendAllDataToRemote();
 		this.customizationSlots.setChanged(); // cheaty call to client to re-enable/hide bottom container
 	}
@@ -615,6 +617,18 @@ public class SimpleTableMenu extends AbstractContainerMenu
 				bcbe.setCustomName(new TextComponent(newName));
 				player.giveExperienceLevels(-1);
 			}
+		}
+	}
+
+	// tabs needing update on client. yeah this used to work but i won't bother debugging, i'll do it correctly here:
+	private final DualTableMenu.DataSlotWithNotification tabsNeedingUpdateClientFlagSlot = new DualTableMenu.DataSlotWithNotification(0);
+	public void registerClientHandlerForTabsNeedingUpdate(Consumer<Integer> event)	{ this.tabsNeedingUpdateClientFlagSlot.setEvent(event); }
+	public void resetTabsNeedingUpdateClientFlag() { this.tabsNeedingUpdateClientFlagSlot.set(0); /*this.sendAllDataToRemote();*/ }
+	public void raiseTabsNeedingUpdateClientFlag() {
+		this.tabsNeedingUpdateClientFlagSlot.set(1);
+		//this.sendAllDataToRemote();  // this causes us to "lose" carried item
+		if (this.player instanceof ServerPlayer sp) {
+			sp.connection.send(new ClientboundContainerSetDataPacket(this.containerId, 0, 1));
 		}
 	}
 
@@ -777,6 +791,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			{
 				this.parent.storeAdjacentInventoriesInSlots();
 				this.parent.lastInventoryAccessRange = range;
+				this.parent.raiseTabsNeedingUpdateClientFlag();
 			}
 			// lanterns
 			int lanternCount = this.parent.getLanternCount();

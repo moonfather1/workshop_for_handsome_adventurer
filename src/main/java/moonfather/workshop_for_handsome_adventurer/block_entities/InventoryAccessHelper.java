@@ -27,7 +27,7 @@ public class InventoryAccessHelper
 {
     private void resolveContainer(BlockEntity be, Player player, BlockPos pos, Level level)
     {
-        this.chosenContainer = null;   this.addonContainer = null;
+        this.chosenContainer = null;   this.addonContainer = null;   this.chestPrimaryPos = null;
         if (be == null) {
             return;
         }
@@ -36,6 +36,7 @@ public class InventoryAccessHelper
                 return;
             }
             //this is how chest combines inv:   Container container = new CompoundContainer(p_51604_, p_51605_);
+            this.chestPrimaryPos = pos;
             DoubleBlockCombiner.BlockType type = ChestBlock.getBlockType(be.getBlockState());
             if (type == DoubleBlockCombiner.BlockType.SINGLE) {
                 this.chosenContainer = (Container)be;
@@ -50,6 +51,7 @@ public class InventoryAccessHelper
                     }
                     this.chosenContainer = (Container)be;
                     this.addonContainer = (Container)be2;
+                    this.chestPrimaryPos = pos;
                 } else {
                     //System.out.println("~~~WTF2");
                     return;
@@ -65,6 +67,7 @@ public class InventoryAccessHelper
                     }
                     this.addonContainer = (Container)be;
                     this.chosenContainer = (Container)be2;
+                    this.chestPrimaryPos = pos2;
                 } else {
                     //System.out.println("~~~WTF");
                     return;
@@ -152,13 +155,14 @@ public class InventoryAccessHelper
                             record.Name = record.ItemChest.getHoverName();
                             record.Nameable = false;
                         }
+                        record.x = pos2.getX(); record.y = pos2.getY(); record.z = pos2.getZ();
                         if (this.addonContainer != null)
                         {
                             record.HasDoubleInventory = true;
+                            record.x = this.chestPrimaryPos.getX(); record.y = this.chestPrimaryPos.getY(); record.z = this.chestPrimaryPos.getZ();
                         }
                         //ih.ifPresent(inventory -> record.ItemFirst = inventory.getStackInSlot(0) );
                         record.ItemFirst = this.chosenContainer.getItem(0);
-                        record.x = pos2.getX(); record.y = pos2.getY(); record.z = pos2.getZ();
                         record.Index = this.adjacentInventories.size();
                         this.adjacentInventories.add(record);
                     }
@@ -177,6 +181,7 @@ public class InventoryAccessHelper
     ////////////////////////////////////////////
 
     public Container chosenContainer, addonContainer;
+    private BlockPos chestPrimaryPos;
 
     public boolean tryInitializeFirstInventoryAccess(Level level, Player player)
     {

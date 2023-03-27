@@ -57,6 +57,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         {
             this.initVisuals();
         }
+        this.parent.getMenu().registerClientHandlerForTabsNeedingUpdate(this::onTabListChangedOnServer);
         this.parent.getMinecraft().keyboardHandler.setSendRepeatsToGui(true);
     }
 
@@ -72,7 +73,6 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             this.renameBox.setBordered(false);  // draw bg myself because some dumbass hardcoded black as background
             this.renameBox.setVisible(true);
             this.renameBox.setTextColor(0xcccccc);
-            this.parent.renderables.add(this.renameBox);
             this.renameButton = new SimpleButton(this.xOffset, bottomY - 23, 25, 18, 181, 105, 18+1, BG_CHEST_LOCATION_3_ROWS, 256, 256, p_93751_ -> this.renameButtonClicked(), new TextComponent("Rename container"));
             this.renameButton.setTooltipBase(renameTooltip);
             this.renameButton.setTooltipInset(new TextComponent(""));
@@ -141,6 +141,14 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         return  this.tabChanged(button, false);
     }
 
+
+    private void onTabListChangedOnServer(Integer flag) {
+        if (flag == 0) return;
+        this.tabsInitialized = false;
+        this.parent.getMenu().selectedTab = -1;
+        this.initVisuals();
+        this.tabChanged(this.tabButtons.get(0));
+    }
 
 
     public int getWidth()
@@ -263,15 +271,15 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
                 this.parent.setPositionsX();
             }
         }
-        if (this.tickCount < 5 || this.tickCount % 10 == 9)
-        {
-            int range = this.parent.getMenu().getInventoryAccessRange();
-            if (this.isVisibleTotal() && range != this.lastInventoryAccessRange) {
-                this.selectedTab = null;
-                this.initVisuals();
-                this.lastInventoryAccessRange = range;
-            }
-        }
+        //if (this.tickCount < 5 || this.tickCount % 10 == 9)
+        //{
+        //    int range = this.parent.getMenu().getInventoryAccessRange();
+        //    if (this.isVisibleTotal() && range != this.lastInventoryAccessRange) {
+        //        this.selectedTab = null;
+        //        this.initVisuals();
+        //        this.lastInventoryAccessRange = range;
+        //    }
+        //} // this part i don't even need anymore. delayed update of tabs and visibility but still nice and reliable.
         if (this.isVisibleTotal() && this.renameBox != null)
         {
             this.renameBox.tick();
@@ -363,13 +371,15 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     }
 
     public boolean mouseClicked(double v1, double v2, int mouseButton) {
-        if (this.renameBox.isMouseOver(v1, v2)) {
-            //System.out.println("~~~mousecl E  " + this.renameBox.isFocused() + "/" + this.renameBox.isHoveredOrFocused());
-            this.renameBox.setFocus(true);
-            return true;
-        }
-        else {
-            this.renameBox.setFocus(false);
+        if (this.renameBox != null) {
+            if (this.renameBox.isMouseOver(v1, v2)) {
+                //System.out.println("~~~mousecl E  " + this.renameBox.isFocused() + "/" + this.renameBox.isHoveredOrFocused());
+                this.renameBox.setFocus(true);
+                return true;
+            }
+            else {
+                this.renameBox.setFocus(false);
+            }
         }
         for(TabButton tabButton : this.tabButtons)
         {
@@ -379,7 +389,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
                 return true;
             }
         }
-        if (this.renameButton.active && ! this.suppressRenameButton && this.renameButton.isMouseOver(v1, v2)) {
+        if (this.renameButton != null && this.renameButton.active && ! this.suppressRenameButton && this.renameButton.isMouseOver(v1, v2)) {
             this.suppressRenameButton = true;
             this.renameButton.mouseClicked(v1, v2, mouseButton);
             return true;
