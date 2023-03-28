@@ -31,7 +31,8 @@ public class ModWorkshop
     //vanilla behavior: when you have two-block rack and you're looking so that the top half isn't visible, items disappear. i think it's not that much of a problem.
     //integration: crescent hammer (thermal) won't go onto the rack.  it's fine.
     //--later--
-    //last thing in 1.0 rename chests at the cost of 1 XPL
+    //after 1.0: tetra belt storage
+    //after 1.0: tc leggings storage
     //after 1.0: render items on top of tables
     //after 1.0: crates from create, maybe in 1.2
     //after 1.0: todo list similar to one in BiblioCraft

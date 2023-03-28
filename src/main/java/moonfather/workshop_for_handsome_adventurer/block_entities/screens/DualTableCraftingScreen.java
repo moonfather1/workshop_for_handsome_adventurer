@@ -58,7 +58,7 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 	@Override
 	protected void init() {
 		super.init();
-		((DualTableMenu) this.menu).registerClientHandlerForDataSlotChange(this::recipeTargetButtonChangeHandler);
+		((DualTableMenu) this.menu).registerClientHandlerForRecipeTargetChange(this::recipeTargetButtonChangeHandler);
 		//PacketSender.sendRemoteUpdateRequestToServer();
 		this.createJeiButton();
 	}

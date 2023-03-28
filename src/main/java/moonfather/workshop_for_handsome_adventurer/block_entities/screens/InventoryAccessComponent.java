@@ -57,7 +57,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         {
             this.initVisuals();
         }
-        this.parent.getMenu().registerClientHandlerForTabsNeedingUpdate(this::onTabListChangedOnServer);
+        this.parent.getMenu().registerClientHandlerForDataSlot(this.parent.getMenu().DATA_SLOT_TABS_NEED_UPDATE, this::onTabListChangedOnServer);
         this.parent.getMinecraft().keyboardHandler.setSendRepeatsToGui(true);
     }
 
@@ -108,6 +108,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
 
         if (this.selectedTab == null && this.tabButtons.size() > 0) {
             this.tabChanged(this.tabButtons.get(0), true);
+            this.parent.getMenu().updateAccessSlotsOnClient();
         }
         this.updateTabLocations();
     }
@@ -143,7 +144,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
 
 
     private void onTabListChangedOnServer(Integer flag) {
-        if (flag == 0) return;
+        if (flag % 2 == 0) return;
         this.tabsInitialized = false;
         this.parent.getMenu().selectedTab = -1;
         this.initVisuals();

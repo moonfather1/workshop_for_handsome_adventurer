@@ -2,6 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
+import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
 import moonfather.workshop_for_handsome_adventurer.blocks.SimpleTable;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
@@ -9,7 +10,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.protocol.game.ClientboundContainerSetDataPacket;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -64,7 +64,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	private final Container tabElements = new SimpleContainer(TAB_SMUGGLING_CONTAINER_SIZE); // magic to transfer to client
 	private Container chestSlots, chestSlots2 = null;
 	protected boolean initialLoading = true;
-	private boolean isValidAccessContainer = true;
+	public final int DATA_SLOT_TABS_NEED_UPDATE;
+	public final int DATA_SLOT_LOWER_ACCESS_NEEDS_UPDATE; //these two are 0 and 1
 
 
 	public SimpleTableMenu(int containerId, Inventory inventory, FriendlyByteBuf friendlyByteBuf)
@@ -76,6 +77,9 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		super(menuType, containerId);
 		this.access = levelAccess;
 		this.player = inventory.player;
+		this.addDataSlot(this.tabsNeedingUpdateClientFlagSlot);		DATA_SLOT_TABS_NEED_UPDATE = this.getNextDataSlotId();
+		this.addDataSlot(this.doubleChestNeedingUpdateClientFlagSlot);		DATA_SLOT_LOWER_ACCESS_NEEDS_UPDATE = this.getNextDataSlotId();
+
 		//---crafting result slot---
 		this.addSlot(new ResultSlot(inventory.player, this.craftSlots, this.resultSlots, 0, 124-12, 35));
 
@@ -112,9 +116,10 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		this.access.execute(this::loadFromWorld);
 		if (! this.player.level.isClientSide) {
 			this.customizationSlots.addListener(new CustomizationListenerServer(this));
-		} //todo: else below??
-		this.customizationSlots.addListener(new CustomizationListenerClient(this));
-		((SimpleContainer)this.tabElements).addListener(new CustomizationListenerClient(this));
+		}
+		else {
+			this.customizationSlots.addListener(new CustomizationListenerClient(this));
+		}
 
 		//---slots to sneak tab images to the client---
 		for (int i = 0; i < this.tabElements.getContainerSize(); i++)
@@ -124,10 +129,9 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		this.storeAdjacentInventoriesInSlots();
 
 		//---slots for adjacent inventories---
-		Optional<Boolean> haveContainer = Optional.of(false);
 		if (this.showInventoryAccess())
 		{
-			haveContainer = this.access.evaluate((level, pos) -> this.inventoryAccessHelper.tryInitializeFirstInventoryAccess(level, this.player));
+			this.access.evaluate((level, pos) -> this.inventoryAccessHelper.tryInitializeFirstInventoryAccess(level, this.player));
 		}
 		if (this.inventoryAccessHelper.chosenContainer != null)	{
 			this.chestSlots = this.inventoryAccessHelper.chosenContainer;
@@ -136,7 +140,6 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			this.chestSlots = new DisabledContainer(27);
 			this.chestSlots2 = new DisabledContainer(27);
 		}
-		this.isValidAccessContainer = haveContainer.isPresent() && haveContainer.get();
 		for (int ver = 0; ver < this.chestSlots.getContainerSize()/9; ++ver)
 		{
 			for (int hor = 0; hor < 9; ++hor)
@@ -151,8 +154,6 @@ public class SimpleTableMenu extends AbstractContainerMenu
 				this.addSlot(new OptionallyDrawnSlot2(this.chestSlots2, ver*9+hor, 5 + hor * 18 - LEFT_PANEL_WIDTH, 30 + (ver + 3) * 18));
 			}
 		}
-		this.customizationSlots.setChanged();
-		this.addDataSlot(this.tabsNeedingUpdateClientFlagSlot);
 		this.initialLoading = false;
 	}
 
@@ -564,8 +565,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	public void changeTabTo(int index)
 	{
 		Optional<Boolean> haveContainer = this.access.evaluate( (level, pos) -> this.inventoryAccessHelper.tryInitializeAnotherInventoryAccess(level, this.player, index) );
-		this.isValidAccessContainer = haveContainer.isPresent() && haveContainer.get();
-		if (this.isValidAccessContainer)
+		if (haveContainer.isPresent() && haveContainer.get())
 		{
 			this.chestSlots = this.inventoryAccessHelper.chosenContainer;
 			for (int i = ACCESS27_SLOT_START; i <= ACCESS27_SLOT_END; i++) {
@@ -595,9 +595,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			}
 		}
 		this.selectedTab = index; //this only happens on server side. we need to separately set this value on client side. it is on client where i need it so this line is for academic purposes.
-		this.resetTabsNeedingUpdateClientFlag(); // 1->0 because change in tab list invokes tab change call
-		this.sendAllDataToRemote();
-		this.customizationSlots.setChanged(); // cheaty call to client to re-enable/hide bottom container
+		this.resetDataSlotFlagForClientFlag(DATA_SLOT_TABS_NEED_UPDATE); // 1->0 because change in tab list invokes tab change call
+		this.sendAllDataToRemote(); //todo!! do i need?
 	}
 
 	public int selectedTab = -1;
@@ -622,17 +621,81 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	// tabs needing update on client. yeah this used to work but i won't bother debugging, i'll do it correctly here:
 	private final DualTableMenu.DataSlotWithNotification tabsNeedingUpdateClientFlagSlot = new DualTableMenu.DataSlotWithNotification(0);
-	public void registerClientHandlerForTabsNeedingUpdate(Consumer<Integer> event)	{ this.tabsNeedingUpdateClientFlagSlot.setEvent(event); }
-	public void resetTabsNeedingUpdateClientFlag() { this.tabsNeedingUpdateClientFlagSlot.set(0); /*this.sendAllDataToRemote();*/ }
-	public void raiseTabsNeedingUpdateClientFlag() {
-		this.tabsNeedingUpdateClientFlagSlot.set(1);
+	// lower half od double chest needing update on client.
+	private final DualTableMenu.DataSlotWithNotification doubleChestNeedingUpdateClientFlagSlot = new DualTableMenu.DataSlotWithNotification(0);
+	// dataslot support
+	public void registerClientHandlerForDataSlot(int dataSlot, Consumer<Integer> event)	{
+		DualTableMenu.DataSlotWithNotification slot = null;
+		if (dataSlot == DATA_SLOT_LOWER_ACCESS_NEEDS_UPDATE) { slot = this.doubleChestNeedingUpdateClientFlagSlot; }
+		if (dataSlot == DATA_SLOT_TABS_NEED_UPDATE) { slot = this.tabsNeedingUpdateClientFlagSlot; } // NPE is fine on not found
+		slot.setEvent(event);
+	}
+	public void resetDataSlotFlagForClientFlag(int dataSlot) {
+		DataSlot slot = null;
+		if (dataSlot == DATA_SLOT_LOWER_ACCESS_NEEDS_UPDATE) { slot = this.doubleChestNeedingUpdateClientFlagSlot; }
+		if (dataSlot == DATA_SLOT_TABS_NEED_UPDATE) { slot = this.tabsNeedingUpdateClientFlagSlot; } // NPE is fine on not found
+		int old = slot.get();
+		int newValue = old % 2 == 1 ? old + 1 : old + 2;
+		slot.set(newValue);
+		this.synchronizeDataSlotToRemote(dataSlot, newValue); // even == reset
+	}
+	public void raiseDataSlotFlagForClientFlag(int dataSlot) {
+		DataSlot slot = null;
+		if (dataSlot == DATA_SLOT_LOWER_ACCESS_NEEDS_UPDATE) { slot = this.doubleChestNeedingUpdateClientFlagSlot; }
+		if (dataSlot == DATA_SLOT_TABS_NEED_UPDATE) { slot = this.tabsNeedingUpdateClientFlagSlot; } // NPE is fine on not found
+		int old = slot.get();
+		int newValue = old % 2 == 1 ? old + 2 : old + 1;
+		slot.set(newValue);
 		//this.sendAllDataToRemote();  // this causes us to "lose" carried item
-		if (this.player instanceof ServerPlayer sp) {
-			sp.connection.send(new ClientboundContainerSetDataPacket(this.containerId, 0, 1));
-		}
+		this.synchronizeDataSlotToRemote(dataSlot, newValue);  // odd == flag up
 	}
 
-	////////////////////////////////////////////
+	private int nextDataSlotId = 0;
+	protected int getNextDataSlotId() { return nextDataSlotId++; }
+
+	/////////////////////////////////////////////////////////////////
+
+	public void updateAccessSlotsOnClient()	{
+		if (this.initialLoading == false && this.showInventoryAccess() && this.chestSlots.getMaxStackSize() == DisabledContainer.MARKER_FOR_DISABLED) {
+			if (this.chestSlots.getMaxStackSize() == DisabledContainer.MARKER_FOR_DISABLED)
+			{
+				//happens on client
+				((DisabledContainer)this.chestSlots).disabled = false;
+				if (! this.tabElements.getItem(0).isEmpty() && (this.tabElements.getItem(0*2).getCount() & 2) == 2) {
+					((DisabledContainer) this.chestSlots2).disabled = false;
+				}
+			}
+			PacketSender.sendTabChangeToServer(0);
+		}
+		// and again, we hide/show access slots here (other direction)
+		if (this.initialLoading == false && ! this.showInventoryAccess() && this.chestSlots.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED) {
+			if (this.selectedTab != 0) { this.changeTabTo(0); }
+			if (this.chestSlots instanceof DisabledContainer && this.chestSlots.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED)
+			{
+				//happens on client
+				((DisabledContainer)this.chestSlots).disabled = true;
+				((DisabledContainer)this.chestSlots2).disabled = true;
+			}
+			this.sendAllDataToRemote();
+		}
+		// more work to do: we need to enable/disable lower part of double chest here
+		if (this.initialLoading == false && this.showInventoryAccess() && this.chestSlots2 instanceof DisabledContainer) { // 3rd condition means client
+			if (this.chestSlots.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED) {
+				((DisabledContainer) this.chestSlots2).disabled = this.tabElements.getItem(this.selectedTab*2).isEmpty() || (this.tabElements.getItem(this.selectedTab*2).getCount() & 2) != 2;
+			}
+			else {
+				((DisabledContainer) this.chestSlots2).disabled = true;
+			}
+		}
+		// range change - again this worked, but apparently we're "fixing" everything
+		int range = this.getInventoryAccessRange();
+		if	(range != this.lastInventoryAccessRange) {
+			PacketSender.sendTabChangeToServer(0);
+		}
+		this.lastInventoryAccessRange = range; // separate value from one on server, but we'll use the same variable. client-copy is only used within this method, below this line.
+	}
+
+	/////////////////////////////////////////////////////////////////
 
 	public class CustomizationSlot extends Slot
 	{
@@ -743,38 +806,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		public void containerChanged(Container container) {
 			// changing drawer state of block in world here causes duping (fixed onRemove, might work now)
 			// anyway we need to hide/show access slots here
-			if (this.parent.initialLoading == false && this.parent.showInventoryAccess() && this.parent.chestSlots.getMaxStackSize() == DisabledContainer.MARKER_FOR_DISABLED) {
-				if (this.parent.selectedTab != 0) { this.parent.changeTabTo(0); }
-				if (this.parent.chestSlots.getMaxStackSize() == DisabledContainer.MARKER_FOR_DISABLED)
-				{
-					//happens on client
-					((DisabledContainer)this.parent.chestSlots).disabled = false;
-					if (! this.parent.tabElements.getItem(0).isEmpty() && this.parent.tabElements.getItem(0*2).getCount() == 2) {
-						((DisabledContainer) this.parent.chestSlots2).disabled = false;
-					}
-				}
-				this.parent.sendAllDataToRemote();
-			}
-			// and again, we hide/show access slots here (other direction)
-			if (this.parent.initialLoading == false && ! this.parent.showInventoryAccess() && this.parent.chestSlots.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED) {
-				if (this.parent.selectedTab != 0) { this.parent.changeTabTo(0); }
-				if (this.parent.chestSlots instanceof DisabledContainer && this.parent.chestSlots.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED)
-				{
-					//happens on client
-					((DisabledContainer)this.parent.chestSlots).disabled = true;
-					((DisabledContainer)this.parent.chestSlots2).disabled = true;
-				}
-				this.parent.sendAllDataToRemote();
-			}
-			// more work to do: we need to enable/disable lower part of double chest here
-			if (this.parent.initialLoading == false && this.parent.showInventoryAccess() && this.parent.chestSlots2 instanceof DisabledContainer) { // 3rd condition means client
-				if (this.parent.chestSlots.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED) {
-					((DisabledContainer) this.parent.chestSlots2).disabled = this.parent.tabElements.getItem(this.parent.selectedTab*2).isEmpty() || this.parent.tabElements.getItem(this.parent.selectedTab*2).getCount() != 2;
-				}
-				else {
-					((DisabledContainer) this.parent.chestSlots2).disabled = true;
-				}
-			}
+			this.parent.updateAccessSlotsOnClient();
 		}
 	}
 
@@ -787,11 +819,16 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		public void containerChanged(Container container) {
 			// name tags
 			int range = this.parent.getInventoryAccessRange();
+			int lastRange = this.parent.lastInventoryAccessRange; // will be overwritten before i need it
 			if (range != this.parent.lastInventoryAccessRange)
 			{
 				this.parent.storeAdjacentInventoriesInSlots();
+				this.parent.resetDataSlotFlagForClientFlag(DATA_SLOT_TABS_NEED_UPDATE); // for some reason i managed to get it stuck on 1
+				this.parent.raiseDataSlotFlagForClientFlag(DATA_SLOT_TABS_NEED_UPDATE);
+				if (lastRange == 0) {
+					this.parent.sendAllDataToRemote();
+				}
 				this.parent.lastInventoryAccessRange = range;
-				this.parent.raiseTabsNeedingUpdateClientFlag();
 			}
 			// lanterns
 			int lanternCount = this.parent.getLanternCount();

@@ -22,6 +22,7 @@ public class DualTableMenu extends SimpleTableMenu
 	public static final int SECONDARY_RESULT_SLOT = CRAFT_SECONDARY_SLOT_END + 1; // 145
 	private final CraftingContainer craftSlotsSecondary = new CraftingContainer(this, 3, 3);
 	private final ResultContainer resultSlotsSecondary = new ResultContainer();
+	public final int DATA_SLOT_JEI_RECIPE_TARGET;
 
 	public DualTableMenu(int containerId, Inventory inventory, FriendlyByteBuf friendlyByteBuf)
 	{
@@ -31,7 +32,7 @@ public class DualTableMenu extends SimpleTableMenu
 	public DualTableMenu(int containerId, Inventory inventory, ContainerLevelAccess levelAccess, @Nullable MenuType<?> menuType) {
 		super(containerId, inventory, levelAccess, menuType);
 		this.initialLoading = true;
-		this.addDataSlot(this.recipeTargetGridSlot);
+		this.addDataSlot(this.recipeTargetGridSlot);		DATA_SLOT_JEI_RECIPE_TARGET = this.getNextDataSlotId();
 		this.access.execute(this::loadFromWorldPartTwo);
 
 		//---crafting grid slots 2---
@@ -114,14 +115,14 @@ public class DualTableMenu extends SimpleTableMenu
 		return this.recipeTargetGridSlot.get();
 	}
 	private final DataSlotWithNotification recipeTargetGridSlot = new DataSlotWithNotification(1);
-	public void registerClientHandlerForDataSlotChange(Consumer<Integer> event)	{
+	public void registerClientHandlerForRecipeTargetChange(Consumer<Integer> event)	{
 		this.recipeTargetGridSlot.setEvent(event);
 	}
 
 	public void changeRecipeTargetGridTo(int grid) {
 		if (grid >= 1 && grid <= 2 ) {
 			this.recipeTargetGridSlot.set(grid);
-			this.sendAllDataToRemote();
+			this.synchronizeDataSlotToRemote(DATA_SLOT_JEI_RECIPE_TARGET, grid);
 		}
 	}
 

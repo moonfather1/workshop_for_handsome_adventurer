@@ -16,7 +16,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 
 
-version = '1.00'
+version = '${mc_version}--${mod_version}'
 group = 'moonfather.workshop_for_handsome_adventurer' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'workshop_for_handsome_adventurer'
 
@@ -157,6 +157,11 @@ repositories {
     //    // wthit
     //    url = "https://maven.bai.lol"
     //}
+    //maven {
+    //    // Maven for Tetra and mutil
+    //    name = "blamejared maven"
+    //    url = "https://maven.blamejared.com/"
+    //}
 }
 
 dependencies {
@@ -185,6 +190,11 @@ dependencies {
 
     //// compile against the API        do 5.14.1 on 1.19.2     7.1.1 on 1.19.4
     //compileOnly fg.deobf("mcp.mobius.waila:wthit-api:forge-4.13.6")
+
+    //implementation fg.deobf("se.mickelus.mutil:mutil:${mutil_version}")
+    //implementation fg.deobf("se.mickelus.tetra:tetra:${tetra_version}")
+    //implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:all") { transitive = false }
+    //implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
