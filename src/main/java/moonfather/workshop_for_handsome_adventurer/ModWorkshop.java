@@ -31,7 +31,7 @@ public class ModWorkshop
     //vanilla behavior: when you have two-block rack and you're looking so that the top half isn't visible, items disappear. i think it's not that much of a problem.
     //integration: crescent hammer (thermal) won't go onto the rack.  it's fine.
     //--later--
-    //after 1.0: tetra belt storage
+    //after 1.0: tetra belt storage           https://github.com/mickelus/tetra/blob/a23378b5d23c1873333e16fc51ac32e800a2ae71/src/main/java/se/mickelus/tetra/items/modular/impl/toolbelt/inventory/StorageInventory.java#L13
     //after 1.0: tc leggings storage
     //after 1.0: render items on top of tables
     //after 1.0: crates from create, maybe in 1.2
