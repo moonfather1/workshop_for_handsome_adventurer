@@ -65,7 +65,9 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 
 	private void recipeTargetButtonChangeHandler(Integer value) {
 		lastDestinationGrid = value;
-		this.jeiButton.setStateTriggered(value == 2);
+		if (this.jeiButton != null) {
+			this.jeiButton.setStateTriggered(value == 2);
+		}
 	}
 
 	@Override
