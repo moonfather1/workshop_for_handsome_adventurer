@@ -23,22 +23,26 @@ import org.slf4j.Logger;
 @Mod(Constants.MODID)
 public class ModWorkshop
 {
+    //bug !- xp nuggets in recipes
+    //bug !- workbench and bare hand
+    //issue: simple table and tetra hammer (!)
+    //MFO FD board, 1.18 create
     //--before--pub--
     //todo: printLn, CR in toml, ver
     //--known-- issues
     //integration: Carry On blacklist is broken in 1.17.0.8 and a few older versions. do not pick up big tables and racks, if you do, type /kill. (actually works on dedicated servers but broken on integrated.)  Carry On developer will fix the blacklist eventually.
-    //integration: WTHIT is entirely unsupported, Jade and TOP are fine. it's not my fault, i wanted to add support but i can not. blame wthit author while switching to an alternative.
+    //integration: WTHIT is entirely unsupported, Jade and TOP are fine. it's not my fault, i wanted to add support but i can not. blame wthit author while you switch to an alternative.
     //vanilla behavior: when you have two-block rack and you're looking so that the top half isn't visible, items disappear. i think it's not that much of a problem.
     //integration: crescent hammer (thermal) won't go onto the rack.  it's fine.
     //--later--
-    //after 1.0: tetra belt storage           https://github.com/mickelus/tetra/blob/a23378b5d23c1873333e16fc51ac32e800a2ae71/src/main/java/se/mickelus/tetra/items/modular/impl/toolbelt/inventory/StorageInventory.java#L13
+    //after 1.0: tetra belt storage
     //after 1.0: tc leggings storage
     //after 1.0: render items on top of tables
     //after 1.0: crates from create, maybe in 1.2
-    //after 1.0: todo list similar to one in BiblioCraft
-    //after 1.0: bookshelf like the one in BiblioCraft; no gui; oh and apparently exactly that is coming in 1.20
+    //after 1.0: todo list similar to one in BiblioCraft     (edit: apparently there will be one in create mod soon so i might cross this off)
+    //after 1.0: bookshelf like the one in BiblioCraft; no gui; (edit: apparently exactly that is coming in 1.20)
     //after 1.0: more than 8 chests
-    //maybe after 1.1: storage drawer support. maybe.
+    //maybe after 1.1: storage drawer support. maybe. not sure how. in any case, only the closest blocks.
     //maybe after 1.1: sword rack? maybe. decorative, single sword, horizontal, no gui
     //maybe after 1.1: chest markers (similar to item frames); maybe? no gui, pull items from chest
     //maybe after 1.1: nine extra storage slots in dual table

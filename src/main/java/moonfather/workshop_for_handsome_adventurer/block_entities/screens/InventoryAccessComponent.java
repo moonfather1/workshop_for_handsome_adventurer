@@ -20,6 +20,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -58,6 +59,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             this.initVisuals();
         }
         this.parent.getMenu().registerClientHandlerForDataSlot(this.parent.getMenu().DATA_SLOT_TABS_NEED_UPDATE, this::onTabListChangedOnServer);
+        this.parent.getMenu().registerClientHandlerForDataSlot(this.parent.getMenu().DATA_SLOT_UPPER_CONTAINER_TRUE_SIZE, this::onContainerSizeChangedOnServer);
         this.parent.getMinecraft().keyboardHandler.setSendRepeatsToGui(true);
     }
 
@@ -150,6 +152,15 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         this.initVisuals();
         this.tabChanged(this.tabButtons.get(0));
     }
+
+
+
+    private void onContainerSizeChangedOnServer(Integer value) {
+        for (int i = SimpleTableMenu.ACCESS27_SLOT_START; i <= SimpleTableMenu.ACCESS27_SLOT_END; i++) {
+            ((SimpleTableMenu.VariableSizeContainerSlot) this.parent.getMenu().getSlot(i)).setContainerSize(value);
+        }
+    }
+
 
 
     public int getWidth()
@@ -438,10 +449,31 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             this.renderIcon(minecraft.getItemRenderer());
         }
 
+        boolean checkedForSpecialScaling = false, doSpecialScaling = false;
         private void renderIcon(ItemRenderer itemRenderer)
         {
-            itemRenderer.renderAndDecorateFakeItem(itemMain, this.x + 1, this.y + 2);
-
+            if (! this.checkedForSpecialScaling) {
+                this.doSpecialScaling = ! (itemMain.getItem() instanceof BlockItem);
+                this.checkedForSpecialScaling = true;
+            }
+            if (! this.doSpecialScaling) {
+                // main image (block)
+                itemRenderer.renderAndDecorateFakeItem(itemMain, this.x + 1, this.y + 2);
+            }
+            else {
+                // main image (item)
+                int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
+                int y = (this.parent.parent.height - this.parent.parent.getYSize()) / 2;
+                PoseStack posestack = RenderSystem.getModelViewStack();
+                posestack.pushPose();
+                posestack.scale(0.667F, 0.667F, 0.667F);
+                posestack.translate(0, 0, +100.0D);
+                RenderSystem.applyModelViewMatrix();
+                itemRenderer.renderAndDecorateFakeItem(itemMain, (int)((x + this.chestIndex * (WIDTH-1) + 7) * 1.5d), (int)((y+6)*1.5d));
+                posestack.popPose();
+                RenderSystem.applyModelViewMatrix();
+            }
+            // sub image
             int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
             int y = (this.parent.parent.height - this.parent.parent.getYSize()) / 2;
             PoseStack posestack = RenderSystem.getModelViewStack();

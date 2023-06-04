@@ -3,6 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.blocks;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.integration.TetraHammerSupport;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -16,6 +17,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
@@ -33,6 +35,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -118,6 +121,11 @@ public class SimpleTable extends Block implements EntityBlock
 		{
 			return InteractionResult.SUCCESS;
 		}
+		else if (ModList.get().isLoaded("tetra") && ! player.isCrouching() && TetraHammerSupport.isHammer(player.getMainHandItem()))
+		{
+			level.setBlockAndUpdate(pos, TetraHammerSupport.getWorkBench());
+			return InteractionResult.CONSUME;
+		}
 		else
 		{
 			player.openMenu(state.getMenuProvider(level, pos));
@@ -125,6 +133,7 @@ public class SimpleTable extends Block implements EntityBlock
 			return InteractionResult.CONSUME;
 		}
 	}
+
 
 	private boolean isObscured(Level level, BlockPos pos)
 	{

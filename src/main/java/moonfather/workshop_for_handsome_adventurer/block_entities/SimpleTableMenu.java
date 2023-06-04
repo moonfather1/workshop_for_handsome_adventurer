@@ -1,11 +1,13 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
+import com.mojang.datafixers.util.Pair;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
 import moonfather.workshop_for_handsome_adventurer.blocks.SimpleTable;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.integration.TetraBeltSupport;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
@@ -66,6 +68,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	protected boolean initialLoading = true;
 	public final int DATA_SLOT_TABS_NEED_UPDATE;
 	public final int DATA_SLOT_LOWER_ACCESS_NEEDS_UPDATE; //these two are 0 and 1
+	public final int DATA_SLOT_UPPER_CONTAINER_TRUE_SIZE; //index is 2;  this one isn't a flag, it's a value.
 
 
 	public SimpleTableMenu(int containerId, Inventory inventory, FriendlyByteBuf friendlyByteBuf)
@@ -79,6 +82,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		this.player = inventory.player;
 		this.addDataSlot(this.tabsNeedingUpdateClientFlagSlot);		DATA_SLOT_TABS_NEED_UPDATE = this.getNextDataSlotId();
 		this.addDataSlot(this.doubleChestNeedingUpdateClientFlagSlot);		DATA_SLOT_LOWER_ACCESS_NEEDS_UPDATE = this.getNextDataSlotId();
+		this.addDataSlot(this.upperContainerTrueSizeSlot);		DATA_SLOT_UPPER_CONTAINER_TRUE_SIZE = this.getNextDataSlotId();
 
 		//---crafting result slot---
 		this.addSlot(new ResultSlot(inventory.player, this.craftSlots, this.resultSlots, 0, 124-12, 35));
@@ -140,11 +144,14 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			this.chestSlots = new DisabledContainer(27);
 			this.chestSlots2 = new DisabledContainer(27);
 		}
+		if (this.inventoryAccessHelper.chosenContainerTrueSize > 0) {
+			this.setUpperContainerTrueSize(this.inventoryAccessHelper.chosenContainerTrueSize);
+		}
 		for (int ver = 0; ver < this.chestSlots.getContainerSize()/9; ++ver)
 		{
 			for (int hor = 0; hor < 9; ++hor)
 			{
-				this.addSlot(new OptionallyDrawnSlot2(this.chestSlots, ver*9+hor, 5 + hor * 18 - LEFT_PANEL_WIDTH, 30 + ver * 18));
+				this.addSlot(new VariableSizeContainerSlot(this.chestSlots, ver*9+hor, 5 + hor * 18 - LEFT_PANEL_WIDTH, 30 + ver * 18, this.getUpperContainerTrueSize()));
 			}
 		}
 		for (int ver = 0; ver < this.chestSlots.getContainerSize()/9; ++ver)
@@ -568,8 +575,14 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		if (haveContainer.isPresent() && haveContainer.get())
 		{
 			this.chestSlots = this.inventoryAccessHelper.chosenContainer;
+			this.setUpperContainerTrueSize(this.inventoryAccessHelper.chosenContainerTrueSize);
 			for (int i = ACCESS27_SLOT_START; i <= ACCESS27_SLOT_END; i++) {
 				this.getSlot(i).container = this.chestSlots;
+			}
+			if (((VariableSizeContainerSlot) this.getSlot(ACCESS27_SLOT_START)).containerTrueSize != this.getUpperContainerTrueSize()) {
+				for (int i = ACCESS27_SLOT_START; i <= ACCESS27_SLOT_END; i++) {
+					((VariableSizeContainerSlot) this.getSlot(i)).setContainerSize(this.getUpperContainerTrueSize());
+				}
 			}
 			if (this.inventoryAccessHelper.addonContainer != null)
 			{
@@ -583,8 +596,10 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		{
 			if (! (this.chestSlots instanceof DisabledContainer)) {
 				this.chestSlots = new DisabledContainer(27);
+				this.setUpperContainerTrueSize(27);
 				for (int i = ACCESS27_SLOT_START; i <= ACCESS27_SLOT_END; i++) {
 					this.getSlot(i).container = this.chestSlots;
+					((VariableSizeContainerSlot) this.getSlot(i)).setContainerSize(27);
 				}
 				if (! (this.chestSlots2 instanceof DisabledContainer)) {
 					this.chestSlots2 = new DisabledContainer(27);
@@ -617,8 +632,14 @@ public class SimpleTableMenu extends AbstractContainerMenu
 				player.giveExperienceLevels(-1);
 			}
 		}
+		else if (this.inventoryAccessHelper.currentType == InventoryAccessHelper.RecordTypes.TOOLBELT) {
+			ItemStack s = (ItemStack) TetraBeltSupport.findToolbelt(player);
+			s.setHoverName(new TextComponent(newName));
+			player.giveExperienceLevels(-1);
+		}
 	}
 
+	///////////////////////////// flags in data slots ///////////////
 	// tabs needing update on client. yeah this used to work but i won't bother debugging, i'll do it correctly here:
 	private final DualTableMenu.DataSlotWithNotification tabsNeedingUpdateClientFlagSlot = new DualTableMenu.DataSlotWithNotification(0);
 	// lower half od double chest needing update on client.
@@ -628,6 +649,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		DualTableMenu.DataSlotWithNotification slot = null;
 		if (dataSlot == DATA_SLOT_LOWER_ACCESS_NEEDS_UPDATE) { slot = this.doubleChestNeedingUpdateClientFlagSlot; }
 		if (dataSlot == DATA_SLOT_TABS_NEED_UPDATE) { slot = this.tabsNeedingUpdateClientFlagSlot; } // NPE is fine on not found
+		if (dataSlot == DATA_SLOT_UPPER_CONTAINER_TRUE_SIZE) { slot = this.upperContainerTrueSizeSlot; }
 		slot.setEvent(event);
 	}
 	public void resetDataSlotFlagForClientFlag(int dataSlot) {
@@ -650,6 +672,17 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		this.synchronizeDataSlotToRemote(dataSlot, newValue);  // odd == flag up
 	}
 
+	///////////////////////// actual values in data slots //////////////
+	private final DualTableMenu.DataSlotWithNotification upperContainerTrueSizeSlot = new DualTableMenu.DataSlotWithNotification(0);
+	private int getUpperContainerTrueSize() { return this.upperContainerTrueSizeSlot.get(); }
+	private void setUpperContainerTrueSize(int value) {
+		if (value != this.getUpperContainerTrueSize()) {
+			this.upperContainerTrueSizeSlot.set(value);
+			this.synchronizeDataSlotToRemote(DATA_SLOT_UPPER_CONTAINER_TRUE_SIZE, value);
+		}
+	}
+
+	//////////////////////// data slot support ////////////////////
 	private int nextDataSlotId = 0;
 	protected int getNextDataSlotId() { return nextDataSlotId++; }
 
@@ -697,7 +730,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	/////////////////////////////////////////////////////////////////
 
-	public class CustomizationSlot extends Slot
+	public static class CustomizationSlot extends Slot
 	{
 		private static final TagKey<Item> ChestTag = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge:chests"));
 		private static final TagKey<Item> LanternTag = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(Constants.MODID, "lanterns"));
@@ -793,6 +826,72 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			super(size);
 		}
 	}
+
+	/////////////////////////////////////////////////////////////////////////
+
+	public static class VariableSizeContainerSlot extends Slot
+	{
+		public static final ResourceLocation EXCESS_SLOT_BG = new ResourceLocation(Constants.MODID, "gui/x_slot");
+		private int containerTrueSize;
+
+		public VariableSizeContainerSlot(Container p_40223_, int p_40224_, int p_40225_, int p_40226_, int containerTrueSize)
+		{
+			super(p_40223_, p_40224_, p_40225_, p_40226_);
+			this.containerTrueSize = containerTrueSize;
+			this.excessBackgroundPair = Pair.of(InventoryMenu.BLOCK_ATLAS, EXCESS_SLOT_BG);
+		}
+
+		@Override
+		public boolean isActive() {
+			return this.container.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED // whole container not disabled
+					&& this.getSlotIndex() < this.containerTrueSize;  // not beyond the limit of variable-size containers
+		}
+
+		@Override
+		public boolean mayPlace(ItemStack itemStack) {
+			return this.isActive() && this.container.canPlaceItem(this.getSlotIndex(), itemStack);
+		}
+
+		public void setContainerSize(int chosenContainerTrueSize) {
+			this.containerTrueSize = chosenContainerTrueSize;
+		}
+		public int getContainerTrueSize() { return this.containerTrueSize; }
+		public boolean isExcessSlot() {	return this.getSlotIndex() >= this.containerTrueSize; }
+
+		public Pair<ResourceLocation, ResourceLocation> getExcessIcon() { return this.excessBackgroundPair; }
+		private final Pair<ResourceLocation, ResourceLocation> excessBackgroundPair;
+	}
+
+	public static class VariableSizeWrapperContainer extends SimpleContainer
+	{
+		private final Container internal;
+		public VariableSizeWrapperContainer(Container wrapped) {
+			super(27);
+			this.internal = wrapped;
+		}
+
+		@Override
+		public boolean canPlaceItem(int slot, ItemStack itemStack) { return slot < internal.getContainerSize() && internal.canPlaceItem(slot, itemStack); }
+
+		@Override
+		public ItemStack getItem(int slot) { return slot < internal.getContainerSize() ? internal.getItem(slot) : ItemStack.EMPTY; }
+
+		@Override
+		public ItemStack removeItem(int slot, int count) { return slot < internal.getContainerSize() ? internal.removeItem(slot, count) : ItemStack.EMPTY; }
+
+		@Override
+		public ItemStack removeItemNoUpdate(int slot) {	return slot < internal.getContainerSize() ? internal.removeItemNoUpdate(slot) : ItemStack.EMPTY; }
+
+		@Override
+		public void setItem(int slot, ItemStack itemStack) { if (slot < internal.getContainerSize()) { internal.setItem(slot, itemStack); } }
+
+		@Override
+		public boolean isEmpty() { return internal.isEmpty(); }
+
+		@Override
+		public void setChanged() { internal.setChanged(); }
+	}
+
 
 	/////////////////////////////////////////////////////////////////////////
 
