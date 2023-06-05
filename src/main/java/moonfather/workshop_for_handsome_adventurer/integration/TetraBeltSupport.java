@@ -3,6 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.integration;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fml.ModList;
 import se.mickelus.tetra.items.modular.impl.toolbelt.ToolbeltHelper;
 import se.mickelus.tetra.items.modular.impl.toolbelt.inventory.StorageInventory;
 
@@ -10,6 +11,7 @@ public class TetraBeltSupport
 {
     public static Object findToolbelt(Player player)
     {
+        if (! ModList.get().isLoaded("tetra")) { return null; }
         return ToolbeltHelper.findToolbelt(player);
     }
 

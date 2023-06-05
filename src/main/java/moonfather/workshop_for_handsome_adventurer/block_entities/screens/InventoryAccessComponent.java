@@ -150,7 +150,9 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         this.tabsInitialized = false;
         this.parent.getMenu().selectedTab = -1;
         this.initVisuals();
-        this.tabChanged(this.tabButtons.get(0));
+        if (this.tabButtons.size() > 0) {
+            this.tabChanged(this.tabButtons.get(0));
+        }
     }
 
 
