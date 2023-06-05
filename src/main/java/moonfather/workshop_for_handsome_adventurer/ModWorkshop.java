@@ -25,17 +25,16 @@ public class ModWorkshop
 {
     //bug !- xp nuggets in recipes
     //bug !- workbench and bare hand
-    //issue: simple table and tetra hammer (!)
     //MFO FD board, 1.18 create
     //--before--pub--
     //todo: printLn, CR in toml, ver
     //--known-- issues
     //integration: Carry On blacklist is broken in 1.17.0.8 and a few older versions. do not pick up big tables and racks, if you do, type /kill. (actually works on dedicated servers but broken on integrated.)  Carry On developer will fix the blacklist eventually.
     //integration: WTHIT is entirely unsupported, Jade and TOP are fine. it's not my fault, i wanted to add support but i can not. blame wthit author while you switch to an alternative.
+    //integration: while tetra belts can hold up to 32 items, only 27 will be accessible from crafting table. we might fix it but it's very low priority.
     //vanilla behavior: when you have two-block rack and you're looking so that the top half isn't visible, items disappear. i think it's not that much of a problem.
     //integration: crescent hammer (thermal) won't go onto the rack.  it's fine.
     //--later--
-    //after 1.0: tetra belt storage
     //after 1.0: tc leggings storage
     //after 1.0: render items on top of tables
     //after 1.0: crates from create, maybe in 1.2
@@ -46,6 +45,7 @@ public class ModWorkshop
     //maybe after 1.1: sword rack? maybe. decorative, single sword, horizontal, no gui
     //maybe after 1.1: chest markers (similar to item frames); maybe? no gui, pull items from chest
     //maybe after 1.1: nine extra storage slots in dual table
+    //maybe after 1.2: tetra tables in wood variants
     //probably not: weapon rack (vertical weapons),  sword and shield on wall...
 
 

@@ -151,7 +151,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		{
 			for (int hor = 0; hor < 9; ++hor)
 			{
-				this.addSlot(new VariableSizeContainerSlot(this.chestSlots, ver*9+hor, 5 + hor * 18 - LEFT_PANEL_WIDTH, 30 + ver * 18, this.getUpperContainerTrueSize()));
+				this.addSlot(new VariableSizeContainerSlot(this.chestSlots, ver*9+hor, 5 + hor * 18 - LEFT_PANEL_WIDTH, 30 + ver * 18, this::getUpperContainerTrueSize));
 			}
 		}
 		for (int ver = 0; ver < this.chestSlots.getContainerSize()/9; ++ver)
@@ -579,11 +579,6 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			for (int i = ACCESS27_SLOT_START; i <= ACCESS27_SLOT_END; i++) {
 				this.getSlot(i).container = this.chestSlots;
 			}
-			if (((VariableSizeContainerSlot) this.getSlot(ACCESS27_SLOT_START)).containerTrueSize != this.getUpperContainerTrueSize()) {
-				for (int i = ACCESS27_SLOT_START; i <= ACCESS27_SLOT_END; i++) {
-					((VariableSizeContainerSlot) this.getSlot(i)).setContainerSize(this.getUpperContainerTrueSize());
-				}
-			}
 			if (this.inventoryAccessHelper.addonContainer != null)
 			{
 				this.chestSlots2 = this.inventoryAccessHelper.addonContainer;
@@ -599,7 +594,6 @@ public class SimpleTableMenu extends AbstractContainerMenu
 				this.setUpperContainerTrueSize(27);
 				for (int i = ACCESS27_SLOT_START; i <= ACCESS27_SLOT_END; i++) {
 					this.getSlot(i).container = this.chestSlots;
-					((VariableSizeContainerSlot) this.getSlot(i)).setContainerSize(27);
 				}
 				if (! (this.chestSlots2 instanceof DisabledContainer)) {
 					this.chestSlots2 = new DisabledContainer(27);
@@ -832,19 +826,19 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	public static class VariableSizeContainerSlot extends Slot
 	{
 		public static final ResourceLocation EXCESS_SLOT_BG = new ResourceLocation(Constants.MODID, "gui/x_slot");
-		private int containerTrueSize;
+		private static final Pair<ResourceLocation, ResourceLocation> excessBackgroundPair = Pair.of(InventoryMenu.BLOCK_ATLAS, EXCESS_SLOT_BG);
+		private Supplier<Integer> containerTrueSizeGetter = null;
 
-		public VariableSizeContainerSlot(Container p_40223_, int p_40224_, int p_40225_, int p_40226_, int containerTrueSize)
+		public VariableSizeContainerSlot(Container p_40223_, int p_40224_, int p_40225_, int p_40226_, Supplier<Integer> containerTrueSize)
 		{
 			super(p_40223_, p_40224_, p_40225_, p_40226_);
-			this.containerTrueSize = containerTrueSize;
-			this.excessBackgroundPair = Pair.of(InventoryMenu.BLOCK_ATLAS, EXCESS_SLOT_BG);
+			this.containerTrueSizeGetter = containerTrueSize;
 		}
 
 		@Override
 		public boolean isActive() {
 			return this.container.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED // whole container not disabled
-					&& this.getSlotIndex() < this.containerTrueSize;  // not beyond the limit of variable-size containers
+					&& this.getSlotIndex() < this.containerTrueSizeGetter.get();  // not beyond the limit of variable-size containers
 		}
 
 		@Override
@@ -852,14 +846,10 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			return this.isActive() && this.container.canPlaceItem(this.getSlotIndex(), itemStack);
 		}
 
-		public void setContainerSize(int chosenContainerTrueSize) {
-			this.containerTrueSize = chosenContainerTrueSize;
-		}
-		public int getContainerTrueSize() { return this.containerTrueSize; }
-		public boolean isExcessSlot() {	return this.getSlotIndex() >= this.containerTrueSize; }
+		public int getContainerTrueSize() { return this.containerTrueSizeGetter.get(); }
+		public boolean isExcessSlot() {	return this.getSlotIndex() >= this.getContainerTrueSize(); }
 
-		public Pair<ResourceLocation, ResourceLocation> getExcessIcon() { return this.excessBackgroundPair; }
-		private final Pair<ResourceLocation, ResourceLocation> excessBackgroundPair;
+		public Pair<ResourceLocation, ResourceLocation> getExcessIcon() { return excessBackgroundPair; }
 	}
 
 	public static class VariableSizeWrapperContainer extends SimpleContainer
@@ -890,6 +880,9 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 		@Override
 		public void setChanged() { internal.setChanged(); }
+
+		@Override
+		public int getMaxStackSize() { return internal.getMaxStackSize(); }
 	}
 
 

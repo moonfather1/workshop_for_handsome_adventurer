@@ -158,9 +158,6 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
 
 
     private void onContainerSizeChangedOnServer(Integer value) {
-        for (int i = SimpleTableMenu.ACCESS27_SLOT_START; i <= SimpleTableMenu.ACCESS27_SLOT_END; i++) {
-            ((SimpleTableMenu.VariableSizeContainerSlot) this.parent.getMenu().getSlot(i)).setContainerSize(value);
-        }
     }
 
 
