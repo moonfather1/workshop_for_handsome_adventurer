@@ -29,6 +29,8 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -132,21 +134,13 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 		this.storeAdjacentInventoriesInSlots();
 
-		//---slots for adjacent inventories---
-		if (this.showInventoryAccess())
-		{
-			this.access.evaluate((level, pos) -> this.inventoryAccessHelper.tryInitializeFirstInventoryAccess(level, this.player));
-		}
-		if (this.inventoryAccessHelper.chosenContainer != null)	{
-			this.chestSlots = this.inventoryAccessHelper.chosenContainer;
-			if (this.inventoryAccessHelper.addonContainer != null)	{ this.chestSlots2 = this.inventoryAccessHelper.addonContainer; } else { this.chestSlots2 = new DisabledContainer(27); }
-		} else {
-			this.chestSlots = new DisabledContainer(27);
-			this.chestSlots2 = new DisabledContainer(27);
-		}
-		if (this.inventoryAccessHelper.chosenContainerTrueSize > 0) {
-			this.setUpperContainerTrueSize(this.inventoryAccessHelper.chosenContainerTrueSize);
-		}
+		//---slots for adjacent inventories - initialization --
+		this.chestSlots = new DisabledContainer(27); // we won't call tryInitializeFirstInventoryAccess here. we did, but after some changes, we had all of this double-called.
+		this.chestSlots2 = new DisabledContainer(27);  // ...instead we'll leave these 4 dummy lines. they do nothing.
+		this.inventoryAccessHelper.chosenContainerTrueSize = 27;
+		this.setUpperContainerTrueSize(27);
+
+		//---slots for adjacent inventories - creation --
 		for (int ver = 0; ver < this.chestSlots.getContainerSize()/9; ++ver)
 		{
 			for (int hor = 0; hor < 9; ++hor)
@@ -626,8 +620,13 @@ public class SimpleTableMenu extends AbstractContainerMenu
 				player.giveExperienceLevels(-1);
 			}
 		}
-		else if (this.inventoryAccessHelper.currentType == InventoryAccessHelper.RecordTypes.TOOLBELT) {
+		else if (this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.TOOLBELT)) {
 			ItemStack s = (ItemStack) TetraBeltSupport.findToolbelt(player);
+			s.setHoverName(new TextComponent(newName));
+			player.giveExperienceLevels(-1);
+		}
+		else if (this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.LEGGINGS) || this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.CHESTSLOT) || this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.BACKSLOT)) {
+			ItemStack s = InventoryAccessHelper.getItemFromNamedSlot(player, this.inventoryAccessHelper.currentType);
 			s.setHoverName(new TextComponent(newName));
 			player.giveExperienceLevels(-1);
 		}
@@ -852,10 +851,10 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		public Pair<ResourceLocation, ResourceLocation> getExcessIcon() { return excessBackgroundPair; }
 	}
 
-	public static class VariableSizeWrapperContainer extends SimpleContainer
+	public static class VariableSizeContainerWrapper extends SimpleContainer
 	{
 		private final Container internal;
-		public VariableSizeWrapperContainer(Container wrapped) {
+		public VariableSizeContainerWrapper(Container wrapped) {
 			super(27);
 			this.internal = wrapped;
 		}
@@ -885,7 +884,46 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		public int getMaxStackSize() { return internal.getMaxStackSize(); }
 	}
 
+	//////////////////////////////////////////////////////////////////////////
 
+	public static class VariableSizeItemStackHandlerWrapper  extends SimpleContainer
+	{
+		private final IItemHandler internal;
+		public VariableSizeItemStackHandlerWrapper(IItemHandler wrapped) {
+			super(27);
+			this.internal = wrapped;
+		}
+
+		@Override
+		public boolean canPlaceItem(int slot, ItemStack itemStack) { return slot < internal.getSlots() && internal.isItemValid(slot, itemStack); }
+
+		@Override
+		public ItemStack getItem(int slot) { return slot < internal.getSlots() ? internal.getStackInSlot(slot) : ItemStack.EMPTY; }
+
+		@Override
+		public ItemStack removeItem(int slot, int count) { return slot < internal.getSlots() ? internal.extractItem(slot, count, false) : ItemStack.EMPTY; }
+
+		@Override
+		public ItemStack removeItemNoUpdate(int slot) {	return slot < internal.getSlots() ? internal.extractItem(slot, 9999, false) : ItemStack.EMPTY; }
+
+		@Override
+		public void setItem(int slot, ItemStack itemStack) { if (slot < internal.getSlots()) { internal.insertItem(slot, itemStack, false); } }
+
+		@Override
+		public boolean isEmpty() {
+			for (int i = 0; i < internal.getSlots(); i++) {
+				if (! internal.getStackInSlot(i).isEmpty()) {
+					return false;
+				}
+			}  return true;
+		}
+
+		@Override
+		public void setChanged() { }
+
+		@Override
+		public int getMaxStackSize() { return internal.getSlots() > 0 ? internal.getSlotLimit(0) : 64; }
+	}
 	/////////////////////////////////////////////////////////////////////////
 
 	private class CustomizationListenerClient implements ContainerListener {
