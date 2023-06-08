@@ -6,6 +6,7 @@ import moonfather.workshop_for_handsome_adventurer.integration.TetraBeltSupport;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.CompoundContainer;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.player.Player;
@@ -27,28 +28,27 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class InventoryAccessHelper
 {
-    private void resolveContainer(BlockEntity be, Player player, BlockPos pos, Level level)
+    private void resolveBlockContainer(BlockEntity be, Player player, BlockPos pos, Level level)
     {
-        this.chosenContainer = null;   this.addonContainer = null;   this.chestPrimaryPos = null;     this.chosenContainerTrueSize = 0;      this.currentType = "";
+        this.chosenContainer = null;      this.chestPrimaryPos = null;     this.chosenContainerTrueSize = 0;      this.currentType = "";  this.chosenContainerVisibleSize = 27;    this.chosenContainerForRename = null;
         if (be == null) {
             return;
         }
-        if (be instanceof ChestBlockEntity) {
+        if (be instanceof ChestBlockEntity cbe && cbe.getContainerSize() <= 54) {
             if (ChestBlock.isChestBlockedAt(level, pos)) {
                 return;
             }
-            this.chosenContainerTrueSize = 27; // upper part only
+            this.chosenContainerTrueSize = cbe.getContainerSize(); // we'll deal with double chests below
+            this.chosenContainerVisibleSize = cbe.getContainerSize() <= 27 ? 27 : 54;
             this.currentType = RecordTypes.BLOCK;
-            //this is how chest combines inv:   Container container = new CompoundContainer(p_51604_, p_51605_);
-            this.chestPrimaryPos = pos;
             DoubleBlockCombiner.BlockType type = ChestBlock.getBlockType(be.getBlockState());
             if (type == DoubleBlockCombiner.BlockType.SINGLE) {
-                this.chosenContainer = (Container)be;
+                this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper((Container) be);
+                this.chosenContainerForRename = be;
             }
             if (type == DoubleBlockCombiner.BlockType.FIRST) {
                 BlockPos pos2 = pos.relative(ChestBlock.getConnectedDirection(be.getBlockState()));
@@ -58,11 +58,12 @@ public class InventoryAccessHelper
                     if (ChestBlock.isChestBlockedAt(level, pos2)) {
                         return;
                     }
-                    this.chosenContainer = (Container)be;
-                    this.addonContainer = (Container)be2;
-                    this.chestPrimaryPos = pos;
+                    Container result = new CompoundContainer((Container) be, (Container) be2);
+                    this.chosenContainer = result.getContainerSize() == 54 ? result : new SimpleTableMenu.VariableSizeContainerWrapper(result);
+                    this.chosenContainerTrueSize = result.getContainerSize();
+                    this.chosenContainerVisibleSize = result.getContainerSize() <= 27 ? 27 : 54;
+                    this.chosenContainerForRename = be;
                 } else {
-                    //System.out.println("~~~WTF2");
                     return;
                 }
             }
@@ -74,22 +75,26 @@ public class InventoryAccessHelper
                     if (ChestBlock.isChestBlockedAt(level, pos2)) {
                         return;
                     }
-                    this.addonContainer = (Container)be;
-                    this.chosenContainer = (Container)be2;
+                    Container result = new CompoundContainer((Container) be2, (Container) be);
+                    this.chosenContainer = result.getContainerSize() == 54 ? result : new SimpleTableMenu.VariableSizeContainerWrapper(result);
+                    this.chosenContainerTrueSize = result.getContainerSize();
+                    this.chosenContainerVisibleSize = result.getContainerSize() <= 27 ? 27 : 54;
+                    this.chosenContainerForRename = be2;
                     this.chestPrimaryPos = pos2;
                 } else {
-                    //System.out.println("~~~WTF");
                     return;
                 }
             }
             return;
         }
-        if (be instanceof Container container && container.getContainerSize() == 27) {
+        if (be instanceof Container container && container.getContainerSize() <= 54) {
             if (be instanceof ShulkerBoxBlockEntity && ! canOpenShulkerBox(level, be.getBlockState(), pos)) {
                 return;
             }
-            this.chosenContainer = container;
-            this.chosenContainerTrueSize = 27;
+            this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(container);
+            this.chosenContainerTrueSize = container.getContainerSize();
+            this.chosenContainerVisibleSize = container.getContainerSize() <= 27 ? 27 : 54;
+            this.chosenContainerForRename = be;
             this.currentType = RecordTypes.BLOCK;
             return;
         }
@@ -97,8 +102,9 @@ public class InventoryAccessHelper
             if (ChestBlock.isChestBlockedAt(level, pos)) {
                 return;
             }
-            this.chosenContainer =  player.getEnderChestInventory();
+            this.chosenContainer =  new SimpleTableMenu.VariableSizeContainerWrapper(player.getEnderChestInventory());
             this.chosenContainerTrueSize = 27;
+            this.chosenContainerVisibleSize = 27;
             this.currentType = RecordTypes.BLOCK;
             return;
         }
@@ -108,10 +114,14 @@ public class InventoryAccessHelper
             oih = be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP);
         }
         oih.ifPresent( ih -> {
-            this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(ih);
-            this.chosenContainerTrueSize = Math.min(ih.getSlots(), 27);
-            this.currentType = RecordTypes.BLOCK;
-            return;
+            if (ih.getSlots() <= 54) {
+                this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(ih);
+                this.chosenContainerTrueSize = ih.getSlots();
+                this.chosenContainerVisibleSize = ih.getSlots() <= 27 ? 27 : 54;
+                this.chosenContainerForRename = be;
+                this.currentType = RecordTypes.BLOCK;
+                return;
+            }
         } );
     }
 
@@ -149,16 +159,19 @@ public class InventoryAccessHelper
             return;
         }
         Object beltSearch = TetraBeltSupport.findToolbelt(player);
-        if (TetraBeltSupport.hasToolbelt(beltSearch) && TetraBeltSupport.getToolbeltStorage(beltSearch).getContainerSize() > 0) {
-            InventoryAccessRecord record = new InventoryAccessRecord();
-            record.ItemChest = TetraBeltSupport.getToolbeltIcon(beltSearch);
-            record.Nameable = true;
-            record.Name = record.ItemChest.getHoverName();
-            record.Type = RecordTypes.TOOLBELT;
-            record.HasDoubleInventory = false;
-            record.ItemFirst = TetraBeltSupport.getToolbeltStorageFirst(beltSearch);
-            record.Index = this.adjacentInventories.size();
-            this.adjacentInventories.add(record);
+        if (TetraBeltSupport.hasToolbelt(beltSearch)) {
+            int size = TetraBeltSupport.getToolbeltStorage(beltSearch).getContainerSize();
+            if (size > 0) {
+                InventoryAccessRecord record = new InventoryAccessRecord();
+                record.ItemChest = TetraBeltSupport.getToolbeltIcon(beltSearch);
+                record.Nameable = true;
+                record.Name = record.ItemChest.getHoverName();
+                record.Type = RecordTypes.TOOLBELT;
+                record.VisibleSlotCount = size <= 27 ? 27 : 54;
+                record.ItemFirst = TetraBeltSupport.getToolbeltStorageFirst(beltSearch);
+                record.Index = this.adjacentInventories.size();
+                this.adjacentInventories.add(record);
+            }
         }
         if (this.adjacentInventories.size() >= SimpleTableMenu.TAB_SMUGGLING_SOFT_LIMIT) {
             return;
@@ -174,7 +187,7 @@ public class InventoryAccessHelper
                 record.Nameable = true;
                 record.Name = record.ItemChest.getHoverName();
                 record.Type = slotName;
-                record.HasDoubleInventory = false;
+                record.VisibleSlotCount = inventory.getSlots() <= 27 ? 27 : 54;
                 record.ItemFirst = ItemStack.EMPTY;
                 record.Index = this.adjacentInventories.size();
                 this.adjacentInventories.add(record);
@@ -205,7 +218,7 @@ public class InventoryAccessHelper
                     if (this.adjacentInventories.size() == SimpleTableMenu.TAB_SMUGGLING_SOFT_LIMIT) { return; }
                     pos2.set(pos.getX() + dx, pos.getY() + dy, pos.getZ() + dz);
                     BlockEntity be = level.getBlockEntity(pos2);
-                    this.resolveContainer(be, player, pos2, level);
+                    this.resolveBlockContainer(be, player, pos2, level);
                     if (this.chosenContainer != null)
                     {
                         if (be instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity bcbe && ! bcbe.canOpen(player))
@@ -214,7 +227,7 @@ public class InventoryAccessHelper
                         }
                         InventoryAccessRecord record = new InventoryAccessRecord();
                         record.ItemChest = be.getBlockState().getBlock().asItem().getDefaultInstance();
-                        if (this.chosenContainer instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity bcbe) {
+                        if (this.chosenContainerForRename instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity bcbe) {
                             record.Name = bcbe.getName();  // Nameable interface doesn't have a set method so i'd have to check for ToolboxBlockEntity and every other separately... doable but meh.
                             record.Nameable = true;
                         }
@@ -224,11 +237,10 @@ public class InventoryAccessHelper
                         }
                         record.x = pos2.getX(); record.y = pos2.getY(); record.z = pos2.getZ();
                         record.Type = RecordTypes.BLOCK;
-                        if (this.addonContainer != null)
+                        record.VisibleSlotCount = this.chosenContainerVisibleSize;
+                        if (this.chestPrimaryPos != null)
                         {
-                            record.HasDoubleInventory = true;
                             record.x = this.chestPrimaryPos.getX(); record.y = this.chestPrimaryPos.getY(); record.z = this.chestPrimaryPos.getZ();
-                            record.Type = RecordTypes.BLOCK;
                         }
                         record.ItemFirst = this.chosenContainer.getItem(0);
                         record.Index = this.adjacentInventories.size();
@@ -248,14 +260,10 @@ public class InventoryAccessHelper
 
     ////////////////////////////////////////////
 
-    public Container chosenContainer, addonContainer;
-    public int chosenContainerTrueSize = 0;
+    public Container chosenContainer;
+    public int chosenContainerTrueSize = 0, chosenContainerVisibleSize = 0;
     private BlockPos chestPrimaryPos;
-
-    public boolean tryInitializeFirstInventoryAccess(Level level, Player player)
-    {
-        return this.tryInitializeAnotherInventoryAccess(level, player, 0);
-    }
+    public BlockEntity chosenContainerForRename = null;
 
 
     public void putInventoriesIntoAContainerForTransferToClient(Container tabElements, int max)
@@ -270,7 +278,7 @@ public class InventoryAccessHelper
             InventoryAccessHelper.InventoryAccessRecord current = this.adjacentInventories.get(i);
             ItemStack chest = current.ItemChest.copy();
             chest.setHoverName(current.Name);
-            if (current.HasDoubleInventory) { chest.setCount(2); }
+            if (current.VisibleSlotCount > 27) { chest.setCount(2); }
             if (! current.Nameable) { chest.setCount(chest.getCount() | 4); }
             ItemStack suff = current.ItemFirst.copy();
             tabElements.setItem(i*2, chest);
@@ -284,8 +292,8 @@ public class InventoryAccessHelper
     }
 
 
-    public boolean tryInitializeAnotherInventoryAccess(Level level, Player player, int index) {
-        this.chosenContainerTrueSize = 0;   this.addonContainer = this.chosenContainer = null;
+    public boolean tryInitializeInventoryAccess(Level level, Player player, int index) {
+        this.chosenContainerTrueSize = 0;   this.chosenContainer = null;
         if (this.adjacentInventories == null || this.adjacentInventories.size() <= index)
         {
             return false;
@@ -294,13 +302,13 @@ public class InventoryAccessHelper
         if (record.Type.equals(RecordTypes.BLOCK)) {
             BlockPos pos = new BlockPos(record.x, record.y, record.z);
             BlockEntity be = level.getBlockEntity(pos);
-            resolveContainer(be, player, pos, level);
+            resolveBlockContainer(be, player, pos, level);
             return this.chosenContainer != null;
         }
         else if (record.Type.equals(RecordTypes.TOOLBELT)) {
             Container belt = TetraBeltSupport.getToolbeltStorage(player);
+            if (belt == null) { return false; }
             this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(belt);
-            this.addonContainer = null;
             this.chosenContainerTrueSize = belt.getContainerSize();
             this.currentType = RecordTypes.TOOLBELT;
             return true;
@@ -310,7 +318,6 @@ public class InventoryAccessHelper
             LazyOptional<IItemHandler> pockets = item.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
             pockets.ifPresent(inventory -> {
                 this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(inventory);
-                this.addonContainer = null;
                 this.chosenContainerTrueSize = inventory.getSlots();
                 this.currentType = record.Type;
             });
@@ -404,8 +411,9 @@ public class InventoryAccessHelper
         public ItemStack ItemChest = ItemStack.EMPTY;
         public ItemStack ItemFirst = ItemStack.EMPTY;
         public int Index, x, y, z;
-        public boolean HasDoubleInventory = false, Nameable = false;
+        public boolean Nameable = false;
         public String Type = "";
+        public int VisibleSlotCount = 3;
     }
 
     static class RecordTypes
@@ -415,6 +423,6 @@ public class InventoryAccessHelper
         public static final String LEGGINGS = "leggings_item";
         public static final String CHESTSLOT = "chest_item";
         public static final String BACKSLOT = "back_item";
-        public static final String[] NAMED_SLOTS = {LEGGINGS, CHESTSLOT, BACKSLOT};
+        public static final String[] NAMED_SLOTS = { LEGGINGS, CHESTSLOT, BACKSLOT };
     }
 }

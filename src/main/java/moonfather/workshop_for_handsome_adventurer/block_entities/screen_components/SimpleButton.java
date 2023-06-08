@@ -53,6 +53,9 @@ public class SimpleButton extends Button {
         }
         RenderSystem.enableDepthTest();
         blit(poseStack, this.x, this.y, (float)this.xTexStart, (float)yOffset, this.width, this.height, this.textureWidth, this.textureHeight);
+    }
+
+    public void renderTooltipsSeparately(PoseStack poseStack, int mouseX, int mouseY) {
         if (this.isHovered) {
             if (this.tooltipLines == null) {
                 this.tooltipLines = new ArrayList<>(2);

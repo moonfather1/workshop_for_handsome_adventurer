@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 
 public class DualTableMenu extends SimpleTableMenu
 {
-	public static final int CRAFT_SECONDARY_SLOT_START = ACCESS54_SLOT_END + 1; //136
+	public static final int CRAFT_SECONDARY_SLOT_START = ACCESS_SLOT_END + 1; //136
 	public static final int CRAFT_SECONDARY_SLOT_END = CRAFT_SECONDARY_SLOT_START + 9 - 1; // 144
 	public static final int SECONDARY_RESULT_SLOT = CRAFT_SECONDARY_SLOT_END + 1; // 145
 	private final CraftingContainer craftSlotsSecondary = new CraftingContainer(this, 3, 3);

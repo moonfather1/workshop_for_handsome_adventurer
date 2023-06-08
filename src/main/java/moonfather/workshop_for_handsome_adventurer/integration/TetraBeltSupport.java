@@ -1,5 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.integration;
 
+import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -42,6 +43,10 @@ public class TetraBeltSupport
 
     public static Container getToolbeltStorage(Player player)
     {
-        return new StorageInventory(ToolbeltHelper.findToolbelt(player));
+        ItemStack belt = ToolbeltHelper.findToolbelt(player);
+        if (! belt.isEmpty()) {
+            return new StorageInventory(belt);
+        }
+        return null;
     }
 }

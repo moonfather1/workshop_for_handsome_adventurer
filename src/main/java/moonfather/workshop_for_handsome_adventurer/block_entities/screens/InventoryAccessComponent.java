@@ -46,6 +46,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     private boolean widthTooNarrow2 = false;
     private SimpleTableCraftingScreen parent;
     private boolean tabsInitialized = false;
+    private boolean slotRowsFourToSixVisible = false;
 
     public void init(SimpleTableCraftingScreen parent, boolean widthTooNarrow)
     {
@@ -134,6 +135,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             boolean canRenameContainer = (button.itemMain.getCount() & 4) == 0;
             this.renameBox.visible = canRenameContainer;
             this.renameButton.visible = canRenameContainer;
+            this.slotRowsFourToSixVisible = (button.itemMain.getCount() & 2) == 2;
             return true;
         }
         return false;
@@ -157,10 +159,9 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
 
 
 
-    private void onContainerSizeChangedOnServer(Integer value) {
-    }
+    private void onContainerSizeChangedOnServer(Integer value) {  }
 
-
+    public boolean areSlotRowsFourToSixVisible() { return this.slotRowsFourToSixVisible; }
 
     public int getWidth()
     {
@@ -201,28 +202,33 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         }
     }
 
+
+
     private ResourceLocation getBackground() {
-        if (this.selectedTab != null && this.selectedTab.itemMain.getCount() == 2) {
+        if (this.selectedTab != null && this.slotRowsFourToSixVisible) {
             return BG_CHEST_LOCATION_6_ROWS;
         }
         return BG_CHEST_LOCATION_3_ROWS;
     }
 
-    public void renderTooltip(PoseStack poseStack, int p_100365_, int p_100366_)
+    public void renderTooltip(PoseStack poseStack, int mouseX, int mouseY)
     {
         if (this.isVisibleTotal()) {
+            this.renameButton.renderTooltipsSeparately(poseStack, mouseX, mouseY);
             for(StateSwitchingButton tabButton : this.tabButtons)
             {
                 if (tabButton.isHoveredOrFocused())
                 {
                     if (this.parent.getMinecraft().screen != null) {
-                        this.parent.getMinecraft().screen.renderTooltip(poseStack, tabButton.getMessage(), p_100365_, p_100366_);
+                        this.parent.getMinecraft().screen.renderTooltip(poseStack, tabButton.getMessage(), mouseX, mouseY);
                     }
                     break;
                 }
             }
         }
     }
+
+    /////////////////////////////////////////////
 
     @Override
     public NarrationPriority narrationPriority()
@@ -282,15 +288,6 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
                 this.parent.setPositionsX();
             }
         }
-        //if (this.tickCount < 5 || this.tickCount % 10 == 9)
-        //{
-        //    int range = this.parent.getMenu().getInventoryAccessRange();
-        //    if (this.isVisibleTotal() && range != this.lastInventoryAccessRange) {
-        //        this.selectedTab = null;
-        //        this.initVisuals();
-        //        this.lastInventoryAccessRange = range;
-        //    }
-        //} // this part i don't even need anymore. delayed update of tabs and visibility but still nice and reliable.
         if (this.isVisibleTotal() && this.renameBox != null)
         {
             this.renameBox.tick();
@@ -300,6 +297,8 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             }
         }
     }
+
+    ///////////////////////////////////////////
 
     @Override
     public boolean keyPressed(int p_94745_, int p_94746_, int p_94747_) {
@@ -456,11 +455,11 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
                 this.checkedForSpecialScaling = true;
             }
             if (! this.doSpecialScaling) {
-                // main image (block)
+                // main image - block   (chests, barrels)
                 itemRenderer.renderAndDecorateFakeItem(itemMain, this.x + 1, this.y + 2);
             }
             else {
-                // main image (item)
+                // main image - item    (belt, backpack...)
                 int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
                 int y = (this.parent.parent.height - this.parent.parent.getYSize()) / 2;
                 PoseStack posestack = RenderSystem.getModelViewStack();

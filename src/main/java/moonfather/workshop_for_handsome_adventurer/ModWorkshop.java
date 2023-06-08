@@ -6,7 +6,6 @@ import moonfather.workshop_for_handsome_adventurer.initialization.ClientSetup;
 import moonfather.workshop_for_handsome_adventurer.initialization.CommonSetup;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.integration.TOPRegistration;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
@@ -31,7 +30,6 @@ public class ModWorkshop
     //--known-- issues
     //integration: Carry On blacklist is broken in 1.17.0.8 and a few older versions. do not pick up big tables and racks, if you do, type /kill. (actually works on dedicated servers but broken on integrated.)  Carry On developer will fix the blacklist eventually.
     //integration: WTHIT is entirely unsupported, Jade and TOP are fine. it's not my fault, i wanted to add support but i can not. blame wthit author while you switch to an alternative.
-    //integration: while tetra belts can hold up to 32 items, only 27 will be accessible from crafting table. we might fix it but it's very low priority.
     //vanilla behavior: when you have two-block rack and you're looking so that the top half isn't visible, items disappear. i think it's not that much of a problem.
     //integration: crescent hammer (thermal) won't go onto the rack.  it's fine.
 	//integration: items in tetra belt storage are shown in different order than what you might expect. tetra displays rows from bottom to top (bottom-most holds items that come first in storage); while we could make a dedicated container which re-maps slot numbers, there is still an issue of us having 9 slots per row and original gui having 8. if people really want, we can fix it.
@@ -41,12 +39,11 @@ public class ModWorkshop
     //after 1.0: todo list similar to one in BiblioCraft     (edit: apparently there will be one in create mod soon so i might cross this off)
     //after 1.0: bookshelf like the one in BiblioCraft; no gui; (edit: apparently exactly that is coming in 1.20)
     //after 1.1: double the number of supported adjacent chests
-	//after 1.1: chest markers (similar to item frames); maybe? no gui, pull items from chest
+	//after 1.1: chest markers (similar to item frames); maybe? (no gui, pull items from chest)
     //maybe after 1.1: storage drawer support. maybe. not sure how. in any case, only the closest blocks.
-    //maybe after 1.1: sword rack? maybe. decorative, single sword, horizontal, no gui
-    //maybe after 1.1: nine extra storage slots in dual table
+    //maybe after 1.1: sword rack? likely not. (decorative, single sword, horizontal, no gui)
     //maybe after 1.2: tetra tables in wood variants
-    //probably not: weapon rack (vertical weapons),  sword and shield on wall...
+    //will not: weapon rack (vertical weapons),  sword and shield on wall...
 
 
     // Directly reference a slf4j logger

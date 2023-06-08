@@ -79,22 +79,25 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 
 		// super.render() calls renderSlot() only for active slot. we want to draw X over inactive slots
 		if (this.inventoryComponent.isVisibleTotal()) {
-			for (int k = SimpleTableMenu.ACCESS27_SLOT_START; k <= SimpleTableMenu.ACCESS27_SLOT_END; k++) {
-				SimpleTableMenu.VariableSizeContainerSlot slot = (SimpleTableMenu.VariableSizeContainerSlot) this.menu.slots.get(k);
-				if (!slot.isActive() && slot.isExcessSlot() && slot.x >= 0) {
-					RenderSystem.setShader(GameRenderer::getPositionTexShader);
-					this.setBlitOffset(100);
-					this.itemRenderer.blitOffset = 100.0F;
-					if (this.excessSlotSprite == null) {
-						Pair<ResourceLocation, ResourceLocation> pair = slot.getExcessIcon();
-						if (pair != null) {
-							this.excessSlotSprite = this.minecraft.getTextureAtlas(pair.getFirst()).apply(pair.getSecond());
+			for (int k = SimpleTableMenu.ACCESS_SLOT_START; k <= SimpleTableMenu.ACCESS_SLOT_END; k++) {
+				if (this.menu.slots.get(k) instanceof SimpleTableMenu.VariableSizeContainerSlot slot) {
+					if (!slot.isActive() && slot.isExcessSlot() && slot.x >= 0) {
+						if (slot.getSlotIndex() < 27 || this.inventoryComponent.areSlotRowsFourToSixVisible()) {
+							RenderSystem.setShader(GameRenderer::getPositionTexShader);
+							this.setBlitOffset(100);
+							this.itemRenderer.blitOffset = 100.0F;
+							if (this.excessSlotSprite == null) {
+								Pair<ResourceLocation, ResourceLocation> pair = slot.getExcessIcon();
+								if (pair != null) {
+									this.excessSlotSprite = this.minecraft.getTextureAtlas(pair.getFirst()).apply(pair.getSecond());
+								}
+							}
+							RenderSystem.setShaderTexture(0, this.excessSlotSprite.atlas().location());
+							blit(poseStack, this.leftPos + slot.x, this.topPos + slot.y, this.getBlitOffset(), 16, 16, this.excessSlotSprite);
+							this.itemRenderer.blitOffset = 0.0F;
+							this.setBlitOffset(0);
 						}
 					}
-					RenderSystem.setShaderTexture(0, this.excessSlotSprite.atlas().location());
-					blit(poseStack, this.leftPos + slot.x, this.topPos + slot.y, this.getBlitOffset(), 16, 16, this.excessSlotSprite);
-					this.itemRenderer.blitOffset = 0.0F;
-					this.setBlitOffset(0);
 				}
 			}
 		}

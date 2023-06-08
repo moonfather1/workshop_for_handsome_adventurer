@@ -40,19 +40,15 @@ public class JEITransferInfoForSmallTable implements IRecipeTransferInfo {
 
     @Override
     public List<Slot> getInventorySlots(AbstractContainerMenu container, Object recipe) {
-        List<Slot> result = new ArrayList<Slot>(9*4);
         SimpleTableMenu menu = (SimpleTableMenu) container;
+        boolean showingChestInventories = menu.showInventoryAccess();
+        List<Slot> result = new ArrayList<Slot>(9*4 + (showingChestInventories ? 54 : 0));
         for (int i = SimpleTableMenu.INV_SLOT_START; i <= SimpleTableMenu.INV_SLOT_END; i++) {
             result.add(menu.getSlot(i));
         }
-        if (menu.showInventoryAccess()) {
-            for (int i = SimpleTableMenu.ACCESS27_SLOT_START; i <= SimpleTableMenu.ACCESS27_SLOT_END; i++) {
+        if (showingChestInventories) {
+            for (int i = SimpleTableMenu.ACCESS_SLOT_START; i <= SimpleTableMenu.ACCESS_SLOT_END; i++) {
                 result.add(menu.getSlot(i));
-            }
-            if (menu.showingDoubleChest()) {
-                for (int i = SimpleTableMenu.ACCESS54_SLOT_START; i <= SimpleTableMenu.ACCESS54_SLOT_END; i++) {
-                    result.add(menu.getSlot(i));
-                }
             }
         }
         for (int i = SimpleTableMenu.HOTBAR_ROW_SLOT_START; i <= SimpleTableMenu.HOTBAR_ROW_SLOT_END; i++) {
