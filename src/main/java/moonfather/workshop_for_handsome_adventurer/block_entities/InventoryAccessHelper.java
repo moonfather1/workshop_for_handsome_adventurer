@@ -28,6 +28,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class InventoryAccessHelper
@@ -132,14 +133,14 @@ public class InventoryAccessHelper
 
 
 
-    private List<InventoryAccessHelper.InventoryAccessRecord> adjacentInventories = null;
+    private LinkedList<InventoryAccessHelper.InventoryAccessRecord> adjacentInventories = null;
     public String currentType;
 
     public void loadAdjacentInventories(Level level, BlockPos pos, Player player, int inventoryAccessRange)
     {
         if (this.adjacentInventories == null)
         {
-            this.adjacentInventories = new ArrayList<>();
+            this.adjacentInventories = new LinkedList<>();
         }
         this.adjacentInventories.clear();
         this.loadAdjacentInventoriesCore(level, pos, player, inventoryAccessRange);
@@ -152,12 +153,12 @@ public class InventoryAccessHelper
         }
         this.loadNonBlockInventories(level, player);
         this.sort(pos, posSecondary);
+        while (this.adjacentInventories.size() > SimpleTableMenu.TAB_SMUGGLING_SOFT_LIMIT) {
+            this.adjacentInventories.removeLast();
+        }
     }
 
     private void loadNonBlockInventories(Level level, Player player) {
-        if (this.adjacentInventories.size() >= SimpleTableMenu.TAB_SMUGGLING_SOFT_LIMIT) {
-            return;
-        }
         Object beltSearch = TetraBeltSupport.findToolbelt(player);
         if (TetraBeltSupport.hasToolbelt(beltSearch)) {
             int size = TetraBeltSupport.getToolbeltStorage(beltSearch).getContainerSize();
@@ -172,9 +173,6 @@ public class InventoryAccessHelper
                 record.Index = this.adjacentInventories.size();
                 this.adjacentInventories.add(record);
             }
-        }
-        if (this.adjacentInventories.size() >= SimpleTableMenu.TAB_SMUGGLING_SOFT_LIMIT) {
-            return;
         }
         // storage inside items (tinker's plate leggings)
         for (int slot = 0; slot < RecordTypes.NAMED_SLOTS.length; slot++) {
@@ -192,9 +190,6 @@ public class InventoryAccessHelper
                 record.Index = this.adjacentInventories.size();
                 this.adjacentInventories.add(record);
             });
-            if (this.adjacentInventories.size() >= SimpleTableMenu.TAB_SMUGGLING_SOFT_LIMIT) {
-                return;
-            }
         }
     }
 
@@ -215,7 +210,6 @@ public class InventoryAccessHelper
                     {
                         continue;
                     }
-                    if (this.adjacentInventories.size() == SimpleTableMenu.TAB_SMUGGLING_SOFT_LIMIT) { return; }
                     pos2.set(pos.getX() + dx, pos.getY() + dy, pos.getZ() + dz);
                     BlockEntity be = level.getBlockEntity(pos2);
                     this.resolveBlockContainer(be, player, pos2, level);
