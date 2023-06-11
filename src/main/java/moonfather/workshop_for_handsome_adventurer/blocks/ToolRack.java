@@ -50,9 +50,9 @@ public class ToolRack extends Block implements EntityBlock
 
 		String translationKeyStructure = "block.%s.tool_rack_%s.tooltip%d";
 		String translationKey = String.format(translationKeyStructure, Constants.MODID, type, 1);
-		this.Tooltip1 = new TranslatableComponent(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
+		this.Tooltip1 = Component.translatable(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
 		translationKey = String.format(translationKeyStructure, Constants.MODID, type, 2);
-		this.Tooltip2 = new TranslatableComponent(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
+		this.Tooltip2 = Component.translatable(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
 	}
 
 
@@ -209,7 +209,7 @@ public class ToolRack extends Block implements EntityBlock
 	}
 
 
-	private final TranslatableComponent RackMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.invalid_item_for_rack");
+	private final MutableComponent RackMessage = Component.translatable("message.workshop_for_handsome_adventurer.invalid_item_for_rack");
 
 
 	@Override

@@ -16,8 +16,8 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
@@ -34,7 +34,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     public static final int PANEL_HEIGHT_WITH_TABS = 166;
     protected static final ResourceLocation BG_CHEST_LOCATION_3_ROWS = new ResourceLocation("workshop_for_handsome_adventurer:textures/gui/left_panel_normal_chest.png");
     protected static final ResourceLocation BG_CHEST_LOCATION_6_ROWS = new ResourceLocation("workshop_for_handsome_adventurer:textures/gui/left_panel_double_chest.png");
-    private final TranslatableComponent renameTooltip = new TranslatableComponent("message.workshop_for_handsome_adventurer.rename");
+    private final String renameTooltipKey = "message.workshop_for_handsome_adventurer.rename";
 
     private int xOffset;
     private final List<TabButton> tabButtons = Lists.newArrayList();
@@ -71,14 +71,14 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         this.xOffset = (this.parent.width - this.parent.getImageWidth() - PANEL_WIDTH) / 2;
         int bottomY = (this.parent.height - parent.getYSize()) / 2 + PANEL_HEIGHT_WITH_TABS;
         if (this.renameBox == null) {
-            this.renameBox = new SlightlyNicerEditBox(this.parent.getMinecraft().font, this.xOffset, bottomY - 18, 120, 9 + 5, new TextComponent("Input box for new name for container"));
+            this.renameBox = new SlightlyNicerEditBox(this.parent.getMinecraft().font, this.xOffset, bottomY - 18, 120, 9 + 5, Component.literal("Input box for new name for container"));
             this.renameBox.setMaxLength(50);
             this.renameBox.setBordered(false);  // draw bg myself because some dumbass hardcoded black as background
             this.renameBox.setVisible(true);
             this.renameBox.setTextColor(0xcccccc);
-            this.renameButton = new SimpleButton(this.xOffset, bottomY - 23, 25, 18, 181, 105, 18+1, BG_CHEST_LOCATION_3_ROWS, 256, 256, p_93751_ -> this.renameButtonClicked(), new TextComponent("Rename container"));
-            this.renameButton.setTooltipBase(renameTooltip);
-            this.renameButton.setTooltipInset(new TextComponent(""));
+            this.renameButton = new SimpleButton(this.xOffset, bottomY - 23, 25, 18, 181, 105, 18+1, BG_CHEST_LOCATION_3_ROWS, 256, 256, p_93751_ -> this.renameButtonClicked(), Component.literal("Rename container"));
+            this.renameButton.setTooltipKey(renameTooltipKey);
+            this.renameButton.setTooltipInset(Component.literal(""));
             this.renameButton.active = false;
         }
         this.renameBox.x = this.xOffset + 9;
@@ -411,7 +411,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
 
     private void renameButtonClicked() {
         PacketSender.sendRenameRequestToServer(this.renameBox.getValue());
-        this.selectedTab.setMessage(new TextComponent(this.renameBox.getValue())); // fake it
+        this.selectedTab.setMessage(Component.literal(this.renameBox.getValue())); // fake it
         this.renameBox.setValue("");
     }
 

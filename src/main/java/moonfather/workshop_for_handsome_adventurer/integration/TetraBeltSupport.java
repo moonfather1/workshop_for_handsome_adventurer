@@ -5,15 +5,15 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.ModList;
-import se.mickelus.tetra.items.modular.impl.toolbelt.ToolbeltHelper;
+/*import se.mickelus.tetra.items.modular.impl.toolbelt.ToolbeltHelper;
 import se.mickelus.tetra.items.modular.impl.toolbelt.inventory.StorageInventory;
-
+*/
 public class TetraBeltSupport
 {
     public static Object findToolbelt(Player player)
     {
         if (! ModList.get().isLoaded("tetra")) { return null; }
-        return ToolbeltHelper.findToolbelt(player);
+        /*return ToolbeltHelper.findToolbelt(player);*/         return null;
     }
 
     public static boolean hasToolbelt(Object searchResult)
@@ -38,15 +38,16 @@ public class TetraBeltSupport
 
     public static Container getToolbeltStorage(Object searchResult)
     {
-        return new StorageInventory((ItemStack) searchResult);
+        /*return new StorageInventory((ItemStack) searchResult);*/
+        return null;
     }
 
     public static Container getToolbeltStorage(Player player)
     {
-        ItemStack belt = ToolbeltHelper.findToolbelt(player);
+        /*ItemStack belt = ToolbeltHelper.findToolbelt(player);
         if (! belt.isEmpty()) {
             return new StorageInventory(belt);
-        }
+        }*/
         return null;
     }
 }

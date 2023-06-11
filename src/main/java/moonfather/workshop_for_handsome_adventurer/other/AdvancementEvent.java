@@ -16,7 +16,7 @@ public class AdvancementEvent
     {
         if (event.getCrafting().getItem() instanceof BlockItemEx bi && bi.isTable())
         {
-            if (event.getPlayer() instanceof ServerPlayer sp)
+            if (event.getEntity() instanceof ServerPlayer sp)
             {
                 sp.getAdvancements().award(GetAdvancement(sp, "minecraft", "story/root"), "crafting_table");
             }

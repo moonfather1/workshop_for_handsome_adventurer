@@ -134,7 +134,7 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
         this.VerifyCapacity();
         int count = Math.min(this.GetItem(slot).getMaxStackSize(), this.itemCounts.get(slot));
         if (this.itemCounts.get(slot) == 0) {
-            return ItemStack.EMPTY; // shouln't be possible
+            return ItemStack.EMPTY; // shouldn't be possible
         }
         else if (this.itemCounts.get(slot) == count) {
             ItemStack result = this.GetItem(slot);

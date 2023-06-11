@@ -76,5 +76,6 @@
 	"message.workshop_for_handsome_adventurer.extension_slotS": "(shift for more)",
 	"message.workshop_for_handsome_adventurer.rename": "Rename container %s \nfor the cost of 1 XP level.",
 
-	"itemGroup.workshop_for_handsome_adventurer": "Workshop for handsome adventurer"
+	"itemGroup.workshop_for_handsome_adventurer": "Workshop for handsome adventurer",
+	"config.jade.plugin_workshop_for_handsome_adventurer.jade_plugin": "Jade"
 }

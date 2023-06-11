@@ -1,24 +1,12 @@
-buildscript {
-    repositories {
-        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
-        maven { url = 'https://maven.minecraftforge.net' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'org.spongepowered:mixingradle:0.7.+'
-	}
-}
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 plugins {
-    //id 'eclipse'
+    id 'eclipse'
     id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'org.spongepowered.mixin' version '0.7.+'
 }
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.spongepowered.mixin'
 
 
-version = '${mc_version}--${mod_version}'
+version = '0.15'
 group = 'moonfather.workshop_for_handsome_adventurer' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'workshop_for_handsome_adventurer'
 
@@ -40,7 +28,7 @@ minecraft {
     //
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'official', version: '1.18.2'
+    mappings channel: 'official', version: '1.19.2'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
 
@@ -48,7 +36,7 @@ minecraft {
     // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
-            workingDirectory project.file('../run1182')
+            workingDirectory project.file('../run')
 
             // Recommended logging data for a userdev environment
             // The markers can be added/remove as needed separated by commas.
@@ -73,13 +61,12 @@ minecraft {
         }
 
         server {
-            workingDirectory project.file('../run1182')
+            workingDirectory project.file('../run')
 
             property 'forge.logging.markers', 'REGISTRIES'
 
             property 'forge.logging.console.level', 'debug'
 
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', 'workshop_for_handsome_adventurer'
 
             mods {
@@ -93,21 +80,12 @@ minecraft {
         // By default, the server will crash when no gametests are provided.
         // The gametest system is also enabled by default for other run configs under the /test command.
         gameTestServer {
-            workingDirectory project.file('../run1182')
+            workingDirectory project.file('../run')
 
-            // Recommended logging data for a userdev environment
-            // The markers can be added/remove as needed separated by commas.
-            // "SCAN": For mods scan.
-            // "REGISTRIES": For firing of registry events.
-            // "REGISTRYDUMP": For getting the contents of all registries.
             property 'forge.logging.markers', 'REGISTRIES'
 
-            // Recommended logging level for the console
-            // You can set various levels here.
-            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', 'workshop_for_handsome_adventurer'
 
             mods {
@@ -118,7 +96,7 @@ minecraft {
         }
 
         data {
-            workingDirectory project.file('../run1182')
+            workingDirectory project.file('../run')
 
             property 'forge.logging.markers', 'REGISTRIES'
 
@@ -148,24 +126,23 @@ repositories {
     //     dir 'libs'
     // }
     maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
+        // location of the maven that hosts JEI files since January 2023
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
     }
     maven {
-        url = "https://www.cursemaven.com"
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
     }
-    maven {
-        // for create
-        name = 'tterrag maven'
-        url = 'https://maven.tterrag.com/'
-    }}
+}
 
 dependencies {
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.18.2-40.2.4'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.2.14'
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
@@ -178,34 +155,36 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-	
-	compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
-	
-    implementation fg.deobf("curse.maven:jade-324717:3865918")
-    implementation fg.deobf("curse.maven:the-one-probe-245211:3671753")
+    // compile against the JEI API but do not include it at runtime
 
-    implementation fg.deobf("curse.maven:curios-309927:3748873")
+    //implementation fg.deobf("curse.maven:curios-309927:4523009")   good version but don't need it
 
-    implementation fg.deobf("curse.maven:mutil-351914:3788376")
-    implementation fg.deobf("curse.maven:tetra-289712:3844400")
+    implementation fg.deobf("curse.maven:the-one-probe-245211:3965693")
+    //implementation fg.deobf("curse.maven:jade-324717:4318618")
+    compileOnly (fg.deobf("curse.maven:jade-324717:4318618"))
 
-    //implementation fg.deobf("com.simibubi.create:create-${create_minecraft_version}:${create_version}:slim") { transitive = false }
-    //implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}")
-    //implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
-    //implementation fg.deobf("curse.maven:mantle-74924:4353120")
-    //implementation fg.deobf("curse.maven:tinkers-construct-74072:4360093")
+
+    //compileOnly fg.deobf("mcp.mobius.waila:wthit-api:forge-${wthitVersion}")  // compile against the API
+    //runtimeOnly fg.deobf("mcp.mobius.waila:wthit:forge-${wthitVersion}")  // run against the full jar
+    //runtimeOnly fg.deobf("lol.bai:badpackets:forge-${badpacketsVersion}")
+    implementation fg.deobf("curse.maven:badpackets-615134:4073854")
+    implementation fg.deobf("curse.maven:wthit-forge-455982:4534202")
+
+    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
+    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
+    // at runtime, use the full JEI jar for Forge
+    runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "workshop_for_handsome_adventurer",
+                "Specification-Title"     : "Workshop for handsome adventurer",
                 "Specification-Vendor"    : "MoonFather",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
-                "Implementation-Version"  : "${mod_version}",
+                "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "MoonFather",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])

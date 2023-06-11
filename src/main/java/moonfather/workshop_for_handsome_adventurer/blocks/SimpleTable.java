@@ -9,7 +9,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -40,7 +39,7 @@ import java.util.List;
 
 public class SimpleTable extends Block implements EntityBlock
 {
-	private Component MessageInaccessible = new TranslatableComponent("message.workshop_for_handsome_adventurer.workshop_table_obscured");
+	private Component MessageInaccessible = Component.translatable("message.workshop_for_handsome_adventurer.workshop_table_obscured");
 	public SimpleTable(Properties properties)
 	{
 		super(properties);
@@ -49,8 +48,8 @@ public class SimpleTable extends Block implements EntityBlock
 	{
 		super(Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2f, 3f).sound(SoundType.WOOD));
 		registerDefaultState(this.defaultBlockState().setValue(SimpleTable.HAS_INVENTORY, false));
-		this.Tooltip1 = new TranslatableComponent("block.workshop_for_handsome_adventurer.simple_table.tooltip1").withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
-		this.Tooltip2 = new TranslatableComponent("block.workshop_for_handsome_adventurer.simple_table.tooltip2").withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
+		this.Tooltip1 = Component.translatable("block.workshop_for_handsome_adventurer.simple_table.tooltip1").withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
+		this.Tooltip2 = Component.translatable("block.workshop_for_handsome_adventurer.simple_table.tooltip2").withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
 	}
 
 	private MutableComponent Tooltip1, Tooltip2;
@@ -181,7 +180,7 @@ public class SimpleTable extends Block implements EntityBlock
 		return null;
 	}
 
-	private static final Component CONTAINER_TITLE = new TranslatableComponent("container.crafting");
+	private static final Component CONTAINER_TITLE = Component.translatable("container.crafting");
 	public MenuProvider getMenuProvider(BlockState state, Level level, BlockPos blockPos)
 	{
 		return new SimpleMenuProvider((containerId, inventory, p_52231_) ->

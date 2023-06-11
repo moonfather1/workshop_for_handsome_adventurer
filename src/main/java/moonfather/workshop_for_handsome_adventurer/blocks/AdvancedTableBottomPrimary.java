@@ -7,7 +7,6 @@ import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -114,7 +113,7 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements En
 	@Override
 	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
 	{
-		String wood = this.getRegistryName().getPath();
+		String wood = ForgeRegistries.BLOCKS.getKey(this).getPath();
 		wood = wood.substring(wood.indexOf("_", 20) + 1);
 		return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MODID, "workstation_placer_" + wood)));
 	}
@@ -165,7 +164,7 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements En
 		return null;
 	}
 
-	private static final Component CONTAINER_TITLE = new TranslatableComponent("container.crafting");
+	private static final Component CONTAINER_TITLE = Component.translatable("container.crafting");
 	public MenuProvider getMenuProvider(BlockState state, Level level, BlockPos blockPos)
 	{
 		return new SimpleMenuProvider((containerId, inventory, p_52231_) ->

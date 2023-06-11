@@ -43,7 +43,7 @@ public class ModWorkshop
     //maybe after 1.1: storage drawer support. maybe. not sure how. in any case, only the closest blocks.
     //maybe after 1.1: sword rack? likely not. (decorative, single sword, horizontal, no gui)
     //maybe after 1.2: tetra tables in wood variants
-    //will not: weapon rack (vertical weapons),  sword and shield on wall...
+    //will not: weapon rack (vertical weapons),  sword and shield on wall... j
 
 
     // Directly reference a slf4j logger

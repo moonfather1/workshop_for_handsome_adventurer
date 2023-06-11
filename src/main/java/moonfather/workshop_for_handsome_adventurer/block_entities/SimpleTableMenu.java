@@ -11,7 +11,7 @@ import moonfather.workshop_for_handsome_adventurer.integration.TetraBeltSupport;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -580,19 +580,19 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		if (this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.BLOCK)) {
 			if (this.inventoryAccessHelper.chosenContainerForRename instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity bcbe) {
 				if (!bcbe.hasCustomName() || !bcbe.getCustomName().getString().equals(newName)) {
-					bcbe.setCustomName(new TextComponent(newName));
+					bcbe.setCustomName(Component.literal(newName));
 					player.giveExperienceLevels(-1);
 				}
 			}
 		}
 		else if (this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.TOOLBELT)) {
 			ItemStack s = (ItemStack) TetraBeltSupport.findToolbelt(player);
-			s.setHoverName(new TextComponent(newName));
+			s.setHoverName(Component.literal(newName));
 			player.giveExperienceLevels(-1);
 		}
 		else if (this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.LEGGINGS) || this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.CHESTSLOT) || this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.BACKSLOT)) {
 			ItemStack s = InventoryAccessHelper.getItemFromNamedSlot(player, this.inventoryAccessHelper.currentType);
-			s.setHoverName(new TextComponent(newName));
+			s.setHoverName(Component.literal(newName));
 			player.giveExperienceLevels(-1);
 		}
 	}

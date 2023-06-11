@@ -24,7 +24,7 @@ public class OptionalRecipeCondition implements ICondition
 	}
 
 	@Override
-	public boolean test()
+	public boolean test(IContext context)
 	{
 		if (this.flagCode.equals("replace_vanilla_crafting_table"))
 		{
@@ -39,6 +39,7 @@ public class OptionalRecipeCondition implements ICondition
 			return false;
 		}
 	}
+
 
 	/////////////////////////////////////////////////////
 

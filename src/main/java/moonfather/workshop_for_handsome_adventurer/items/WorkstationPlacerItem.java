@@ -8,7 +8,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
@@ -29,8 +28,8 @@ public class WorkstationPlacerItem extends Item
 	public WorkstationPlacerItem(String wood, Properties properties)
 	{
 		super(properties);
-		this.Tooltip1 = new TranslatableComponent("item.workshop_for_handsome_adventurer.workstation_placer.tooltip1").withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
-		this.Tooltip2 = new TranslatableComponent("item.workshop_for_handsome_adventurer.workstation_placer.tooltip2").withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
+		this.Tooltip1 = Component.translatable("item.workshop_for_handsome_adventurer.workstation_placer.tooltip1").withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
+		this.Tooltip2 = Component.translatable("item.workshop_for_handsome_adventurer.workstation_placer.tooltip2").withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
 		this.woodType = wood;
 	}
 
@@ -68,7 +67,7 @@ public class WorkstationPlacerItem extends Item
 		}
 		if (!canPlace)
 		{
-			context.getPlayer().displayClientMessage(new TranslatableComponent("message.workshop_for_handsome_adventurer.no_room_for_workstation"), true);
+			context.getPlayer().displayClientMessage(Component.translatable("message.workshop_for_handsome_adventurer.no_room_for_workstation"), true);
 			return InteractionResult.FAIL;
 		}
 		Direction facingToSet = context.getHorizontalDirection().getOpposite();

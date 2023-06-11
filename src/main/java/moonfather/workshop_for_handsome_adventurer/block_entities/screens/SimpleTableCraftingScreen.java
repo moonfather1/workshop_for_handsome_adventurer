@@ -12,8 +12,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
@@ -153,7 +151,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 						Arrays.stream(Language.getInstance().getOrDefault(this.getCustomizationTooltipPath())
 												.replace("[ITEM]", itemName)
 												.split("\n"))
-								.forEach(text -> tooltipCustomizationsFull.add(new TextComponent(text).withStyle(ChatFormatting.DARK_GRAY)));
+								.forEach(text -> tooltipCustomizationsFull.add(Component.literal(text).withStyle(ChatFormatting.DARK_GRAY)));
 					}
 					this.minecraft.screen.renderTooltip(poseStack, tooltipCustomizationsFull, Optional.empty(), mouseX, mouseY);
 				}
@@ -169,8 +167,8 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		}
 	}
 
-	private final Component tooltipCustomizationsTitle = new TranslatableComponent("message.workshop_for_handsome_adventurer.extension_slotT").withStyle(Style.EMPTY.withColor(0xaa77dd));
-	private final Component tooltipCustomizationsShift = new TranslatableComponent("message.workshop_for_handsome_adventurer.extension_slotS").withStyle(ChatFormatting.DARK_GRAY);
+	private final Component tooltipCustomizationsTitle = Component.translatable("message.workshop_for_handsome_adventurer.extension_slotT").withStyle(Style.EMPTY.withColor(0xaa77dd));
+	private final Component tooltipCustomizationsShift = Component.translatable("message.workshop_for_handsome_adventurer.extension_slotS").withStyle(ChatFormatting.DARK_GRAY);
 	protected String getCustomizationTooltipPath() {
 		return "message.workshop_for_handsome_adventurer.extension_slot1";
 	}

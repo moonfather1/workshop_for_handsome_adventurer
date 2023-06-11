@@ -78,5 +78,6 @@
 	"message.workshop_for_handsome_adventurer.extension_slotS": "(shift за детаље)",
 	"message.workshop_for_handsome_adventurer.rename": "Промени назив контејнера %s \nза цену 1 нивоа искуства.",
 
-	"itemGroup.workshop_for_handsome_adventurer": "Радионица за згодног авантуристу"
+	"itemGroup.workshop_for_handsome_adventurer": "Радионица за згодног авантуристу",
+	"config.jade.plugin_workshop_for_handsome_adventurer.jade_plugin": "?"
 }

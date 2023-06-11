@@ -5,13 +5,16 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.transfer.IRecipeTransferInfo;
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
+import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.crafting.Recipe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class JEITransferInfoForDualTable implements IRecipeTransferInfo {
     @Override
@@ -62,13 +65,9 @@ public class JEITransferInfoForDualTable implements IRecipeTransferInfo {
         return result;
     }
 
-    @Override
-    public Class getRecipeClass() {
-        return null;
-    }
 
     @Override
-    public ResourceLocation getRecipeCategoryUid() {
-        return null;
+    public Optional<MenuType> getMenuType() {
+        return Optional.of(Registration.CRAFTING_DUAL_MENU_TYPE.get());
     }
 }

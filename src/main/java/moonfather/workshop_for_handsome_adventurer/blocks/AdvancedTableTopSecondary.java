@@ -1,6 +1,5 @@
 package moonfather.workshop_for_handsome_adventurer.blocks;
 
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;

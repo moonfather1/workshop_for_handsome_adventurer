@@ -9,8 +9,6 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -26,7 +24,7 @@ public class SimpleButton extends Button {
     private final int textureWidth;
     private final int textureHeight;
 
-    private TranslatableComponent tooltip = null;
+    private String tooltipKey = null;
     private Component tooltipInset = null;
     List<Component> tooltipLines = null;
 
@@ -59,17 +57,17 @@ public class SimpleButton extends Button {
         if (this.isHovered) {
             if (this.tooltipLines == null) {
                 this.tooltipLines = new ArrayList<>(2);
-                Arrays.stream(Language.getInstance().getOrDefault(this.tooltip.getKey())
+                Arrays.stream(Language.getInstance().getOrDefault(this.tooltipKey)
                                 .split("\n"))
                         .forEach(text -> {
                             int pos = text.indexOf("%s");
                             if (pos == -1) {
-                                this.tooltipLines.add(new TextComponent(text).withStyle(ChatFormatting.GRAY));
+                                this.tooltipLines.add(Component.literal(text).withStyle(ChatFormatting.GRAY));
                             }
                             else {
-                                this.tooltipLines.add(new TextComponent(text.substring(0, pos)).withStyle(ChatFormatting.GRAY)
+                                this.tooltipLines.add(Component.literal(text.substring(0, pos)).withStyle(ChatFormatting.GRAY)
                                         .append(this.tooltipInset.copy().withStyle(Style.EMPTY.withColor(0xeeaa77)))
-                                        .append(new TextComponent(text.substring(pos+2)).withStyle(ChatFormatting.GRAY))
+                                        .append(Component.literal(text.substring(pos+2)).withStyle(ChatFormatting.GRAY))
                                 );
                             }
                         });
@@ -78,8 +76,8 @@ public class SimpleButton extends Button {
         }
     }
 
-    public void setTooltipBase(TranslatableComponent newTooltip) {
-        this.tooltip = newTooltip;
+    public void setTooltipKey(String newKey) {
+        this.tooltipKey = newKey;
         this.tooltipLines = null;
     }
 

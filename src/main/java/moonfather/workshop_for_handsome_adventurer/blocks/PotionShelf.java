@@ -5,8 +5,9 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlo
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -37,9 +38,9 @@ public class PotionShelf extends ToolRack
         super(PotionShelfBlockEntity.CAPACITY, "----");
         String translationKeyStructure = "block.%s.potion_shelf.tooltip%d";
         String translationKey = String.format(translationKeyStructure, Constants.MODID, 1);
-        this.Tooltip1 = new TranslatableComponent(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
+        this.Tooltip1 = Component.translatable(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
         translationKey = String.format(translationKeyStructure, Constants.MODID, 2);
-        this.Tooltip2 = new TranslatableComponent(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
+        this.Tooltip2 = Component.translatable(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
         this.PrepareListOfShapes();
     }
 
@@ -64,18 +65,21 @@ public class PotionShelf extends ToolRack
     }
 
 
-
     public static int getTargetedSlot(BlockHitResult blockHitResult)
     {
+        return getTargetedSlot(blockHitResult, blockHitResult.getBlockPos(), blockHitResult.getDirection());
+    }
+    public static int getTargetedSlot(HitResult hitResult, BlockPos blockPos, Direction direction)
+    {
         int aboveThisRow = 0;
-        double frac = blockHitResult.getLocation().y - blockHitResult.getBlockPos().getY();
+        double frac = hitResult.getLocation().y - blockPos.getY();
         if (frac < 8/16d) { aboveThisRow = 3; /* row2*/ }
 
         int integral;
-        integral = (int) blockHitResult.getLocation().z;
-        frac = (blockHitResult.getLocation().z - integral) * blockHitResult.getDirection().getStepX();
-        integral = (int) blockHitResult.getLocation().x;
-        frac -= (blockHitResult.getLocation().x - integral) * blockHitResult.getDirection().getStepZ();
+        integral = (int) hitResult.getLocation().z;
+        frac = (hitResult.getLocation().z - integral) * direction.getStepX();
+        integral = (int) hitResult.getLocation().x;
+        frac -= (hitResult.getLocation().x - integral) * direction.getStepZ();
         int horizontalIndex;
         if ((frac >= -1/3d && frac < 0) || (frac >= 2/3d && frac < 1))
         {
@@ -94,11 +98,11 @@ public class PotionShelf extends ToolRack
 
 
 
-    private final TranslatableComponent ShelfMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_invalid_item");
-    private final TranslatableComponent MaxedMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_slot_maxed");
-    private final TranslatableComponent RemainingRoomMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_remaining_room");
-    private final TranslatableComponent RemainingItemsMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_remaining_items");
-    private final TranslatableComponent WrongPotionMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_wrong_potion");
+    private final MutableComponent ShelfMessage = Component.translatable("message.workshop_for_handsome_adventurer.shelf_invalid_item");
+    private final MutableComponent MaxedMessage = Component.translatable("message.workshop_for_handsome_adventurer.shelf_slot_maxed");
+    private final MutableComponent RemainingRoomMessage = Component.translatable("message.workshop_for_handsome_adventurer.shelf_remaining_room");
+    private final MutableComponent RemainingItemsMessage = Component.translatable("message.workshop_for_handsome_adventurer.shelf_remaining_items");
+    private final MutableComponent WrongPotionMessage = Component.translatable("message.workshop_for_handsome_adventurer.shelf_wrong_potion");
 
 
     @Override
@@ -131,7 +135,7 @@ public class PotionShelf extends ToolRack
                 BE.DepositPotion(slot, player.getMainHandItem());
             }
             player.playSound(SoundEvents.WOOD_PLACE, 0.5f, 0.7f);
-            TranslatableComponent remainingRoomMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_remaining_room");
+            MutableComponent remainingRoomMessage = Component.translatable("message.workshop_for_handsome_adventurer.shelf_remaining_room");
             player.displayClientMessage(remainingRoomMessage.append(BE.GetRemainingRoom(slot).toString()), true);
         }
         else if (existing.isEmpty() && player.getMainHandItem().isEmpty())
@@ -150,7 +154,7 @@ public class PotionShelf extends ToolRack
             }
             player.playSound(SoundEvents.ITEM_PICKUP, 0.5f, 1);
             if (BE.GetRemainingItems(slot) > 0) {
-                TranslatableComponent remainingItemsMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_remaining_items");
+                MutableComponent remainingItemsMessage = Component.translatable("message.workshop_for_handsome_adventurer.shelf_remaining_items");
                 player.displayClientMessage(remainingItemsMessage.append(BE.GetRemainingItems(slot).toString()), true);
             }
         }
@@ -171,7 +175,7 @@ public class PotionShelf extends ToolRack
                     BE.DepositPotion(slot, player.getMainHandItem());
                 }
                 player.playSound(SoundEvents.WOOD_PLACE, 0.5f, 0.7f);
-                TranslatableComponent remainingRoomMessage = new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_remaining_room");
+                MutableComponent remainingRoomMessage = Component.translatable("message.workshop_for_handsome_adventurer.shelf_remaining_room");
                 player.displayClientMessage(remainingRoomMessage.append(BE.GetRemainingRoom(slot).toString()), true);
             }
             else {
@@ -182,10 +186,10 @@ public class PotionShelf extends ToolRack
     }
 
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getPlayer().isCrouching()) {
-            BlockState state = event.getWorld().getBlockState(event.getPos());
+        if (event.getEntity().isCrouching()) {
+            BlockState state = event.getLevel().getBlockState(event.getPos());
             if (state.getBlock() instanceof PotionShelf && event.getFace() == state.getValue(FACING).getOpposite()) {
-                if (! event.getPlayer().getMainHandItem().isEmpty()) {
+                if (! event.getEntity().getMainHandItem().isEmpty()) {
                     event.setUseBlock(Event.Result.ALLOW);
                 }
             }
@@ -251,7 +255,7 @@ public class PotionShelf extends ToolRack
         {
             return existing.copy();
         }
-        String wood = this.getRegistryName().getPath();
+        String wood = ForgeRegistries.BLOCKS.getKey(this).getPath();
         wood = wood.substring(wood.indexOf("_", 8) + 1);
         return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MODID, "potion_shelf_" + wood)));
     }

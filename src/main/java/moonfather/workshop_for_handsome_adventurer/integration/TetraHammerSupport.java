@@ -4,12 +4,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
-import se.mickelus.tetra.TetraToolActions;
+/*import se.mickelus.tetra.TetraToolActions;*/
 
 public class TetraHammerSupport {
     public static boolean isHammer(ItemStack item) {
-        return item.canPerformAction(TetraToolActions.hammer);
+    /*    return item.canPerformAction(TetraToolActions.hammer);*/
+        return false;
     }
 
     public static BlockState getWorkBench() { return ForgeRegistries.BLOCKS.getValue(new ResourceLocation("tetra", "basic_workbench")).defaultBlockState(); }
 }
+
+

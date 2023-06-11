@@ -22,9 +22,9 @@ import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.ArrayList;
@@ -109,9 +109,9 @@ public class InventoryAccessHelper
             return;
         }
         // IItemHandler capability
-        LazyOptional<IItemHandler> oih = be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
+        LazyOptional<IItemHandler> oih = be.getCapability(ForgeCapabilities.ITEM_HANDLER);
         if (! oih.isPresent()) {
-            oih = be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.UP);
+            oih = be.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.UP);
         }
         oih.ifPresent( ih -> {
             if (ih.getSlots() <= 54) {
@@ -180,7 +180,7 @@ public class InventoryAccessHelper
         for (int slot = 0; slot < RecordTypes.NAMED_SLOTS.length; slot++) {
             String slotName = RecordTypes.NAMED_SLOTS[slot];
             ItemStack maybeStorageItem = getItemFromNamedSlot(player, slotName);
-            LazyOptional<IItemHandler> pockets = maybeStorageItem.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
+            LazyOptional<IItemHandler> pockets = maybeStorageItem.getCapability(ForgeCapabilities.ITEM_HANDLER);
             pockets.ifPresent(inventory -> {
                 InventoryAccessRecord record = new InventoryAccessRecord();
                 record.ItemChest = maybeStorageItem.copy();
@@ -315,7 +315,7 @@ public class InventoryAccessHelper
         }
         else if (record.Type.equals(RecordTypes.LEGGINGS) || record.Type.equals(RecordTypes.CHESTSLOT) || record.Type.equals(RecordTypes.BACKSLOT)) {
             ItemStack item = getItemFromNamedSlot(player, record.Type);
-            LazyOptional<IItemHandler> pockets = item.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
+            LazyOptional<IItemHandler> pockets = item.getCapability(ForgeCapabilities.ITEM_HANDLER);
             pockets.ifPresent(inventory -> {
                 this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(inventory);
                 this.chosenContainerTrueSize = inventory.getSlots();

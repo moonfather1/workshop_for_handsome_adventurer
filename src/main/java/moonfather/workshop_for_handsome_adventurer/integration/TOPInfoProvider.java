@@ -7,8 +7,8 @@ import mcjty.theoneprobe.api.ProbeMode;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -32,7 +32,7 @@ public class TOPInfoProvider implements IProbeInfoProvider
             PotionShelfBlockEntity shelf = (PotionShelfBlockEntity) level.getBlockEntity(probeHitData.getPos());
             int count = shelf.GetRemainingItems(slot);
             int total =  shelf.GetRemainingRoom(slot) + count;
-            probeInfo.text(new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_probe_tooltip", count, total).withStyle(Style.EMPTY.withColor(0xaa77dd)));
+            probeInfo.text(Component.translatable("message.workshop_for_handsome_adventurer.shelf_probe_tooltip", count, total).withStyle(Style.EMPTY.withColor(0xaa77dd)));
         }
     }
 }
