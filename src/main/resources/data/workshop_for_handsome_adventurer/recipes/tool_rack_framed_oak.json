@@ -11,7 +11,7 @@
       "item": "minecraft:oak_slab"
     },
 	"n": {
-      "tag": "forge:nuggets"
+      "item": "minecraft:iron_nugget"
     }
   },
   "result": {
