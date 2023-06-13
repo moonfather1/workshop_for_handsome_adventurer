@@ -1,6 +1,5 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
-import com.mojang.datafixers.util.Pair;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
@@ -9,7 +8,7 @@ import moonfather.workshop_for_handsome_adventurer.blocks.SimpleTable;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.integration.TetraBeltSupport;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
@@ -159,7 +158,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			if (optional.isPresent()) {
 				CraftingRecipe craftingrecipe = optional.get();
 				if (p_150551_.setRecipeUsed(p_150548_, serverplayer, craftingrecipe)) {
-					itemstack = craftingrecipe.assemble(p_150550_);
+					itemstack = craftingrecipe.assemble(p_150550_, p_150548_.registryAccess());
 				}
 			}
 
@@ -677,14 +676,16 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	public static class CustomizationSlot extends Slot
 	{
-		private static final TagKey<Item> ChestTag = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge:chests"));
-		private static final TagKey<Item> LanternTag = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(Constants.MODID, "lanterns"));
-		public static final ResourceLocation EMPTY_SLOT_BG = new ResourceLocation(Constants.MODID, "gui/c_slot");
+		private static final TagKey<Item> ChestTag = TagKey.create(Registries.ITEM, new ResourceLocation("forge:chests"));
+		private static final TagKey<Item> LanternTag = TagKey.create(Registries.ITEM, new ResourceLocation(Constants.MODID, "lanterns"));
+		private static final ResourceLocation EMPTY_SLOT_BG = new ResourceLocation(Constants.MODID, "gui/c_slot");
+
 
 		public CustomizationSlot(Container p_39521_, int p_39522_, int p_39523_, int p_39524_)
 		{
 			super(p_39521_, p_39522_, p_39523_, p_39524_);
 			this.setBackground(InventoryMenu.BLOCK_ATLAS, EMPTY_SLOT_BG);
+			// to make own atlas, start with PaintingTextureManager. gave up during 1.19.4 porting. too much effort.
 		}
 
 		public boolean mayPlace(ItemStack itemStack)
@@ -761,8 +762,6 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	public static class VariableSizeContainerSlot extends Slot
 	{
-		public static final ResourceLocation EXCESS_SLOT_BG = new ResourceLocation(Constants.MODID, "gui/x_slot");
-		private static final Pair<ResourceLocation, ResourceLocation> excessBackgroundPair = Pair.of(InventoryMenu.BLOCK_ATLAS, EXCESS_SLOT_BG);
 		private Supplier<Integer> containerTrueSizeGetter = null;
 
 		public VariableSizeContainerSlot(Container p_40223_, int p_40224_, int p_40225_, int p_40226_, Supplier<Integer> containerTrueSize)
@@ -801,8 +800,6 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 		public int getContainerTrueSize() { return this.containerTrueSizeGetter.get(); }
 		public boolean isExcessSlot() {	return this.getSlotIndex() >= this.getContainerTrueSize(); }
-
-		public Pair<ResourceLocation, ResourceLocation> getExcessIcon() { return excessBackgroundPair; }
 	}
 
 	public static class VariableSizeContainerWrapper extends SimpleContainer

@@ -2,7 +2,6 @@ package moonfather.workshop_for_handsome_adventurer.items;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
-import moonfather.workshop_for_handsome_adventurer.other.CreativeTab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -35,7 +34,7 @@ public class WorkstationPlacerItem extends Item
 
 	public WorkstationPlacerItem(String wood)
 	{
-		this(wood, new Properties().stacksTo(1).tab(CreativeTab.TAB_WORKSHOP));
+		this(wood, new Properties().stacksTo(1));
 	}
 	private final String woodType;
 

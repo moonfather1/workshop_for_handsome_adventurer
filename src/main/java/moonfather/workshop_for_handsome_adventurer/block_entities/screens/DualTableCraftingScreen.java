@@ -102,8 +102,8 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 
 		@Override
 		public boolean mouseClicked(double x, double y, int p_93643_) {
-			double localX = x - this.x;
-			double localY = y - this.y;
+			double localX = x - this.getX();
+			double localY = y - this.getY();
 			if (localX >= 10 && localX <= 20 && localY >= 4 && localY <= 14) {
 				if (lastDestinationGrid != 2)
 				{

@@ -2,7 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.block_entities.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.datafixers.util.Pair;
+import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import net.minecraft.ChatFormatting;
@@ -15,6 +15,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -82,18 +83,13 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 					if (!slot.isActive() && slot.isExcessSlot() && slot.x >= 0) {
 						if (slot.getSlotIndex() < 27 || this.inventoryComponent.areSlotRowsFourToSixVisible()) {
 							RenderSystem.setShader(GameRenderer::getPositionTexShader);
-							this.setBlitOffset(100);
-							this.itemRenderer.blitOffset = 100.0F;
+							poseStack.translate(0f, 0f, 100f);
 							if (this.excessSlotSprite == null) {
-								Pair<ResourceLocation, ResourceLocation> pair = slot.getExcessIcon();
-								if (pair != null) {
-									this.excessSlotSprite = this.minecraft.getTextureAtlas(pair.getFirst()).apply(pair.getSecond());
-								}
+								this.excessSlotSprite = this.minecraft.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(EXCESS_SLOT_BG);
 							}
-							RenderSystem.setShaderTexture(0, this.excessSlotSprite.atlas().location());
-							blit(poseStack, this.leftPos + slot.x, this.topPos + slot.y, this.getBlitOffset(), 16, 16, this.excessSlotSprite);
-							this.itemRenderer.blitOffset = 0.0F;
-							this.setBlitOffset(0);
+							RenderSystem.setShaderTexture(0, this.excessSlotSprite.atlasLocation());
+							blit(poseStack, this.leftPos + slot.x, this.topPos + slot.y, 0/*z?*/, 16, 16, this.excessSlotSprite);
+							poseStack.translate(0f, 0f, -100f);
 						}
 					}
 				}
@@ -106,6 +102,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		this.renderCustomizationTooltips(poseStack, p_98480_, p_98481_);
 	}
 	private TextureAtlasSprite excessSlotSprite = null;
+	private static final ResourceLocation EXCESS_SLOT_BG = new ResourceLocation(Constants.MODID, "gui/x_slot");
 
 
 

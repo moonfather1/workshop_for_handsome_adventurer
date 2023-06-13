@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[43,)"
+loaderVersion="[45,)"
 license="All rights reserved"
 
 [[mods]]
@@ -21,22 +21,16 @@ Adds a few blocks:
 [[dependencies.workshop_for_handsome_adventurer]]
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[43,)" #mandatory
+    versionRange="[45,)" #mandatory
     ordering="NONE"
     side="BOTH"
 [[dependencies.workshop_for_handsome_adventurer]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.2,1.19.3)"
+    versionRange="[1.19.4,1.19.5)"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.workshop_for_handsome_adventurer]]
-    modId="jade"
-    mandatory=false
-    versionRange="[5.2.3, )"
-    ordering="NONE"
-    side="BOTH"
 
 [modproperties.workshop_for_handsome_adventurer]
     catalogueImageIcon="textures/gui/catalogue.png"

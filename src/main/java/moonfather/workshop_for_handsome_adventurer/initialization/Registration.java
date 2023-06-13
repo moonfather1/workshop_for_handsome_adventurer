@@ -4,13 +4,12 @@ import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.*;
 import moonfather.workshop_for_handsome_adventurer.blocks.*;
 import moonfather.workshop_for_handsome_adventurer.items.BlockItemEx;
-import moonfather.workshop_for_handsome_adventurer.other.CreativeTab;
 import moonfather.workshop_for_handsome_adventurer.other.UnsupportedWoodRecipe;
 import moonfather.workshop_for_handsome_adventurer.items.WorkstationPlacerItem;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
@@ -133,7 +132,7 @@ public class Registration
 
 	private static RegistryObject<Item> FromBlock(RegistryObject<Block> block)
 	{
-		Item.Properties properties = new Item.Properties().tab(CreativeTab.TAB_WORKSHOP);
+		Item.Properties properties = new Item.Properties();
 		return ITEMS.register(block.getId().getPath(), () -> new BlockItemEx(block.get(), properties));
 	}
 
@@ -157,5 +156,5 @@ public class Registration
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public static final RegistryObject<RecipeSerializer<UnsupportedWoodRecipe>> TABLE_RECIPE = RECIPES.register("table_recipe_unknown_planks", ()-> new SimpleRecipeSerializer<UnsupportedWoodRecipe>(UnsupportedWoodRecipe::new));
+	public static final RegistryObject<RecipeSerializer<UnsupportedWoodRecipe>> TABLE_RECIPE = RECIPES.register("table_recipe_unknown_planks", ()-> new SimpleCraftingRecipeSerializer<UnsupportedWoodRecipe>(UnsupportedWoodRecipe::new));
 }

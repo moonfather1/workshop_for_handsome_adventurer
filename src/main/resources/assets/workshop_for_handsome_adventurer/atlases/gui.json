@@ -1,0 +1,12 @@
+{
+    "sources": [
+        {
+            "type": "single",
+            "resource": "gui/c_slot"
+        },
+        {
+            "type": "single",
+            "resource": "gui/x_slot"
+        }
+    ]
+}

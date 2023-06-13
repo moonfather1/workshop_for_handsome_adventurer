@@ -27,9 +27,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.items.IItemHandler;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 public class InventoryAccessHelper
 {

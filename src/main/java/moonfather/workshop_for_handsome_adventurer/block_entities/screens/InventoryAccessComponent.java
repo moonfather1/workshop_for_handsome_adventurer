@@ -17,7 +17,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
@@ -27,7 +26,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Function;
 
-public class InventoryAccessComponent extends GuiComponent implements Widget, GuiEventListener, NarratableEntry
+public class InventoryAccessComponent extends GuiComponent implements Renderable, GuiEventListener, NarratableEntry
 {
     public static final int PANEL_WIDTH = 176;
     public static final int PANEL_HEIGHT_WITHOUT_TABS = 134;
@@ -61,7 +60,6 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         }
         this.parent.getMenu().registerClientHandlerForDataSlot(this.parent.getMenu().DATA_SLOT_TABS_NEED_UPDATE, this::onTabListChangedOnServer);
         this.parent.getMenu().registerClientHandlerForDataSlot(this.parent.getMenu().DATA_SLOT_UPPER_CONTAINER_TRUE_SIZE, this::onContainerSizeChangedOnServer);
-        this.parent.getMinecraft().keyboardHandler.setSendRepeatsToGui(true);
     }
 
 
@@ -81,10 +79,10 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             this.renameButton.setTooltipInset(Component.literal(""));
             this.renameButton.active = false;
         }
-        this.renameBox.x = this.xOffset + 9;
-        this.renameBox.y = bottomY - 18;
-        this.renameButton.x = this.xOffset + 7 + this.renameBox.getWidth() + 7;
-        this.renameButton.y = bottomY - 23;
+        this.renameBox.setX(this.xOffset + 9);
+        this.renameBox.setY(bottomY - 18);
+        this.renameButton.setX(this.xOffset + 7 + this.renameBox.getWidth() + 7);
+        this.renameButton.setY(bottomY - 23);
 
         if (! this.tabsInitialized) {
             this.tabButtons.clear();
@@ -249,12 +247,17 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     public boolean isMouseOver(double p_100353_, double p_100354_) {
         return false;
     }
-    public boolean changeFocus(boolean p_100372_) {
-        return false;
+
+    @Override
+    public void setFocused(boolean p_265728_) {
     }
-    public void removed() {
-        this.parent.getMinecraft().keyboardHandler.setSendRepeatsToGui(false);
+
+    @Override
+    public boolean isFocused() {
+        return this.renameBox.isFocused();
     }
+
+    public void removed() { }
     public void toggleVisibility() {
         this.setVisible(!this.isVisible());
     }
@@ -384,11 +387,11 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         if (this.renameBox != null) {
             if (this.renameBox.isMouseOver(v1, v2)) {
                 //System.out.println("~~~mousecl E  " + this.renameBox.isFocused() + "/" + this.renameBox.isHoveredOrFocused());
-                this.renameBox.setFocus(true);
+                this.renameBox.setFocused(true);
                 return true;
             }
             else {
-                this.renameBox.setFocus(false);
+                this.renameBox.setFocused(false);
             }
         }
         for(TabButton tabButton : this.tabButtons)
@@ -431,7 +434,8 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         }
 
 
-        public void renderButton(PoseStack poseStack, int p_100458_, int p_100459_, float p_100460_)
+        @Override
+        public void renderWidget(PoseStack poseStack, int p_100458_, int p_100459_, float p_100460_)
         {
             Minecraft minecraft = Minecraft.getInstance();
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -442,13 +446,13 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             if (this.isStateTriggered) { texX += this.xDiffTex; }
             if (this.isHoveredOrFocused()) { texY += this.yDiffTex; } //not a thing
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            this.blit(poseStack, this.x, this.y, texX, texY, this.width, this.height);
+            this.blit(poseStack, this.getX(), this.getY(), texX, texY, this.width, this.height);
             RenderSystem.enableDepthTest();
-            this.renderIcon(minecraft.getItemRenderer());
+            this.renderIcon(minecraft.getItemRenderer(), poseStack);
         }
 
         boolean checkedForSpecialScaling = false, doSpecialScaling = false;
-        private void renderIcon(ItemRenderer itemRenderer)
+        private void renderIcon(ItemRenderer itemRenderer, PoseStack poseStack)
         {
             if (! this.checkedForSpecialScaling) {
                 this.doSpecialScaling = ! (itemMain.getItem() instanceof BlockItem);
@@ -456,31 +460,29 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             }
             if (! this.doSpecialScaling) {
                 // main image - block   (chests, barrels)
-                itemRenderer.renderAndDecorateFakeItem(itemMain, this.x + 1, this.y + 2);
+                itemRenderer.renderAndDecorateFakeItem(poseStack, itemMain, this.getX() + 1, this.getY() + 2);
             }
             else {
                 // main image - item    (belt, backpack...)
                 int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
                 int y = (this.parent.parent.height - this.parent.parent.getYSize()) / 2;
-                PoseStack posestack = RenderSystem.getModelViewStack();
-                posestack.pushPose();
-                posestack.scale(0.667F, 0.667F, 0.667F);
-                posestack.translate(0, 0, +100.0D);
+                poseStack.pushPose();
+                poseStack.scale(0.667F, 0.667F, 0.667F);
+                poseStack.translate(0, 0, +100.0D);
                 RenderSystem.applyModelViewMatrix();
-                itemRenderer.renderAndDecorateFakeItem(itemMain, (int)((x + this.chestIndex * (WIDTH-1) + 7) * 1.5d), (int)((y+6)*1.5d));
-                posestack.popPose();
+                itemRenderer.renderAndDecorateFakeItem(poseStack, itemMain, (int)((x + this.chestIndex * (WIDTH-1) + 7) * 1.5d), (int)((y+6)*1.5d));
+                poseStack.popPose();
                 RenderSystem.applyModelViewMatrix();
             }
             // sub image
             int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
             int y = (this.parent.parent.height - this.parent.parent.getYSize()) / 2;
-            PoseStack posestack = RenderSystem.getModelViewStack();
-            posestack.pushPose();
-            posestack.scale(0.667F, 0.667F, 0.667F);
-            posestack.translate(0, 0, +100.0D);
+            poseStack.pushPose();
+            poseStack.scale(0.667F, 0.667F, 0.667F);
+            poseStack.translate(0, 0, +100.0D);
             RenderSystem.applyModelViewMatrix();
-            itemRenderer.renderAndDecorateFakeItem(itemSub, (int)((x + this.chestIndex * (WIDTH-1) + 13) * 1.5d), (int)((y+12)*1.5d));
-            posestack.popPose();
+            itemRenderer.renderAndDecorateFakeItem(poseStack, itemSub, (int)((x + this.chestIndex * (WIDTH-1) + 13) * 1.5d), (int)((y+12)*1.5d));
+            poseStack.popPose();
             RenderSystem.applyModelViewMatrix();
         }
 

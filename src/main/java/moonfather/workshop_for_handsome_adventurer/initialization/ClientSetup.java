@@ -1,14 +1,10 @@
 package moonfather.workshop_for_handsome_adventurer.initialization;
 
-import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screens.DualTableCraftingScreen;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screens.SimpleTableCraftingScreen;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackTESR;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class ClientSetup
@@ -31,11 +27,5 @@ public class ClientSetup
 		event.registerBlockEntityRenderer(Registration.POTION_SHELF_BE.get(),	ToolRackTESR::new);
 	}
 
-	public static void StitchTextures(TextureStitchEvent.Pre event)
-	{
-		if (event.getAtlas().location().equals(InventoryMenu.BLOCK_ATLAS)) {
-			event.addSprite(new ResourceLocation(Constants.MODID, "gui/c_slot"));
-			event.addSprite(new ResourceLocation(Constants.MODID, "gui/x_slot"));
-		}
-	}
+	// two slot textures are in minecraft's block atlas. i wanted to add my own, but it's way too much trouble.
 }

@@ -1,24 +1,20 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.CrossbowItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolActions;
+import org.joml.Quaternionf;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -108,8 +104,8 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			}
 			BakedModel model = this.itemRenderer.getModel(itemStack, tile.getLevel(), null, combinedLight);
 
-			matrixStack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
-			matrixStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+			matrixStack.mulPose(new Quaternionf().fromAxisAngleDeg(1, 0, 0, -90));  // 1.19.4   Vector3f.XP.rotationDegrees(-90.0F)
+			matrixStack.mulPose(new Quaternionf().fromAxisAngleDeg(0, 1, 0, 180));  // 1.19.4   Vector3f.YP.rotationDegrees(180.0F)
 
 			if (itemStack.getItem().canPerformAction(itemStack, ToolActions.SHIELD_BLOCK))
 			{
@@ -119,16 +115,16 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			else if (itemStack.getItem().canPerformAction(itemStack, ToolActions.SWORD_SWEEP) || itemStack.getItem() instanceof SwordItem) //ModularBladedItem
 			{
 				matrixStack.translate(0, -0.2, 0);
-				matrixStack.mulPose(Vector3f.ZP.rotationDegrees(135.0F));
+				matrixStack.mulPose(new Quaternionf().fromAxisAngleDeg(0, 0, 1, 135));  // 1.19.4      Vector3f.ZP.rotationDegrees(135.0F)
 			}
 			else if (itemStack.getItem().getClass().getSimpleName().contains("rossbow") || itemStack.getItem() instanceof CrossbowItem)  //ModularCrossbowItem
 			{
 				matrixStack.translate(0, -0.2, 0);
-				matrixStack.mulPose(Vector3f.ZP.rotationDegrees(225.0F));
+				matrixStack.mulPose(new Quaternionf().fromAxisAngleDeg(0, 0, 1, 225));  // 1.19.4      Vector3f.ZP.rotationDegrees(225.0F)
 			}
 			else if (model.isGui3d())
 			{
-				matrixStack.mulPose(Vector3f.ZP.rotationDegrees(-45.0F));
+				matrixStack.mulPose(new Quaternionf().fromAxisAngleDeg(0, 0, 1, -45));  // 1.19.4      Vector3f.ZP.rotationDegrees(-45.0F)
 			}
 			else if ((itemStack.getTag() != null && itemStack.getTag().contains("CustomPotionColor")) || itemStack.is(Items.GLASS_BOTTLE))
 			{
@@ -136,10 +132,10 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			}
 			else
 			{
-				matrixStack.mulPose(Vector3f.ZP.rotationDegrees(-45.0F));
+				matrixStack.mulPose(new Quaternionf().fromAxisAngleDeg(0, 0, 1, -45));  // 1.19.4    Vector3f.ZP.rotationDegrees(-45.0F)
 			}
 
-			Minecraft.getInstance().getItemRenderer().renderStatic(itemStack, ItemTransforms.TransformType.FIXED, combinedLight, combinedOverlay, matrixStack, buffer, renderId);
+			Minecraft.getInstance().getItemRenderer().renderStatic(itemStack, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, matrixStack, buffer, tile.getLevel(), renderId);
 		}
 	}
 
@@ -156,11 +152,11 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 		{
 			result.getTag().remove("Enchantments");
 		}
-		if (result.getTag().contains("Potion"))
-		{
-			result.getTag().putInt("CustomPotionColor", PotionUtils.getColor(PotionUtils.getPotion(result.getTag())));
-			result.getTag().remove("Potion");
-		}
+		//if (result.getTag().contains("Potion"))
+		//{
+		//	result.getTag().putInt("CustomPotionColor", PotionUtils.getColor(PotionUtils.getPotion(result.getTag())));
+		//	result.getTag().remove("Potion");
+		//}
 		return result;
 	}
 }

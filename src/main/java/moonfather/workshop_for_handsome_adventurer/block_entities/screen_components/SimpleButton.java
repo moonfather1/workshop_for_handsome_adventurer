@@ -29,7 +29,7 @@ public class SimpleButton extends Button {
     List<Component> tooltipLines = null;
 
     public SimpleButton(int x, int y, int width, int height, int xTexStart, int yTexStart, int yDiffTex, ResourceLocation texture, int textureWidth, int textureHeight, OnPress onPress, Component message) {
-        super(x, y, width, height, message, onPress);
+        super(x, y, width, height, message, onPress, DEFAULT_NARRATION);
         this.textureWidth = textureWidth;
         this.textureHeight = textureHeight;
         this.xTexStart = xTexStart;
@@ -39,7 +39,8 @@ public class SimpleButton extends Button {
     }
 
 
-    public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float p_94285_) {
+    @Override
+    public void renderWidget(PoseStack poseStack, int mouseX, int mouseY, float p_94285_) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, this.resourceLocation);
         int yOffset = this.yTexStart;
@@ -50,7 +51,7 @@ public class SimpleButton extends Button {
             yOffset += 2 * this.yDiffTex;
         }
         RenderSystem.enableDepthTest();
-        blit(poseStack, this.x, this.y, (float)this.xTexStart, (float)yOffset, this.width, this.height, this.textureWidth, this.textureHeight);
+        blit(poseStack, this.getX(), this.getY(), (float)this.xTexStart, (float)yOffset, this.width, this.height, this.textureWidth, this.textureHeight);
     }
 
     public void renderTooltipsSeparately(PoseStack poseStack, int mouseX, int mouseY) {

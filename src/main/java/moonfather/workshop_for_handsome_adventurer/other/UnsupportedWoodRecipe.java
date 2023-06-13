@@ -4,14 +4,15 @@ package moonfather.workshop_for_handsome_adventurer.other;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
-import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -21,8 +22,10 @@ public class UnsupportedWoodRecipe extends CustomRecipe
 {
     public UnsupportedWoodRecipe(ResourceLocation id)
     {
-        super(id);
+        super(id, CraftingBookCategory.MISC);
     }
+
+    public UnsupportedWoodRecipe(ResourceLocation id, CraftingBookCategory craftingBookCategory) { super(id, CraftingBookCategory.MISC); }
 
     @Override
     public boolean matches(CraftingContainer craftingContainer, Level level)
@@ -61,7 +64,7 @@ public class UnsupportedWoodRecipe extends CustomRecipe
     }
 
 
-    private final TagKey<Item> supportedPlanks = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(Constants.MODID, "supported_planks"));
+    private final TagKey<Item> supportedPlanks = TagKey.create(Registries.ITEM, new ResourceLocation(Constants.MODID, "supported_planks"));
     private boolean isAnUnsupportedPlank(ItemStack item) {
         return item.is(ItemTags.PLANKS) && ! item.is(supportedPlanks);
     }
@@ -69,7 +72,7 @@ public class UnsupportedWoodRecipe extends CustomRecipe
 
 
     @Override
-    public ItemStack assemble(CraftingContainer craftingContainer)
+    public ItemStack assemble(CraftingContainer craftingContainer, RegistryAccess access)
     {
         if (! OptionsHolder.COMMON.SimpleTableReplacesVanillaTable.get())
         {

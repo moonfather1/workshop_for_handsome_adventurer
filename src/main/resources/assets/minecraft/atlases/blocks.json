@@ -1,0 +1,12 @@
+{
+    "sources": [
+        {
+            "type": "single",
+            "resource": "workshop_for_handsome_adventurer:gui/c_slot"
+        },
+        {
+            "type": "single",
+            "resource": "workshop_for_handsome_adventurer:gui/x_slot"
+        }
+    ]
+}
