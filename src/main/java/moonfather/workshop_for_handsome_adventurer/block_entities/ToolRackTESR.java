@@ -113,8 +113,10 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 
 			if (itemStack.getItem().canPerformAction(itemStack, ToolActions.SHIELD_BLOCK))
 			{
-				matrixStack.translate(-0.25, 0, 0.16);
-				matrixStack.scale(2, 2, 2);
+				matrixStack.translate(-0.00, -0.10, 0.14);
+				matrixStack.scale(1.75f, 1.60f, 1.75f);
+				//matrixStack.translate(-0.25, 0, 0.16);  //1.18.2
+				//matrixStack.scale(2, 2, 2);         //1.18.2
 			}
 			else if (itemStack.getItem().canPerformAction(itemStack, ToolActions.SWORD_SWEEP) || itemStack.getItem() instanceof SwordItem) //ModularBladedItem
 			{
