@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "",
+  "pattern": [
+    "sps",
+    "sps"
+  ],
+  "key": {
+    "s": {
+      "item": "minecraft:mangrove_slab"
+    },
+	"p": {
+      "item": "minecraft:mangrove_pressure_plate"
+    }
+  },
+  "result": {
+    "item": "workshop_for_handsome_adventurer:potion_shelf_mangrove",
+    "count": 1
+  },
+  "conditions":  []
+}
