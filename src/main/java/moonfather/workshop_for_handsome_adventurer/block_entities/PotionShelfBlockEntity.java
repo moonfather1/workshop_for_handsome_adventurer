@@ -167,12 +167,13 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
     {
         this.VerifyCapacity();
         if (this.itemCounts.get(slot) == 0) {
-            return 6; //may not be true but we'll go with that
+            return OptionsHolder.COMMON.SlotRoomMultiplier.get(); //may not be true but we'll go with that
         }
         return Math.min(64, this.GetItem(slot).getMaxStackSize() * OptionsHolder.COMMON.SlotRoomMultiplier.get()) - this.itemCounts.get(slot);
     }
 
     public Integer GetRemainingItems(int slot) {
+        this.VerifyCapacity();
         return this.itemCounts.get(slot);
     }
 
