@@ -1,0 +1,7 @@
+{
+    "parent": "workshop_for_handsome_adventurer:block/dual_table_part_top_right2",
+    "textures": {
+        "particle": "minecraft:block/stripped_mangrove_log",
+        "oak_planks": "minecraft:block/mangrove_planks"
+    }
+}

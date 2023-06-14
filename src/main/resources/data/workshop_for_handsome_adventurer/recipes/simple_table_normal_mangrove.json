@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "",
+  "pattern": [
+    "c","p"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:mangrove_planks"
+    },
+	"c": {
+      "tag": "forge:workbench"
+    }
+  },
+  "result": {
+    "item": "workshop_for_handsome_adventurer:simple_table_mangrove",
+    "count": 1
+  },
+  "conditions":
+  [
+    {
+      "type": "workshop_for_handsome_adventurer:optional",
+      "flag_code": "dont_replace_vanilla_crafting_table"
+    }
+  ]
+}
