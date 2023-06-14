@@ -173,6 +173,7 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
     }
 
     public Integer GetRemainingItems(int slot) {
+        this.VerifyCapacity();
         return this.itemCounts.get(slot);
     }
 
