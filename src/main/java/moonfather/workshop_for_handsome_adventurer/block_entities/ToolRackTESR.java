@@ -126,7 +126,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			{
 				matrixStack.mulPose(new Quaternionf().fromAxisAngleDeg(0, 0, 1, -45));  // 1.19.4      Vector3f.ZP.rotationDegrees(-45.0F)
 			}
-			else if ((itemStack.getTag() != null && itemStack.getTag().contains("CustomPotionColor")) || itemStack.is(Items.GLASS_BOTTLE))
+			else if ((itemStack.getTag() != null && itemStack.getTag().contains("Potion")) || itemStack.is(Items.GLASS_BOTTLE))
 			{
 				matrixStack.translate(0, 0.1, 0);
 			}
