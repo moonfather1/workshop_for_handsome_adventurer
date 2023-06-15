@@ -6,19 +6,19 @@ import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-/*import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.IElement;
-*/
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class JadeTooltipProvider //implements IBlockComponentProvider, IServerDataProvider<BlockAccessor>
+public class JadeTooltipProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor>
 {
-/*    private static final JadeTooltipProvider instance = new JadeTooltipProvider();
+    private static final JadeTooltipProvider instance = new JadeTooltipProvider();
     public static JadeTooltipProvider getInstance() { return instance; }
 
 
@@ -66,5 +66,5 @@ public class JadeTooltipProvider //implements IBlockComponentProvider, IServerDa
     }
     private final ResourceLocation pluginId = new ResourceLocation(Constants.MODID, "jade_plugin");
 
- */
+
 }
