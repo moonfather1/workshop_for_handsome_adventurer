@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "",
+  "pattern": [
+    "sns"
+  ],
+  "key": {
+    "s": {
+      "item": "minecraft:cherry_slab"
+    },
+	"n": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "result": {
+    "item": "workshop_for_handsome_adventurer:tool_rack_single_cherry",
+    "count": 1
+  },
+  "conditions":  []
+}

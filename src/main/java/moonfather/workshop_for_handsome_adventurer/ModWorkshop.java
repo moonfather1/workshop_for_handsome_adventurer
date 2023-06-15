@@ -60,9 +60,7 @@ public class ModWorkshop
 
     private void enqueueIMC(final InterModEnqueueEvent event)
     {
-        String[] woodTypes = {"oak", "spruce", "jungle", "birch", "dark_oak", "mangrove"};
-
-        for (String woodType: woodTypes)
+        for (String woodType: Registration.woodTypes)
         {
             InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":tool_rack_double_" + woodType);
             InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":tool_rack_framed_" + woodType);

@@ -6,6 +6,7 @@
 	"item.workshop_for_handsome_adventurer.workstation_placer_dark_oak": "Радна станица (од тамног храста)",
 	"item.workshop_for_handsome_adventurer.workstation_placer_acacia": "Радна станица (од акације)",
 	"item.workshop_for_handsome_adventurer.workstation_placer_mangrove": "Радна станица (од мангрове)",
+	"item.workshop_for_handsome_adventurer.workstation_placer_cherry": "Радна станица (од трешње)",
 	"item.workshop_for_handsome_adventurer.workstation_placer.tooltip1": "Прописни радни сто. Довољно места да правиш више ствари одједном.",
 	"item.workshop_for_handsome_adventurer.workstation_placer.tooltip2": "Лак приступ сандуцима и фиокама поред стола. Може да држи стварчице.",
 
@@ -69,6 +70,12 @@
 	"block.workshop_for_handsome_adventurer.tool_rack_pframed_mangrove": "Држач за алатке (са стубовима, од мангрове)",
 	"block.workshop_for_handsome_adventurer.tool_rack_single_mangrove": "Држач за алатке (један ред, од мангрове)",
 	"block.workshop_for_handsome_adventurer.potion_shelf_mangrove": "Полица за напитке (од мангрове)",
+	"block.workshop_for_handsome_adventurer.simple_table_cherry": "Радни сто (од трешње)",
+	"block.workshop_for_handsome_adventurer.tool_rack_double_cherry": "Држач за алатке (три реда, од трешње)",
+	"block.workshop_for_handsome_adventurer.tool_rack_framed_cherry": "Држач за алатке (са оквиром, од трешње)",
+	"block.workshop_for_handsome_adventurer.tool_rack_pframed_cherry": "Држач за алатке (са стубовима, од трешње)",
+	"block.workshop_for_handsome_adventurer.tool_rack_single_cherry": "Држач за алатке (један ред, од трешње)",
+	"block.workshop_for_handsome_adventurer.potion_shelf_cherry": "Полица за напитке (од трешње)",
 
 	"message.workshop_for_handsome_adventurer.no_room_for_workstation": "Ту нема места за радну станицу.",
 	"message.workshop_for_handsome_adventurer.workshop_table_obscured": "Не можеш прићи радној површини стола.",

@@ -13,53 +13,17 @@ public class CreativeTab
     {
         if (event.getTab() == Registration.CREATIVE_TAB.get())
         {
-            event.accept(Registration.SIMPLE_TABLE_ITEM_OAK);
-            event.accept(Registration.DUAL_TABLE_PLACER_ITEM_OAK);
-            event.accept(Registration.MINI_TOOL_RACK_ITEM_OAK);
-            event.accept(Registration.FRAMED_TOOL_RACK_ITEM_OAK);
-            event.accept(Registration.PFRAMED_TOOL_RACK_ITEM_OAK);
-            event.accept(Registration.DUAL_TOOL_RACK_ITEM_OAK);
-            event.accept(Registration.POTION_SHELF_ITEM_OAK);
-
-            event.accept(Registration.SIMPLE_TABLE_ITEM_SPRUCE);
-            event.accept(Registration.DUAL_TABLE_PLACER_ITEM_SPRUCE);
-            event.accept(Registration.MINI_TOOL_RACK_ITEM_SPRUCE);
-            event.accept(Registration.FRAMED_TOOL_RACK_ITEM_SPRUCE);
-            event.accept(Registration.PFRAMED_TOOL_RACK_ITEM_SPRUCE);
-            event.accept(Registration.DUAL_TOOL_RACK_ITEM_SPRUCE);
-            event.accept(Registration.POTION_SHELF_ITEM_SPRUCE);
-
-            event.accept(Registration.SIMPLE_TABLE_ITEM_BIRCH);
-            event.accept(Registration.DUAL_TABLE_PLACER_ITEM_BIRCH);
-            event.accept(Registration.MINI_TOOL_RACK_ITEM_BIRCH);
-            event.accept(Registration.FRAMED_TOOL_RACK_ITEM_BIRCH);
-            event.accept(Registration.PFRAMED_TOOL_RACK_ITEM_BIRCH);
-            event.accept(Registration.DUAL_TOOL_RACK_ITEM_BIRCH);
-            event.accept(Registration.POTION_SHELF_ITEM_BIRCH);
-
-            event.accept(Registration.SIMPLE_TABLE_ITEM_JUNGLE);
-            event.accept(Registration.DUAL_TABLE_PLACER_ITEM_JUNGLE);
-            event.accept(Registration.MINI_TOOL_RACK_ITEM_JUNGLE);
-            event.accept(Registration.FRAMED_TOOL_RACK_ITEM_JUNGLE);
-            event.accept(Registration.PFRAMED_TOOL_RACK_ITEM_JUNGLE);
-            event.accept(Registration.DUAL_TOOL_RACK_ITEM_JUNGLE);
-            event.accept(Registration.POTION_SHELF_ITEM_JUNGLE);
-
-            event.accept(Registration.SIMPLE_TABLE_ITEM_DARK_OAK);
-            event.accept(Registration.DUAL_TABLE_PLACER_ITEM_DARK_OAK);
-            event.accept(Registration.MINI_TOOL_RACK_ITEM_DARK_OAK);
-            event.accept(Registration.FRAMED_TOOL_RACK_ITEM_DARK_OAK);
-            event.accept(Registration.PFRAMED_TOOL_RACK_ITEM_DARK_OAK);
-            event.accept(Registration.DUAL_TOOL_RACK_ITEM_DARK_OAK);
-            event.accept(Registration.POTION_SHELF_ITEM_DARK_OAK);
-
-            event.accept(Registration.SIMPLE_TABLE_ITEM_MANGROVE);
-            event.accept(Registration.DUAL_TABLE_PLACER_ITEM_MANGROVE);
-            event.accept(Registration.MINI_TOOL_RACK_ITEM_MANGROVE);
-            event.accept(Registration.FRAMED_TOOL_RACK_ITEM_MANGROVE);
-            event.accept(Registration.PFRAMED_TOOL_RACK_ITEM_MANGROVE);
-            event.accept(Registration.DUAL_TOOL_RACK_ITEM_MANGROVE);
-            event.accept(Registration.POTION_SHELF_ITEM_MANGROVE);
+            int i = 0;
+            for (String woodType: Registration.woodTypes) {
+                event.accept(Registration.items_table1.get(i));
+                event.accept(Registration.items_table2.get(i));
+                event.accept(Registration.items_rack1.get(i));
+                event.accept(Registration.items_rack2.get(i));
+                event.accept(Registration.items_rack3.get(i));
+                event.accept(Registration.items_rack4.get(i));
+                event.accept(Registration.items_shelf.get(i));
+                i++;
+            }
         }
     }
 
@@ -68,7 +32,7 @@ public class CreativeTab
     public static CreativeModeTab buildTab()
     {
         return CreativeModeTab.builder()
-                .icon( ()-> new ItemStack(Registration.SIMPLE_TABLE_OAK.get()) )
+                .icon( ()-> new ItemStack(Registration.items_table1.get(0).get()) )
                 .title(Component.translatable("itemGroup.workshop_for_handsome_adventurer"))
                 .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
                 .build();

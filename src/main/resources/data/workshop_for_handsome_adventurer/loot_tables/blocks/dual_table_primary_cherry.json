@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [ { "condition": "minecraft:survives_explosion" } ],
+          "name": "workshop_for_handsome_adventurer:workstation_placer_cherry"
+		}
+      ]
+    }
+  ],
+  "functions": [ { "function": "minecraft:explosion_decay" } ]
+}

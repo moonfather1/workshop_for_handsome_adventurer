@@ -66,6 +66,17 @@
 		"workshop_for_handsome_adventurer:potion_shelf_spruce",
 		"workshop_for_handsome_adventurer:potion_shelf_jungle",
 		"workshop_for_handsome_adventurer:potion_shelf_dark_oak",
-		"workshop_for_handsome_adventurer:potion_shelf_mangrove"
+		"workshop_for_handsome_adventurer:potion_shelf_mangrove",
+
+		"workshop_for_handsome_adventurer:simple_table_cherry",
+		"workshop_for_handsome_adventurer:dual_table_bottom_left_cherry",
+		"workshop_for_handsome_adventurer:dual_table_bottom_right_cherry",
+		"workshop_for_handsome_adventurer:dual_table_top_left_cherry",
+		"workshop_for_handsome_adventurer:dual_table_top_right_cherry",
+		"workshop_for_handsome_adventurer:tool_rack_single_cherry",
+		"workshop_for_handsome_adventurer:tool_rack_double_cherry",
+		"workshop_for_handsome_adventurer:tool_rack_pframed_cherry",
+		"workshop_for_handsome_adventurer:tool_rack_framed_cherry",
+		"workshop_for_handsome_adventurer:potion_shelf_cherry"
 	]
 }

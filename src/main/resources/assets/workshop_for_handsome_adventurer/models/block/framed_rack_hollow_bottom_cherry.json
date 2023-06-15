@@ -1,0 +1,9 @@
+{
+    "parent": "workshop_for_handsome_adventurer:block/framed_rack_hollow_bottom",
+    "textures": {
+        "particle": "minecraft:block/cherry_planks",
+        "plank": "minecraft:block/cherry_planks",
+        "thingy": "minecraft:block/white_terracotta",
+        "stripped_log": "minecraft:block/stripped_cherry_log"
+    }
+}

@@ -5,6 +5,7 @@
 	"item.workshop_for_handsome_adventurer.workstation_placer_jungle": "Workstation (jungle)",
 	"item.workshop_for_handsome_adventurer.workstation_placer_dark_oak": "Workstation (dark oak)",
 	"item.workshop_for_handsome_adventurer.workstation_placer_mangrove": "Workstation (mangrove)",
+	"item.workshop_for_handsome_adventurer.workstation_placer_cherry": "Workstation (cherry)",
 	"item.workshop_for_handsome_adventurer.workstation_placer.tooltip1": "A proper crafting table. Enough room to work on multiple items.",
 	"item.workshop_for_handsome_adventurer.workstation_placer.tooltip2": "Can access nearby inventories. Can hold items.",
 
@@ -77,6 +78,12 @@
 	"block.workshop_for_handsome_adventurer.tool_rack_pframed_mangrove": "Tool Rack (mangrove, partly framed)",
 	"block.workshop_for_handsome_adventurer.tool_rack_single_mangrove": "Tool Rack (mangrove, single)",
 	"block.workshop_for_handsome_adventurer.potion_shelf_mangrove": "Potion Shelf (mangrove)",
+	"block.workshop_for_handsome_adventurer.simple_table_cherry": "Crafting Table (cherry)",
+	"block.workshop_for_handsome_adventurer.tool_rack_double_cherry": "Tool Rack (cherry, triple)",
+	"block.workshop_for_handsome_adventurer.tool_rack_framed_cherry": "Tool Rack (cherry, framed)",
+	"block.workshop_for_handsome_adventurer.tool_rack_pframed_cherry": "Tool Rack (cherry, partly framed)",
+	"block.workshop_for_handsome_adventurer.tool_rack_single_cherry": "Tool Rack (cherry, single)",
+	"block.workshop_for_handsome_adventurer.potion_shelf_cherry": "Potion Shelf (cherry)",
 
 	"message.workshop_for_handsome_adventurer.extension_slot1": "Put a chest or a storage drawer here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests.",
 	"message.workshop_for_handsome_adventurer.extension_slot2": "Put a chest or a storage drawer here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests. \n(optionally one more [ITEM] for a range of two blocks)\n \nOr two lanterns to make them part of the workstation \nand light up the surroundings (put two in one slot).",
