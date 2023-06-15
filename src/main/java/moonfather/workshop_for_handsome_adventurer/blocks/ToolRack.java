@@ -26,8 +26,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -42,7 +41,7 @@ public class ToolRack extends Block implements EntityBlock
 {
 	public ToolRack(int itemCount, String type)
 	{
-		super(Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2f, 3f).sound(SoundType.WOOD));
+		super(Properties.of().strength(2f, 3f).sound(SoundType.WOOD).ignitedByLava().mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY));
 		this.itemCount = itemCount;
 
 		registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
@@ -201,12 +200,6 @@ public class ToolRack extends Block implements EntityBlock
 		}
 	}
 
-
-	@Override
-	public PushReaction getPistonPushReaction(BlockState p_60584_)
-	{
-		return PushReaction.DESTROY;
-	}
 
 
 	private final MutableComponent RackMessage = Component.translatable("message.workshop_for_handsome_adventurer.invalid_item_for_rack");

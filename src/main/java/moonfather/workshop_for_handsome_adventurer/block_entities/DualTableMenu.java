@@ -20,7 +20,7 @@ public class DualTableMenu extends SimpleTableMenu
 	public static final int CRAFT_SECONDARY_SLOT_START = ACCESS_SLOT_END + 1; //136
 	public static final int CRAFT_SECONDARY_SLOT_END = CRAFT_SECONDARY_SLOT_START + 9 - 1; // 144
 	public static final int SECONDARY_RESULT_SLOT = CRAFT_SECONDARY_SLOT_END + 1; // 145
-	private final CraftingContainer craftSlotsSecondary = new CraftingContainer(this, 3, 3);
+	private final CraftingContainer craftSlotsSecondary = new TransientCraftingContainer(this, 3, 3);
 	private final ResultContainer resultSlotsSecondary = new ResultContainer();
 	public final int DATA_SLOT_JEI_RECIPE_TARGET;
 

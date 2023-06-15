@@ -8,14 +8,12 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.Pack
 import moonfather.workshop_for_handsome_adventurer.block_entities.screen_components.SimpleButton;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screen_components.SlightlyNicerEditBox;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.Slot;
@@ -26,7 +24,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Function;
 
-public class InventoryAccessComponent extends GuiComponent implements Renderable, GuiEventListener, NarratableEntry
+public class InventoryAccessComponent implements Renderable, GuiEventListener, NarratableEntry
 {
     public static final int PANEL_WIDTH = 176;
     public static final int PANEL_HEIGHT_WITHOUT_TABS = 134;
@@ -176,27 +174,25 @@ public class InventoryAccessComponent extends GuiComponent implements Renderable
     /////////////////////////////////////////////////////////////////////
 
     @Override
-    public void render(PoseStack poseStack, int p_100320_, int p_100321_, float p_100322_)
+    public void render(GuiGraphics graphics, int p_100320_, int p_100321_, float p_100322_)
     {
         if (this.isVisibleTotal())
         {
-            poseStack.pushPose();
-            poseStack.translate(0.0D, 0.0D, 100.0D);
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, this.getBackground());
+            graphics.pose().pushPose();
+            graphics.pose().translate(0.0D, 0.0D, 100.0D);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             int x = this.parent.getGuiLeft();
             int y = (this.parent.height - parent.getYSize()) / 2;
-            this.blit(poseStack, x, y, 0, 0, PANEL_WIDTH, PANEL_HEIGHT_WITH_TABS);
+            graphics.blit(this.getBackground(), x, y,0, 0, PANEL_WIDTH, PANEL_HEIGHT_WITH_TABS, 256, 256);
 
-            this.renameBox.render(poseStack, p_100320_, p_100321_, p_100322_);
-            this.renameButton.render(poseStack, p_100320_, p_100321_, p_100322_);
+            this.renameBox.render(graphics, p_100320_, p_100321_, p_100322_);
+            this.renameButton.render(graphics, p_100320_, p_100321_, p_100322_);
 
             for (StateSwitchingButton tabButton : this.tabButtons)
             {
-                tabButton.render(poseStack, p_100320_, p_100321_, p_100322_);
+                tabButton.render(graphics, p_100320_, p_100321_, p_100322_);
             }
-            poseStack.popPose();
+            graphics.pose().popPose();
         }
     }
 
@@ -209,16 +205,16 @@ public class InventoryAccessComponent extends GuiComponent implements Renderable
         return BG_CHEST_LOCATION_3_ROWS;
     }
 
-    public void renderTooltip(PoseStack poseStack, int mouseX, int mouseY)
+    public void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY)
     {
         if (this.isVisibleTotal()) {
-            this.renameButton.renderTooltipsSeparately(poseStack, mouseX, mouseY);
+            this.renameButton.renderTooltipsSeparately(graphics, this.parent.getFont(), mouseX, mouseY);
             for(StateSwitchingButton tabButton : this.tabButtons)
             {
                 if (tabButton.isHoveredOrFocused())
                 {
                     if (this.parent.getMinecraft().screen != null) {
-                        this.parent.getMinecraft().screen.renderTooltip(poseStack, tabButton.getMessage(), mouseX, mouseY);
+                        graphics.renderTooltip(this.parent.getFont(), tabButton.getMessage(), mouseX+2, mouseY+12);
                     }
                     break;
                 }
@@ -435,24 +431,18 @@ public class InventoryAccessComponent extends GuiComponent implements Renderable
 
 
         @Override
-        public void renderWidget(PoseStack poseStack, int p_100458_, int p_100459_, float p_100460_)
+        public void renderWidget(GuiGraphics graphics, int p_100458_, int p_100459_, float p_100460_)
         {
-            Minecraft minecraft = Minecraft.getInstance();
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, this.resourceLocation);
-            RenderSystem.disableDepthTest();
             int texX = this.xTexStart;
             int texY = this.yTexStart;
             if (this.isStateTriggered) { texX += this.xDiffTex; }
             if (this.isHoveredOrFocused()) { texY += this.yDiffTex; } //not a thing
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            this.blit(poseStack, this.getX(), this.getY(), texX, texY, this.width, this.height);
-            RenderSystem.enableDepthTest();
-            this.renderIcon(minecraft.getItemRenderer(), poseStack);
+            graphics.blit(this.resourceLocation, this.getX(), this.getY(), texX, texY, this.width, this.height, 256, 256);
+            this.renderIcon(graphics);
         }
 
         boolean checkedForSpecialScaling = false, doSpecialScaling = false;
-        private void renderIcon(ItemRenderer itemRenderer, PoseStack poseStack)
+        private void renderIcon(GuiGraphics graphics)
         {
             if (! this.checkedForSpecialScaling) {
                 this.doSpecialScaling = ! (itemMain.getItem() instanceof BlockItem);
@@ -460,30 +450,25 @@ public class InventoryAccessComponent extends GuiComponent implements Renderable
             }
             if (! this.doSpecialScaling) {
                 // main image - block   (chests, barrels)
-                itemRenderer.renderAndDecorateFakeItem(poseStack, itemMain, this.getX() + 1, this.getY() + 2);
+                graphics.renderFakeItem(itemMain, this.getX() + 1, this.getY() + 3);
             }
             else {
                 // main image - item    (belt, backpack...)
                 int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
                 int y = (this.parent.parent.height - this.parent.parent.getYSize()) / 2;
-                poseStack.pushPose();
-                poseStack.scale(0.667F, 0.667F, 0.667F);
-                poseStack.translate(0, 0, +100.0D);
-                RenderSystem.applyModelViewMatrix();
-                itemRenderer.renderAndDecorateFakeItem(poseStack, itemMain, (int)((x + this.chestIndex * (WIDTH-1) + 7) * 1.5d), (int)((y+6)*1.5d));
-                poseStack.popPose();
-                RenderSystem.applyModelViewMatrix();
-            }
+                graphics.pose().pushPose();
+                graphics.pose().scale(2/3f, 2/3f, 2/3f);
+                graphics.pose().translate(0, 0, +100.0D);
+                graphics.renderFakeItem(itemMain, (int)((x + this.chestIndex * (WIDTH-1) + 7) * 1.5d), (int)((y+6)*1.5d));
+                graphics.pose().popPose();            }
             // sub image
             int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
             int y = (this.parent.parent.height - this.parent.parent.getYSize()) / 2;
-            poseStack.pushPose();
-            poseStack.scale(0.667F, 0.667F, 0.667F);
-            poseStack.translate(0, 0, +100.0D);
-            RenderSystem.applyModelViewMatrix();
-            itemRenderer.renderAndDecorateFakeItem(poseStack, itemSub, (int)((x + this.chestIndex * (WIDTH-1) + 13) * 1.5d), (int)((y+12)*1.5d));
-            poseStack.popPose();
-            RenderSystem.applyModelViewMatrix();
+            graphics.pose().pushPose();
+            graphics.pose().scale(2/3f, 2/3f, 2/3f);
+            graphics.pose().translate(0, 0, +100.0D);
+            graphics.renderFakeItem(itemSub, (int)((x + this.chestIndex * (WIDTH-1) + 13) * 1.5d), (int)((y+12)*1.5d));
+            graphics.pose().popPose();
         }
 
         private Function<TabButton, Boolean> handler = null;

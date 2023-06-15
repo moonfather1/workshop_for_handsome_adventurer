@@ -1,18 +1,17 @@
 package moonfather.workshop_for_handsome_adventurer.other;
 
-import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 
 public class CreativeTab
 {
-    public static void OnCreativeTabPopulation(CreativeModeTabEvent.BuildContents event)
+    public static void OnCreativeTabPopulation(BuildCreativeModeTabContentsEvent event)
     {
-        if (event.getTab() == TAB_WORKSHOP)
+        if (event.getTab() == Registration.CREATIVE_TAB.get())
         {
             event.accept(Registration.SIMPLE_TABLE_ITEM_OAK);
             event.accept(Registration.DUAL_TABLE_PLACER_ITEM_OAK);
@@ -64,13 +63,14 @@ public class CreativeTab
         }
     }
 
-    public static void OnCreativeTabRegistration(CreativeModeTabEvent.Register event) {
-        TAB_WORKSHOP = event.registerCreativeModeTab(tab, builder -> builder
+
+
+    public static CreativeModeTab buildTab()
+    {
+        return CreativeModeTab.builder()
                 .icon( ()-> new ItemStack(Registration.SIMPLE_TABLE_OAK.get()) )
                 .title(Component.translatable("itemGroup.workshop_for_handsome_adventurer"))
-        );
+                .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
+                .build();
     }
-
-    private static final ResourceLocation tab = new ResourceLocation(Constants.MODID, "tab");
-    public static CreativeModeTab TAB_WORKSHOP;
 }

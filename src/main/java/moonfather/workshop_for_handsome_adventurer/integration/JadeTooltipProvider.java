@@ -6,22 +6,19 @@ import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import snownee.jade.api.BlockAccessor;
+/*import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.IElement;
-
+*/
 import java.util.ArrayList;
 import java.util.List;
 
-public class JadeTooltipProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity>
+public class JadeTooltipProvider //implements IBlockComponentProvider, IServerDataProvider<BlockAccessor>
 {
-    private static final JadeTooltipProvider instance = new JadeTooltipProvider();
+/*    private static final JadeTooltipProvider instance = new JadeTooltipProvider();
     public static JadeTooltipProvider getInstance() { return instance; }
 
 
@@ -51,19 +48,23 @@ public class JadeTooltipProvider implements IBlockComponentProvider, IServerData
     }
 
 
+
     @Override
-    public void appendServerData(CompoundTag data, ServerPlayer player, Level world, BlockEntity t, boolean showDetails)
-    {
+    public void appendServerData(CompoundTag data, BlockAccessor blockAccessor) {
         for (int i = 0; i < 6; i++)
         {
-            int bottles = ((PotionShelfBlockEntity)t).GetRemainingItems(i);
+            int bottles = ((PotionShelfBlockEntity)blockAccessor.getBlockEntity()).GetRemainingItems(i);
             data.putInt("Bottles" + i, bottles);
         }
     }
+
+
 
     @Override
     public ResourceLocation getUid() {
         return this.pluginId;
     }
     private final ResourceLocation pluginId = new ResourceLocation(Constants.MODID, "jade_plugin");
+
+ */
 }

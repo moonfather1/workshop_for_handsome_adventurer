@@ -94,22 +94,22 @@ public class WorkstationPlacerItem extends Item
 	private boolean checkCanPlace(Level level, BlockPos position, Direction horizontalDirection)
 	{
 		BlockState current = level.getBlockState(position);
-		if (! current.isAir() && ! current.getMaterial().isReplaceable())
+		if (! current.isAir() && ! current.canBeReplaced())
 		{
 			return false;
 		}
 		current = level.getBlockState(position.above());
-		if (! current.isAir() && ! current.getMaterial().isReplaceable())
+		if (! current.isAir() && ! current.canBeReplaced())
 		{
 			return false;
 		}
 		current = level.getBlockState(position.relative(horizontalDirection.getClockWise()));
-		if (! current.isAir() && ! current.getMaterial().isReplaceable())
+		if (! current.isAir() && ! current.canBeReplaced())
 		{
 			return false;
 		}
 		current = level.getBlockState(position.above().relative(horizontalDirection.getClockWise()));
-		if (! current.isAir() && ! current.getMaterial().isReplaceable())
+		if (! current.isAir() && ! current.canBeReplaced())
 		{
 			return false;
 		}

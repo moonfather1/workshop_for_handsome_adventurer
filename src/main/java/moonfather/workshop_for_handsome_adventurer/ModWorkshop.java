@@ -54,7 +54,6 @@ public class ModWorkshop
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::Initialize));
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::RegisterRenderers));
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(CreativeTab::OnCreativeTabRegistration);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(CreativeTab::OnCreativeTabPopulation);
         MinecraftForge.EVENT_BUS.addListener(PotionShelf::onRightClickBlock);
     }

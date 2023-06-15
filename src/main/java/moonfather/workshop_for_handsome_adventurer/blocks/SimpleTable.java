@@ -46,7 +46,7 @@ public class SimpleTable extends Block implements EntityBlock
 	}
 	public SimpleTable()
 	{
-		super(Properties.of(Material.WOOD, MaterialColor.COLOR_BROWN).strength(2f, 3f).sound(SoundType.WOOD));
+		super(Properties.of().strength(2f, 3f).sound(SoundType.WOOD).ignitedByLava().mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY));
 		registerDefaultState(this.defaultBlockState().setValue(SimpleTable.HAS_INVENTORY, false));
 		this.Tooltip1 = Component.translatable("block.workshop_for_handsome_adventurer.simple_table.tooltip1").withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
 		this.Tooltip2 = Component.translatable("block.workshop_for_handsome_adventurer.simple_table.tooltip2").withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
@@ -76,12 +76,6 @@ public class SimpleTable extends Block implements EntityBlock
 	public VoxelShape getShape(BlockState p_60555_, BlockGetter p_60556_, BlockPos p_60557_, CollisionContext p_60558_)
 	{
 		return SHAPE_TABLE;
-	}
-
-	@Override
-	public PushReaction getPistonPushReaction(BlockState p_60584_)
-	{
-		return PushReaction.DESTROY;
 	}
 
 	@Override

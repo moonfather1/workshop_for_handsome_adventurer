@@ -6,6 +6,8 @@ import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -68,13 +70,14 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		this.inventoryComponent.tick();
 	}
 
-	public void render(PoseStack poseStack, int p_98480_, int p_98481_, float p_98482_) {
-		this.renderBackground(poseStack);
+	@Override
+	public void render(GuiGraphics graphics, int p_98480_, int p_98481_, float p_98482_) {
+		this.renderBackground(graphics);
 		if (this.inventoryComponent.isVisibleTotal())
 		{
-			this.inventoryComponent.render(poseStack, p_98480_, p_98481_, p_98482_);
+			this.inventoryComponent.render(graphics, p_98480_, p_98481_, p_98482_);
 		}
-		super.render(poseStack, p_98480_, p_98481_, p_98482_);
+		super.render(graphics, p_98480_, p_98481_, p_98482_);
 
 		// super.render() calls renderSlot() only for active slot. we want to draw X over inactive slots
 		if (this.inventoryComponent.isVisibleTotal()) {
@@ -82,14 +85,12 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 				if (this.menu.slots.get(k) instanceof SimpleTableMenu.VariableSizeContainerSlot slot) {
 					if (!slot.isActive() && slot.isExcessSlot() && slot.x >= 0) {
 						if (slot.getSlotIndex() < 27 || this.inventoryComponent.areSlotRowsFourToSixVisible()) {
-							RenderSystem.setShader(GameRenderer::getPositionTexShader);
-							poseStack.translate(0f, 0f, 100f);
+							graphics.pose().translate(0f, 0f, 101f);
 							if (this.excessSlotSprite == null) {
 								this.excessSlotSprite = this.minecraft.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(EXCESS_SLOT_BG);
 							}
-							RenderSystem.setShaderTexture(0, this.excessSlotSprite.atlasLocation());
-							blit(poseStack, this.leftPos + slot.x, this.topPos + slot.y, 0/*z?*/, 16, 16, this.excessSlotSprite);
-							poseStack.translate(0f, 0f, -100f);
+							graphics.blit(this.leftPos + slot.x, this.topPos + slot.y, 0/*z?*/, 16, 16, this.excessSlotSprite);
+							graphics.pose().translate(0f, 0f, -101f);
 						}
 					}
 				}
@@ -97,39 +98,16 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		}
 
 		// tooltips at the end so that they wouldn't be obstructed by X-es
-		this.renderTooltip(poseStack, p_98480_, p_98481_);
-		this.inventoryComponent.renderTooltip(poseStack, p_98480_, p_98481_);
-		this.renderCustomizationTooltips(poseStack, p_98480_, p_98481_);
+		this.renderTooltip(graphics, p_98480_, p_98481_);
+		this.inventoryComponent.renderTooltip(graphics, p_98480_, p_98481_);
+		this.renderCustomizationTooltips(graphics, p_98480_, p_98481_);
 	}
 	private TextureAtlasSprite excessSlotSprite = null;
 	private static final ResourceLocation EXCESS_SLOT_BG = new ResourceLocation(Constants.MODID, "gui/x_slot");
 
 
 
-	@Override
-	public void renderSlot(PoseStack poseStack, Slot slot)
-	{
-		if (! this.inventoryComponent.isVisibleTotal() && slot.x < 0) // see comment below
-		{
-			return;
-		}
-		super.renderSlot(poseStack, slot);
-	}
-
-
-
-	@Override
-	public boolean isHovering(Slot slot, double x, double y) {
-		if (! this.inventoryComponent.isVisibleTotal() && /*slot instanceof SimpleTableMenu.OptionallyDrawnSlot2*/ slot.x < 0)
-		{
-			return false; //leaving 0 above even though we move slots. tried  this.renderLeftPos briefly.
-		}
-		return this.isHovering(slot.x, slot.y, 16, 16, x, y);
-	}
-
-
-
-	private void renderCustomizationTooltips(PoseStack poseStack, int mouseX, int mouseY)
+	private void renderCustomizationTooltips(GuiGraphics graphics, int mouseX, int mouseY)
 	{
 		if (this.hoveredSlot == null || this.hoveredSlot.hasItem())
 		{
@@ -150,7 +128,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 												.split("\n"))
 								.forEach(text -> tooltipCustomizationsFull.add(Component.literal(text).withStyle(ChatFormatting.DARK_GRAY)));
 					}
-					this.minecraft.screen.renderTooltip(poseStack, tooltipCustomizationsFull, Optional.empty(), mouseX, mouseY);
+					graphics.renderComponentTooltip(this.font, tooltipCustomizationsFull, mouseX, mouseY);
 				}
 				else {
 					if (tooltipCustomizationsBrief == null) {
@@ -158,7 +136,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 						tooltipCustomizationsBrief.add(tooltipCustomizationsTitle);
 						tooltipCustomizationsBrief.add(tooltipCustomizationsShift);
 					}
-					this.minecraft.screen.renderTooltip(poseStack, tooltipCustomizationsBrief, Optional.empty(), mouseX, mouseY);
+					graphics.renderComponentTooltip(this.font, tooltipCustomizationsBrief, mouseX, mouseY);
 				}
 			}
 		}
@@ -172,13 +150,11 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 
 
 
-	protected void renderBg(PoseStack p_98474_, float p_98475_, int p_98476_, int p_98477_) {
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.setShaderTexture(0, this.getBackgroundImage());
+	@Override
+	protected void renderBg(GuiGraphics graphics, float p_98475_, int p_98476_, int p_98477_) {
 		int i = this.renderLeftPos;
 		int j = (this.height - this.imageHeight) / 2;
-		this.blit(p_98474_, i, j, 0, 0, this.imageWidth, this.imageHeight);
+		graphics.blit(this.getBackgroundImage(), i, j, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
 	}
 
 	protected ResourceLocation getBackgroundImage()
@@ -224,4 +200,6 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	{
 		return this.imageWidth;
 	}
+
+	public Font getFont() { return this.font; }
 }

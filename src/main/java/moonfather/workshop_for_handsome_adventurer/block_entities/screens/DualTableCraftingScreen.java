@@ -1,10 +1,10 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities.screens;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -46,10 +46,10 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 
 
 	@Override
-	protected void renderLabels(PoseStack p_97808_, int p_97809_, int p_97810_) {
-		this.font.draw(p_97808_, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 4210752);
-		this.font.draw(p_97808_, this.title, (float)this.titleLabelX, (float)this.titleLabelY + 3*18+13, 4210752);
-		this.font.draw(p_97808_, this.playerInventoryTitle, (float)this.inventoryLabelX, (float)this.inventoryLabelY + 3*18+13, 4210752);
+	protected void renderLabels(GuiGraphics graphics, int p_97809_, int p_97810_) {
+		graphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
+		graphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY + 3*18+13, 4210752, false);
+		graphics.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY + 3*18+13, 4210752, false);
 	}
 
 	//////jei////////
@@ -59,7 +59,6 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 	protected void init() {
 		super.init();
 		((DualTableMenu) this.menu).registerClientHandlerForRecipeTargetChange(this::recipeTargetButtonChangeHandler);
-		//PacketSender.sendRemoteUpdateRequestToServer();
 		this.createJeiButton();
 	}
 
@@ -123,6 +122,11 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 				return true;
 			}
 			return super.mouseClicked(x, y, p_93643_);
+		}
+
+		@Override
+		public boolean isFocused() {
+			return false;
 		}
 	}
 }

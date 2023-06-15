@@ -56,7 +56,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	public static final int TABS_SLOT_END = TABS_SLOT_START + TAB_SMUGGLING_CONTAINER_SIZE - 1;//81;
 	public static final int ACCESS_SLOT_START = TABS_SLOT_END + 1;//82;
 	public static final int ACCESS_SLOT_END = ACCESS_SLOT_START + 54 - 1;//108;
-	protected final CraftingContainer craftSlots = new CraftingContainer(this, 3, 3);
+	protected final CraftingContainer craftSlots = new TransientCraftingContainer(this, 3, 3);
 	protected final ResultContainer resultSlots = new ResultContainer();
 	protected final Player player;
 	protected final ContainerLevelAccess access;
@@ -116,7 +116,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		this.addSlot(new CustomizationSlot(this.customizationSlots, 2, 152, 17 + 2*22 + ((2 < custSlotCount) ? 0 : 9009)));
 		this.addSlot(new CustomizationSlot(this.customizationSlots, 3, 152, 17 + 3*22 + ((3 < custSlotCount) ? 0 : 9009)));
 		this.access.execute(this::loadFromWorld);
-		if (! this.player.level.isClientSide) {
+		if (! this.player.level().isClientSide) {
 			this.customizationSlots.addListener(new CustomizationListenerServer(this));
 		}
 		else {

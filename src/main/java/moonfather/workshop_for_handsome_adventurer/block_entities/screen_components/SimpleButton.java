@@ -1,9 +1,8 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities.screen_components;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.locale.Language;
@@ -40,9 +39,7 @@ public class SimpleButton extends Button {
 
 
     @Override
-    public void renderWidget(PoseStack poseStack, int mouseX, int mouseY, float p_94285_) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, this.resourceLocation);
+    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float p_94285_) {
         int yOffset = this.yTexStart;
         if (this.isActive() && this.isHoveredOrFocused()) {
             yOffset += this.yDiffTex;
@@ -50,11 +47,11 @@ public class SimpleButton extends Button {
         else if (! this.isActive()) {
             yOffset += 2 * this.yDiffTex;
         }
-        RenderSystem.enableDepthTest();
-        blit(poseStack, this.getX(), this.getY(), (float)this.xTexStart, (float)yOffset, this.width, this.height, this.textureWidth, this.textureHeight);
+        graphics.blit(this.resourceLocation, this.getX(), this.getY(), (float)this.xTexStart, (float)yOffset, this.width, this.height, this.textureWidth, this.textureHeight);
+
     }
 
-    public void renderTooltipsSeparately(PoseStack poseStack, int mouseX, int mouseY) {
+    public void renderTooltipsSeparately(GuiGraphics graphics, Font font, int mouseX, int mouseY) {
         if (this.isHovered) {
             if (this.tooltipLines == null) {
                 this.tooltipLines = new ArrayList<>(2);
@@ -73,7 +70,7 @@ public class SimpleButton extends Button {
                             }
                         });
             }
-            Minecraft.getInstance().screen.renderTooltip(poseStack, this.tooltipLines, Optional.empty(), mouseX, mouseY-8);
+            graphics.renderComponentTooltip(font, this.tooltipLines, mouseX, mouseY-8);
         }
     }
 
