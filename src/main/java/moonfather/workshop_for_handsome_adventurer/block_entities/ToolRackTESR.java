@@ -1,6 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import moonfather.workshop_for_handsome_adventurer.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -8,8 +9,10 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -24,6 +27,8 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 {
 	private ItemRenderer itemRenderer = null;
 	private final BlockEntityRendererProvider.Context context;
+	private final TagKey<Item> itemsThatWeShouldntRotate = TagKey.create(Registries.ITEM, new ResourceLocation(Constants.MODID, "dont_rotate_on_toolrack"));
+
 
 	public ToolRackTESR(BlockEntityRendererProvider.Context context)
 	{
@@ -132,6 +137,10 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			{
 				matrixStack.translate(0, 0.1, 0);
 			}
+			else if (itemStack.is(itemsThatWeShouldntRotate))
+			{
+				matrixStack.translate(0, 0.1, 0);
+			}
 			else
 			{
 				matrixStack.mulPose(new Quaternionf().fromAxisAngleDeg(0, 0, 1, -45));  // 1.19.4    Vector3f.ZP.rotationDegrees(-45.0F)
@@ -154,11 +163,6 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 		{
 			result.getTag().remove("Enchantments");
 		}
-		//if (result.getTag().contains("Potion"))
-		//{
-		//	result.getTag().putInt("CustomPotionColor", PotionUtils.getColor(PotionUtils.getPotion(result.getTag())));
-		//	result.getTag().remove("Potion");
-		//}
 		return result;
 	}
 }

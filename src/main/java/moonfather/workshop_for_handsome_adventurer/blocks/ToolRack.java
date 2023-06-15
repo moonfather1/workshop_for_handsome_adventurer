@@ -6,9 +6,12 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockE
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.*;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -316,31 +319,27 @@ public class ToolRack extends Block implements EntityBlock
 		return aboveThisRow + (left ? 0 : 1);
 	}
 
-	protected boolean canDepositItem(ItemStack mainHandItem)
-	{
-		if (mainHandItem == null || mainHandItem.isEmpty())
-		{
+	protected boolean canDepositItem(ItemStack mainHandItem) {
+		if (mainHandItem == null || mainHandItem.isEmpty()) {
 			return true;
 		}
-		if (mainHandItem.getMaxStackSize() > 1 && ! mainHandItem.getItem().equals(Items.LEAD))
-		{
+		if (mainHandItem.getMaxStackSize() > 1 && !mainHandItem.getItem().equals(Items.LEAD)) {
 			return false;
 		}
-		if (mainHandItem.getItem() instanceof BlockItem || mainHandItem.getItem() instanceof ArmorItem || mainHandItem.getItem() instanceof HorseArmorItem)
-		{
+		if (mainHandItem.getItem() instanceof BlockItem || mainHandItem.getItem() instanceof ArmorItem || mainHandItem.getItem() instanceof HorseArmorItem) {
 			return false;
 		}
-		if (mainHandItem.getItem().getFoodProperties() != null || mainHandItem.getItem() instanceof BucketItem || mainHandItem.getItem() instanceof MinecartItem || mainHandItem.getItem() instanceof BoatItem)
-		{
+		if (mainHandItem.getItem().getFoodProperties() != null || mainHandItem.getItem() instanceof BucketItem || mainHandItem.getItem() instanceof MinecartItem || mainHandItem.getItem() instanceof BoatItem) {
 			return false;
 		}
-		if (mainHandItem.getTag() != null && mainHandItem.getTag().contains("Potion"))
+		if (mainHandItem.getTag() != null && mainHandItem.getTag().contains("Potion")) {
+			return false;
+		}
+		if (mainHandItem.is(blacklisted))
 		{
-			return false;  //will have potion shelf
+			return false;
 		}
 		return true;
 	}
-
-
-
+	private final TagKey<Item> blacklisted = TagKey.create(Registries.ITEM, new ResourceLocation(Constants.MODID, "dont_allow_onto_toolrack"));
 }
