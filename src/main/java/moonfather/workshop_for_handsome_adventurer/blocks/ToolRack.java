@@ -6,9 +6,12 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockE
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.*;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -343,11 +346,13 @@ public class ToolRack extends Block implements EntityBlock
 		}
 		if (mainHandItem.getTag() != null && mainHandItem.getTag().contains("Potion"))
 		{
-			return false;  //will have potion shelf
+			return false;
+		}
+		if (mainHandItem.is(blacklisted))
+		{
+			return false;
 		}
 		return true;
 	}
-
-
-
+	private final TagKey<Item> blacklisted = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(Constants.MODID, "dont_allow_onto_toolrack"));
 }
