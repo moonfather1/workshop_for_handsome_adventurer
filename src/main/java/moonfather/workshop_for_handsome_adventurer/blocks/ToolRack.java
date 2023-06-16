@@ -270,7 +270,6 @@ public class ToolRack extends Block implements EntityBlock
 		else if (! existing.isEmpty() && itemInMainHand.isEmpty() && itemInOffHand.isEmpty() && existing.canPerformAction(ToolActions.SHIELD_BLOCK))
 		{
 			//System.out.println("~~~~~TAKEN SHIELD");
-			//player.addItem(existing);
 			player.setItemInHand(InteractionHand.OFF_HAND, existing);
 			BE.ClearItem(slot);
 			player.playSound(SoundEvents.ITEM_PICKUP, 0.5f, 1);
@@ -278,7 +277,6 @@ public class ToolRack extends Block implements EntityBlock
 		else if (! existing.isEmpty() && itemInMainHand.isEmpty())
 		{
 			//System.out.println("~~~~~TAKEN WITH MAIN");
-			//player.addItem(existing);
 			player.setItemInHand(InteractionHand.MAIN_HAND, existing);
 			BE.ClearItem(slot);
 			player.playSound(SoundEvents.ITEM_PICKUP, 0.5f, 1);
@@ -286,8 +284,15 @@ public class ToolRack extends Block implements EntityBlock
 		else if (! existing.isEmpty() && ! itemInMainHand.isEmpty() && doOffhand && itemInOffHand.isEmpty())
 		{
 			//System.out.println("~~~~~TAKEN WITH OFFHAND");
-			//player.addItem(existing);
-			player.setItemInHand(InteractionHand.OFF_HAND, existing);
+			if (! itemInMainHand.canPerformAction(ToolActions.SHIELD_BLOCK))
+			{
+				player.setItemInHand(InteractionHand.OFF_HAND, existing); // normal
+			}
+			else
+			{
+				player.setItemInHand(InteractionHand.OFF_HAND, itemInMainHand); // exception: move shield to offhand
+				player.setItemInHand(InteractionHand.MAIN_HAND, existing);
+			}
 			BE.ClearItem(slot);
 			player.playSound(SoundEvents.ITEM_PICKUP, 0.5f, 1);
 		}
