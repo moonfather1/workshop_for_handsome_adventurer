@@ -1,13 +1,13 @@
 modLoader="javafml"
 loaderVersion="[43,)"
-license="All rights reserved"
+license="MIT"
 
 [[mods]]
 modId="workshop_for_handsome_adventurer"
 version="${file.jarVersion}"
 displayName="Workshop for handsome adventurer"
-#updateJSONURL="https://change.me.example.invalid/updates.json"
-#displayURL="https://change.me.to.your.mods.homepage.example.invalid/"
+updateJSONURL="https://raw.githubusercontent.com/moonfather1/workshop_for_handsome_adventurer/main/versions.json"
+displayURL="https://modrinth.com/mod/workshop-for-handsome-adventurer"
 #logoFile="logo.png"
 credits="Big thanks to great guys at forge discord!"
 authors="MoonFather"
