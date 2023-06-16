@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "minecraft:elytra"
+    "minecraft:elytra",
+    "#music_discs",
+    "minecraft:saddle"
   ]
 }
