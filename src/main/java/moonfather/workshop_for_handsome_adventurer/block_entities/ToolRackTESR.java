@@ -2,6 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+import moonfather.workshop_for_handsome_adventurer.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -10,10 +11,10 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.CrossbowItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SwordItem;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraftforge.api.distmarker.Dist;
@@ -28,6 +29,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 {
 	private ItemRenderer itemRenderer = null;
 	private final BlockEntityRendererProvider.Context context;
+	private final TagKey<Item> itemsThatWeShouldntRotate = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(Constants.MODID, "dont_rotate_on_toolrack"));
 
 	public ToolRackTESR(BlockEntityRendererProvider.Context context)
 	{
@@ -131,6 +133,10 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 				matrixStack.mulPose(Vector3f.ZP.rotationDegrees(-45.0F));
 			}
 			else if ((itemStack.getTag() != null && itemStack.getTag().contains("CustomPotionColor")) || itemStack.is(Items.GLASS_BOTTLE))
+			{
+				matrixStack.translate(0, 0.1, 0);
+			}
+			else if (itemStack.is(itemsThatWeShouldntRotate))
 			{
 				matrixStack.translate(0, 0.1, 0);
 			}
