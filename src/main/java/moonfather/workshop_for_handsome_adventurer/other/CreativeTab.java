@@ -11,7 +11,7 @@ public class CreativeTab
     {
         public ItemStack makeIcon()
         {
-            return new ItemStack(Registration.SIMPLE_TABLE_OAK.get());
+            return new ItemStack(Registration.items_table1.get(0).get());
         }
     };
 
