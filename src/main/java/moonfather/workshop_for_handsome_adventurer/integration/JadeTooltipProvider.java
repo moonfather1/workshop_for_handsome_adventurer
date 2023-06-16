@@ -31,14 +31,19 @@ public class JadeTooltipProvider implements IComponentProvider, IServerDataProvi
             int slot = PotionShelf.getTargetedSlot(accessor.getHitResult());
             if (! shelf.GetItem(slot).isEmpty())
             {
+                int count;
                 if (accessor.getServerData().contains("Bottles" + slot))
                 {
-                    int count = accessor.getServerData().getInt("Bottles" + slot);
-                    List<IElement> list = new ArrayList<>(2);
-                    list.add(tooltip.getElementHelper().text(new TextComponent(" " + shelf.GetRemainingItems(slot) + "x  ")));
-                    list.add(tooltip.getElementHelper().text(shelf.GetItem(slot).getDisplayName()));
-                    tooltip.add(list);
+                    count = accessor.getServerData().getInt("Bottles" + slot);
                 }
+                else
+                {
+                    count = shelf.GetRemainingItems(slot);
+                }
+                List<IElement> list = new ArrayList<>(2);
+                list.add(tooltip.getElementHelper().text(new TextComponent(" " + count + "x  ")));
+                list.add(tooltip.getElementHelper().text(shelf.GetItem(slot).getHoverName()));
+                tooltip.add(list);
             }
         }
     }
