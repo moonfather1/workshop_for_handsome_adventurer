@@ -253,6 +253,6 @@ public class PotionShelf extends ToolRack
         }
         String wood = this.getRegistryName().getPath();
         wood = wood.substring(wood.indexOf("_", 8) + 1);
-        return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MODID, "potion_shelf_" + wood)));
+        return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(Registration.getHostMod(wood), "potion_shelf_" + wood)));
     }
 }
