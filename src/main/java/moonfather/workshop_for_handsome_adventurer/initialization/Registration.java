@@ -18,13 +18,16 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.HashMap;
+
 public class Registration
 {
+	private static final HashMap<String, String> woodToHostMap = new HashMap<>();
 	private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MODID);
 	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MODID);
 	private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Constants.MODID);
-	public static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Constants.MODID);
-	public static final DeferredRegister<RecipeSerializer<?>> RECIPES = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Constants.MODID);
+	private static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Constants.MODID);
+	private static final DeferredRegister<RecipeSerializer<?>> RECIPES = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Constants.MODID);
 
 	public static void init()
 	{
@@ -33,6 +36,12 @@ public class Registration
 		BLOCK_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
 		CONTAINER_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 		RECIPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+		registerHostMod("oak", Constants.MODID);
+		registerHostMod("spruce", Constants.MODID);
+		registerHostMod("birch", Constants.MODID);
+		registerHostMod("jungle", Constants.MODID);
+		registerHostMod("dark_oak", Constants.MODID);
+		registerHostMod("mangrove", Constants.MODID);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -174,4 +183,8 @@ public class Registration
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public static final RegistryObject<RecipeSerializer<UnsupportedWoodRecipe>> TABLE_RECIPE = RECIPES.register("table_recipe_unknown_planks", ()-> new SimpleCraftingRecipeSerializer<UnsupportedWoodRecipe>(UnsupportedWoodRecipe::new));
+
+	////////////////////////////////////////////////////////////////
+	public static String getHostMod(String wood) { return woodToHostMap.get(wood); }
+	public static void registerHostMod(String wood, String hostMod) { woodToHostMap.put(wood, hostMod); }
 }

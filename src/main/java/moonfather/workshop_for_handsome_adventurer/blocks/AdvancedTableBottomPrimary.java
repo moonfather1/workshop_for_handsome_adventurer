@@ -115,7 +115,7 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements En
 	{
 		String wood = ForgeRegistries.BLOCKS.getKey(this).getPath();
 		wood = wood.substring(wood.indexOf("_", 20) + 1);
-		return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(Constants.MODID, "workstation_placer_" + wood)));
+		return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(Registration.getHostMod(wood), "workstation_placer_" + wood)));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
