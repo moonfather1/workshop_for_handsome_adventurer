@@ -228,6 +228,12 @@ public class ToolRack extends Block implements EntityBlock
 		{
 			return InteractionResult.PASS;
 		}
+		if (level.isClientSide)
+		{
+			return InteractionResult.SUCCESS;
+			// we were doing just fine without this statement, updating both sides in parallel, but then CarryOn caused desyncs.
+			// implementing getUpdatePacket() to return ClientboundBlockEntityDataPacket.create instead of nothing fixed "empty block entity" issue but desyncs remained when clicking quickly. so we're trying server-only plus forced update.
+		}
 
 		int slot = this.getTargetedSlot(blockHitResult);
 		if (slot >= this.itemCount)
@@ -303,6 +309,7 @@ public class ToolRack extends Block implements EntityBlock
 		{
 			//System.out.println("~~~~~BOTH FULL");
 		}
+		level.sendBlockUpdated(pos, blockState, blockState, 2);
 		return InteractionResult.sidedSuccess(level.isClientSide);
 		//return super.use(blockState, level, pos, player, hand, blockHitResult);
 	}

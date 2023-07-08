@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -114,6 +115,12 @@ public class PotionShelf extends ToolRack
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
 
+        if (level.isClientSide)
+        {
+            return InteractionResult.SUCCESS;
+            // we were doing just fine without this statement, updating both sides in parallel, but then CarryOn caused desyncs.
+            // implementing getUpdatePacket() to return ClientboundBlockEntityDataPacket.create instead of nothing fixed "empty block entity" issue but desyncs remained when clicking quickly. so we're trying server-only plus forced update.
+        }
         int slot = this.getTargetedSlot(blockHitResult);
         if (slot >= this.itemCount)
         {
@@ -178,6 +185,7 @@ public class PotionShelf extends ToolRack
                 player.displayClientMessage(WrongPotionMessage, true);
             }
         }
+        level.sendBlockUpdated(pos, blockState, blockState, 2);
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
