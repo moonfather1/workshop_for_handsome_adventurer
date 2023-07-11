@@ -63,7 +63,7 @@ public class WthitPlugin implements IWailaPlugin {
         public void appendTail(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
             if (accessor.getBlockEntity() instanceof PotionShelfBlockEntity shelf)
             {
-                int slot = PotionShelf.getTargetedSlot(accessor.getHitResult(), accessor.getPosition(), accessor.getSide());
+                int slot = PotionShelf.getPotionShelfSlot(accessor.getHitResult(), accessor.getPosition(), accessor.getSide());
                 if (! shelf.GetItem(slot).isEmpty())
                 {
                     int count, room;

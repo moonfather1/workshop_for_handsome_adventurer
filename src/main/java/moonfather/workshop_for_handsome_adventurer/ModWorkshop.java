@@ -40,9 +40,13 @@ public class ModWorkshop
     //maybe after 1.1: storage drawer support. maybe. not sure how. in any case, only the closest blocks.
     //maybe after 1.1: sword rack? likely not. (decorative, single sword, horizontal, no gui)
     //maybe after 1.2: tetra tables in wood variants
-    //will not: weapon rack (vertical weapons),  sword and shield on wall... j
+    //will not: weapon rack (vertical weapons),  sword and shield on wall...
 
-
+    // todo: bug - packing tape does not work with potion shelf +          rotation is broken
+    // todo: consider - i can use furnaces from crafting tables. maybe forbid that? what condition
+    // todo: bug - carry on messes up the potion shelf   +
+    // todo: pt blacklist    +, consider addon support
+    // todo: unbolt 6 from potion shelf
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 

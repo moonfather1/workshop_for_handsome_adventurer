@@ -28,7 +28,7 @@ public class TOPInfoProvider implements IProbeInfoProvider
     {
         if (blockState.getBlock() instanceof PotionShelf)
         {
-            int slot = PotionShelf.getTargetedSlot(new BlockHitResult(probeHitData.getHitVec(), blockState.getValue(PotionShelf.FACING).getOpposite(), probeHitData.getPos(), true));
+            int slot = PotionShelf.getPotionShelfSlot(new BlockHitResult(probeHitData.getHitVec(), blockState.getValue(PotionShelf.FACING).getOpposite(), probeHitData.getPos(), true));
             PotionShelfBlockEntity shelf = (PotionShelfBlockEntity) level.getBlockEntity(probeHitData.getPos());
             int count = shelf.GetRemainingItems(slot);
             int total =  shelf.GetRemainingRoom(slot) + count;

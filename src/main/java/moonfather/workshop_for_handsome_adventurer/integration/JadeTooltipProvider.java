@@ -27,7 +27,7 @@ public class JadeTooltipProvider implements IBlockComponentProvider, IServerData
     {
         if (accessor.getBlockEntity() instanceof PotionShelfBlockEntity shelf)
         {
-            int slot = PotionShelf.getTargetedSlot(accessor.getHitResult());
+            int slot = PotionShelf.getPotionShelfSlot(accessor.getHitResult());
             if (! shelf.GetItem(slot).isEmpty())
             {
                 int count;

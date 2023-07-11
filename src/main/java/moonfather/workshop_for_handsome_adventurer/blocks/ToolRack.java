@@ -2,6 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.blocks;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
+import moonfather.workshop_for_handsome_adventurer.block_entities.BaseContainerBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.integration.PackingTape;
@@ -35,7 +36,6 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolActions;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,19 +45,27 @@ public class ToolRack extends Block implements EntityBlock
 {
 	public ToolRack(int itemCount, String type)
 	{
-		super(Properties.of().strength(2f, 3f).sound(SoundType.WOOD).ignitedByLava().mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY));
+		this(itemCount, "tool_rack", type);
+	}
+	public ToolRack(int itemCount, String mainType, String subType)
+	{
+		this(itemCount, mainType, subType, Properties.of().strength(2f, 3f).sound(SoundType.WOOD).ignitedByLava().mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY));
+	}
+	public ToolRack(int itemCount, String mainType, String subType, Properties properties)
+	{
+		super(properties);
 		this.itemCount = itemCount;
 
 		registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
 		this.PrepareListOfShapes();
 
-		String translationKeyStructure = "block.%s.tool_rack_%s.tooltip%d";
-		String translationKey = String.format(translationKeyStructure, Constants.MODID, type, 1);
+		String translationKeyStructure = "block.%s.%s_%s.tooltip%d";
+		if (subType == null) { translationKeyStructure = "block.%s.%s.tooltip%d"; }
+		String translationKey = String.format(translationKeyStructure, Constants.MODID, mainType, subType, 1);
 		this.Tooltip1 = Component.translatable(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
-		translationKey = String.format(translationKeyStructure, Constants.MODID, type, 2);
+		translationKey = String.format(translationKeyStructure, Constants.MODID, mainType, subType, 2);
 		this.Tooltip2 = Component.translatable(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
 	}
-
 
 
 	protected final int itemCount;
@@ -76,26 +84,26 @@ public class ToolRack extends Block implements EntityBlock
 	@Override
 	public VoxelShape getOcclusionShape(BlockState state, BlockGetter p_60579_, BlockPos p_60580_)
 	{
-		return this.Shapes.get(state.getValue(FACING));
+		return this.shapes.get(state.getValue(FACING));
 	}
 
 
 	@Override
 	public VoxelShape getBlockSupportShape(BlockState state, BlockGetter p_60582_, BlockPos p_60583_)
 	{
-		return this.Shapes.get(state.getValue(FACING));
+		return this.shapes.get(state.getValue(FACING));
 	}
 
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter p_60556_, BlockPos p_60557_, CollisionContext p_60558_)
 	{
-		return this.Shapes.get(state.getValue(FACING));
+		return this.shapes.get(state.getValue(FACING));
 	}
 
 	@Override
 	public VoxelShape getInteractionShape(BlockState state, BlockGetter p_60548_, BlockPos p_60549_)
 	{
-		return this.Shapes.get(state.getValue(FACING));
+		return this.shapes.get(state.getValue(FACING));
 	}
 
 	@Override
@@ -146,13 +154,13 @@ public class ToolRack extends Block implements EntityBlock
 
 
 
-	private final Map<Direction, VoxelShape> Shapes = new HashMap<Direction, VoxelShape>(4);
-	private void PrepareListOfShapes()
+	protected final Map<Direction, VoxelShape> shapes = new HashMap<Direction, VoxelShape>(4);
+	protected void PrepareListOfShapes()
 	{
-		this.Shapes.put(Direction.NORTH, SHAPE_PLANK1N);
-		this.Shapes.put(Direction.EAST, SHAPE_PLANK1E);
-		this.Shapes.put(Direction.SOUTH, SHAPE_PLANK1S);
-		this.Shapes.put(Direction.WEST, SHAPE_PLANK1W);
+		this.shapes.put(Direction.NORTH, SHAPE_PLANK1N);
+		this.shapes.put(Direction.EAST, SHAPE_PLANK1E);
+		this.shapes.put(Direction.SOUTH, SHAPE_PLANK1S);
+		this.shapes.put(Direction.WEST, SHAPE_PLANK1W);
 	}
 
 
@@ -196,7 +204,7 @@ public class ToolRack extends Block implements EntityBlock
 		if (state.getBlock() != newState.getBlock())
 		{
 			BlockEntity be = worldIn.getBlockEntity(pos);
-			if (be instanceof ToolRackBlockEntity rack)
+			if (be instanceof BaseContainerBlockEntity rack)
 			{
 				rack.DropAll();
 			}
@@ -309,7 +317,7 @@ public class ToolRack extends Block implements EntityBlock
 		//return super.use(blockState, level, pos, player, hand, blockHitResult);
 	}
 
-	private int getTargetedSlot(BlockHitResult blockHitResult)
+	protected int getTargetedSlot(BlockHitResult blockHitResult)
 	{
 		int aboveThisRow = 0;
 		double frac = blockHitResult.getLocation().y - blockHitResult.getBlockPos().getY();
@@ -343,7 +351,7 @@ public class ToolRack extends Block implements EntityBlock
 		if (mainHandItem.getTag() != null && mainHandItem.getTag().contains("Potion")) {
 			return false;
 		}
-		if (mainHandItem.is(blacklisted))
+		if (mainHandItem.is(blacklisted) || mainHandItem.is(ItemTags.BOOKSHELF_BOOKS))
 		{
 			return false;
 		}

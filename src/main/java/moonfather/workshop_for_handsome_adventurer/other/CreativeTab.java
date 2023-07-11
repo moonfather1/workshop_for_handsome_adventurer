@@ -21,7 +21,12 @@ public class CreativeTab
                 event.accept(Registration.items_rack2.get(i));
                 event.accept(Registration.items_rack3.get(i));
                 event.accept(Registration.items_rack4.get(i));
-                event.accept(Registration.items_shelf.get(i));
+                event.accept(Registration.items_pshelf.get(i));
+                event.accept(Registration.items_bshelf1.get(i));
+                event.accept(Registration.items_bshelf2.get(i));
+                event.accept(Registration.items_bshelf3.get(i));
+                event.accept(Registration.items_bshelf4.get(i));
+                event.accept(Registration.items_bshelf5.get(i));
                 i++;
             }
         }

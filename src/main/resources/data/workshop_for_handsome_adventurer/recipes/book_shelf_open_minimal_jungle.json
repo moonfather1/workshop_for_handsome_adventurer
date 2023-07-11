@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "",
+  "pattern": [
+    "b"
+  ],
+  "key": {
+    "b": {
+      "item": "workshop_for_handsome_adventurer:book_shelf_minimal_jungle"
+    }
+  },
+  "result": {
+    "item": "workshop_for_handsome_adventurer:book_shelf_open_minimal_jungle",
+    "count": 2
+  },
+  "conditions":  []
+}

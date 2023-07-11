@@ -1,0 +1,7 @@
+{
+	"parent": "workshop_for_handsome_adventurer:block/book_shelf_minimal_oak",
+	"textures": {
+		"plank": "minecraft:block/cherry_planks",
+		"particle": "minecraft:block/cherry_planks"
+	}
+}

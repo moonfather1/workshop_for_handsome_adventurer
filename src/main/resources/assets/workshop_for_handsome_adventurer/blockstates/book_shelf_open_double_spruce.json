@@ -1,0 +1,680 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_open_double_spruce",
+        "y": 90
+      },
+      "when": {
+        "facing": "east"
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_2_book_a",
+        "y": 90
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_2_book_b",
+        "y": 90
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "east"
+          },
+          {
+            "slot_2_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_4_book_a",
+        "y": 90
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_4_book_b",
+        "y": 90
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "east"
+          },
+          {
+            "slot_4_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_0_book_a",
+        "y": 90
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_0_book_b",
+        "y": 90
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "east"
+          },
+          {
+            "slot_0_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_5_book_a",
+        "y": 90
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_5_book_b",
+        "y": 90
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "east"
+          },
+          {
+            "slot_5_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_3_book_a",
+        "y": 90
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_3_book_b",
+        "y": 90
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "east"
+          },
+          {
+            "slot_3_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_1_book_a",
+        "y": 90
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_1_book_b",
+        "y": 90
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "east"
+          },
+          {
+            "slot_1_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_open_double_spruce",
+        "y": 270
+      },
+      "when": {
+        "facing": "west"
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_2_book_a",
+        "y": 270
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_2_book_b",
+        "y": 270
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "west"
+          },
+          {
+            "slot_2_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_4_book_a",
+        "y": 270
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_4_book_b",
+        "y": 270
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "west"
+          },
+          {
+            "slot_4_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_0_book_a",
+        "y": 270
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_0_book_b",
+        "y": 270
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "west"
+          },
+          {
+            "slot_0_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_5_book_a",
+        "y": 270
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_5_book_b",
+        "y": 270
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "west"
+          },
+          {
+            "slot_5_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_3_book_a",
+        "y": 270
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_3_book_b",
+        "y": 270
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "west"
+          },
+          {
+            "slot_3_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_1_book_a",
+        "y": 270
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_1_book_b",
+        "y": 270
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "west"
+          },
+          {
+            "slot_1_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_open_double_spruce",
+        "y": 180
+      },
+      "when": {
+        "facing": "south"
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_2_book_a",
+        "y": 180
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_2_book_b",
+        "y": 180
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "south"
+          },
+          {
+            "slot_2_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_4_book_a",
+        "y": 180
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_4_book_b",
+        "y": 180
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "south"
+          },
+          {
+            "slot_4_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_0_book_a",
+        "y": 180
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_0_book_b",
+        "y": 180
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "south"
+          },
+          {
+            "slot_0_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_5_book_a",
+        "y": 180
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_5_book_b",
+        "y": 180
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "south"
+          },
+          {
+            "slot_5_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_3_book_a",
+        "y": 180
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_3_book_b",
+        "y": 180
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "south"
+          },
+          {
+            "slot_3_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_1_book_a",
+        "y": 180
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_1_book_b",
+        "y": 180
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "south"
+          },
+          {
+            "slot_1_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_open_double_spruce",
+        "y": 0
+      },
+      "when": {
+        "facing": "north"
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_2_book_a",
+        "y": 0
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_2_book_b",
+        "y": 0
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "north"
+          },
+          {
+            "slot_2_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_4_book_a",
+        "y": 0
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_4_book_b",
+        "y": 0
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "north"
+          },
+          {
+            "slot_4_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_0_book_a",
+        "y": 0
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_0_book_b",
+        "y": 0
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "north"
+          },
+          {
+            "slot_0_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_5_book_a",
+        "y": 0
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_5_book_b",
+        "y": 0
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "north"
+          },
+          {
+            "slot_5_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_3_book_a",
+        "y": 0
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_3_book_b",
+        "y": 0
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "north"
+          },
+          {
+            "slot_3_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_1_book_a",
+        "y": 0
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_1_book_b",
+        "y": 0
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "north"
+          },
+          {
+            "slot_1_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_6_book_a",
+        "y": 0
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_6_book_b",
+        "y": 0
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "north"
+          },
+          {
+            "slot_6_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_7_book_a",
+        "y": 0
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_7_book_b",
+        "y": 0
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "north"
+          },
+          {
+            "slot_7_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_6_book_a",
+        "y": 180
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_6_book_b",
+        "y": 180
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "south"
+          },
+          {
+            "slot_6_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_7_book_a",
+        "y": 180
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_7_book_b",
+        "y": 180
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "south"
+          },
+          {
+            "slot_7_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_6_book_a",
+        "y": 270
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_6_book_b",
+        "y": 270
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "west"
+          },
+          {
+            "slot_6_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_7_book_a",
+        "y": 270
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_7_book_b",
+        "y": 270
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "west"
+          },
+          {
+            "slot_7_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_6_book_a",
+        "y": 90
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_6_book_b",
+        "y": 90
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "east"
+          },
+          {
+            "slot_6_occupied": "true"
+          }
+        ]
+      }
+    },
+    {
+      "apply": [{
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_7_book_a",
+        "y": 90
+      },
+      {
+        "model": "workshop_for_handsome_adventurer:block/book_shelf_slot_7_book_b",
+        "y": 90
+      }],
+      "when": {
+        "AND": [
+          {
+            "facing": "east"
+          },
+          {
+            "slot_7_occupied": "true"
+          }
+        ]
+      }
+    }
+  ]
+}
