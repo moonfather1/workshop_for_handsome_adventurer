@@ -4,6 +4,7 @@ import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.integration.PackingTape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
@@ -338,7 +339,7 @@ public class ToolRack extends Block implements EntityBlock
 		{
 			return true;
 		}
-		if (mainHandItem.getMaxStackSize() > 1 && ! mainHandItem.getItem().equals(Items.LEAD))
+		if (mainHandItem.getMaxStackSize() > 1 && ! (mainHandItem.getItem().equals(Items.LEAD) || PackingTape.isTape(mainHandItem)))
 		{
 			return false;
 		}
