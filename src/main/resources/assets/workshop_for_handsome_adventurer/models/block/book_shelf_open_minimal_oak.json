@@ -1,0 +1,93 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"plank": "minecraft:block/oak_planks",
+		"particle": "minecraft:block/oak_planks"
+	},
+	"elements": [
+		{
+			"name": "vert4",
+			"from": [15, 7.5, 0],
+			"to": [16, 10.5, 7],
+			"faces": {
+				"north": {"uv": [2, 1, 3, 4], "texture": "#plank"},
+				"east": {"uv": [9, 1, 16, 4], "texture": "#plank"},
+				"south": {"uv": [8, 1, 9, 4], "texture": "#plank"},
+				"west": {"uv": [0, 1, 7, 4], "texture": "#plank"},
+				"up": {"uv": [5, 2, 12, 3], "rotation": 90, "texture": "#plank"},
+				"down": {"uv": [8, 14, 15, 15], "rotation": 90, "texture": "#plank"}
+			}
+		},
+		{
+			"name": "vert3",
+			"from": [0, 7.5, 0],
+			"to": [1, 10.5, 7],
+			"faces": {
+				"north": {"uv": [2, 1, 3, 4], "texture": "#plank"},
+				"east": {"uv": [9, 1, 16, 4], "texture": "#plank"},
+				"south": {"uv": [8, 1, 9, 4], "texture": "#plank"},
+				"west": {"uv": [0, 1, 7, 4], "texture": "#plank"},
+				"up": {"uv": [5, 2, 12, 3], "rotation": 90, "texture": "#plank"},
+				"down": {"uv": [8, 14, 15, 15], "rotation": 90, "texture": "#plank"}
+			}
+		},
+		{
+			"name": "hor2",
+			"from": [1, 7.5, 1],
+			"to": [15, 8.5, 7],
+			"faces": {
+				"south": {"uv": [1, 2, 15, 3], "texture": "#plank"},
+				"up": {"uv": [0, 0, 14, 7], "texture": "#plank"},
+				"down": {"uv": [0, 8, 14, 15], "texture": "#plank"}
+			}
+		},
+		{
+			"name": "back1",
+			"from": [1, 7.5, 0],
+			"to": [15, 10.5, 1],
+			"faces": {
+				"north": {"uv": [1, 9, 15, 12], "texture": "#plank"},
+				"south": {"uv": [2, 1, 16, 4], "texture": "#plank"},
+				"up": {"uv": [0, 7, 14, 8], "texture": "#plank"},
+				"down": {"uv": [0, 15, 14, 16], "texture": "#plank"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [-180, -11, 91],
+			"translation": [-0.25, 1.25, -3.25],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [-42, 82, 144],
+			"translation": [5.25, -0.5, 0.25],
+			"scale": [0.55, 0.55, 0.55]
+		},
+		"firstperson_righthand": {
+			"rotation": [-9, -129, 90],
+			"translation": [-1.75, -0.5, 1.5],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, -111, 0],
+			"translation": [-2.75, -4.75, 0]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"gui": {
+			"rotation": [30, 45, 0],
+			"translation": [3, -4, 0],
+			"scale": [0.91, 0.66, 0.95]
+		},
+		"head": {
+			"rotation": [90, 0, 0]
+		},
+		"fixed": {
+			"rotation": [0, -180, 0],
+			"translation": [0, 0, -5]
+		}
+	}
+}

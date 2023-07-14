@@ -45,14 +45,20 @@ public class Registration
 	public static final List<RegistryObject<Block>> blocks_table1 = new ArrayList<>();
 	public static final List<RegistryObject<Block>> blocks_table2 = new ArrayList<>();
 	public static final List<RegistryObject<Block>> blocks_rack = new ArrayList<>();
-	public static final List<RegistryObject<Block>> blocks_shelf = new ArrayList<>();
+	public static final List<RegistryObject<Block>> blocks_pshelf = new ArrayList<>();
+	public static final List<RegistryObject<Block>> blocks_bshelf = new ArrayList<>();
 	public static final List<RegistryObject<Item>> items_table1 = new ArrayList<>();
 	public static final List<RegistryObject<Item>> items_table2 = new ArrayList<>(); // because of sorting in creative tabs, we can't just dump into one list
 	public static final List<RegistryObject<Item>> items_rack1 = new ArrayList<>();
 	public static final List<RegistryObject<Item>> items_rack2 = new ArrayList<>();
 	public static final List<RegistryObject<Item>> items_rack3 = new ArrayList<>();
 	public static final List<RegistryObject<Item>> items_rack4 = new ArrayList<>();
-	public static final List<RegistryObject<Item>> items_shelf = new ArrayList<>();
+	public static final List<RegistryObject<Item>> items_pshelf = new ArrayList<>();
+	public static final List<RegistryObject<Item>> items_bshelf1 = new ArrayList<>();
+	public static final List<RegistryObject<Item>> items_bshelf2 = new ArrayList<>();
+	public static final List<RegistryObject<Item>> items_bshelf3 = new ArrayList<>();
+	public static final List<RegistryObject<Item>> items_bshelf4 = new ArrayList<>();
+	public static final List<RegistryObject<Item>> items_bshelf5 = new ArrayList<>();
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public static final String[] woodTypes = {"oak", "spruce", "jungle", "birch", "dark_oak"};
 
@@ -94,8 +100,27 @@ public class Registration
 		// potion shelves
 		for (String woodType: Registration.woodTypes) {
 			RegistryObject<Block> shelf = BLOCKS.register("potion_shelf_" + woodType, () -> new PotionShelf());
-			items_shelf.add(FromBlock(shelf));
-			blocks_shelf.add(shelf);
+			items_pshelf.add(FromBlock(shelf));
+			blocks_pshelf.add(shelf);
+		}
+		// book shelves
+		for (String woodType: Registration.woodTypes) {
+			RegistryObject<Block> rack;
+			rack = BLOCKS.register("book_shelf_double_" + woodType, () -> new BookShelf.Dual("double"));
+			items_bshelf1.add(FromBlock(rack));
+			blocks_bshelf.add(rack);
+			rack = BLOCKS.register("book_shelf_open_double_" + woodType, () -> new BookShelf.Dual("open_double"));
+			items_bshelf2.add(FromBlock(rack));
+			blocks_bshelf.add(rack);
+			rack = BLOCKS.register("book_shelf_minimal_" + woodType, () -> new BookShelf.TopSimple("minimal"));
+			items_bshelf3.add(FromBlock(rack));
+			blocks_bshelf.add(rack);
+			rack = BLOCKS.register("book_shelf_open_minimal_" + woodType, () -> new BookShelf.TopSimple("open_minimal"));
+			items_bshelf4.add(FromBlock(rack));
+			blocks_bshelf.add(rack);
+			rack = BLOCKS.register("book_shelf_with_lanterns_" + woodType, () -> new BookShelf.TopWithLanterns("with_lanterns"));
+			items_bshelf5.add(FromBlock(rack));
+			blocks_bshelf.add(rack);
 		}
 	}
 
@@ -120,7 +145,8 @@ public class Registration
 	public static final RegistryObject<BlockEntityType<ToolRackBlockEntity>> TOOL_RACK_BE = BLOCK_ENTITIES.register("tool_rack_be", () -> BlockEntityType.Builder.of(ToolRackBlockEntity::new, ListToArray(blocks_rack)).build(null));
 	public static final RegistryObject<BlockEntityType<SimpleTableBlockEntity>> SIMPLE_TABLE_BE = BLOCK_ENTITIES.register("simple_table_be", () -> BlockEntityType.Builder.of(SimpleTableBlockEntity::new, ListToArray(blocks_table1)).build(null));
 	public static final RegistryObject<BlockEntityType<DualTableBlockEntity>> DUAL_TABLE_BE = BLOCK_ENTITIES.register("dual_table_be", () -> BlockEntityType.Builder.of(DualTableBlockEntity::new, ListToArray(blocks_table2)).build(null));
-	public static final RegistryObject<BlockEntityType<PotionShelfBlockEntity>> POTION_SHELF_BE = BLOCK_ENTITIES.register("potion_shelf_be", () -> BlockEntityType.Builder.of(PotionShelfBlockEntity::new, ListToArray(blocks_shelf)).build(null));
+	public static final RegistryObject<BlockEntityType<PotionShelfBlockEntity>> POTION_SHELF_BE = BLOCK_ENTITIES.register("potion_shelf_be", () -> BlockEntityType.Builder.of(PotionShelfBlockEntity::new, ListToArray(blocks_pshelf)).build(null));
+	public static final RegistryObject<BlockEntityType<BookShelfBlockEntity>> BOOK_SHELF_BE = BLOCK_ENTITIES.register("book_shelf_be", () -> BlockEntityType.Builder.of(BookShelfBlockEntity::new, ListToArray(blocks_bshelf)).build(null));
 	public static final RegistryObject<MenuType<SimpleTableMenu>> CRAFTING_SINGLE_MENU_TYPE = CONTAINER_TYPES.register("crafting_single", () -> IForgeMenuType.create(SimpleTableMenu::new));
 	public static final RegistryObject<MenuType<DualTableMenu>> CRAFTING_DUAL_MENU_TYPE = CONTAINER_TYPES.register("crafting_dual", () -> IForgeMenuType.create(DualTableMenu::new));
 

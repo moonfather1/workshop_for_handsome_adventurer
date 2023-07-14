@@ -1,0 +1,8 @@
+{
+	"parent": "workshop_for_handsome_adventurer:block/book_shelf_with_lit_lanterns_oak",
+	"textures": {
+		"plank": "minecraft:block/jungle_planks",
+		"particle": "minecraft:block/jungle_planks",
+		"lantern": "workshop_for_handsome_adventurer:block/lantern_off"
+	}
+}

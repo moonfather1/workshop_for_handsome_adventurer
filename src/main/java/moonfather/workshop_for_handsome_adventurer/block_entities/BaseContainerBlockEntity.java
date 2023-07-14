@@ -26,6 +26,13 @@ public class BaseContainerBlockEntity extends BlockEntity
     private final List<ItemStack> items = new ArrayList<ItemStack>(9);
     protected int capacity = 9;
 
+    public void setCapacity(int value)
+    {
+        if (value > this.capacity)
+        {
+            this.capacity = value;
+        }
+    }
     protected void VerifyCapacity()
     {
         for (int i = this.items.size(); i < this.capacity; i++) { this.items.add(ItemStack.EMPTY); }

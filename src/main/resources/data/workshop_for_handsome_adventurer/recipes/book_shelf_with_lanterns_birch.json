@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "",
+  "pattern": [
+    "LsL"
+  ],
+  "key": {
+    "s": {
+      "item": "workshop_for_handsome_adventurer:book_shelf_open_minimal_birch"
+    },
+    "L": {
+      "tag": "workshop_for_handsome_adventurer:lanterns"
+    }
+  },
+  "result": {
+    "item": "workshop_for_handsome_adventurer:book_shelf_with_lanterns_birch",
+    "count": 1
+  },
+  "conditions":  []
+}

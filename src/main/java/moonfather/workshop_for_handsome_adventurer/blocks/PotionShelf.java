@@ -1,13 +1,10 @@
 package moonfather.workshop_for_handsome_adventurer.blocks;
 
-import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -16,32 +13,20 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class PotionShelf extends ToolRack
 {
     public PotionShelf() {
-        super(PotionShelfBlockEntity.CAPACITY, "----");
-        String translationKeyStructure = "block.%s.potion_shelf.tooltip%d";
-        String translationKey = String.format(translationKeyStructure, Constants.MODID, 1);
-        this.Tooltip1 = new TranslatableComponent(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
-        translationKey = String.format(translationKeyStructure, Constants.MODID, 2);
-        this.Tooltip2 = new TranslatableComponent(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
-        this.PrepareListOfShapes();
+        super(PotionShelfBlockEntity.CAPACITY, "potion_shelf", null);
     }
 
 
@@ -65,18 +50,21 @@ public class PotionShelf extends ToolRack
     }
 
 
-
-    public static int getTargetedSlot(BlockHitResult blockHitResult)
+    public static int getPotionShelfSlot(BlockHitResult blockHitResult)
+    {
+        return getPotionShelfSlot(blockHitResult, blockHitResult.getBlockPos(), blockHitResult.getDirection());
+    }
+    public static int getPotionShelfSlot(HitResult blockHitResult, BlockPos blockPos, Direction direction)
     {
         int aboveThisRow = 0;
-        double frac = blockHitResult.getLocation().y - blockHitResult.getBlockPos().getY();
+        double frac = blockHitResult.getLocation().y - blockPos.getY();
         if (frac < 8/16d) { aboveThisRow = 3; /* row2*/ }
 
         int integral;
         integral = (int) blockHitResult.getLocation().z;
-        frac = (blockHitResult.getLocation().z - integral) * blockHitResult.getDirection().getStepX();
+        frac = (blockHitResult.getLocation().z - integral) * direction.getStepX();
         integral = (int) blockHitResult.getLocation().x;
-        frac -= (blockHitResult.getLocation().x - integral) * blockHitResult.getDirection().getStepZ();
+        frac -= (blockHitResult.getLocation().x - integral) * direction.getStepZ();
         int horizontalIndex;
         if ((frac >= -1/3d && frac < 0) || (frac >= 2/3d && frac < 1))
         {
@@ -121,7 +109,7 @@ public class PotionShelf extends ToolRack
             // we were doing just fine without this statement, updating both sides in parallel, but then CarryOn caused desyncs.
             // implementing getUpdatePacket() to return ClientboundBlockEntityDataPacket.create instead of nothing fixed "empty block entity" issue but desyncs remained when clicking quickly. so we're trying server-only plus forced update.
         }
-        int slot = this.getTargetedSlot(blockHitResult);
+        int slot = getPotionShelfSlot(blockHitResult);
         if (slot >= this.itemCount)
         {
             slot -= this.itemCount;
@@ -205,40 +193,18 @@ public class PotionShelf extends ToolRack
     private static final VoxelShape SHAPE_FRAME1E = Block.box(13.0D, 1.0D, 1.0D, 16.0D, 15.0D, 15.0D);
     private static final VoxelShape SHAPE_FRAME1S = Block.box(1.0D, 1.0D, 13.0D, 15.0D, 15.0D, 16.0D);
     private static final VoxelShape SHAPE_FRAME1W = Block.box(0.0D, 1.0D, 1.0D, 3.0D, 15.0D, 15.0D);
-    private final Map<Direction, VoxelShape> frameShapes = new HashMap<Direction, VoxelShape>(4);
-
-    private void PrepareListOfShapes()
-    {
-        this.frameShapes.put(Direction.NORTH, SHAPE_FRAME1N);
-        this.frameShapes.put(Direction.EAST,  SHAPE_FRAME1E);
-        this.frameShapes.put(Direction.SOUTH, SHAPE_FRAME1S);
-        this.frameShapes.put(Direction.WEST,  SHAPE_FRAME1W);
-    }
 
     @Override
-    public VoxelShape getOcclusionShape(BlockState state, BlockGetter p_60579_, BlockPos p_60580_)
+    protected void PrepareListOfShapes()
     {
-        return this.frameShapes.get(state.getValue(FACING));
+        this.shapes.clear();
+        this.shapes.put(Direction.NORTH, SHAPE_FRAME1N);
+        this.shapes.put(Direction.EAST,  SHAPE_FRAME1E);
+        this.shapes.put(Direction.SOUTH, SHAPE_FRAME1S);
+        this.shapes.put(Direction.WEST,  SHAPE_FRAME1W);
     }
 
 
-    @Override
-    public VoxelShape getBlockSupportShape(BlockState state, BlockGetter p_60582_, BlockPos p_60583_)
-    {
-        return this.frameShapes.get(state.getValue(FACING));
-    }
-
-    @Override
-    public VoxelShape getShape(BlockState state, BlockGetter p_60556_, BlockPos p_60557_, CollisionContext p_60558_)
-    {
-        return this.frameShapes.get(state.getValue(FACING));
-    }
-
-    @Override
-    public VoxelShape getInteractionShape(BlockState state, BlockGetter p_60548_, BlockPos p_60549_)
-    {
-        return super.getInteractionShape(state, p_60548_, p_60549_);
-    }
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState blockState) {
@@ -253,14 +219,12 @@ public class PotionShelf extends ToolRack
         PotionShelfBlockEntity BE = ((PotionShelfBlockEntity)level.getBlockEntity(pos));
         if (BE == null || ! state.hasProperty(FACING)) { return Items.STICK.getDefaultInstance(); }
         BlockHitResult bhr = new BlockHitResult(target.getLocation(), state.getValue(FACING).getOpposite(), pos, true);
-        int slot = PotionShelf.getTargetedSlot(bhr);
+        int slot = PotionShelf.getPotionShelfSlot(bhr);
         ItemStack existing = BE.GetItem(slot);
         if (! existing.isEmpty())
         {
             return existing.copy();
         }
-        String wood = this.getRegistryName().getPath();
-        wood = wood.substring(wood.indexOf("_", 8) + 1);
-        return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(Registration.getHostMod(wood), "potion_shelf_" + wood)));
+        return super.getCloneItemStack(state, target, level, pos, player);
     }
 }

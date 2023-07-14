@@ -1,0 +1,6 @@
+{
+	"parent": "workshop_for_handsome_adventurer:block/book_shelf_slot_1_book_a",
+	"textures": {
+		"book1": "workshop_for_handsome_adventurer:block/book3"
+	}
+}
