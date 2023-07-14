@@ -17,6 +17,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -180,6 +181,13 @@ public abstract class BookShelf extends ToolRack
     private int getBookCount() { return this.numberOfRows() * this.numberOfBooksInARow(); }
     private int getBookCapacity() { return Math.max(this.numberOfRows() * this.numberOfBooksInARow(), 8); }
 
+    //////////////// flammability ///////////////////
+
+    @Override
+    public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) { return 5; }
+    @Override
+    public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) { return 20; }
+    
     //////////////// states ///////////////////
 
     @Override
