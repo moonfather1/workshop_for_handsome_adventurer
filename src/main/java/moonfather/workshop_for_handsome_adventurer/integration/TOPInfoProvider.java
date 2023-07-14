@@ -5,7 +5,9 @@ import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoProvider;
 import mcjty.theoneprobe.api.ProbeMode;
 import moonfather.workshop_for_handsome_adventurer.Constants;
+import moonfather.workshop_for_handsome_adventurer.block_entities.BookShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
+import moonfather.workshop_for_handsome_adventurer.blocks.BookShelf;
 import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -33,6 +35,12 @@ public class TOPInfoProvider implements IProbeInfoProvider
             int count = shelf.GetRemainingItems(slot);
             int total =  shelf.GetRemainingRoom(slot) + count;
             probeInfo.text(new TranslatableComponent("message.workshop_for_handsome_adventurer.shelf_probe_tooltip", count, total).withStyle(Style.EMPTY.withColor(0xaa77dd)));
+        }
+        if (blockState.getBlock() instanceof BookShelf)
+        {
+            int slot = BookShelf.getBookShelfSlot((BookShelf) blockState.getBlock(), new BlockHitResult(probeHitData.getHitVec(), blockState.getValue(PotionShelf.FACING).getOpposite(), probeHitData.getPos(), true));
+            BookShelfBlockEntity shelf = (BookShelfBlockEntity) level.getBlockEntity(probeHitData.getPos());
+            probeInfo.horizontal().item(shelf.GetItem(slot)).vertical().padding(2, 4).itemLabel(shelf.GetItem(slot)); // add enc list here
         }
     }
 }

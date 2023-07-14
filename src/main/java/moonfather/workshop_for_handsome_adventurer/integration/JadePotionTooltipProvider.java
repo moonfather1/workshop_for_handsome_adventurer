@@ -17,10 +17,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JadeTooltipProvider implements IComponentProvider, IServerDataProvider<BlockEntity>
+public class JadePotionTooltipProvider implements IComponentProvider, IServerDataProvider<BlockEntity>
 {
-    private static final JadeTooltipProvider instance = new JadeTooltipProvider();
-    public static JadeTooltipProvider getInstance() { return instance; }
+    private static final JadePotionTooltipProvider instance = new JadePotionTooltipProvider();
+    public static JadePotionTooltipProvider getInstance() { return instance; }
 
 
     @Override

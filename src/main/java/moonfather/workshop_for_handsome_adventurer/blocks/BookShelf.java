@@ -46,11 +46,17 @@ public abstract class BookShelf extends ToolRack
     }
 
     private static final int INITIAL_BOOK_COUNT = 12; // so that we don't have 8 hardcoded anywhere
+
     protected int numberOfBooksInARow() { return 4; }
     protected int numberOfRows() { return 2; }
     protected boolean singleRowIsTop() { return true; }
 
     ////////// main part///////////////////////
+
+    public static int getBookShelfSlot(BookShelf block, BlockHitResult blockHitResult)
+    {  // for the one probe
+        return block.getTargetedSlot(blockHitResult);
+    }
 
     @Override
     protected int getTargetedSlot(BlockHitResult blockHitResult)
@@ -77,7 +83,7 @@ public abstract class BookShelf extends ToolRack
         frac -= (blockHitResult.getLocation().x - integral) * blockHitResult.getDirection().getStepZ();
         while (frac < 0) frac += 1.0;
         while (frac > 1) frac -= 1.0;
-        int horizontal = this.numberOfBooksInARow() - 1 - (int) Math.floor(frac * this.numberOfBooksInARow()); // 3-Ax4 ---- x4 turns quaters of a block into slots, 3-slot turns indices around because i did the above math backwards
+        int horizontal = this.numberOfBooksInARow() - 1 - (int) Math.floor(frac * this.numberOfBooksInARow()); // 3-Ax4 ---- x4 turns quarters of a block into slots, 3-slot turns indices around because i did the above math backwards
 
         return aboveThisRow + horizontal;
     }
