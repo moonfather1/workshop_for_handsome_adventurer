@@ -26,7 +26,7 @@ public class JadeBookTooltipProvider implements IComponentProvider
         if (accessor.getBlockEntity() instanceof BookShelfBlockEntity shelf)
         {
             int slot = BookShelf.getBookShelfSlot((BookShelf) accessor.getBlock(), accessor.getHitResult());
-            if (! shelf.GetItem(slot).isEmpty())
+            if (slot >= 0 && ! shelf.GetItem(slot).isEmpty())
             {
                 List<IElement> list = new ArrayList<>(3);
                 list.add(tooltip.getElementHelper().item(shelf.GetItem(slot)));
