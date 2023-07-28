@@ -19,10 +19,10 @@ import snownee.jade.api.ui.IElement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JadeTooltipProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity>
+public class JadePotionTooltipProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity>
 {
-    private static final JadeTooltipProvider instance = new JadeTooltipProvider();
-    public static JadeTooltipProvider getInstance() { return instance; }
+    private static final JadePotionTooltipProvider instance = new JadePotionTooltipProvider();
+    public static JadePotionTooltipProvider getInstance() { return instance; }
 
 
     @Override
@@ -30,7 +30,7 @@ public class JadeTooltipProvider implements IBlockComponentProvider, IServerData
     {
         if (accessor.getBlockEntity() instanceof PotionShelfBlockEntity shelf)
         {
-            int slot = PotionShelf.getTargetedSlot(accessor.getHitResult());
+            int slot = PotionShelf.getPotionShelfSlot(accessor.getHitResult());
             if (! shelf.GetItem(slot).isEmpty())
             {
                 int count;
@@ -65,5 +65,5 @@ public class JadeTooltipProvider implements IBlockComponentProvider, IServerData
     public ResourceLocation getUid() {
         return this.pluginId;
     }
-    private final ResourceLocation pluginId = new ResourceLocation(Constants.MODID, "jade_plugin");
+    private final ResourceLocation pluginId = new ResourceLocation(Constants.MODID, "jade_plugin_potions");
 }

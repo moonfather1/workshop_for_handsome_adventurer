@@ -407,8 +407,9 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	private void storeCraftingGridToWorld(Container container, Level level, BlockPos pos)
 	{
-		SimpleTableBlockEntity be = (SimpleTableBlockEntity) level.getBlockEntity(pos);  assert be != null;
-		for(int i = 0; i < container.getContainerSize(); i++)
+		SimpleTableBlockEntity be = (SimpleTableBlockEntity) level.getBlockEntity(pos);
+		if (be == null) return;
+		for (int i = 0; i < container.getContainerSize(); i++)
 		{
 			be.DepositItem(this.getSlotOffsetInDataStorage(container) + i, container.removeItemNoUpdate(i));
 		}

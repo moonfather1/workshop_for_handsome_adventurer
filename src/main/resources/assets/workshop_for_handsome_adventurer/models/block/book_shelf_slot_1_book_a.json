@@ -1,0 +1,32 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"book1": "workshop_for_handsome_adventurer:block/book2"
+	},
+	"elements": [
+		{
+			"name": "slot2book_f",
+			"from": [4.5, 8.5, 4],
+			"to": [8, 14.5, 6],
+			"faces": {
+				"east": {"uv": [7, 8, 9, 14], "texture": "#book1"},
+				"south": {"uv": [4, 8, 7, 14], "texture": "#book1"},
+				"west": {"uv": [2, 8, 4, 14], "texture": "#book1"},
+				"up": {"uv": [12, 8, 16, 16], "rotation": 90, "texture": "#book1"},
+				"down": {"uv": [12, 8, 16, 16], "rotation": 270, "texture": "#book1"}
+			}
+		},
+		{
+			"name": "slot2book_b",
+			"from": [4.5, 8.5, 1],
+			"to": [8, 14.5, 4],
+			"faces": {
+				"north": {"uv": [12, 8, 13, 16], "rotation": 90, "texture": "#book1"},
+				"east": {"uv": [9, 8, 12, 14], "texture": "#book1"},
+				"west": {"uv": [0, 8, 3, 14], "texture": "#book1"},
+				"up": {"uv": [12, 8, 13, 16], "rotation": 90, "texture": "#book1"},
+				"down": {"uv": [12, 8, 13, 16], "rotation": 90, "texture": "#book1"}
+			}
+		}
+	]
+}

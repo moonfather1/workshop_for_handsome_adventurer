@@ -22,8 +22,6 @@ import org.slf4j.Logger;
 @Mod(Constants.MODID)
 public class ModWorkshop
 {
-    //MFO FD board, 1.18 create
-
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 

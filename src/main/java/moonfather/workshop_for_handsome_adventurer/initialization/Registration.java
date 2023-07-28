@@ -19,7 +19,9 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Registration
 {
@@ -47,115 +49,89 @@ public class Registration
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public static final RegistryObject<Block> SIMPLE_TABLE_OAK = BLOCKS.register("simple_table_oak", () -> new SimpleTable());
-	public static final RegistryObject<Item> SIMPLE_TABLE_ITEM_OAK = FromBlock(SIMPLE_TABLE_OAK);
-	public static final RegistryObject<Block> SIMPLE_TABLE_SPRUCE = BLOCKS.register("simple_table_spruce", () -> new SimpleTable());
-	public static final RegistryObject<Item> SIMPLE_TABLE_ITEM_SPRUCE = FromBlock(SIMPLE_TABLE_SPRUCE);
-	public static final RegistryObject<Block> SIMPLE_TABLE_BIRCH = BLOCKS.register("simple_table_birch", () -> new SimpleTable());
-	public static final RegistryObject<Item> SIMPLE_TABLE_ITEM_BIRCH = FromBlock(SIMPLE_TABLE_BIRCH);
-	public static final RegistryObject<Block> SIMPLE_TABLE_JUNGLE = BLOCKS.register("simple_table_jungle", () -> new SimpleTable());
-	public static final RegistryObject<Item> SIMPLE_TABLE_ITEM_JUNGLE = FromBlock(SIMPLE_TABLE_JUNGLE);
-	public static final RegistryObject<Block> SIMPLE_TABLE_DARK_OAK = BLOCKS.register("simple_table_dark_oak", () -> new SimpleTable());
-	public static final RegistryObject<Item> SIMPLE_TABLE_ITEM_DARK_OAK = FromBlock(SIMPLE_TABLE_DARK_OAK);
-	public static final RegistryObject<Block> SIMPLE_TABLE_MANGROVE = BLOCKS.register("simple_table_mangrove", () -> new SimpleTable());
-	public static final RegistryObject<Item> SIMPLE_TABLE_ITEM_MANGROVE = FromBlock(SIMPLE_TABLE_MANGROVE);
+	public static final List<RegistryObject<Block>> blocks_table1 = new ArrayList<>();
+	public static final List<RegistryObject<Block>> blocks_table2 = new ArrayList<>();
+	public static final List<RegistryObject<Block>> blocks_rack = new ArrayList<>();
+	public static final List<RegistryObject<Block>> blocks_pshelf = new ArrayList<>();
+	public static final List<RegistryObject<Block>> blocks_bshelf = new ArrayList<>();
+	public static final List<RegistryObject<Item>> items_table1 = new ArrayList<>();
+	public static final List<RegistryObject<Item>> items_table2 = new ArrayList<>(); // because of sorting in creative tabs, we can't just dump into one list
+	public static final List<RegistryObject<Item>> items_rack1 = new ArrayList<>();
+	public static final List<RegistryObject<Item>> items_rack2 = new ArrayList<>();
+	public static final List<RegistryObject<Item>> items_rack3 = new ArrayList<>();
+	public static final List<RegistryObject<Item>> items_rack4 = new ArrayList<>();
+	public static final List<RegistryObject<Item>> items_pshelf = new ArrayList<>();
+	public static final List<RegistryObject<Item>> items_bshelf1 = new ArrayList<>();
+	public static final List<RegistryObject<Item>> items_bshelf2 = new ArrayList<>();
+	public static final List<RegistryObject<Item>> items_bshelf3 = new ArrayList<>();
+	public static final List<RegistryObject<Item>> items_bshelf4 = new ArrayList<>();
+	public static final List<RegistryObject<Item>> items_bshelf5 = new ArrayList<>();
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public static final String[] woodTypes = {"oak", "spruce", "jungle", "birch", "dark_oak", "mangrove"};
 
-	public static final RegistryObject<Block> DUAL_TABLE_PRIMARY_OAK = BLOCKS.register("dual_table_bottom_left_oak", () -> new AdvancedTableBottomPrimary());
-	public static final RegistryObject<Block> DUAL_TABLE_PRIMARY_SPRUCE = BLOCKS.register("dual_table_bottom_left_spruce", () -> new AdvancedTableBottomPrimary());
-	public static final RegistryObject<Block> DUAL_TABLE_PRIMARY_BIRCH = BLOCKS.register("dual_table_bottom_left_birch", () -> new AdvancedTableBottomPrimary());
-	public static final RegistryObject<Block> DUAL_TABLE_PRIMARY_JUNGLE = BLOCKS.register("dual_table_bottom_left_jungle", () -> new AdvancedTableBottomPrimary());
-	public static final RegistryObject<Block> DUAL_TABLE_PRIMARY_DARK_OAK = BLOCKS.register("dual_table_bottom_left_dark_oak", () -> new AdvancedTableBottomPrimary());
-	public static final RegistryObject<Block> DUAL_TABLE_PRIMARY_MANGROVE = BLOCKS.register("dual_table_bottom_left_mangrove", () -> new AdvancedTableBottomPrimary());
-	public static final RegistryObject<Block> DUAL_TABLE_SECONDARY_OAK = BLOCKS.register("dual_table_bottom_right_oak", () -> new AdvancedTableBottomSecondary());
-	public static final RegistryObject<Block> DUAL_TABLE_SECONDARY_SPRUCE = BLOCKS.register("dual_table_bottom_right_spruce", () -> new AdvancedTableBottomSecondary());
-	public static final RegistryObject<Block> DUAL_TABLE_SECONDARY_BIRCH = BLOCKS.register("dual_table_bottom_right_birch", () -> new AdvancedTableBottomSecondary());
-	public static final RegistryObject<Block> DUAL_TABLE_SECONDARY_JUNGLE = BLOCKS.register("dual_table_bottom_right_jungle", () -> new AdvancedTableBottomSecondary());
-	public static final RegistryObject<Block> DUAL_TABLE_SECONDARY_DARK_OAK = BLOCKS.register("dual_table_bottom_right_dark_oak", () -> new AdvancedTableBottomSecondary());
-	public static final RegistryObject<Block> DUAL_TABLE_SECONDARY_MANGROVE = BLOCKS.register("dual_table_bottom_right_mangrove", () -> new AdvancedTableBottomSecondary());
-	public static final RegistryObject<Block> DUAL_TABLE_TOP_LEFT_OAK = BLOCKS.register("dual_table_top_left_oak", () -> new AdvancedTableTopSecondary());
-	public static final RegistryObject<Block> DUAL_TABLE_TOP_LEFT_SPRUCE = BLOCKS.register("dual_table_top_left_spruce", () -> new AdvancedTableTopSecondary());
-	public static final RegistryObject<Block> DUAL_TABLE_TOP_LEFT_BIRCH = BLOCKS.register("dual_table_top_left_birch", () -> new AdvancedTableTopSecondary());
-	public static final RegistryObject<Block> DUAL_TABLE_TOP_LEFT_JUNGLE = BLOCKS.register("dual_table_top_left_jungle", () -> new AdvancedTableTopSecondary());
-	public static final RegistryObject<Block> DUAL_TABLE_TOP_LEFT_DARK_OAK = BLOCKS.register("dual_table_top_left_dark_oak", () -> new AdvancedTableTopSecondary());
-	public static final RegistryObject<Block> DUAL_TABLE_TOP_LEFT_MANGROVE = BLOCKS.register("dual_table_top_left_mangrove", () -> new AdvancedTableTopSecondary());
-	public static final RegistryObject<Block> DUAL_TABLE_TOP_RIGHT_OAK = BLOCKS.register("dual_table_top_right_oak", () -> new AdvancedTableTopSecondary());
-	public static final RegistryObject<Block> DUAL_TABLE_TOP_RIGHT_SPRUCE = BLOCKS.register("dual_table_top_right_spruce", () -> new AdvancedTableTopSecondary());
-	public static final RegistryObject<Block> DUAL_TABLE_TOP_RIGHT_BIRCH = BLOCKS.register("dual_table_top_right_birch", () -> new AdvancedTableTopSecondary());
-	public static final RegistryObject<Block> DUAL_TABLE_TOP_RIGHT_JUNGLE = BLOCKS.register("dual_table_top_right_jungle", () -> new AdvancedTableTopSecondary());
-	public static final RegistryObject<Block> DUAL_TABLE_TOP_RIGHT_DARK_OAK = BLOCKS.register("dual_table_top_right_dark_oak", () -> new AdvancedTableTopSecondary());
-	public static final RegistryObject<Block> DUAL_TABLE_TOP_RIGHT_MANGROVE = BLOCKS.register("dual_table_top_right_mangrove", () -> new AdvancedTableTopSecondary());
+	// static initialization
+	static {
+		// small tables
+		for (String woodType: Registration.woodTypes) {
+			RegistryObject<Block> block = BLOCKS.register("simple_table_" + woodType, () -> new SimpleTable());
+			blocks_table1.add(block);
+			items_table1.add(FromBlock(block));
+		}
+		// dual tables
+		for (String woodType: Registration.woodTypes) {
+			RegistryObject<Block> primary = BLOCKS.register("dual_table_bottom_left_" + woodType, () -> new AdvancedTableBottomPrimary());
+			BLOCKS.register("dual_table_bottom_right_" + woodType, () -> new AdvancedTableBottomSecondary());
+			BLOCKS.register("dual_table_top_left_" + woodType, () -> new AdvancedTableTopSecondary());
+			BLOCKS.register("dual_table_top_right_" + woodType, () -> new AdvancedTableTopSecondary());
+			RegistryObject<Item> placer = ITEMS.register("workstation_placer_" + woodType, () -> new WorkstationPlacerItem(woodType));
+			items_table2.add(placer);
+			blocks_table2.add(primary);
+			registerHostMod(woodType, Constants.MODID);
+		}
+		// toolracks
+		for (String woodType: Registration.woodTypes) {
+			RegistryObject<Block> rack;
+			rack = BLOCKS.register("tool_rack_single_" + woodType, () -> new ToolRack(2, "single"));
+			items_rack1.add(FromBlock(rack));
+			blocks_rack.add(rack);
+			rack = BLOCKS.register("tool_rack_framed_" + woodType, () -> new DualToolRack(6, "framed"));
+			items_rack2.add(FromBlock(rack));
+			blocks_rack.add(rack);
+			rack = BLOCKS.register("tool_rack_pframed_" + woodType, () -> new DualToolRack(6, "pframed"));
+			items_rack3.add(FromBlock(rack));
+			blocks_rack.add(rack);
+			rack = BLOCKS.register("tool_rack_double_" + woodType, () -> new DualToolRack(6, "double"));
+			items_rack4.add(FromBlock(rack));
+			blocks_rack.add(rack);
+		}
+		// potion shelves
+		for (String woodType: Registration.woodTypes) {
+			RegistryObject<Block> shelf = BLOCKS.register("potion_shelf_" + woodType, () -> new PotionShelf());
+			items_pshelf.add(FromBlock(shelf));
+			blocks_pshelf.add(shelf);
+		}
+		// book shelves
+		for (String woodType: Registration.woodTypes) {
+			RegistryObject<Block> rack;
+			rack = BLOCKS.register("book_shelf_double_" + woodType, () -> new BookShelf.Dual("double"));
+			items_bshelf1.add(FromBlock(rack));
+			blocks_bshelf.add(rack);
+			rack = BLOCKS.register("book_shelf_open_double_" + woodType, () -> new BookShelf.Dual("open_double"));
+			items_bshelf2.add(FromBlock(rack));
+			blocks_bshelf.add(rack);
+			rack = BLOCKS.register("book_shelf_minimal_" + woodType, () -> new BookShelf.TopSimple("minimal"));
+			items_bshelf3.add(FromBlock(rack));
+			blocks_bshelf.add(rack);
+			rack = BLOCKS.register("book_shelf_open_minimal_" + woodType, () -> new BookShelf.TopSimple("open_minimal"));
+			items_bshelf4.add(FromBlock(rack));
+			blocks_bshelf.add(rack);
+			rack = BLOCKS.register("book_shelf_with_lanterns_" + woodType, () -> new BookShelf.TopWithLanterns("with_lanterns"));
+			items_bshelf5.add(FromBlock(rack));
+			blocks_bshelf.add(rack);
+		}
+	}
 
-	public static final RegistryObject<Item> DUAL_TABLE_PLACER_ITEM_OAK = ITEMS.register("workstation_placer_oak", () -> new WorkstationPlacerItem("oak"));
-	public static final RegistryObject<Item> DUAL_TABLE_PLACER_ITEM_SPRUCE = ITEMS.register("workstation_placer_spruce", () -> new WorkstationPlacerItem("spruce"));
-	public static final RegistryObject<Item> DUAL_TABLE_PLACER_ITEM_BIRCH = ITEMS.register("workstation_placer_birch", () -> new WorkstationPlacerItem("birch"));
-	public static final RegistryObject<Item> DUAL_TABLE_PLACER_ITEM_JUNGLE = ITEMS.register("workstation_placer_jungle", () -> new WorkstationPlacerItem("jungle"));
-	public static final RegistryObject<Item> DUAL_TABLE_PLACER_ITEM_DARK_OAK = ITEMS.register("workstation_placer_dark_oak", () -> new WorkstationPlacerItem("dark_oak"));
-	public static final RegistryObject<Item> DUAL_TABLE_PLACER_ITEM_MANGROVE = ITEMS.register("workstation_placer_mangrove", () -> new WorkstationPlacerItem("mangrove"));
 
-	public static final RegistryObject<Block> MINI_TOOL_RACK_OAK = BLOCKS.register("tool_rack_single_oak", () -> new ToolRack(2, "single"));
-	public static final RegistryObject<Item> MINI_TOOL_RACK_ITEM_OAK = FromBlock(MINI_TOOL_RACK_OAK);
-	public static final RegistryObject<Block> MINI_TOOL_RACK_SPRUCE = BLOCKS.register("tool_rack_single_spruce", () -> new ToolRack(2, "single"));
-	public static final RegistryObject<Item> MINI_TOOL_RACK_ITEM_SPRUCE = FromBlock(MINI_TOOL_RACK_SPRUCE);
-	public static final RegistryObject<Block> MINI_TOOL_RACK_BIRCH = BLOCKS.register("tool_rack_single_birch", () -> new ToolRack(2, "single"));
-	public static final RegistryObject<Item> MINI_TOOL_RACK_ITEM_BIRCH = FromBlock(MINI_TOOL_RACK_BIRCH);
-	public static final RegistryObject<Block> MINI_TOOL_RACK_JUNGLE = BLOCKS.register("tool_rack_single_jungle", () -> new ToolRack(2, "single"));
-	public static final RegistryObject<Item> MINI_TOOL_RACK_ITEM_JUNGLE = FromBlock(MINI_TOOL_RACK_JUNGLE);
-	public static final RegistryObject<Block> MINI_TOOL_RACK_DARK_OAK = BLOCKS.register("tool_rack_single_dark_oak", () -> new ToolRack(2, "single"));
-	public static final RegistryObject<Item> MINI_TOOL_RACK_ITEM_DARK_OAK = FromBlock(MINI_TOOL_RACK_DARK_OAK);
-	public static final RegistryObject<Block> MINI_TOOL_RACK_MANGROVE = BLOCKS.register("tool_rack_single_mangrove", () -> new ToolRack(2, "single"));
-	public static final RegistryObject<Item> MINI_TOOL_RACK_ITEM_MANGROVE = FromBlock(MINI_TOOL_RACK_MANGROVE);
-
-	public static final RegistryObject<Block> FRAMED_TOOL_RACK_OAK = BLOCKS.register("tool_rack_framed_oak", () -> new DualToolRack(6, "framed"));
-	public static final RegistryObject<Item> FRAMED_TOOL_RACK_ITEM_OAK = FromBlock(FRAMED_TOOL_RACK_OAK);
-	public static final RegistryObject<Block> FRAMED_TOOL_RACK_SPRUCE = BLOCKS.register("tool_rack_framed_spruce", () -> new DualToolRack(6, "framed"));
-	public static final RegistryObject<Item> FRAMED_TOOL_RACK_ITEM_SPRUCE = FromBlock(FRAMED_TOOL_RACK_SPRUCE);
-	public static final RegistryObject<Block> FRAMED_TOOL_RACK_BIRCH = BLOCKS.register("tool_rack_framed_birch", () -> new DualToolRack(6, "framed"));
-	public static final RegistryObject<Item> FRAMED_TOOL_RACK_ITEM_BIRCH = FromBlock(FRAMED_TOOL_RACK_BIRCH);
-	public static final RegistryObject<Block> FRAMED_TOOL_RACK_JUNGLE = BLOCKS.register("tool_rack_framed_jungle", () -> new DualToolRack(6, "framed"));
-	public static final RegistryObject<Item> FRAMED_TOOL_RACK_ITEM_JUNGLE = FromBlock(FRAMED_TOOL_RACK_JUNGLE);
-	public static final RegistryObject<Block> FRAMED_TOOL_RACK_DARK_OAK = BLOCKS.register("tool_rack_framed_dark_oak", () -> new DualToolRack(6, "framed"));
-	public static final RegistryObject<Item> FRAMED_TOOL_RACK_ITEM_DARK_OAK = FromBlock(FRAMED_TOOL_RACK_DARK_OAK);
-	public static final RegistryObject<Block> FRAMED_TOOL_RACK_MANGROVE = BLOCKS.register("tool_rack_framed_mangrove", () -> new DualToolRack(6, "framed"));
-	public static final RegistryObject<Item> FRAMED_TOOL_RACK_ITEM_MANGROVE = FromBlock(FRAMED_TOOL_RACK_MANGROVE);
-
-	public static final RegistryObject<Block> PFRAMED_TOOL_RACK_OAK = BLOCKS.register("tool_rack_pframed_oak", () -> new DualToolRack(6, "pframed"));
-	public static final RegistryObject<Item> PFRAMED_TOOL_RACK_ITEM_OAK = FromBlock(PFRAMED_TOOL_RACK_OAK);
-	public static final RegistryObject<Block> PFRAMED_TOOL_RACK_SPRUCE = BLOCKS.register("tool_rack_pframed_spruce", () -> new DualToolRack(6, "pframed"));
-	public static final RegistryObject<Item> PFRAMED_TOOL_RACK_ITEM_SPRUCE = FromBlock(PFRAMED_TOOL_RACK_SPRUCE);
-	public static final RegistryObject<Block> PFRAMED_TOOL_RACK_BIRCH = BLOCKS.register("tool_rack_pframed_birch", () -> new DualToolRack(6, "pframed"));
-	public static final RegistryObject<Item> PFRAMED_TOOL_RACK_ITEM_BIRCH = FromBlock(PFRAMED_TOOL_RACK_BIRCH);
-	public static final RegistryObject<Block> PFRAMED_TOOL_RACK_JUNGLE = BLOCKS.register("tool_rack_pframed_jungle", () -> new DualToolRack(6, "pframed"));
-	public static final RegistryObject<Item> PFRAMED_TOOL_RACK_ITEM_JUNGLE = FromBlock(PFRAMED_TOOL_RACK_JUNGLE);
-	public static final RegistryObject<Block> PFRAMED_TOOL_RACK_DARK_OAK = BLOCKS.register("tool_rack_pframed_dark_oak", () -> new DualToolRack(6, "pframed"));
-	public static final RegistryObject<Item> PFRAMED_TOOL_RACK_ITEM_DARK_OAK = FromBlock(PFRAMED_TOOL_RACK_DARK_OAK);
-	public static final RegistryObject<Block> PFRAMED_TOOL_RACK_MANGROVE = BLOCKS.register("tool_rack_pframed_mangrove", () -> new DualToolRack(6, "pframed"));
-	public static final RegistryObject<Item> PFRAMED_TOOL_RACK_ITEM_MANGROVE = FromBlock(PFRAMED_TOOL_RACK_MANGROVE);
-
-	public static final RegistryObject<Block> DUAL_TOOL_RACK_OAK = BLOCKS.register("tool_rack_double_oak", () -> new DualToolRack(6, "double"));
-	public static final RegistryObject<Item> DUAL_TOOL_RACK_ITEM_OAK = FromBlock(DUAL_TOOL_RACK_OAK);
-	public static final RegistryObject<Block> DUAL_TOOL_RACK_SPRUCE = BLOCKS.register("tool_rack_double_spruce", () -> new DualToolRack(6, "double"));
-	public static final RegistryObject<Item> DUAL_TOOL_RACK_ITEM_SPRUCE = FromBlock(DUAL_TOOL_RACK_SPRUCE);
-	public static final RegistryObject<Block> DUAL_TOOL_RACK_BIRCH = BLOCKS.register("tool_rack_double_birch", () -> new DualToolRack(6, "double"));
-	public static final RegistryObject<Item> DUAL_TOOL_RACK_ITEM_BIRCH = FromBlock(DUAL_TOOL_RACK_BIRCH);
-	public static final RegistryObject<Block> DUAL_TOOL_RACK_JUNGLE = BLOCKS.register("tool_rack_double_jungle", () -> new DualToolRack(6, "double"));
-	public static final RegistryObject<Item> DUAL_TOOL_RACK_ITEM_JUNGLE = FromBlock(DUAL_TOOL_RACK_JUNGLE);
-	public static final RegistryObject<Block> DUAL_TOOL_RACK_DARK_OAK = BLOCKS.register("tool_rack_double_dark_oak", () -> new DualToolRack(6, "double"));
-	public static final RegistryObject<Item> DUAL_TOOL_RACK_ITEM_DARK_OAK = FromBlock(DUAL_TOOL_RACK_DARK_OAK);
-	public static final RegistryObject<Block> DUAL_TOOL_RACK_MANGROVE = BLOCKS.register("tool_rack_double_mangrove", () -> new DualToolRack(6, "double"));
-	public static final RegistryObject<Item> DUAL_TOOL_RACK_ITEM_MANGROVE = FromBlock(DUAL_TOOL_RACK_MANGROVE);
-
-	public static final RegistryObject<Block> POTION_SHELF_OAK = BLOCKS.register("potion_shelf_oak", () -> new PotionShelf());
-	public static final RegistryObject<Item> POTION_SHELF_ITEM_OAK = FromBlock(POTION_SHELF_OAK);
-	public static final RegistryObject<Block> POTION_SHELF_SPRUCE = BLOCKS.register("potion_shelf_spruce", () -> new PotionShelf());
-	public static final RegistryObject<Item> POTION_SHELF_ITEM_SPRUCE = FromBlock(POTION_SHELF_SPRUCE);
-	public static final RegistryObject<Block> POTION_SHELF_BIRCH = BLOCKS.register("potion_shelf_birch", () -> new PotionShelf());
-	public static final RegistryObject<Item> POTION_SHELF_ITEM_BIRCH = FromBlock(POTION_SHELF_BIRCH);
-	public static final RegistryObject<Block> POTION_SHELF_JUNGLE = BLOCKS.register("potion_shelf_jungle", () -> new PotionShelf());
-	public static final RegistryObject<Item> POTION_SHELF_ITEM_JUNGLE = FromBlock(POTION_SHELF_JUNGLE);
-	public static final RegistryObject<Block> POTION_SHELF_DARK_OAK = BLOCKS.register("potion_shelf_dark_oak", () -> new PotionShelf());
-	public static final RegistryObject<Item> POTION_SHELF_ITEM_DARK_OAK = FromBlock(POTION_SHELF_DARK_OAK);
-	public static final RegistryObject<Block> POTION_SHELF_MANGROVE = BLOCKS.register("potion_shelf_mangrove", () -> new PotionShelf());
-	public static final RegistryObject<Item> POTION_SHELF_ITEM_MANGROVE = FromBlock(POTION_SHELF_MANGROVE);
 
 	private static RegistryObject<Item> FromBlock(RegistryObject<Block> block)
 	{
@@ -163,21 +139,21 @@ public class Registration
 		return ITEMS.register(block.getId().getPath(), () -> new BlockItemEx(block.get(), properties));
 	}
 
+	private static Block[] ListToArray(List<RegistryObject<Block>> list) {
+		Block[] result = new Block[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			result[i] = list.get(i).get();
+		}
+		return result;
+	}
+
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public static final RegistryObject<BlockEntityType<ToolRackBlockEntity>> TOOL_RACK_BE = BLOCK_ENTITIES.register("tool_rack_be", () -> BlockEntityType.Builder.of(ToolRackBlockEntity::new,
-				DUAL_TOOL_RACK_OAK.get(), DUAL_TOOL_RACK_SPRUCE.get(), DUAL_TOOL_RACK_JUNGLE.get(), DUAL_TOOL_RACK_BIRCH.get(), DUAL_TOOL_RACK_DARK_OAK.get(), DUAL_TOOL_RACK_MANGROVE.get(),
-				FRAMED_TOOL_RACK_OAK.get(), FRAMED_TOOL_RACK_SPRUCE.get(), FRAMED_TOOL_RACK_JUNGLE.get(), FRAMED_TOOL_RACK_BIRCH.get(), FRAMED_TOOL_RACK_DARK_OAK.get(), FRAMED_TOOL_RACK_MANGROVE.get(),
-				PFRAMED_TOOL_RACK_OAK.get(), PFRAMED_TOOL_RACK_SPRUCE.get(), PFRAMED_TOOL_RACK_JUNGLE.get(), PFRAMED_TOOL_RACK_BIRCH.get(), PFRAMED_TOOL_RACK_DARK_OAK.get(), PFRAMED_TOOL_RACK_MANGROVE.get(),
-				MINI_TOOL_RACK_OAK.get(), MINI_TOOL_RACK_SPRUCE.get(), MINI_TOOL_RACK_JUNGLE.get(), MINI_TOOL_RACK_BIRCH.get(), MINI_TOOL_RACK_DARK_OAK.get(), MINI_TOOL_RACK_MANGROVE.get()
-			).build(null));
-	public static final RegistryObject<BlockEntityType<SimpleTableBlockEntity>> SIMPLE_TABLE_BE = BLOCK_ENTITIES.register("simple_table_be", () -> BlockEntityType.Builder.of(SimpleTableBlockEntity::new,
-			SIMPLE_TABLE_OAK.get(), SIMPLE_TABLE_SPRUCE.get(), SIMPLE_TABLE_BIRCH.get(), SIMPLE_TABLE_JUNGLE.get(), SIMPLE_TABLE_DARK_OAK.get(), SIMPLE_TABLE_MANGROVE.get()).build(null));
-	public static final RegistryObject<BlockEntityType<DualTableBlockEntity>> DUAL_TABLE_BE = BLOCK_ENTITIES.register("dual_table_be", () -> BlockEntityType.Builder.of(DualTableBlockEntity::new,
-			DUAL_TABLE_PRIMARY_OAK.get(), DUAL_TABLE_PRIMARY_SPRUCE.get(), DUAL_TABLE_PRIMARY_BIRCH.get(), DUAL_TABLE_PRIMARY_JUNGLE.get(), DUAL_TABLE_PRIMARY_DARK_OAK.get(), DUAL_TABLE_PRIMARY_MANGROVE.get()).build(null));
-	public static final RegistryObject<BlockEntityType<PotionShelfBlockEntity>> POTION_SHELF_BE = BLOCK_ENTITIES.register("potion_shelf_be", () -> BlockEntityType.Builder.of(PotionShelfBlockEntity::new,
-			POTION_SHELF_OAK.get(), POTION_SHELF_SPRUCE.get(), POTION_SHELF_JUNGLE.get(), POTION_SHELF_BIRCH.get(), POTION_SHELF_DARK_OAK.get(), POTION_SHELF_MANGROVE.get()
-	).build(null));
+	public static final RegistryObject<BlockEntityType<ToolRackBlockEntity>> TOOL_RACK_BE = BLOCK_ENTITIES.register("tool_rack_be", () -> BlockEntityType.Builder.of(ToolRackBlockEntity::new, ListToArray(blocks_rack)).build(null));
+	public static final RegistryObject<BlockEntityType<SimpleTableBlockEntity>> SIMPLE_TABLE_BE = BLOCK_ENTITIES.register("simple_table_be", () -> BlockEntityType.Builder.of(SimpleTableBlockEntity::new, ListToArray(blocks_table1)).build(null));
+	public static final RegistryObject<BlockEntityType<DualTableBlockEntity>> DUAL_TABLE_BE = BLOCK_ENTITIES.register("dual_table_be", () -> BlockEntityType.Builder.of(DualTableBlockEntity::new, ListToArray(blocks_table2)).build(null));
+	public static final RegistryObject<BlockEntityType<PotionShelfBlockEntity>> POTION_SHELF_BE = BLOCK_ENTITIES.register("potion_shelf_be", () -> BlockEntityType.Builder.of(PotionShelfBlockEntity::new, ListToArray(blocks_pshelf)).build(null));
+	public static final RegistryObject<BlockEntityType<BookShelfBlockEntity>> BOOK_SHELF_BE = BLOCK_ENTITIES.register("book_shelf_be", () -> BlockEntityType.Builder.of(BookShelfBlockEntity::new, ListToArray(blocks_bshelf)).build(null));
 	public static final RegistryObject<MenuType<SimpleTableMenu>> CRAFTING_SINGLE_MENU_TYPE = CONTAINER_TYPES.register("crafting_single", () -> IForgeMenuType.create(SimpleTableMenu::new));
 	public static final RegistryObject<MenuType<DualTableMenu>> CRAFTING_DUAL_MENU_TYPE = CONTAINER_TYPES.register("crafting_dual", () -> IForgeMenuType.create(DualTableMenu::new));
 

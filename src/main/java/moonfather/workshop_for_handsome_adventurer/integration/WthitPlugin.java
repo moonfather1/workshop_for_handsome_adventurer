@@ -2,7 +2,9 @@ package moonfather.workshop_for_handsome_adventurer.integration;
 
 import mcp.mobius.waila.api.*;
 import mcp.mobius.waila.api.component.ItemComponent;
+import moonfather.workshop_for_handsome_adventurer.block_entities.BookShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
+import moonfather.workshop_for_handsome_adventurer.blocks.BookShelf;
 import moonfather.workshop_for_handsome_adventurer.blocks.DualTableBaseBlock;
 import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
 import net.minecraft.nbt.CompoundTag;
@@ -23,6 +25,7 @@ public class WthitPlugin implements IWailaPlugin {
         registrar.addIcon(new WorkstationProvider(), DualTableBaseBlock.class);
         registrar.addComponent(new PotionShelfProvider(), TooltipPosition.TAIL, PotionShelfBlockEntity.class);
         registrar.addBlockData(new PotionShelfDataProvider(), PotionShelf.class);
+        registrar.addComponent(new BookShelfProvider(), TooltipPosition.TAIL, BookShelfBlockEntity.class);
     }
 
     ////////////////////////////////////
@@ -100,6 +103,21 @@ public class WthitPlugin implements IWailaPlugin {
                 compoundTag.putInt("Bottles" + i, bottles);
                 int space = serverAccessor.getTarget().GetRemainingRoom(i);
                 compoundTag.putInt("Space" + i, space);
+            }
+        }
+    }
+
+    private static class BookShelfProvider implements  IBlockComponentProvider
+    {
+        @Override
+        public void appendTail(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config)
+        {
+            IBlockComponentProvider.super.appendTail(tooltip, accessor, config);
+            if (accessor.getBlockEntity() instanceof BookShelfBlockEntity shelf) {
+                int slot = BookShelf.getBookShelfSlot((BookShelf) accessor.getBlock(), accessor.getHitResult(), accessor.getPosition(), accessor.getSide());
+                if (slot >= 0 && ! shelf.GetItem(slot).isEmpty()) {
+                    tooltip.addLine(shelf.GetItem(slot).getHoverName());
+                }
             }
         }
     }

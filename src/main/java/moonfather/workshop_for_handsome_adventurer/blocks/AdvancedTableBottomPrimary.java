@@ -1,6 +1,5 @@
 package moonfather.workshop_for_handsome_adventurer.blocks;
 
-import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableMenu;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
