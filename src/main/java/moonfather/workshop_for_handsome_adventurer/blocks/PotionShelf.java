@@ -117,7 +117,12 @@ public class PotionShelf extends ToolRack
             player.displayClientMessage(ShelfMessage, true);
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
-
+        if (level.isClientSide)
+        {
+            return InteractionResult.SUCCESS;
+            // we were doing just fine without this statement, updating both sides in parallel, but then CarryOn caused desyncs.
+            // implementing getUpdatePacket() to return ClientboundBlockEntityDataPacket.create instead of nothing fixed "empty block entity" issue but desyncs remained when clicking quickly. so we're trying server-only plus forced update.
+        }
         int slot = this.getTargetedSlot(blockHitResult);
         if (slot >= this.itemCount)
         {
@@ -181,6 +186,7 @@ public class PotionShelf extends ToolRack
             else {
                 player.displayClientMessage(WrongPotionMessage, true);
             }
+            level.sendBlockUpdated(pos, blockState, blockState, 2);
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
