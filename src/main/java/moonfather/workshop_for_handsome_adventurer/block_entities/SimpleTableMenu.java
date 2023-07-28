@@ -426,7 +426,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	protected void loadFromWorld(Level level, BlockPos pos)
 	{
-		SimpleTableBlockEntity be = (SimpleTableBlockEntity) level.getBlockEntity(pos);  assert be != null;
+		SimpleTableBlockEntity be = (SimpleTableBlockEntity) level.getBlockEntity(pos);  if (be == null) return;
 		for(int i = 0; i < this.craftSlots.getContainerSize(); i++)
 		{
 			this.craftSlots.setItem(i, be.GetItem(i));
