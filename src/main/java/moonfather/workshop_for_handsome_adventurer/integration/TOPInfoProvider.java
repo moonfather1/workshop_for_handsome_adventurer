@@ -39,8 +39,11 @@ public class TOPInfoProvider implements IProbeInfoProvider
         if (blockState.getBlock() instanceof BookShelf)
         {
             int slot = BookShelf.getBookShelfSlot((BookShelf) blockState.getBlock(), new BlockHitResult(probeHitData.getHitVec(), blockState.getValue(PotionShelf.FACING).getOpposite(), probeHitData.getPos(), true));
-            BookShelfBlockEntity shelf = (BookShelfBlockEntity) level.getBlockEntity(probeHitData.getPos());
-            probeInfo.horizontal().item(shelf.GetItem(slot)).vertical().padding(2, 4).itemLabel(shelf.GetItem(slot)); // add enc list here
+            if (slot >= 0)
+            {
+                BookShelfBlockEntity shelf = (BookShelfBlockEntity) level.getBlockEntity(probeHitData.getPos());
+                probeInfo.horizontal().item(shelf.GetItem(slot)).vertical().padding(2, 4).itemLabel(shelf.GetItem(slot)); // add enc list here
+            }
         }
     }
 }
