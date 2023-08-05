@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
@@ -15,6 +16,11 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
 {
     public PotionShelfBlockEntity(BlockPos pos, BlockState state) {
         super(Registration.POTION_SHELF_BE.get(), pos, state, CAPACITY);
+    }
+
+    public PotionShelfBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state)
+    {
+        super(blockEntityType, pos, state, CAPACITY); //needed this for EveryCompat
     }
 
     public static final int CAPACITY = 6;
