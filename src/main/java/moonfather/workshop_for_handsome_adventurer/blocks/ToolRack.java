@@ -40,6 +40,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.ToolActions;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.MessageFormat;
 import java.util.*;
 
 public class ToolRack extends Block implements EntityBlock
@@ -60,11 +61,11 @@ public class ToolRack extends Block implements EntityBlock
 		registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
 		this.PrepareListOfShapes();
 
-		String translationKeyStructure = "block.%s.%s_%s.tooltip%d";
-		if (subType == null) { translationKeyStructure = "block.%s.%s.tooltip%d"; }
-		String translationKey = String.format(translationKeyStructure, Constants.MODID, mainType, subType, 1);
+		String translationKeyStructure = "block.{0}.{1}_{2}.tooltip{3}";
+		if (subType == null) { translationKeyStructure = "block.{0}.{1}.tooltip{3}"; }
+		String translationKey = MessageFormat.format(translationKeyStructure, Constants.MODID, mainType, subType, 1);
 		this.Tooltip1 = new TranslatableComponent(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
-		translationKey = String.format(translationKeyStructure, Constants.MODID, mainType, subType, 2);
+		translationKey = MessageFormat.format(translationKeyStructure, Constants.MODID, mainType, subType, 2);
 		this.Tooltip2 = new TranslatableComponent(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
 	}
 
