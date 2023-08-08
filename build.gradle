@@ -6,7 +6,7 @@ plugins {
 }
 
 
-version = '${mod_version}'
+version = "${mod_version}"
 group = 'moonfather.workshop_for_handsome_adventurer' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'workshop_for_handsome_adventurer--mc1.19.2-'
 
