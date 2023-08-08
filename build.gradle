@@ -147,19 +147,45 @@ repositories {
     // flatDir {
     //     dir 'libs'
     // }
-    maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
+    //maven {
+    //    // location of the maven that hosts JEI files
+    //    name = "Progwml6 maven"
+    //    url = "https://dvs1.progwml6.com/files/maven/"
+    //}
+    //maven {
+    //    url = "https://www.cursemaven.com"
+    //}
+    //maven {
+    //    // for create
+    //    name = 'tterrag maven'
+    //    url = 'https://maven.tterrag.com/'
+    //}
+    //exclusiveContent {
+    //    forRepository {
+    //        maven {
+    //            name = "Modrinth"
+    //            url = "https://api.modrinth.com/maven"
+    //        }
+    //    }
+    //    filter {
+    //        includeGroup "maven.modrinth"
+    //    }
+    //}
+    //exclusiveContent {
+    //    forRepository {
+    //        maven {
+    //            name = "CurseForge"
+    //            url = "https://www.cursemaven.com"
+    //        }
+    //    }
+    //    filter {
+    //        includeGroup "curse.maven"
+    //    }
+    //}
     maven {
         url = "https://www.cursemaven.com"
     }
-    maven {
-        // for create
-        name = 'tterrag maven'
-        url = 'https://maven.tterrag.com/'
-    }}
+}
 
 dependencies {
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
@@ -179,10 +205,10 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 	
-	compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
-	
-    implementation fg.deobf("curse.maven:jade-324717:3865918")
+	// fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
+    //runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+
+    compileOnly fg.deobf("curse.maven:jade-324717:3865918")
     implementation fg.deobf("curse.maven:the-one-probe-245211:3671753")
 
     implementation fg.deobf("curse.maven:curios-309927:3748873")
@@ -195,7 +221,20 @@ dependencies {
     //implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
     //implementation fg.deobf("curse.maven:mantle-74924:4353120")
     //implementation fg.deobf("curse.maven:tinkers-construct-74072:4360093")
-    runtimeOnly fg.deobf("curse.maven:carry-on-274259:4628664")
+    //runtimeOnly fg.deobf("curse.maven:carry-on-274259:4628664")
+    runtimeOnly fg.deobf("curse.maven:storage-drawers-223852:3807626")
+    //implementation fg.deobf("curse.maven:jei-238222:4593548")
+    implementation fg.deobf("curse.maven:jei-238222:4351311")
+
+    //implementation fg.deobf("maven.modrinth:jei:9.7.2.1001")
+    //runtimeOnly fg.deobf("maven.modrinth:carry-on:1.17.1.12")
+    // fg.deobf("maven.modrinth:tinkers-construct:3.6.4.113")
+    //runtimeOnly fg.deobf("maven.modrinth:mantle:1.9.45")
+    //1.19.2  implementation fg.deobf("maven.modrinth:tetra:5.4.0")
+    //1.19.2  implementation fg.deobf("maven.modrinth:mutil:5.1.0")
+    //implementation fg.deobf("maven.modrinth:curios:1.18.2-5.0.9.1")
+
+    //implementation fg.deobf("maven.modrinth:the-one-probe:1.18-5.1.2")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
