@@ -25,7 +25,6 @@ import java.util.List;
 
 public class Registration
 {
-	private static final HashMap<String, String> woodToHostMap = new HashMap<>();
 	private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MODID);
 	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MODID);
 	private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Constants.MODID);
@@ -39,12 +38,6 @@ public class Registration
 		BLOCK_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
 		CONTAINER_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 		RECIPES.register(FMLJavaModLoadingContext.get().getModEventBus());
-		registerHostMod("oak", Constants.MODID);
-		registerHostMod("spruce", Constants.MODID);
-		registerHostMod("birch", Constants.MODID);
-		registerHostMod("jungle", Constants.MODID);
-		registerHostMod("dark_oak", Constants.MODID);
-		registerHostMod("mangrove", Constants.MODID);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,7 +79,7 @@ public class Registration
 			RegistryObject<Item> placer = ITEMS.register("workstation_placer_" + woodType, () -> new WorkstationPlacerItem(woodType));
 			items_table2.add(placer);
 			blocks_table2.add(primary);
-			registerHostMod(woodType, Constants.MODID);
+			ExternalWoodSupport.registerHostMod(woodType, Constants.MODID);
 		}
 		// toolracks
 		for (String woodType: Registration.woodTypes) {
@@ -160,8 +153,4 @@ public class Registration
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public static final RegistryObject<RecipeSerializer<UnsupportedWoodRecipe>> TABLE_RECIPE = RECIPES.register("table_recipe_unknown_planks", ()-> new SimpleRecipeSerializer<UnsupportedWoodRecipe>(UnsupportedWoodRecipe::new));
-	
-	////////////////////////////////////////////////////////////////
-	public static String getHostMod(String wood) { return woodToHostMap.get(wood); }
-	public static void registerHostMod(String wood, String hostMod) { woodToHostMap.put(wood, hostMod); }
 }

@@ -2,8 +2,9 @@ package moonfather.workshop_for_handsome_adventurer.items;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
-import moonfather.workshop_for_handsome_adventurer.other.CreativeTab;
+import moonfather.workshop_for_handsome_adventurer.initialization.ExternalWoodSupport;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.other.CreativeTab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -73,11 +74,12 @@ public class WorkstationPlacerItem extends Item
 		}
 		Direction facingToSet = context.getHorizontalDirection().getOpposite();
 		Direction right = context.getHorizontalDirection().getClockWise();
-		String hostModId = Registration.getHostMod(this.woodType);
-		Block bottomLeft = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(hostModId, "dual_table_bottom_left_" + this.woodType));
-		Block bottomRight = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(hostModId, "dual_table_bottom_right_" + this.woodType));
-		Block topLeft = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(hostModId, "dual_table_top_left_" + this.woodType));
-		Block topRight = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(hostModId, "dual_table_top_right_" + this.woodType));		
+		String hostModId = ExternalWoodSupport.getHostMod(this.woodType);
+		String prefix = ExternalWoodSupport.getPrefix(this.woodType);
+		Block bottomLeft = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(hostModId, prefix + "dual_table_bottom_left_" + this.woodType));
+		Block bottomRight = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(hostModId, prefix + "dual_table_bottom_right_" + this.woodType));
+		Block topLeft = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(hostModId, prefix + "dual_table_top_left_" + this.woodType));
+		Block topRight = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(hostModId, prefix + "dual_table_top_right_" + this.woodType));		
 		context.getLevel().setBlock(position, bottomLeft.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, true), 0);
 		context.getLevel().setBlock(position.above(), topLeft.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, true), 0);
 		context.getLevel().setBlock(position.relative(right), bottomRight.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, true), 0);

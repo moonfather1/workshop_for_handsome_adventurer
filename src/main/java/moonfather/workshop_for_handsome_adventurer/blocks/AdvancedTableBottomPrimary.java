@@ -2,6 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.blocks;
 
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableMenu;
+import moonfather.workshop_for_handsome_adventurer.initialization.ExternalWoodSupport;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -113,8 +114,8 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements En
 	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
 	{
 		String wood = ForgeRegistries.BLOCKS.getKey(this).getPath();
-		wood = wood.substring(wood.indexOf("_", 20) + 1);
-		return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(Registration.getHostMod(wood), "workstation_placer_" + wood)));
+		wood = wood.substring(wood.indexOf("_left_") + 6);   // this.wood would be better but i don't want to break compatibility and change constructor. maybe map in EWS class?
+		return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(ExternalWoodSupport.getHostMod(wood), ExternalWoodSupport.getPrefix(wood) + "workstation_placer_" + wood)));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
