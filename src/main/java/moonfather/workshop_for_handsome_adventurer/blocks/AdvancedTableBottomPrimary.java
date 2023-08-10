@@ -115,7 +115,7 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements En
 	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
 	{
 		String wood = this.getRegistryName().getPath();
-		wood = wood.substring(wood.indexOf("_placer_") + 8);
+		wood = wood.substring(wood.indexOf("_left_") + 6);  // it would be nicer to have this.wood but a changed constructor would break addons and EC.
 		return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(ExternalWoodSupport.getHostMod(wood), ExternalWoodSupport.getPrefix(wood) + "workstation_placer_" + wood)));
 	}
 
