@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    { "id": "quark:ancient_tome", "required": false },
+    { "id": "malum:encyclopedia_arcana", "required": false }
+  ]
+}

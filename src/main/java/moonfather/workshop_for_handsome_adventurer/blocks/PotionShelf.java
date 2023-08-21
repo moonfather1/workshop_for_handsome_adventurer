@@ -1,13 +1,11 @@
 package moonfather.workshop_for_handsome_adventurer.blocks;
 
-import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -26,19 +24,11 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.Event;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class PotionShelf extends ToolRack
 {
     public PotionShelf() {
         super(PotionShelfBlockEntity.CAPACITY, "potion_shelf", null);
-        //String translationKeyStructure = "block.%s.potion_shelf.tooltip%d";
-        //String translationKey = String.format(translationKeyStructure, Constants.MODID, 1);
-        //this.Tooltip1 = Component.translatable(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
-        //translationKey = String.format(translationKeyStructure, Constants.MODID, 2);
-        //this.Tooltip2 = Component.translatable(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
-        //this.PrepareListOfShapes();
     }
 
 
