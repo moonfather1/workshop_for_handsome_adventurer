@@ -226,6 +226,11 @@ dependencies {
     //implementation fg.deobf("curse.maven:jei-238222:4593548")
     implementation fg.deobf("curse.maven:jei-238222:4351311")
 
+    //runtimeOnly fg.deobf("curse.maven:lodestone-616457:4631609")
+    //runtimeOnly fg.deobf("curse.maven:malum-484064:4631612")
+    //runtimeOnly fg.deobf("curse.maven:every-compat-628539:4702870")
+    //runtimeOnly fg.deobf("curse.maven:selene-499980:4702486")
+
     //implementation fg.deobf("maven.modrinth:jei:9.7.2.1001")
     //runtimeOnly fg.deobf("maven.modrinth:carry-on:1.17.1.12")
     // fg.deobf("maven.modrinth:tinkers-construct:3.6.4.113")
