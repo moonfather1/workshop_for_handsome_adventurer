@@ -12,6 +12,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -47,6 +48,11 @@ public abstract class BookShelf extends ToolRack
 
     ////////// main part///////////////////////
 
+    public static int getBookShelfSlot(BookShelf block, BlockHitResult blockHitResult)
+    {  // for the one probe
+        return block.getTargetedSlot(blockHitResult);
+    }
+
     @Override
     protected int getTargetedSlot(BlockHitResult blockHitResult)
     {
@@ -72,7 +78,7 @@ public abstract class BookShelf extends ToolRack
         frac -= (blockHitResult.getLocation().x - integral) * blockHitResult.getDirection().getStepZ();
         while (frac < 0) frac += 1.0;
         while (frac > 1) frac -= 1.0;
-        int horizontal = this.numberOfBooksInARow() - 1 - (int) Math.floor(frac * this.numberOfBooksInARow()); // 3-Ax4 ---- x4 turns quaters of a block into slots, 3-slot turns indices around because i did the above math backwards
+        int horizontal = this.numberOfBooksInARow() - 1 - (int) Math.floor(frac * this.numberOfBooksInARow()); // 3-Ax4 ---- x4 turns quarters of a block into slots, 3 minus slot turns indices around because i did the above math backwards
 
         return aboveThisRow + horizontal;
     }
@@ -168,6 +174,13 @@ public abstract class BookShelf extends ToolRack
 
     private int getBookCount() { return this.numberOfRows() * this.numberOfBooksInARow(); }
     private int getBookCapacity() { return Math.max(this.numberOfRows() * this.numberOfBooksInARow(), 8); }
+
+    //////////////// flammability ///////////////////
+
+    @Override
+    public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) { return 5; }
+    @Override
+    public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) { return 20; }
 
     //////////////// states ///////////////////
 
