@@ -406,7 +406,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	private void storeCraftingGridToWorld(Container container, Level level, BlockPos pos)
 	{
-		SimpleTableBlockEntity be = (SimpleTableBlockEntity) level.getBlockEntity(pos);  assert be != null;
+		SimpleTableBlockEntity be = (SimpleTableBlockEntity) level.getBlockEntity(pos);  if (be == null) return; // no drop?
 		for(int i = 0; i < container.getContainerSize(); i++)
 		{
 			be.DepositItem(this.getSlotOffsetInDataStorage(container) + i, container.removeItemNoUpdate(i));
@@ -425,7 +425,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	protected void loadFromWorld(Level level, BlockPos pos)
 	{
-		SimpleTableBlockEntity be = (SimpleTableBlockEntity) level.getBlockEntity(pos);  assert be != null;
+		SimpleTableBlockEntity be = (SimpleTableBlockEntity) level.getBlockEntity(pos);  if (be == null) return;
 		for(int i = 0; i < this.craftSlots.getContainerSize(); i++)
 		{
 			this.craftSlots.setItem(i, be.GetItem(i));

@@ -182,8 +182,11 @@ public class DualTableMenu extends SimpleTableMenu
 
 	@Override
 	protected void storeDataValues(Level level, BlockPos pos) {
-		DualTableBlockEntity be = (DualTableBlockEntity) level.getBlockEntity(pos);  assert be != null;
-		be.StoreIntegerData(0, this.getRecipeTargetGrid());
+		DualTableBlockEntity be = (DualTableBlockEntity) level.getBlockEntity(pos);
+		if (be != null)
+		{
+			be.StoreIntegerData(0, this.getRecipeTargetGrid());
+		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////
