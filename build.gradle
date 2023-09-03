@@ -231,6 +231,10 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:every-compat-628539:4702870")
     //runtimeOnly fg.deobf("curse.maven:selene-499980:4702486")
 
+    compileOnly fg.deobf("curse.maven:crafting-tweaks-233071:4513973")
+    //implementation fg.deobf("curse.maven:crafting-tweaks-233071:4513973")
+    //implementation fg.deobf("curse.maven:balm-531761:4442615")
+
     //implementation fg.deobf("maven.modrinth:jei:9.7.2.1001")
     //runtimeOnly fg.deobf("maven.modrinth:carry-on:1.17.1.12")
     // fg.deobf("maven.modrinth:tinkers-construct:3.6.4.113")

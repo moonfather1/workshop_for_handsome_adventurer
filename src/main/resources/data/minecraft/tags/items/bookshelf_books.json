@@ -8,6 +8,7 @@
     "minecraft:knowledge_book",
 
     { "id": "quark:ancient_tome", "required": false },
-    { "id": "malum:encyclopedia_arcana", "required": false }
+    { "id": "malum:encyclopedia_arcana", "required": false },
+    { "id": "croptopia:guide", "required": false }
   ]
 }

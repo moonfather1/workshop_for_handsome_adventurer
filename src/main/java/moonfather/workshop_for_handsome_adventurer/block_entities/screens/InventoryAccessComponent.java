@@ -338,12 +338,26 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
                 this.parent.getMenu().slots.get(k).x += PANEL_WIDTH + 2;
             }
             this.slotsMoved = true;
+            for (var c : this.parent.children())  // CraftingTweaks support
+            {
+                if (c instanceof Button b)
+                {
+                    b.x += PANEL_WIDTH + 2;
+                }
+            }
         }
         else if (! this.isVisibleTotal() && this.slotsMoved) {
             for (int k = 0; k < this.parent.getMenu().slots.size(); k++) {
                 this.parent.getMenu().slots.get(k).x -= PANEL_WIDTH + 2;
             }
             this.slotsMoved = false;
+            for (var c : this.parent.children())   // CraftingTweaks support
+            {
+                if (c instanceof Button b)
+                {
+                    b.x -= PANEL_WIDTH + 2;
+                }
+            }
         }
     }
     private boolean slotsMoved = false;
