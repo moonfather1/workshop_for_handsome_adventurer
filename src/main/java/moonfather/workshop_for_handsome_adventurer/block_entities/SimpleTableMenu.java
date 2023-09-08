@@ -3,6 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.block_entities;
 import com.mojang.datafixers.util.Pair;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
+import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.IExcessSlotManager;
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
 import moonfather.workshop_for_handsome_adventurer.blocks.SimpleTable;
@@ -36,6 +37,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class SimpleTableMenu extends AbstractContainerMenu
@@ -65,10 +67,6 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	private final Container tabElements = new SimpleContainer(TAB_SMUGGLING_CONTAINER_SIZE); // magic to transfer to client
 	private Container chestSlots = null;
 	protected boolean initialLoading = true;
-	public final int DATA_SLOT_TABS_NEED_UPDATE;
-	public final int DATA_SLOT_LOWER_ACCESS_NEEDS_UPDATE; //these two are 0 and 1
-	public final int DATA_SLOT_UPPER_CONTAINER_TRUE_SIZE; //index is 2;  this one isn't a flag, it's a value.
-
 
 	public SimpleTableMenu(int containerId, Inventory inventory, FriendlyByteBuf friendlyByteBuf)
 	{
@@ -79,9 +77,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		super(menuType, containerId);
 		this.access = levelAccess;
 		this.player = inventory.player;
-		this.addDataSlot(this.tabsNeedingUpdateClientFlagSlot);		DATA_SLOT_TABS_NEED_UPDATE = this.getNextDataSlotId();
-		this.addDataSlot(this.doubleChestNeedingUpdateClientFlagSlot);		DATA_SLOT_LOWER_ACCESS_NEEDS_UPDATE = this.getNextDataSlotId();
-		this.addDataSlot(this.upperContainerTrueSizeSlot);		DATA_SLOT_UPPER_CONTAINER_TRUE_SIZE = this.getNextDataSlotId();
+		this.DataSlots.addSlots();
 
 		//---crafting result slot---
 		this.addSlot(new ResultSlot(inventory.player, this.craftSlots, this.resultSlots, 0, 124-4, 35));
@@ -140,14 +136,14 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		{
 			for (int hor = 0; hor < 9; ++hor)
 			{
-				this.addSlot(new VariableSizeContainerSlot(this.chestSlots, ver*9+hor, 5 + hor * 18 - LEFT_PANEL_WIDTH, 30 + ver * 18, this::getUpperContainerTrueSize));
+				this.addSlot(new VariableSizeContainerSlot(this.chestSlots, ver*9+hor, 5 + hor * 18 - LEFT_PANEL_WIDTH, 30 + ver * 18, this::getUpperContainerTrueSize, this::isSlotSpecificallyDisabled));
 			}
 		}
 		this.initialLoading = false;
 	}
 
 
-
+	public DataSlot addDataSlot(DataSlot slot) { return super.addDataSlot(slot); }
 	public int getCustomizationSlotCount()	{ return OptionsHolder.COMMON.SimpleTableNumberOfSlots.get(); }
 
 
@@ -553,6 +549,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			for (int i = ACCESS_SLOT_START; i <= ACCESS_SLOT_END; i++) {
 				this.getSlot(i).container = this.chestSlots;
 			}
+			this.initExcessSlotMap();
 		}
 		else
 		{
@@ -563,9 +560,10 @@ public class SimpleTableMenu extends AbstractContainerMenu
 					this.getSlot(i).container = this.chestSlots;
 				}
 			}
+			this.clearExcessSlotMap();
 		}
 		this.selectedTab = index; //this only happens on server side. we need to separately set this value on client side. it is on client where i need it so this line is for academic purposes.
-		this.resetDataSlotFlagForClientFlag(DATA_SLOT_TABS_NEED_UPDATE); // 1->0 because change in tab list invokes tab change call
+		this.DataSlots.resetDataSlotFlagForClientFlag(SimpleTableDataSlots.DATA_SLOT_TABS_NEED_UPDATE); // 1->0 because change in tab list invokes tab change call
 		this.sendAllDataToRemote(); //todo!! do i need?
 	}
 	public int selectedTab = -1;
@@ -597,52 +595,64 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 	}
 
-	///////////////////////////// flags in data slots ///////////////
-	// tabs needing update on client. yeah this used to work but i won't bother debugging, i'll do it correctly here:
-	private final DualTableMenu.DataSlotWithNotification tabsNeedingUpdateClientFlagSlot = new DualTableMenu.DataSlotWithNotification(0);
-	// lower half of double chest needing update on client.
-	private final DualTableMenu.DataSlotWithNotification doubleChestNeedingUpdateClientFlagSlot = new DualTableMenu.DataSlotWithNotification(0);
-	// dataslot support
-	public void registerClientHandlerForDataSlot(int dataSlot, Consumer<Integer> event)	{
-		DualTableMenu.DataSlotWithNotification slot = null;
-		if (dataSlot == DATA_SLOT_LOWER_ACCESS_NEEDS_UPDATE) { slot = this.doubleChestNeedingUpdateClientFlagSlot; }
-		if (dataSlot == DATA_SLOT_TABS_NEED_UPDATE) { slot = this.tabsNeedingUpdateClientFlagSlot; } // NPE is fine on not found
-		if (dataSlot == DATA_SLOT_UPPER_CONTAINER_TRUE_SIZE) { slot = this.upperContainerTrueSizeSlot; }
-		slot.setEvent(event);
-	}
-	public void resetDataSlotFlagForClientFlag(int dataSlot) {
-		DataSlot slot = null;
-		if (dataSlot == DATA_SLOT_LOWER_ACCESS_NEEDS_UPDATE) { slot = this.doubleChestNeedingUpdateClientFlagSlot; }
-		if (dataSlot == DATA_SLOT_TABS_NEED_UPDATE) { slot = this.tabsNeedingUpdateClientFlagSlot; } // NPE is fine on not found
-		int old = slot.get();
-		int newValue = old % 2 == 1 ? old + 1 : old + 2;
-		slot.set(newValue);
-		this.synchronizeDataSlotToRemote(dataSlot, newValue); // even == reset
-	}
-	public void raiseDataSlotFlagForClientFlag(int dataSlot) {
-		DataSlot slot = null;
-		if (dataSlot == DATA_SLOT_LOWER_ACCESS_NEEDS_UPDATE) { slot = this.doubleChestNeedingUpdateClientFlagSlot; }
-		if (dataSlot == DATA_SLOT_TABS_NEED_UPDATE) { slot = this.tabsNeedingUpdateClientFlagSlot; } // NPE is fine on not found
-		int old = slot.get();
-		int newValue = old % 2 == 1 ? old + 2 : old + 1;
-		slot.set(newValue);
-		//this.sendAllDataToRemote();  // this causes us to "lose" carried item
-		this.synchronizeDataSlotToRemote(dataSlot, newValue);  // odd == flag up
-	}
+	protected SimpleTableDataSlots DataSlots = new SimpleTableDataSlots(this);
+
 
 	///////////////////////// actual values in data slots //////////////
-	private final DualTableMenu.DataSlotWithNotification upperContainerTrueSizeSlot = new DualTableMenu.DataSlotWithNotification(0);
-	private int getUpperContainerTrueSize() { return this.upperContainerTrueSizeSlot.get(); }
-	private void setUpperContainerTrueSize(int value) {
-		if (value != this.getUpperContainerTrueSize()) {
-			this.upperContainerTrueSizeSlot.set(value);
-			this.synchronizeDataSlotToRemote(DATA_SLOT_UPPER_CONTAINER_TRUE_SIZE, value);
+
+	private int getUpperContainerTrueSize()
+	{
+		return this.DataSlots.getSlotValue(SimpleTableDataSlots.DATA_SLOT_UPPER_CONTAINER_TRUE_SIZE);
+	}
+	private void setUpperContainerTrueSize(int value)
+	{
+		if (value != this.getUpperContainerTrueSize())
+		{
+			this.DataSlots.setSlotValue(SimpleTableDataSlots.DATA_SLOT_UPPER_CONTAINER_TRUE_SIZE, value);
+			this.synchronizeDataSlotToRemote(SimpleTableDataSlots.DATA_SLOT_UPPER_CONTAINER_TRUE_SIZE, value);
 		}
 	}
 
-	//////////////////////// data slot support ////////////////////
-	private int nextDataSlotId = 0;
-	protected int getNextDataSlotId() { return nextDataSlotId++; }
+	private boolean isSlotSpecificallyDisabled(int slotIndex)
+	{
+		return slotIndex < 27 && ((this.DataSlots.getSlotValue(SimpleTableDataSlots.DATA_SLOT_SLOTS_00_TO_26_EXCESS) & (1 << slotIndex)) != 0)
+				|| slotIndex >= 27 && slotIndex < 54 && ((this.DataSlots.getSlotValue(SimpleTableDataSlots.DATA_SLOT_SLOTS_27_TO_53_EXCESS) & (1 << (slotIndex - 27))) != 0);
+	}
+	private void initExcessSlotMap()
+	{
+		this.initExcessSlotMapInternal(SimpleTableDataSlots.DATA_SLOT_SLOTS_00_TO_26_EXCESS, 0);
+		this.initExcessSlotMapInternal(SimpleTableDataSlots.DATA_SLOT_SLOTS_27_TO_53_EXCESS, 27);
+	}
+	private void clearExcessSlotMap()
+	{
+		this.DataSlots.setSlotValue(SimpleTableDataSlots.DATA_SLOT_SLOTS_00_TO_26_EXCESS, 0);
+		this.synchronizeDataSlotToRemote(SimpleTableDataSlots.DATA_SLOT_SLOTS_00_TO_26_EXCESS, 0);
+		this.DataSlots.setSlotValue(SimpleTableDataSlots.DATA_SLOT_SLOTS_27_TO_53_EXCESS, 0);
+		this.synchronizeDataSlotToRemote(SimpleTableDataSlots.DATA_SLOT_SLOTS_27_TO_53_EXCESS, 0);
+	}
+	private void initExcessSlotMapInternal(int slot, int offset)
+	{
+		if (this.inventoryAccessHelper.chosenContainer instanceof IExcessSlotManager esm)
+		{
+			int map = 0;
+			int mask = 1;
+			for (int k = 0; k < 27; k++)
+			{
+				if (esm.isSlotSpecificallyDisabled(k + offset))
+				{
+					map = map | mask;
+				}
+				mask = mask << 1;
+			}
+			this.DataSlots.setSlotValue(slot, map);
+			this.synchronizeDataSlotToRemote(slot, map);
+		}
+	}
+
+	public void registerClientHandlerForDataSlot(int slotIndex, Consumer<Integer> event)
+	{
+		this.DataSlots.registerClientHandlerForDataSlot(slotIndex, event);
+	}
 
 	/////////////////////////////////////////////////////////////////
 
@@ -744,7 +754,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		private boolean disabled = true;
 		@Override
 		public int getMaxStackSize() {
-			return this.disabled ? MARKER_FOR_DISABLED : super.getMaxStackSize();
+			return this.disabled ? MARKER_FOR_DISABLED : super.getMaxStackSize()/*999*/;
 		}
 
 		@Override
@@ -764,17 +774,19 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		public static final ResourceLocation EXCESS_SLOT_BG = new ResourceLocation(Constants.MODID, "gui/x_slot");
 		private static final Pair<ResourceLocation, ResourceLocation> excessBackgroundPair = Pair.of(InventoryMenu.BLOCK_ATLAS, EXCESS_SLOT_BG);
 		private Supplier<Integer> containerTrueSizeGetter = null;
+		private Function<Integer, Boolean> excessSettingGetter = null;
 
-		public VariableSizeContainerSlot(Container p_40223_, int p_40224_, int p_40225_, int p_40226_, Supplier<Integer> containerTrueSize)
+		public VariableSizeContainerSlot(Container p_40223_, int p_40224_, int p_40225_, int p_40226_, Supplier<Integer> containerTrueSize, Function<Integer, Boolean> excessSetting)
 		{
 			super(p_40223_, p_40224_, p_40225_, p_40226_);
 			this.containerTrueSizeGetter = containerTrueSize;
+			this.excessSettingGetter = excessSetting;
 		}
 
 		@Override
 		public boolean isActive() {
 			return this.container.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED // whole container not disabled
-					&& this.getSlotIndex() < this.getContainerTrueSize();  // not beyond the limit of variable-size containers
+					&& ! this.isExcessSlot();  // not beyond the limit of variable-size containers
 		}
 
 		@Override
@@ -784,7 +796,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 		@Override
 		public ItemStack getItem() {
-			if (this.getSlotIndex() < this.getContainerTrueSize()) {
+			if (! this.isExcessSlot()) {
 				return super.getItem();
 			}
 			else {
@@ -800,18 +812,28 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 
 		public int getContainerTrueSize() { return this.containerTrueSizeGetter.get(); }
-		public boolean isExcessSlot() {	return this.getSlotIndex() >= this.getContainerTrueSize(); }
+
+		public boolean isExcessSlot()
+		{
+			return this.getSlotIndex() >= this.getContainerTrueSize()
+					|| (excessSettingGetter != null && excessSettingGetter.apply(this.getSlotIndex()));
+		}
 
 		public Pair<ResourceLocation, ResourceLocation> getExcessIcon() { return excessBackgroundPair; }
 	}
 
-	public static class VariableSizeContainerWrapper extends SimpleContainer
+	public static class VariableSizeContainerWrapper extends SimpleContainer implements IExcessSlotManager
 	{
+		private IExcessSlotManager excessManager = null;
 		private final Container internal;
+
 		public VariableSizeContainerWrapper(Container wrapped) {
 			super(54);
 			this.internal = wrapped;
-		}
+			if (this.internal instanceof IExcessSlotManager esm)
+			{
+				this.excessManager = esm;
+			}}
 
 		@Override
 		public boolean canPlaceItem(int slot, ItemStack itemStack) { return slot < internal.getContainerSize() && internal.canPlaceItem(slot, itemStack); }
@@ -836,11 +858,17 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 		@Override
 		public int getMaxStackSize() { return internal.getMaxStackSize(); }
+
+		@Override
+		public boolean isSlotSpecificallyDisabled(int slotIndex)
+		{
+			return this.excessManager != null && this.excessManager.isSlotSpecificallyDisabled(slotIndex);
+		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 
-	public static class VariableSizeItemStackHandlerWrapper  extends SimpleContainer
+	public static class VariableSizeItemStackHandlerWrapper extends SimpleContainer
 	{
 		private final IItemHandler internal;
 		public VariableSizeItemStackHandlerWrapper(IItemHandler wrapped) {
@@ -876,7 +904,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		public void setChanged() { }
 
 		@Override
-		public int getMaxStackSize() { return internal.getSlots() > 0 ? internal.getSlotLimit(0) : 64; }
+		public int getMaxStackSize() { return internal.getSlots() > 1 ? internal.getSlotLimit(1) : 64; }
 	}
 	/////////////////////////////////////////////////////////////////////////
 
@@ -907,8 +935,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			if (range != this.parent.lastInventoryAccessRange)
 			{
 				this.parent.storeAdjacentInventoriesInSlots();
-				this.parent.resetDataSlotFlagForClientFlag(DATA_SLOT_TABS_NEED_UPDATE); // for some reason i managed to get it stuck on 1
-				this.parent.raiseDataSlotFlagForClientFlag(DATA_SLOT_TABS_NEED_UPDATE);
+				this.parent.DataSlots.resetDataSlotFlagForClientFlag(SimpleTableDataSlots.DATA_SLOT_TABS_NEED_UPDATE); // for some reason i managed to get it stuck on 1
+				this.parent.DataSlots.raiseDataSlotFlagForClientFlag(SimpleTableDataSlots.DATA_SLOT_TABS_NEED_UPDATE);
 				if (lastRange == 0) {
 					this.parent.sendAllDataToRemote();
 				}

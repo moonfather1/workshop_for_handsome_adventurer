@@ -1,5 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.blocks;
 
+import moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleToolRackHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,6 +14,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraftforge.fml.ModList;
 
 import javax.annotation.Nullable;
 
@@ -25,7 +27,19 @@ public class DualToolRack extends ToolRack
         registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER));
     }
 
+    public static ToolRack create(int itemCount, String type)
+    {
+        if (ModList.get().isLoaded("tetra"))
+        {
+            return TetraCompatibleToolRackHelper.create(true, itemCount, type);
+        }
+        else
+        {
+            return new DualToolRack(itemCount, type);
+        }
+    }
 
+    ////////////////////////////////////////////
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
