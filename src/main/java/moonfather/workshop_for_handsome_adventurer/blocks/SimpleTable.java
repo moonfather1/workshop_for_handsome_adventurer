@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -34,6 +35,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -118,6 +120,21 @@ public class SimpleTable extends Block implements EntityBlock
 		else if (level.isClientSide)
 		{
 			return InteractionResult.SUCCESS;
+		}
+		else if (ModList.get().isLoaded("tetra_tables") && ! player.isCrouching() && TetraHammerSupport.isHammer(player.getMainHandItem()))
+		{
+			String id = ForgeRegistries.BLOCKS.getKey(state.getBlock()).toString();
+			String wood = id.substring(id.indexOf("simple_table") + 13);
+			String newName = "tetra_table_" + wood;
+			for (ResourceLocation key: ForgeRegistries.BLOCKS.getKeys())
+			{
+				if (key.toString().endsWith(newName))
+				{
+					level.setBlockAndUpdate(pos, ForgeRegistries.BLOCKS.getValue(key).defaultBlockState());
+					return InteractionResult.CONSUME;
+				}
+			}
+			return InteractionResult.FAIL;
 		}
 		else if (ModList.get().isLoaded("tetra") && ! player.isCrouching() && TetraHammerSupport.isHammer(player.getMainHandItem()))
 		{
