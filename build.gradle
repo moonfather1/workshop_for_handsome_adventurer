@@ -194,8 +194,8 @@ dependencies {
     // runtimeOnly fg.deobf("curse.maven:carry-on-274259:4628675")
     runtimeOnly fg.deobf("curse.maven:packing-tape-238659:4574130")
 
-    runtimeOnly fg.deobf("curse.maven:balm-531761:4757228")
-    implementation fg.deobf("curse.maven:crafting-tweaks-233071:4757229")
+    //runtimeOnly fg.deobf("curse.maven:balm-531761:4757228")
+    compileOnly fg.deobf("curse.maven:crafting-tweaks-233071:4757229")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

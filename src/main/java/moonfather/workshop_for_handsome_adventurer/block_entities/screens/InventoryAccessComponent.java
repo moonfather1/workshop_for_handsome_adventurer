@@ -3,6 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.block_entities.screens;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableDataSlots;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screen_components.SimpleButton;
@@ -16,14 +17,17 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.function.Function;
 
+@ParametersAreNonnullByDefault
 public class InventoryAccessComponent implements Renderable, GuiEventListener, NarratableEntry
 {
     public static final int PANEL_WIDTH = 176;
@@ -56,8 +60,8 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         {
             this.initVisuals();
         }
-        this.parent.getMenu().registerClientHandlerForDataSlot(this.parent.getMenu().DATA_SLOT_TABS_NEED_UPDATE, this::onTabListChangedOnServer);
-        this.parent.getMenu().registerClientHandlerForDataSlot(this.parent.getMenu().DATA_SLOT_UPPER_CONTAINER_TRUE_SIZE, this::onContainerSizeChangedOnServer);
+        this.parent.getMenu().registerClientHandlerForDataSlot(SimpleTableDataSlots.DATA_SLOT_TABS_NEED_UPDATE, this::onTabListChangedOnServer);
+        this.parent.getMenu().registerClientHandlerForDataSlot(SimpleTableDataSlots.DATA_SLOT_UPPER_CONTAINER_TRUE_SIZE, this::onContainerSizeChangedOnServer);
     }
 
 

@@ -22,7 +22,6 @@ public class DualTableMenu extends SimpleTableMenu
 	public static final int SECONDARY_RESULT_SLOT = CRAFT_SECONDARY_SLOT_END + 1; // 145
 	private final CraftingContainer craftSlotsSecondary = new TransientCraftingContainer(this, 3, 3);
 	private final ResultContainer resultSlotsSecondary = new ResultContainer();
-	public final int DATA_SLOT_JEI_RECIPE_TARGET;
 
 	public DualTableMenu(int containerId, Inventory inventory, FriendlyByteBuf friendlyByteBuf)
 	{
@@ -32,7 +31,7 @@ public class DualTableMenu extends SimpleTableMenu
 	public DualTableMenu(int containerId, Inventory inventory, ContainerLevelAccess levelAccess, @Nullable MenuType<?> menuType) {
 		super(containerId, inventory, levelAccess, menuType);
 		this.initialLoading = true;
-		this.addDataSlot(this.recipeTargetGridSlot);		DATA_SLOT_JEI_RECIPE_TARGET = this.getNextDataSlotId();
+		this.DataSlots.setSlotValue(SimpleTableDataSlots.DATA_SLOT_JEI_RECIPE_TARGET, 1); // initial value. no event subscribed yet.
 		this.access.execute(this::loadFromWorldPartTwo);
 
 		//---crafting grid slots 2---
@@ -61,7 +60,7 @@ public class DualTableMenu extends SimpleTableMenu
 		{
 			current = this.slots.get(k);
 			((CustomizationSlot)current).setAcceptsLanterns(true);
-			if (k == CUST_SLOT_START) { y0 = current.y - 9; };
+			if (k == CUST_SLOT_START) { y0 = current.y - 9; }
 			if ((k - CUST_SLOT_START) >= this.getCustomizationSlotCount()) { continue; } // leave them off-screen
 			current.y = y0 + (k - CUST_SLOT_START) * (18 + 4);
 		}
@@ -110,19 +109,22 @@ public class DualTableMenu extends SimpleTableMenu
 	}
 
 
-
-	public int getRecipeTargetGrid() {
-		return this.recipeTargetGridSlot.get();
-	}
-	private final DataSlotWithNotification recipeTargetGridSlot = new DataSlotWithNotification(1);
-	public void registerClientHandlerForRecipeTargetChange(Consumer<Integer> event)	{
-		this.recipeTargetGridSlot.setEvent(event);
+	public int getRecipeTargetGrid()
+	{
+		return this.DataSlots.getSlotValue(SimpleTableDataSlots.DATA_SLOT_JEI_RECIPE_TARGET);
 	}
 
-	public void changeRecipeTargetGridTo(int grid) {
-		if (grid >= 1 && grid <= 2 ) {
-			this.recipeTargetGridSlot.set(grid);
-			this.synchronizeDataSlotToRemote(DATA_SLOT_JEI_RECIPE_TARGET, grid);
+	public void registerClientHandlerForRecipeTargetChange(Consumer<Integer> event)
+	{
+		this.DataSlots.registerClientHandlerForDataSlot(SimpleTableDataSlots.DATA_SLOT_JEI_RECIPE_TARGET, event);
+	}
+
+	public void changeRecipeTargetGridTo(int grid)
+	{
+		if (grid >= 1 && grid <= 2 )
+		{
+			this.DataSlots.setSlotValue(SimpleTableDataSlots.DATA_SLOT_JEI_RECIPE_TARGET, grid);
+			this.synchronizeDataSlotToRemote(SimpleTableDataSlots.DATA_SLOT_JEI_RECIPE_TARGET, grid);
 		}
 	}
 

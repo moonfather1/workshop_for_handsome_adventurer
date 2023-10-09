@@ -1,5 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
+import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.TetraBeltTranslator;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
 import moonfather.workshop_for_handsome_adventurer.integration.CuriosAccessor;
 import moonfather.workshop_for_handsome_adventurer.integration.TetraBeltSupport;
@@ -107,6 +108,21 @@ public class InventoryAccessHelper
             this.currentType = RecordTypes.BLOCK;
             return;
         }
+        if (be.getBlockState().getBlock().getDescriptionId().contains("storagedrawers"))
+        {
+            // support for storage drawers is killed as there is a nasty duplication issue and i have no strength now.
+            return;
+            //LazyOptional<IItemHandler> oih = be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
+            //oih.ifPresent( ih -> {
+            //    this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new StorageDrawersSimpleTranslator(ih));
+            //    this.chosenContainerTrueSize = ih.getSlots() - 1;
+            //    this.currentType = RecordTypes.BLOCK;
+            //} );
+            //if (this.currentType.equals(RecordTypes.BLOCK))
+            //{
+            //    return;
+            //}
+        }
         // IItemHandler capability
         LazyOptional<IItemHandler> oih = be.getCapability(ForgeCapabilities.ITEM_HANDLER);
         if (! oih.isPresent()) {
@@ -166,7 +182,7 @@ public class InventoryAccessHelper
                 record.Nameable = true;
                 record.Name = record.ItemChest.getHoverName();
                 record.Type = RecordTypes.TOOLBELT;
-                record.VisibleSlotCount = size <= 27 ? 27 : 54;
+                record.VisibleSlotCount = (size / 8 * 9) <= 27 ? 27 : 54;
                 record.ItemFirst = TetraBeltSupport.getToolbeltStorageFirst(beltSearch);
                 record.Index = this.adjacentInventories.size();
                 this.adjacentInventories.add(record);
@@ -300,8 +316,8 @@ public class InventoryAccessHelper
         else if (record.Type.equals(RecordTypes.TOOLBELT)) {
             Container belt = TetraBeltSupport.getToolbeltStorage(player);
             if (belt == null) { return false; }
-            this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(belt);
-            this.chosenContainerTrueSize = belt.getContainerSize();
+            this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new TetraBeltTranslator(belt));
+            this.chosenContainerTrueSize = belt.getContainerSize() / TetraBeltTranslator.GetRowWidth(belt) * 9;
             this.currentType = RecordTypes.TOOLBELT;
             return true;
         }
