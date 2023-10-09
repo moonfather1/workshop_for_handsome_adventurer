@@ -40,11 +40,11 @@ public class DualTableMenu extends SimpleTableMenu
 		{
 			for (int hor = 0; hor < 3; ++hor)
 			{
-				this.addSlot(new Slot(this.craftSlotsSecondary, hor + ver * 3, 30-12 + hor * 18, -50 + 17 + ver * 18));
+				this.addSlot(new Slot(this.craftSlotsSecondary, hor + ver * 3, 30-4 + hor * 18, -50 + 17 + ver * 18));
 			}
 		}
 		//---crafting result slot 2---
-		this.addSlot(new ResultSlot(inventory.player, this.craftSlotsSecondary, this.resultSlotsSecondary, 0, 124-12, 35+18));
+		this.addSlot(new ResultSlot(inventory.player, this.craftSlotsSecondary, this.resultSlotsSecondary, 0, 124-4, 35+18));
 
 		/////////////////////////////////////////////////////////////
 		//fix locations to fit a new table

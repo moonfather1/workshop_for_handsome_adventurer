@@ -337,12 +337,26 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
                 this.parent.getMenu().slots.get(k).x += PANEL_WIDTH + 2;
             }
             this.slotsMoved = true;
+            for (var c : this.parent.children())  // CraftingTweaks support
+            {
+                if (c instanceof Button b)
+                {
+                    b.setX(b.getX() + (PANEL_WIDTH + 2));
+                }
+            }
         }
         else if (! this.isVisibleTotal() && this.slotsMoved) {
             for (int k = 0; k < this.parent.getMenu().slots.size(); k++) {
                 this.parent.getMenu().slots.get(k).x -= PANEL_WIDTH + 2;
             }
             this.slotsMoved = false;
+            for (var c : this.parent.children())  // CraftingTweaks support
+            {
+                if (c instanceof Button b)
+                {
+                    b.setX(b.getX() - (PANEL_WIDTH + 2));
+                }
+            }
         }
     }
     private boolean slotsMoved = false;

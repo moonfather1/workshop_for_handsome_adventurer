@@ -83,14 +83,14 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		this.addDataSlot(this.upperContainerTrueSizeSlot);		DATA_SLOT_UPPER_CONTAINER_TRUE_SIZE = this.getNextDataSlotId();
 
 		//---crafting result slot---
-		this.addSlot(new ResultSlot(inventory.player, this.craftSlots, this.resultSlots, 0, 124-12, 35));
+		this.addSlot(new ResultSlot(inventory.player, this.craftSlots, this.resultSlots, 0, 124-4, 35));
 
 		//---crafting grid slots---
 		for (int ver = 0; ver < 3; ++ver)
 		{
 			for(int hor = 0; hor < 3; ++hor)
 			{
-				this.addSlot(new Slot(this.craftSlots, hor + ver * 3, 30-12 + hor * 18, 17 + ver * 18));
+				this.addSlot(new Slot(this.craftSlots, hor + ver * 3, 30-4 + hor * 18, 17 + ver * 18));
 			}
 		}
 
