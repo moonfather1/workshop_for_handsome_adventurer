@@ -10,13 +10,13 @@ public class ToolRackBlockEntity extends BaseContainerBlockEntity
 	public ToolRackBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(Registration.TOOL_RACK_BE.get(), pos, state);
-		this.capacity = 6;
+		this.setCapacity(6);
 	}
 
 	public ToolRackBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state, int capacity)
 	{
 		super(blockEntityType, pos, state);
-		this.capacity = capacity;
+		this.setCapacity(capacity);
 	}
 
 	public int getNumberOfItemsInOneRow() {

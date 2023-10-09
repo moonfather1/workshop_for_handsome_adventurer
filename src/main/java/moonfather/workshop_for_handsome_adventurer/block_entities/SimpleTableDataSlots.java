@@ -56,7 +56,7 @@ public class SimpleTableDataSlots
 
     public void raiseDataSlotFlagForClientFlag(int dataSlot) {
         DataSlot slot = null;
-        if (! this.isFlagSlot(dataSlot))
+        if (this.isFlagSlot(dataSlot))
         {
             slot = this.slots[dataSlot];
         }

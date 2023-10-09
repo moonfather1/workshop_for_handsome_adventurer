@@ -1,8 +1,9 @@
-package moonfather.workshop_for_handsome_adventurer.block_entities;
+package moonfather.workshop_for_handsome_adventurer.block_entities.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import moonfather.workshop_for_handsome_adventurer.Constants;
+import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -22,19 +23,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolActions;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-
-
-
-// i needed to leave this one as a copy so as not to break EveryCompat
-// unused. there is a copy in renderers package.
-// i will update EveryCompat eventually.
-
-
-
-
-
-
-
 
 @ParametersAreNonnullByDefault
 @OnlyIn(Dist.CLIENT)

@@ -10,13 +10,13 @@ public class BookShelfBlockEntity extends BaseContainerBlockEntity
 	public BookShelfBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(Registration.BOOK_SHELF_BE.get(), pos, state);
-		this.capacity = 20;
+		this.setCapacity(20);
 	}
 
 	public BookShelfBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state, int capacity)
 	{
 		super(blockEntityType, pos, state);
-		this.capacity = capacity;
+		this.setCapacity(capacity);
 	}
 
     public int getNumberOfItemsInOneRow() {

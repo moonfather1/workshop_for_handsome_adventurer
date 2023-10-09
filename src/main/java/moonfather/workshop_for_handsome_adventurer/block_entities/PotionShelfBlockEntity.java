@@ -65,7 +65,7 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
     public void DropAll()
     {
         this.VerifyCapacity();
-        for (int slot = 0; slot < this.capacity; slot++)
+        for (int slot = 0; slot < this.getCapacity(); slot++)
         {
             for (int j = 0; j < this.itemCounts.get(slot); j++) {
                 ItemStack potion = this.GetItem(slot);
@@ -188,7 +188,7 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
     protected void VerifyCapacity()
     {
         super.VerifyCapacity();
-        for (int i = this.itemCounts.size(); i < this.capacity; i++) { this.itemCounts.add(0); }
+        for (int i = this.itemCounts.size(); i < this.getCapacity(); i++) { this.itemCounts.add(0); }
     }
 
 }

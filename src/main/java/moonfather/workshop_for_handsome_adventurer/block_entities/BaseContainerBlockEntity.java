@@ -24,18 +24,18 @@ public class BaseContainerBlockEntity extends BlockEntity
     ///////////////////////////////////
 
     private final List<ItemStack> items = new ArrayList<ItemStack>(9);
-    protected int capacity = 9;
+    private int capacity = 9;
 
     public void setCapacity(int value)
     {
-        if (value > this.capacity)
+        if (value > this.getCapacity())
         {
             this.capacity = value;
         }
     }
     protected void VerifyCapacity()
     {
-        for (int i = this.items.size(); i < this.capacity; i++) { this.items.add(ItemStack.EMPTY); }
+        for (int i = this.items.size(); i < this.getCapacity(); i++) { this.items.add(ItemStack.EMPTY); }
     }
 
     ///////////////////////////////////
@@ -45,7 +45,7 @@ public class BaseContainerBlockEntity extends BlockEntity
     {
         super.load(compoundTag);
         this.VerifyCapacity();
-        for (int i = 0; i < this.capacity; i++)
+        for (int i = 0; i < this.getCapacity(); i++)
         {
             CompoundTag tag = compoundTag.getCompound("item" + i);
             if (tag.contains("id"))
@@ -69,7 +69,7 @@ public class BaseContainerBlockEntity extends BlockEntity
     public CompoundTag saveInternal(CompoundTag compoundTag)
     {
         this.VerifyCapacity();
-        for (int i = 0; i < this.capacity; i++) { compoundTag.put("item" + i, this.items.get(i).save(new CompoundTag())); }
+        for (int i = 0; i < this.getCapacity(); i++) { compoundTag.put("item" + i, this.items.get(i).save(new CompoundTag())); }
         return compoundTag;
     }
 
@@ -98,7 +98,7 @@ public class BaseContainerBlockEntity extends BlockEntity
     public void DropAll()
     {
         this.VerifyCapacity();
-        for (int i = 0; i < this.capacity; i++)
+        for (int i = 0; i < this.getCapacity(); i++)
         {
             Block.popResource(this.level, this.getBlockPos(), this.items.get(i));
             this.ClearItem(i);
@@ -123,5 +123,10 @@ public class BaseContainerBlockEntity extends BlockEntity
         this.VerifyCapacity();
         this.items.set(slot, ItemStack.EMPTY);
         this.setChanged();
+    }
+
+    public int getCapacity()
+    {
+        return capacity;
     }
 }

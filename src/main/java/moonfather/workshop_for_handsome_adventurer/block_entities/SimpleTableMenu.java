@@ -73,7 +73,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		this(containerId, inventory, ContainerLevelAccess.NULL, Registration.CRAFTING_SINGLE_MENU_TYPE.get());
 	}
 
-	public SimpleTableMenu(int containerId, Inventory inventory, ContainerLevelAccess levelAccess, @Nullable MenuType<?> menuType) {
+	public SimpleTableMenu(int containerId, Inventory inventory, ContainerLevelAccess levelAccess, @Nullable MenuType<?> menuType)
+	{
 		super(menuType, containerId);
 		this.access = levelAccess;
 		this.player = inventory.player;
@@ -85,7 +86,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		//---crafting grid slots---
 		for (int ver = 0; ver < 3; ++ver)
 		{
-			for(int hor = 0; hor < 3; ++hor)
+			for (int hor = 0; hor < 3; ++hor)
 			{
 				this.addSlot(new Slot(this.craftSlots, hor + ver * 3, 30-4 + hor * 18, 17 + ver * 18));
 			}
@@ -94,7 +95,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		//---player inventory slots---
 		for (int ver = 0; ver < 3; ++ver)
 		{
-			for(int hor = 0; hor < 9; ++hor)
+			for (int hor = 0; hor < 9; ++hor)
 			{
 				this.addSlot(new Slot(inventory, hor + ver * 9 + 9, 8 + hor * 18, 84 + ver * 18));
 			}
@@ -113,10 +114,12 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		this.addSlot(new CustomizationSlot(this.customizationSlots, 2, 152, 17 + 2*22 + ((2 < custSlotCount) ? 0 : 9009)));
 		this.addSlot(new CustomizationSlot(this.customizationSlots, 3, 152, 17 + 3*22 + ((3 < custSlotCount) ? 0 : 9009)));
 		this.access.execute(this::loadFromWorld);
-		if (! this.player.level.isClientSide) {
+		if (! this.player.level.isClientSide)
+		{
 			this.customizationSlots.addListener(new CustomizationListenerServer(this));
 		}
-		else {
+		else
+		{
 			this.customizationSlots.addListener(new CustomizationListenerClient(this));
 		}
 
@@ -147,21 +150,27 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	public int getCustomizationSlotCount()	{ return OptionsHolder.COMMON.SimpleTableNumberOfSlots.get(); }
 
 
-	protected static void slotChangedCraftingGrid(AbstractContainerMenu p_150547_, Level p_150548_, Player p_150549_, CraftingContainer p_150550_, ResultContainer p_150551_) {
-		if (!p_150548_.isClientSide) {
-			ServerPlayer serverplayer = (ServerPlayer)p_150549_;
+	protected static void slotChangedCraftingGrid(AbstractContainerMenu menu, Level level, BlockPos tablePos, Player player, CraftingContainer craftingContainer, ResultContainer resultContainer)
+	{
+		if (! level.isClientSide)
+		{
+			ServerPlayer serverplayer = (ServerPlayer)player;
 			ItemStack itemstack = ItemStack.EMPTY;
-			Optional<CraftingRecipe> optional = p_150548_.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, p_150550_, p_150548_);
-			if (optional.isPresent()) {
+			Optional<CraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingContainer, level);
+			if (optional.isPresent())
+			{
 				CraftingRecipe craftingrecipe = optional.get();
-				if (p_150551_.setRecipeUsed(p_150548_, serverplayer, craftingrecipe)) {
-					itemstack = craftingrecipe.assemble(p_150550_);
+				if (resultContainer.setRecipeUsed(level, serverplayer, craftingrecipe))
+				{
+					itemstack = craftingrecipe.assemble(craftingContainer);
 				}
 			}
 
-			p_150551_.setItem(0, itemstack);
-			p_150547_.setRemoteSlot(0, itemstack);
-			serverplayer.connection.send(new ClientboundContainerSetSlotPacket(p_150547_.containerId, p_150547_.incrementStateId(), 0, itemstack));
+			resultContainer.setItem(0, itemstack);
+			menu.setRemoteSlot(0, itemstack);
+			serverplayer.connection.send(new ClientboundContainerSetSlotPacket(menu.containerId, menu.incrementStateId(), 0, itemstack));
+			BlockState blockState = level.getBlockState(tablePos);
+			level.sendBlockUpdated(tablePos, blockState, blockState, 2); // syncs inventory of client BE from sever BE. needed for renderer. all these months, until 1.09 client BE had item list what was read when loading level, and we were fine - menu would get fresh items and BE would stay oblivious.
 		}
 	}
 
@@ -169,9 +178,9 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	{
 		if (isCraftingGrid(container))
 		{
-			this.access.execute( (p_39386_, p_39387_) ->
+			this.access.execute( (level, pos) ->
 			{
-				slotChangedCraftingGrid(this, p_39386_, this.player, this.craftSlots, this.resultSlots);
+				slotChangedCraftingGrid(this, level, pos, this.player, this.craftSlots, this.resultSlots);
 			});
 		}
 		else
@@ -183,14 +192,22 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	protected void clearAdditional()  {}
 
-	public void removed(Player player) {
+	public void removed(Player player)
+	{
 		super.removed(player);
 		boolean hasDrawer = hasChestInCustomizationSlots();
 		this.clearContainer(player, this.craftSlots);
 		this.clearAdditional();
 		this.access.execute( (level, pos) -> this.storeDataValues(level, pos));
 		this.access.execute( (level, pos) -> this.storeCustomizationsToWorld(this.customizationSlots, level, pos));
-		this.access.execute( (level, pos) -> updateDrawerInWorld(level, pos, hasDrawer));
+		this.access.execute( (level, pos) -> this.updateDrawerInWorld(level, pos, hasDrawer));
+		this.access.execute( (level, pos) -> this.updateInventoryOnClientSide(level, pos)); // see comment for the same call in this file
+	}
+
+	private void updateInventoryOnClientSide(Level level, BlockPos pos)
+	{
+		BlockState state = level.getBlockState(pos);
+		level.sendBlockUpdated(pos, state, state, 2);
 	}
 
 	protected void storeDataValues(Level level, BlockPos pos) { }
@@ -207,14 +224,17 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	protected boolean isSlotACraftingResultSlot(int index) { return index == RESULT_SLOT; }
 	protected boolean isSlotACraftingGridSlot(int index) { return index >= CRAFT_SLOT_START && index <= CRAFT_SLOT_END; }
 
-	protected boolean moveItemStackToCraftingGrid(ItemStack itemstack1) {
+	protected boolean moveItemStackToCraftingGrid(ItemStack itemstack1)
+	{
 		return this.moveItemStackToOccupiedSlotsOnly(itemstack1, CRAFT_SLOT_START, CRAFT_SLOT_END+1, false);
 	}
 
-	public ItemStack quickMoveStack(Player player, int slotIndex) {
+	public ItemStack quickMoveStack(Player player, int slotIndex)
+	{
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(slotIndex);
-		if (slot != null && slot.hasItem()) {
+		if (slot != null && slot.hasItem())
+		{
 			ItemStack itemstack1 = slot.getItem();
 			itemstack = itemstack1.copy();
 			if (this.isSlotACraftingResultSlot(slotIndex)) { //shift on result
@@ -222,54 +242,78 @@ public class SimpleTableMenu extends AbstractContainerMenu
 					itemstack1.getItem().onCraftedBy(itemstack1, level, player);
 				});
 				//reverse: hotbar first, then inv
-				if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, HOTBAR_ROW_SLOT_END+1, true)) {
+				if (! this.moveItemStackTo(itemstack1, INV_SLOT_START, HOTBAR_ROW_SLOT_END+1, true))
+				{
 					return ItemStack.EMPTY;
 				}
 				slot.onQuickCraft(itemstack1, itemstack);
-			} else if (slotIndex >= INV_SLOT_START && slotIndex <= HOTBAR_ROW_SLOT_END) { //from player
-				if (!this.moveItemStackToCraftingGrid(itemstack1)) {
+			}
+			else if (slotIndex >= INV_SLOT_START && slotIndex <= HOTBAR_ROW_SLOT_END)
+			{ //from player
+				if (! this.moveItemStackToCraftingGrid(itemstack1))
+				{
 					// not prioritizing crafting grid anymore (or unlikely no room), try chest
-					if (! this.showInventoryAccess() || ! this.moveItemStackToOccupiedSlotsOnly(itemstack1, ACCESS_SLOT_START, ACCESS_SLOT_END+1, false)) {
+					if (! this.showInventoryAccess() || ! this.moveItemStackToOccupiedSlotsOnly(itemstack1, ACCESS_SLOT_START, ACCESS_SLOT_END+1, false))
+					{
 						// try inv->hotbar or hotbar->inv
-						if (slotIndex < HOTBAR_ROW_SLOT_START) {
-							if (!this.moveItemStackTo(itemstack1, HOTBAR_ROW_SLOT_START, HOTBAR_ROW_SLOT_END + 1, false)) {
+						if (slotIndex < HOTBAR_ROW_SLOT_START)
+						{
+							if (! this.moveItemStackTo(itemstack1, HOTBAR_ROW_SLOT_START, HOTBAR_ROW_SLOT_END + 1, false))
+							{
 								return ItemStack.EMPTY;
 							}
-						} else if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, INV_SLOT_END + 1, false)) {
+						}
+						else if (! this.moveItemStackTo(itemstack1, INV_SLOT_START, INV_SLOT_END + 1, false))
+						{
 							return ItemStack.EMPTY;
 						}
 					}
 				}
-			} else if (slotIndex >= ACCESS_SLOT_START && slotIndex <= ACCESS_SLOT_END) { //from chest
-				if (!this.moveItemStackToCraftingGrid(itemstack1)) {
-					if (!this.moveItemStackToOccupiedSlotsOnly(itemstack1, INV_SLOT_START, INV_SLOT_END + 1, false)) {
-						if (!this.moveItemStackTo(itemstack1, HOTBAR_ROW_SLOT_START, HOTBAR_ROW_SLOT_END + 1, true)) {
-							if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, INV_SLOT_END + 1, false)) {
+			}
+			else if (slotIndex >= ACCESS_SLOT_START && slotIndex <= ACCESS_SLOT_END)
+			{ //from chest
+				if (! this.moveItemStackToCraftingGrid(itemstack1))
+				{
+					if (! this.moveItemStackToOccupiedSlotsOnly(itemstack1, INV_SLOT_START, INV_SLOT_END + 1, false))
+					{
+						if (! this.moveItemStackTo(itemstack1, HOTBAR_ROW_SLOT_START, HOTBAR_ROW_SLOT_END + 1, true))
+						{
+							if (! this.moveItemStackTo(itemstack1, INV_SLOT_START, INV_SLOT_END + 1, false))
+							{
 								return ItemStack.EMPTY;
 							}
 						}
 					}
 				}
-			} else if (isSlotACraftingGridSlot(slotIndex)) { //from crafting
-				if (! this.showInventoryAccess() || ! this.moveItemStackToOccupiedSlotsOnly(itemstack1, ACCESS_SLOT_START, ACCESS_SLOT_END+1, false)) {
-					if (!this.moveItemStackTo(itemstack1, INV_SLOT_START, HOTBAR_ROW_SLOT_END + 1, false)) {
+			}
+			else if (isSlotACraftingGridSlot(slotIndex))
+			{ //from crafting
+				if (! this.showInventoryAccess() || ! this.moveItemStackToOccupiedSlotsOnly(itemstack1, ACCESS_SLOT_START, ACCESS_SLOT_END+1, false))
+				{
+					if (! this.moveItemStackTo(itemstack1, INV_SLOT_START, HOTBAR_ROW_SLOT_END + 1, false))
+					{
 						return ItemStack.EMPTY;
 					}
 				}
 			}
 
-			if (itemstack1.isEmpty()) {
+			if (itemstack1.isEmpty())
+			{
 				slot.set(ItemStack.EMPTY);
-			} else {
+			}
+			else
+			{
 				slot.setChanged();
 			}
 
-			if (itemstack1.getCount() == itemstack.getCount()) {
+			if (itemstack1.getCount() == itemstack.getCount())
+			{
 				return ItemStack.EMPTY;
 			}
 
 			slot.onTake(player, itemstack1);
-			if (slotIndex == 0) {
+			if (slotIndex == 0)
+			{
 				player.drop(itemstack1, false);
 			}
 		}
@@ -283,37 +327,51 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	{
 		boolean result = false;
 		int i = startingSlot;
-		if (reverse) {
+		if (reverse)
+		{
 			i = endingSlotPlus1 - 1;
 		}
 
-		if (itemStack.isStackable()) {
-			while(!itemStack.isEmpty()) {
-				if (reverse) {
-					if (i < startingSlot) {
+		if (itemStack.isStackable())
+		{
+			while(! itemStack.isEmpty())
+			{
+				if (reverse)
+				{
+					if (i < startingSlot)
+					{
 						break;
 					}
-				} else if (i >= endingSlotPlus1) {
+				}
+				else if (i >= endingSlotPlus1)
+				{
 					break;
 				}
 
 				Slot slot = this.slots.get(i);
-				if (reverse) {
+				if (reverse)
+				{
 					--i;
-				} else {
+				}
+				else
+				{
 					++i;
 				} // don't use i anymore
 				if (! slot.isActive()) { continue; }
 				ItemStack itemstack = slot.getItem();
-				if (!itemstack.isEmpty() && ItemStack.isSameItemSameTags(itemStack, itemstack)) {
+				if (! itemstack.isEmpty() && ItemStack.isSameItemSameTags(itemStack, itemstack))
+				{
 					int j = itemstack.getCount() + itemStack.getCount();
 					int maxSize = Math.min(slot.getMaxStackSize(), itemStack.getMaxStackSize());
-					if (j <= maxSize) {
+					if (j <= maxSize)
+					{
 						itemStack.setCount(0);
 						itemstack.setCount(j);
 						slot.setChanged();
 						result = true;
-					} else if (itemstack.getCount() < maxSize) {
+					}
+					else if (itemstack.getCount() < maxSize)
+					{
 						itemStack.shrink(maxSize - itemstack.getCount());
 						itemstack.setCount(maxSize);
 						slot.setChanged();
@@ -329,7 +387,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 
 
-	public boolean canTakeItemForPickAll(ItemStack p_39381_, Slot slot) {
+	public boolean canTakeItemForPickAll(ItemStack p_39381_, Slot slot)
+	{
 		return slot.container != this.resultSlots
 				&& slot.container != this.tabElements
 				&& slot.container != this.customizationSlots
@@ -354,14 +413,15 @@ public class SimpleTableMenu extends AbstractContainerMenu
 						}
 						if (! this.hasChestInCustomizationSlots())
 						{
-							if (this.showInventoryAccess()) {
+							if (this.showInventoryAccess())
+							{
 								this.clearContainerWithInventoryAccess(player, container); // will place to chests
 							}
 							super.clearContainer(player, container); // will place to player
 							this.clearInWorld(container, level, pos);
 							return;
 						}
-						//if (!player.isAlive() || player instanceof ServerPlayer && ((ServerPlayer) player).hasDisconnected()) {
+						//if (! player.isAlive() || player instanceof ServerPlayer && ((ServerPlayer) player).hasDisconnected()) {
 						//	super.clearContainer(player, container); // will drop
 						//	this.clearInWorld(level, pos);
 						//	return;
@@ -378,13 +438,19 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 
 
-	protected void clearContainerWithInventoryAccess(Player player, Container container) {
-		if (!player.isAlive() || player instanceof ServerPlayer && ((ServerPlayer)player).hasDisconnected()) {
-			for (int j = 0; j < container.getContainerSize(); ++j) {
+	protected void clearContainerWithInventoryAccess(Player player, Container container)
+	{
+		if (! player.isAlive() || player instanceof ServerPlayer && ((ServerPlayer)player).hasDisconnected())
+		{
+			for (int j = 0; j < container.getContainerSize(); ++j)
+			{
 				player.drop(container.removeItemNoUpdate(j), false);
 			}
-		} else {
-			for (int i = 0; i < container.getContainerSize(); ++i) {
+		}
+		else
+		{
+			for (int i = 0; i < container.getContainerSize(); ++i)
+			{
 				moveItemStackToOccupiedSlotsOnly(container.getItem(i), ACCESS_SLOT_START, ACCESS_SLOT_END+1, false);
 			}
 		}
@@ -397,14 +463,15 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		return container instanceof CraftingContainer;
 	}
 
-	protected int getSlotOffsetInDataStorage(Container container) {
+	protected int getSlotOffsetInDataStorage(Container container)
+	{
 		return 0;
 	}
 
 	private void storeCraftingGridToWorld(Container container, Level level, BlockPos pos)
 	{
 		SimpleTableBlockEntity be = (SimpleTableBlockEntity) level.getBlockEntity(pos);  assert be != null;
-		for(int i = 0; i < container.getContainerSize(); i++)
+		for (int i = 0; i < container.getContainerSize(); i++)
 		{
 			be.DepositItem(this.getSlotOffsetInDataStorage(container) + i, container.removeItemNoUpdate(i));
 		}
@@ -414,7 +481,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	{
 		SimpleTableBlockEntity be = (SimpleTableBlockEntity) level.getBlockEntity(pos);
 		if (be == null) return;
-		for(int i = 0; i < container.getContainerSize(); i++)
+		for (int i = 0; i < container.getContainerSize(); i++)
 		{
 			be.DepositCustomizationItem(i, container.removeItemNoUpdate(i));
 		}
@@ -423,12 +490,12 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	protected void loadFromWorld(Level level, BlockPos pos)
 	{
 		SimpleTableBlockEntity be = (SimpleTableBlockEntity) level.getBlockEntity(pos);  if (be == null) return;
-		for(int i = 0; i < this.craftSlots.getContainerSize(); i++)
+		for (int i = 0; i < this.craftSlots.getContainerSize(); i++)
 		{
 			this.craftSlots.setItem(i, be.GetItem(i));
 		}
 		this.craftSlots.setChanged();
-		for(int i = 0; i < this.customizationSlots.getContainerSize(); i++)
+		for (int i = 0; i < this.customizationSlots.getContainerSize(); i++)
 		{
 			this.customizationSlots.setItem(i, be.GetCustomizationItem(i));
 		}
@@ -439,7 +506,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	private void clearInWorld(Container container, Level level, BlockPos pos)
 	{
 		BaseContainerBlockEntity be = (BaseContainerBlockEntity) level.getBlockEntity(pos);
-		for(int i = 0; i < container.getContainerSize(); i++)
+		for (int i = 0; i < container.getContainerSize(); i++)
 		{
 			be.ClearItem(this.getSlotOffsetInDataStorage(container) + i);
 		}
@@ -490,7 +557,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		return false;
 	}
 
-	public int getInventoryAccessRange() {
+	public int getInventoryAccessRange()
+	{
 		int result = 0;
 		for (int i = 0; i < this.customizationSlots.getContainerSize(); i++)
 		{
@@ -503,14 +571,16 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		return result;
 	}
 
-	public int getLanternCount() {
+	public int getLanternCount()
+	{
 		int result = 0;
 		for (int i = 0; i < this.customizationSlots.getContainerSize(); i++)
 		{
 			ItemStack stack = this.customizationSlots.getItem(i);
 			if (stack.is(CustomizationSlot.LanternTag))
 			{
-				if (stack.getCount() > result) {
+				if (stack.getCount() > result)
+				{
 					result = stack.getCount();
 				}
 			}
@@ -518,8 +588,10 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		return result;
 	}
 
-	private void setLanternState(Level level, BlockPos pos, boolean value) {
-		if (level.getBlockState(pos).getBlock() instanceof AdvancedTableBottomPrimary block) {
+	private void setLanternState(Level level, BlockPos pos, boolean value)
+	{
+		if (level.getBlockState(pos).getBlock() instanceof AdvancedTableBottomPrimary block)
+		{
 			block.setLanternState(level, pos, value);
 		}
 	}
@@ -546,17 +618,20 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		{
 			this.chestSlots = this.inventoryAccessHelper.chosenContainer;
 			this.setUpperContainerTrueSize(this.inventoryAccessHelper.chosenContainerTrueSize);
-			for (int i = ACCESS_SLOT_START; i <= ACCESS_SLOT_END; i++) {
+			for (int i = ACCESS_SLOT_START; i <= ACCESS_SLOT_END; i++)
+			{
 				this.getSlot(i).container = this.chestSlots;
 			}
 			this.initExcessSlotMap();
 		}
 		else
 		{
-			if (! (this.chestSlots instanceof DisabledContainer)) {
+			if (! (this.chestSlots instanceof DisabledContainer))
+			{
 				this.chestSlots = new DisabledContainer(54);
 				this.setUpperContainerTrueSize(54);
-				for (int i = ACCESS_SLOT_START; i <= ACCESS_SLOT_END; i++) {
+				for (int i = ACCESS_SLOT_START; i <= ACCESS_SLOT_END; i++)
+				{
 					this.getSlot(i).container = this.chestSlots;
 				}
 			}
@@ -569,26 +644,33 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	public int selectedTab = -1;
 
 
-	public void renameChest(String newName) {
+	public void renameChest(String newName)
+	{
 		//System.out.println("rename on server");
-		if (this.player.experienceLevel == 0 && ! this.player.isCreative()) {
+		if (this.player.experienceLevel == 0 && ! this.player.isCreative())
+		{
 			return;
 		}
 		if (newName.equals("")) { return; }
-		if (this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.BLOCK)) {
-			if (this.inventoryAccessHelper.chosenContainerForRename instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity bcbe) {
-				if (!bcbe.hasCustomName() || !bcbe.getCustomName().getString().equals(newName)) {
+		if (this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.BLOCK))
+		{
+			if (this.inventoryAccessHelper.chosenContainerForRename instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity bcbe)
+			{
+				if (! bcbe.hasCustomName() || ! bcbe.getCustomName().getString().equals(newName))
+				{
 					bcbe.setCustomName(new TextComponent(newName));
 					player.giveExperienceLevels(-1);
 				}
 			}
 		}
-		else if (this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.TOOLBELT)) {
+		else if (this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.TOOLBELT))
+		{
 			ItemStack s = (ItemStack) TetraBeltSupport.findToolbelt(player);
 			s.setHoverName(new TextComponent(newName));
 			player.giveExperienceLevels(-1);
 		}
-		else if (this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.LEGGINGS) || this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.CHESTSLOT) || this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.BACKSLOT)) {
+		else if (this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.LEGGINGS) || this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.CHESTSLOT) || this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.BACKSLOT))
+		{
 			ItemStack s = InventoryAccessHelper.getItemFromNamedSlot(player, this.inventoryAccessHelper.currentType);
 			s.setHoverName(new TextComponent(newName));
 			player.giveExperienceLevels(-1);
@@ -657,7 +739,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	/////////////////////////////////////////////////////////////////
 
 	public void updateAccessSlotsOnClient()	{
-		if (this.initialLoading == false && this.showInventoryAccess() && this.chestSlots.getMaxStackSize() == DisabledContainer.MARKER_FOR_DISABLED) {
+		if (this.initialLoading == false && this.showInventoryAccess() && this.chestSlots.getMaxStackSize() == DisabledContainer.MARKER_FOR_DISABLED)
+		{
 			if (this.chestSlots.getMaxStackSize() == DisabledContainer.MARKER_FOR_DISABLED)
 			{
 				//happens on client
@@ -666,7 +749,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			PacketSender.sendTabChangeToServer(0);
 		}
 		// and again, we hide/show access slots here (other direction)
-		if (this.initialLoading == false && ! this.showInventoryAccess() && this.chestSlots.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED) {
+		if (this.initialLoading == false && ! this.showInventoryAccess() && this.chestSlots.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED)
+		{
 			if (this.selectedTab != 0) { this.changeTabTo(0); }
 			if (this.chestSlots instanceof DisabledContainer && this.chestSlots.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED)
 			{
@@ -677,7 +761,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 		// range change - again this worked, but apparently we're "fixing" everything
 		int range = this.getInventoryAccessRange();
-		if	(range != this.lastInventoryAccessRange) {
+		if	(range != this.lastInventoryAccessRange)
+		{
 			PacketSender.sendTabChangeToServer(0);
 		}
 		this.lastInventoryAccessRange = range; // separate value from one on server, but we'll use the same variable. client-copy is only used within this method, below this line.
@@ -704,7 +789,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 					|| this.acceptsLanterns && itemStack.is(LanternTag);
 		}
 
-		public int getMaxStackSize(ItemStack itemStack) {
+		public int getMaxStackSize(ItemStack itemStack)
+		{
 			return itemStack.is(LanternTag) ? 2 : 1;
 		}
 
@@ -741,7 +827,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 
 		@Override
-		public boolean isActive() {
+		public boolean isActive()
+		{
 			return this.shouldRender();
 		}
 	}
@@ -753,16 +840,19 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		private final static int MARKER_FOR_DISABLED = 707;
 		private boolean disabled = true;
 		@Override
-		public int getMaxStackSize() {
+		public int getMaxStackSize()
+		{
 			return this.disabled ? MARKER_FOR_DISABLED : super.getMaxStackSize()/*999*/;
 		}
 
 		@Override
-		public boolean canPlaceItem(int p_18952_, ItemStack p_18953_) {
-			return !this.disabled && super.canPlaceItem(p_18952_, p_18953_);
+		public boolean canPlaceItem(int p_18952_, ItemStack p_18953_)
+		{
+			return ! this.disabled && super.canPlaceItem(p_18952_, p_18953_);
 		}
 
-		public DisabledContainer(int size) {
+		public DisabledContainer(int size)
+		{
 			super(size);
 		}
 	}
@@ -784,29 +874,36 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 
 		@Override
-		public boolean isActive() {
+		public boolean isActive()
+		{
 			return this.container.getMaxStackSize() != DisabledContainer.MARKER_FOR_DISABLED // whole container not disabled
 					&& ! this.isExcessSlot();  // not beyond the limit of variable-size containers
 		}
 
 		@Override
-		public boolean mayPlace(ItemStack itemStack) {
+		public boolean mayPlace(ItemStack itemStack)
+		{
 			return this.isActive() && this.container.canPlaceItem(this.getSlotIndex(), itemStack);
 		}
 
 		@Override
-		public ItemStack getItem() {
-			if (! this.isExcessSlot()) {
+		public ItemStack getItem()
+		{
+			if (! this.isExcessSlot())
+			{
 				return super.getItem();
 			}
-			else {
+			else
+			{
 				return  ItemStack.EMPTY;
 			}
 		}
 
 		@Override
-		public void set(ItemStack stack) {
-			if (this.getSlotIndex() < this.getContainerTrueSize()) {
+		public void set(ItemStack stack)
+		{
+			if (this.getSlotIndex() < this.getContainerTrueSize())
+			{
 				super.set(stack);
 			}
 		}
@@ -827,7 +924,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		private IExcessSlotManager excessManager = null;
 		private final Container internal;
 
-		public VariableSizeContainerWrapper(Container wrapped) {
+		public VariableSizeContainerWrapper(Container wrapped)
+		{
 			super(54);
 			this.internal = wrapped;
 			if (this.internal instanceof IExcessSlotManager esm)
@@ -871,7 +969,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	public static class VariableSizeItemStackHandlerWrapper extends SimpleContainer
 	{
 		private final IItemHandler internal;
-		public VariableSizeItemStackHandlerWrapper(IItemHandler wrapped) {
+		public VariableSizeItemStackHandlerWrapper(IItemHandler wrapped)
+		{
 			super(54);
 			this.internal = wrapped;
 		}
@@ -892,12 +991,16 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		public void setItem(int slot, ItemStack itemStack) { if (slot < internal.getSlots()) { if (internal instanceof IItemHandlerModifiable i2) i2.setStackInSlot(slot, itemStack); else internal.insertItem(slot, itemStack, false); } }
 
 		@Override
-		public boolean isEmpty() {
-			for (int i = 0; i < internal.getSlots(); i++) {
-				if (! internal.getStackInSlot(i).isEmpty()) {
+		public boolean isEmpty()
+		{
+			for (int i = 0; i < internal.getSlots(); i++)
+			{
+				if (! internal.getStackInSlot(i).isEmpty())
+				{
 					return false;
 				}
-			}  return true;
+			}
+			return true;
 		}
 
 		@Override
@@ -908,14 +1011,17 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	}
 	/////////////////////////////////////////////////////////////////////////
 
-	private class CustomizationListenerClient implements ContainerListener {
+	private class CustomizationListenerClient implements ContainerListener
+	{
 		private final SimpleTableMenu parent;
-		public CustomizationListenerClient(SimpleTableMenu simpleTableMenu) {
+		public CustomizationListenerClient(SimpleTableMenu simpleTableMenu)
+		{
 			this.parent = simpleTableMenu;
 		}
 
 		@Override
-		public void containerChanged(Container container) {
+		public void containerChanged(Container container)
+		{
 			// changing drawer state of block in world here causes duping (fixed onRemove, might work now)
 			// anyway we need to hide/show access slots here
 			this.parent.updateAccessSlotsOnClient();
@@ -924,11 +1030,13 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	private class CustomizationListenerServer implements ContainerListener {
 		private final SimpleTableMenu parent;
-		public CustomizationListenerServer(SimpleTableMenu simpleTableMenu) {
+		public CustomizationListenerServer(SimpleTableMenu simpleTableMenu)
+		{
 			this.parent = simpleTableMenu;
 		}
 		@Override
-		public void containerChanged(Container container) {
+		public void containerChanged(Container container)
+		{
 			// name tags
 			int range = this.parent.getInventoryAccessRange();
 			int lastRange = this.parent.lastInventoryAccessRange; // will be overwritten before i need it
@@ -937,7 +1045,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 				this.parent.storeAdjacentInventoriesInSlots();
 				this.parent.DataSlots.resetDataSlotFlagForClientFlag(SimpleTableDataSlots.DATA_SLOT_TABS_NEED_UPDATE); // for some reason i managed to get it stuck on 1
 				this.parent.DataSlots.raiseDataSlotFlagForClientFlag(SimpleTableDataSlots.DATA_SLOT_TABS_NEED_UPDATE);
-				if (lastRange == 0) {
+				if (lastRange == 0)
+				{
 					this.parent.sendAllDataToRemote();
 				}
 				this.parent.lastInventoryAccessRange = range;

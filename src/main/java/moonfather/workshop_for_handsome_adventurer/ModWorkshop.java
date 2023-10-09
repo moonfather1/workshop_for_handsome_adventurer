@@ -25,25 +25,17 @@ import org.slf4j.Logger;
 @Mod(Constants.MODID)
 public class ModWorkshop
 {
-    //--later--
-    //after 1.0: render items on top of tables
-    //after 1.0: todo list similar to one in BiblioCraft     (edit: apparently there will be one in create mod soon so i might cross this off)
-    //after 1.0: bookshelf like the one in BiblioCraft; no gui; (edit: apparently exactly that is coming in 1.20)   DONE IN 1.05
-    //after 1.1: double the number of supported adjacent chests
-	//after 1.1: chest markers (similar to item frames); maybe? (no gui, pull items from chest)
-    //maybe after 1.1: storage drawer support. maybe. not sure how. in any case, only the closest blocks.
-    //maybe after 1.2: tetra tables in wood variants
-
-
     // todo: consider - i can use furnaces from crafting tables. maybe forbid that? what condition
     // todo: consider packingtape addon/support
     // todo: unbolt 6 from potion shelf
+    // todo: c:relocation_not_supported in 1.20+
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public ModWorkshop()
     {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, OptionsHolder.COMMON_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, OptionsHolder.CLIENT_SPEC);
         Registration.init();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::init);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::Initialize));
