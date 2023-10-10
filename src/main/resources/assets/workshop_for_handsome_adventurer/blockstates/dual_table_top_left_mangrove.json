@@ -5,9 +5,13 @@
         "facing=east,has_lanterns=false": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_left_mangrove", "y": -90 },
         "facing=south,has_lanterns=false": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_left_mangrove", "y": 0 },
         "facing=west,has_lanterns=false": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_left_mangrove", "y": 90 },
-        "facing=north,has_lanterns=true": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_left2_mangrove", "y": 180 },
-        "facing=east,has_lanterns=true": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_left2_mangrove", "y": -90 },
-        "facing=south,has_lanterns=true": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_left2_mangrove", "y": 0 },
-        "facing=west,has_lanterns=true": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_left2_mangrove", "y": 90 }
+        "facing=north,has_lanterns=true,is_lit=true": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_left2_mangrove", "y": 180 },
+        "facing=east,has_lanterns=true,is_lit=true": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_left2_mangrove", "y": -90 },
+        "facing=south,has_lanterns=true,is_lit=true": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_left2_mangrove", "y": 0 },
+        "facing=west,has_lanterns=true,is_lit=true": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_left2_mangrove", "y": 90 },
+        "facing=north,has_lanterns=true,is_lit=false": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_left3_mangrove", "y": 180 },
+        "facing=east,has_lanterns=true,is_lit=false": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_left3_mangrove", "y": -90 },
+        "facing=south,has_lanterns=true,is_lit=false": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_left3_mangrove", "y": 0 },
+        "facing=west,has_lanterns=true,is_lit=false": { "model": "workshop_for_handsome_adventurer:block/dual_table_part_top_left3_mangrove", "y": 90 }
     }
 }

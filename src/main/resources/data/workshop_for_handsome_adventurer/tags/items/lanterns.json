@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "minecraft:lantern"
+    "minecraft:lantern",
+    { "id": "byg:glowstone_lantern", "required": false },
+    { "id": "byg:therium_lantern", "required": false }
   ]
 }
