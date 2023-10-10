@@ -51,8 +51,29 @@ public class OptionsHolder
 
 	///////////////////////////////////////////////////
 
+	public static class Client
+	{
+		private static final boolean defaultRenderItemsOnTable = false;
+
+		public final ConfigValue<Boolean> RenderItemsOnTable;
+
+		public Client(ForgeConfigSpec.Builder builder)
+		{
+			builder.push("Tables");
+			this.RenderItemsOnTable = builder.comment("Crafting tables can permanently hold items if you put a chest into a customization slot. Here you set whether the items are rendered.").worldRestart()
+											 .define("Render items on top of tables", defaultRenderItemsOnTable);
+			builder.pop();
+		}
+	}
+
+	///////////////////////////////////////////////////
+
 	public static final Common COMMON;
 	public static final ForgeConfigSpec COMMON_SPEC;
+
+	public static final Client CLIENT;
+	public static final ForgeConfigSpec CLIENT_SPEC;
+
 
 
 	static //constructor
@@ -60,5 +81,9 @@ public class OptionsHolder
 		Pair<Common, ForgeConfigSpec> commonSpecPair = new ForgeConfigSpec.Builder().configure(Common::new);
 		COMMON = commonSpecPair.getLeft();
 		COMMON_SPEC = commonSpecPair.getRight();
+
+		Pair<Client, ForgeConfigSpec> clientSpecPair = new ForgeConfigSpec.Builder().configure(Client::new);
+		CLIENT = clientSpecPair.getLeft();
+		CLIENT_SPEC = clientSpecPair.getRight();
 	}
 }

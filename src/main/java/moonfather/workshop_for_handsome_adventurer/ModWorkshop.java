@@ -19,6 +19,7 @@ import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
+// todo: c:relocation_not_supported in 1.20+
 
 @Mod(Constants.MODID)
 public class ModWorkshop
@@ -28,6 +29,7 @@ public class ModWorkshop
     public ModWorkshop()
     {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, OptionsHolder.COMMON_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, OptionsHolder.CLIENT_SPEC);
         Registration.init();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(CommonSetup::init);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::Initialize));

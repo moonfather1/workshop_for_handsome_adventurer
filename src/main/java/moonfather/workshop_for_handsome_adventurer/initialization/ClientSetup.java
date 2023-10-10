@@ -2,7 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.initialization;
 
 import moonfather.workshop_for_handsome_adventurer.block_entities.screens.DualTableCraftingScreen;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screens.SimpleTableCraftingScreen;
-import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackTESR;
+import moonfather.workshop_for_handsome_adventurer.block_entities.renderers.*;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -23,8 +23,10 @@ public class ClientSetup
 
 	public static void RegisterRenderers(EntityRenderersEvent.RegisterRenderers event)
 	{
-		event.registerBlockEntityRenderer(Registration.TOOL_RACK_BE.get(),	ToolRackTESR::new);
-		event.registerBlockEntityRenderer(Registration.POTION_SHELF_BE.get(),	ToolRackTESR::new);
+		event.registerBlockEntityRenderer(Registration.TOOL_RACK_BE.get(), ToolRackTESR::new);
+		event.registerBlockEntityRenderer(Registration.POTION_SHELF_BE.get(), ToolRackTESR::new);
+		event.registerBlockEntityRenderer(Registration.DUAL_TABLE_BE.get(), DualTableTESR::new);
+		event.registerBlockEntityRenderer(Registration.SIMPLE_TABLE_BE.get(), SimpleTableTESR::new);
 	}
 
 	// two slot textures are in minecraft's block atlas. i wanted to add my own, but it's way too much trouble.

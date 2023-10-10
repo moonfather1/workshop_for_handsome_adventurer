@@ -91,14 +91,14 @@ public class DualTableMenu extends SimpleTableMenu
 		{
 			this.access.execute( (level, pos) ->
 			{
-				slotChangedCraftingGrid(this, level, this.player, this.craftSlots, this.resultSlots);
+				slotChangedCraftingGrid(this, level, pos, this.player, this.craftSlots, this.resultSlots);
 			});
 		}
 		else if (container.equals(this.craftSlotsSecondary))
 		{
 			this.access.execute( (level, pos) ->
 			{
-				slotChangedCraftingGrid(this, level, this.player, this.craftSlotsSecondary, this.resultSlotsSecondary);
+				slotChangedCraftingGrid(this, level, pos, this.player, this.craftSlotsSecondary, this.resultSlotsSecondary);
 			});
 		}
 		else

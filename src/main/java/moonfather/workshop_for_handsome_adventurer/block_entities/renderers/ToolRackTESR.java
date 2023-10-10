@@ -1,7 +1,8 @@
-package moonfather.workshop_for_handsome_adventurer.block_entities;
+package moonfather.workshop_for_handsome_adventurer.block_entities.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import moonfather.workshop_for_handsome_adventurer.Constants;
+import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -20,18 +21,6 @@ import net.minecraftforge.common.ToolActions;
 import org.joml.Quaternionf;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-
-
-// i needed to leave this one as a copy so as not to break EveryCompat
-// unused. there is a copy in renderers package.
-// i will update EveryCompat eventually.
-
-
-
-
-
-
-
 
 @ParametersAreNonnullByDefault
 @OnlyIn(Dist.CLIENT)
@@ -67,7 +56,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 				for (int i = 0; i < itemsPerRow; i++)
 				{
 					if (tile.getCapacity() <= row * itemsPerRow) { break; }
-					ItemStack itemStack = this.RemoveEnchantments(tile.GetItem(row * itemsPerRow + i));
+					ItemStack itemStack = ToolRackTESR.RemoveEnchantments(tile.GetItem(row * itemsPerRow + i));
 					if (!itemStack.isEmpty())
 					{
 						matrixStack.pushPose();
@@ -92,7 +81,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 				for (int i = 0; i < itemsPerRow; i++)
 				{
 					if (tile.getCapacity() <= row * itemsPerRow) { break; }
-					ItemStack itemStack = this.RemoveEnchantments(tile.GetItem(row * itemsPerRow + i));
+					ItemStack itemStack = ToolRackTESR.RemoveEnchantments(tile.GetItem(row * itemsPerRow + i));
 					if (!itemStack.isEmpty())
 					{
 						matrixStack.pushPose();
@@ -121,8 +110,8 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			}
 			BakedModel model = this.itemRenderer.getModel(itemStack, tile.getLevel(), null, combinedLight);
 
-			matrixStack.mulPose(new Quaternionf().fromAxisAngleDeg(1, 0, 0, -90));  // 1.19.4   Vector3f.XP.rotationDegrees(-90.0F)
-			matrixStack.mulPose(new Quaternionf().fromAxisAngleDeg(0, 1, 0, 180));  // 1.19.4   Vector3f.YP.rotationDegrees(180.0F)
+			matrixStack.mulPose(XMinus90);  // 1.19.4   Vector3f.XP.rotationDegrees(-90.0F)
+			matrixStack.mulPose(YPlus180);  // 1.19.4   Vector3f.YP.rotationDegrees(180.0F)
 
 			if (itemStack.getItem().canPerformAction(itemStack, ToolActions.SHIELD_BLOCK))
 			{
@@ -134,16 +123,16 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			else if (itemStack.getItem().canPerformAction(itemStack, ToolActions.SWORD_SWEEP) || itemStack.getItem() instanceof SwordItem) //ModularBladedItem
 			{
 				matrixStack.translate(0, -0.2, 0);
-				matrixStack.mulPose(new Quaternionf().fromAxisAngleDeg(0, 0, 1, 135));  // 1.19.4      Vector3f.ZP.rotationDegrees(135.0F)
+				matrixStack.mulPose(ZPlus135);  // 1.19.4      Vector3f.ZP.rotationDegrees(135.0F)
 			}
 			else if (itemStack.getItem().getClass().getSimpleName().contains("rossbow") || itemStack.getItem() instanceof CrossbowItem)  //ModularCrossbowItem
 			{
 				matrixStack.translate(0, -0.2, 0);
-				matrixStack.mulPose(new Quaternionf().fromAxisAngleDeg(0, 0, 1, 225));  // 1.19.4      Vector3f.ZP.rotationDegrees(225.0F)
+				matrixStack.mulPose(ZPlus225);  // 1.19.4      Vector3f.ZP.rotationDegrees(225.0F)
 			}
 			else if (model.isGui3d())
 			{
-				matrixStack.mulPose(new Quaternionf().fromAxisAngleDeg(0, 0, 1, -45));  // 1.19.4      Vector3f.ZP.rotationDegrees(-45.0F)
+				matrixStack.mulPose(ZMinus45);  // 1.19.4      Vector3f.ZP.rotationDegrees(-45.0F)
 			}
 			else if ((itemStack.getTag() != null && itemStack.getTag().contains("Potion")) || itemStack.is(Items.GLASS_BOTTLE))
 			{
@@ -155,19 +144,22 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			}
 			else
 			{
-				matrixStack.mulPose(new Quaternionf().fromAxisAngleDeg(0, 0, 1, -45));  // 1.19.4    Vector3f.ZP.rotationDegrees(-45.0F)
+				matrixStack.mulPose(ZMinus45);  // 1.19.4    Vector3f.ZP.rotationDegrees(-45.0F)
 			}
 
 			Minecraft.getInstance().getItemRenderer().renderStatic(itemStack, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, matrixStack, buffer, tile.getLevel(), renderId);
 		}
 	}
+	private static final Quaternionf ZMinus45 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, -45);
+	private static final Quaternionf ZPlus225 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 225);
+	private static final Quaternionf ZPlus135 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 135);
+	private static final Quaternionf XMinus90 = new Quaternionf().fromAxisAngleDeg(1, 0, 0, -90);
+	private static final Quaternionf YPlus180 = new Quaternionf().fromAxisAngleDeg(0, 1, 0, 180);
 
-
-
-	private ItemStack RemoveEnchantments(ItemStack stored)
+	public static ItemStack RemoveEnchantments(ItemStack stored)
 	{
 		ItemStack result = stored.copy();
-		if (!result.hasTag())
+		if (! result.hasTag())
 		{
 			return result;
 		}

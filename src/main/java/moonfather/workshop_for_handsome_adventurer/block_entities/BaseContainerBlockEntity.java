@@ -24,7 +24,12 @@ public class BaseContainerBlockEntity extends BlockEntity
     ///////////////////////////////////
 
     private final List<ItemStack> items = new ArrayList<ItemStack>(9);
-    protected int capacity = 9;
+    private int capacity = 9;
+
+    public int getCapacity()
+    {
+        return capacity;
+    }
 
     public void setCapacity(int value)
     {
