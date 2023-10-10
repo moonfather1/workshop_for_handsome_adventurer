@@ -1,6 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import mcp.mobius.waila.impl.ui.ItemStackElement;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
@@ -60,11 +61,11 @@ public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEnti
                 poseStack.translate(0, 1.01f, 0);   // on top
                 int tableOffset = secondary ? +1 : 0;
                 poseStack.translate(tableOffset + 0.5D, 0, 0.5D); // center
-                poseStack.mulPose(Vector3f.YP.rotationDegrees(direction.toYRot())); // rotate towards player
+                poseStack.mulPose(YRot[((int) direction.toYRot()) / 90]); // rotate towards player
                 double positionScale = 0.63f;
                 poseStack.translate(j % 3 * 0.3D * positionScale, 0, j / 3 * 0.3D * positionScale);
                 poseStack.translate(-0.19D, 0, -0.19D);
-                poseStack.mulPose(Vector3f.XP.rotationDegrees(-90.0F)); // lay them horizontal
+                poseStack.mulPose(XMinus90); // lay them horizontal
                 float itemScale = 0.15f;
                 poseStack.scale(itemScale, itemScale, itemScale/3); // last part flattens them a little. i don't know how else to deal with blocks
                 Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemTransforms.TransformType.FIXED, combinedLight, combinedOverlay, poseStack, bufferSource, j);
@@ -72,6 +73,14 @@ public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEnti
             }
         }
     }
+    private static final Quaternion XMinus90 = Vector3f.XP.rotationDegrees(-90.0F);
+    private static final Quaternion[] YRot = new Quaternion[]
+            {
+                    Vector3f.YP.rotationDegrees(0f),
+                    Vector3f.YP.rotationDegrees(90f),
+                    Vector3f.YP.rotationDegrees(180f),
+                    Vector3f.YP.rotationDegrees(270f)
+            };
 
     @Override
     public boolean shouldRender(SimpleTableBlockEntity blockEntity, Vec3 location)

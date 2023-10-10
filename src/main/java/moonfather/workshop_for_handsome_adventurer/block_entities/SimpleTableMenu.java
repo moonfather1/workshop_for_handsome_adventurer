@@ -1,6 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import com.mojang.datafixers.util.Pair;
+import com.mojang.logging.LogUtils;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.IExcessSlotManager;
@@ -471,7 +472,12 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	private void storeCraftingGridToWorld(Container container, Level level, BlockPos pos)
 	{
-		SimpleTableBlockEntity be = (SimpleTableBlockEntity) level.getBlockEntity(pos);  assert be != null;
+		SimpleTableBlockEntity be = (SimpleTableBlockEntity) level.getBlockEntity(pos);
+		if (be == null)
+		{
+			LogUtils.getLogger().warn("Error 412 in workshop mod. Please report to the author, along with what you were doing to that poor table.");
+			return;
+		}
 		for (int i = 0; i < container.getContainerSize(); i++)
 		{
 			be.DepositItem(this.getSlotOffsetInDataStorage(container) + i, container.removeItemNoUpdate(i));

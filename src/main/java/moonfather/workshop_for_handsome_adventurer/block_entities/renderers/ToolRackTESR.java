@@ -1,6 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
@@ -44,6 +45,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 	{
 		Direction direction = tile.getBlockState().getValue(HorizontalDirectionalBlock.FACING).getOpposite();
 		Direction itemDirection = direction.getCounterClockWise();
+		Quaternion yBlockDirection = YRot[((int) direction.toYRot()) / 90]; // so that we wouldn't create new objects here
 
 		int itemsPerRow = tile.getNumberOfItemsInOneRow();
 		if (itemsPerRow == 3)  // potions
@@ -63,7 +65,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 						matrixStack.pushPose();
 						double antiZFighting = row * 0.003d + i * 0.001d;
 						matrixStack.translate(itemDirection.getStepX() * (i - 1d) + antiZFighting, 0 - row*(rowHeight/16f+3/16f)-2/16f, itemDirection.getStepZ() * (i - 1d) + antiZFighting);
-						matrixStack.mulPose(direction.getRotation());
+						matrixStack.mulPose(yBlockDirection);
 						renderItemStack(tile, itemStack, matrixStack, buffer, combinedLight, combinedOverlay);
 						matrixStack.popPose();
 					}
@@ -88,7 +90,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 						matrixStack.pushPose();
 						double antiZFighting = row * 0.003d + i * 0.001d;
 						matrixStack.translate(itemDirection.getStepX() * (i - 0.5) + antiZFighting, 0 - row*(rowHeight/16f), itemDirection.getStepZ() * (i - 0.5) + antiZFighting);
-						matrixStack.mulPose(direction.getRotation());
+						matrixStack.mulPose(yBlockDirection);
 						renderItemStack(tile, itemStack, matrixStack, buffer, combinedLight, combinedOverlay);
 						matrixStack.popPose();
 					}
@@ -97,6 +99,13 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			matrixStack.popPose();
 		}
 	}
+	private static final Quaternion[] YRot = new Quaternion[]
+			{
+					Vector3f.YP.rotationDegrees(0f),
+					Vector3f.YP.rotationDegrees(90f),
+					Vector3f.YP.rotationDegrees(180f),
+					Vector3f.YP.rotationDegrees(270f)
+			};
 
 
 
@@ -111,8 +120,8 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			}
 			BakedModel model = this.itemRenderer.getModel(itemStack, tile.getLevel(), null, combinedLight);
 
-			matrixStack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
-			matrixStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+			matrixStack.mulPose(XMinus90);
+			matrixStack.mulPose(YPlus180);
 
 			if (itemStack.getItem().canPerformAction(itemStack, ToolActions.SHIELD_BLOCK))
 			{
@@ -122,16 +131,16 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			else if (itemStack.getItem().canPerformAction(itemStack, ToolActions.SWORD_SWEEP) || itemStack.getItem() instanceof SwordItem) //ModularBladedItem
 			{
 				matrixStack.translate(0, -0.2, 0);
-				matrixStack.mulPose(Vector3f.ZP.rotationDegrees(135.0F));
+				matrixStack.mulPose(ZPlus135);
 			}
 			else if (itemStack.getItem().getClass().getSimpleName().contains("rossbow") || itemStack.getItem() instanceof CrossbowItem)  //ModularCrossbowItem
 			{
 				matrixStack.translate(0, -0.2, 0);
-				matrixStack.mulPose(Vector3f.ZP.rotationDegrees(225.0F));
+				matrixStack.mulPose(ZPlus225);
 			}
 			else if (model.isGui3d())
 			{
-				matrixStack.mulPose(Vector3f.ZP.rotationDegrees(-45.0F));
+				matrixStack.mulPose(ZMinus45);
 			}
 			else if ((itemStack.getTag() != null && itemStack.getTag().contains("CustomPotionColor")) || itemStack.is(Items.GLASS_BOTTLE))
 			{
@@ -143,13 +152,17 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			}
 			else
 			{
-				matrixStack.mulPose(Vector3f.ZP.rotationDegrees(-45.0F));
+				matrixStack.mulPose(ZMinus45);
 			}
 
 			Minecraft.getInstance().getItemRenderer().renderStatic(itemStack, ItemTransforms.TransformType.FIXED, combinedLight, combinedOverlay, matrixStack, buffer, renderId);
 		}
 	}
-
+	private static final Quaternion ZMinus45 = Vector3f.ZP.rotationDegrees(-45.0F);
+	private static final Quaternion ZPlus225 = Vector3f.ZP.rotationDegrees(225.0F);
+	private static final Quaternion ZPlus135 = Vector3f.ZP.rotationDegrees(135.0F);
+	private static final Quaternion XMinus90 = Vector3f.XP.rotationDegrees(-90.0F);
+	private static final Quaternion YPlus180 = Vector3f.YP.rotationDegrees(180.0F);
 
 
 	protected static ItemStack RemoveEnchantments(ItemStack stored)
