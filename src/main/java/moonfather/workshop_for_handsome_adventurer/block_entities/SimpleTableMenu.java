@@ -114,6 +114,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		this.addSlot(new CustomizationSlot(this.customizationSlots, 2, 152, 17 + 2*22 + ((2 < custSlotCount) ? 0 : 9009)));
 		this.addSlot(new CustomizationSlot(this.customizationSlots, 3, 152, 17 + 3*22 + ((3 < custSlotCount) ? 0 : 9009)));
 		this.access.execute(this::loadFromWorld);
+		this.lastLanternCount = this.getLanternCount();
 		if (! this.player.level.isClientSide)
 		{
 			this.customizationSlots.addListener(new CustomizationListenerServer(this));

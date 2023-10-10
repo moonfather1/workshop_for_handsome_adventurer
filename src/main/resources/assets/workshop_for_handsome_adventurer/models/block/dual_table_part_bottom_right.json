@@ -42,8 +42,8 @@
 			"faces": {
 				"north": {"uv": [1, 0, 5, 16], "rotation": 90, "texture": "#stripped_oak_log"},
 				"east": {"uv": [0, 0, 16, 4], "texture": "#stripped_oak_log"},
-				"south": {"uv": [1, 1, 5, 16], "rotation": 90, "texture": "#stripped_oak_log"},
-				"up": {"uv": [0, 0, 16, 16], "rotation": 90, "texture": "#stripped_oak_log"},
+				"south": {"uv": [1, 16, 5, 0], "rotation": 90, "texture": "#stripped_oak_log"},
+				"up": {"uv": [0, 16, 16, 0], "rotation": 90, "texture": "#stripped_oak_log"},
 				"down": {"uv": [0, 0, 16, 16], "rotation": 270, "texture": "#stripped_oak_log"}
 			}
 		},
