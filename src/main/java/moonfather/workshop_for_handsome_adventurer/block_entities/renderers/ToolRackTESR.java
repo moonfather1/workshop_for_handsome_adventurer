@@ -101,10 +101,10 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 	}
 	private static final Quaternion[] YRot = new Quaternion[]
 			{
-					Vector3f.YP.rotationDegrees(0f),
-					Vector3f.YP.rotationDegrees(90f),
-					Vector3f.YP.rotationDegrees(180f),
-					Vector3f.YP.rotationDegrees(270f)
+					Direction.SOUTH.getRotation(), // 0
+					Direction.WEST.getRotation(), // 90
+					Direction.NORTH.getRotation(), // 180
+					Direction.EAST.getRotation() // 270
 			};
 
 
