@@ -6,6 +6,7 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.BaseContainerB
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.integration.PackingTape;
+import moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleToolRackHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
@@ -38,11 +39,14 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.ToolActions;
+import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.text.MessageFormat;
 import java.util.*;
 
+@ParametersAreNonnullByDefault
 public class ToolRack extends Block implements EntityBlock
 {
 	public ToolRack(int itemCount, String type)
@@ -69,6 +73,19 @@ public class ToolRack extends Block implements EntityBlock
 		this.Tooltip2 = Component.translatable(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
 	}
 
+	public static ToolRack create(int itemCount, String type)
+	{
+		if (ModList.get().isLoaded("tetra"))
+		{
+			return TetraCompatibleToolRackHelper.create(false, itemCount, type);
+		}
+		else
+		{
+			return new ToolRack(itemCount, type);
+		}
+	}
+
+	////////////////////////////////////////////
 
 	protected final int itemCount;
 	protected MutableComponent Tooltip1;

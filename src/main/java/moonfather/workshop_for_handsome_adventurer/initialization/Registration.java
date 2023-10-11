@@ -84,16 +84,16 @@ public class Registration
 		// toolracks
 		for (String woodType: Registration.woodTypes) {
 			RegistryObject<Block> rack;
-			rack = BLOCKS.register("tool_rack_single_" + woodType, () -> new ToolRack(2, "single"));
+			rack = BLOCKS.register("tool_rack_single_" + woodType, () -> ToolRack.create(2, "single"));
 			items_rack1.add(FromBlock(rack));
 			blocks_rack.add(rack);
-			rack = BLOCKS.register("tool_rack_framed_" + woodType, () -> new DualToolRack(6, "framed"));
+			rack = BLOCKS.register("tool_rack_framed_" + woodType, () -> DualToolRack.create(6, "framed"));
 			items_rack2.add(FromBlock(rack));
 			blocks_rack.add(rack);
-			rack = BLOCKS.register("tool_rack_pframed_" + woodType, () -> new DualToolRack(6, "pframed"));
+			rack = BLOCKS.register("tool_rack_pframed_" + woodType, () -> DualToolRack.create(6, "pframed"));
 			items_rack3.add(FromBlock(rack));
 			blocks_rack.add(rack);
-			rack = BLOCKS.register("tool_rack_double_" + woodType, () -> new DualToolRack(6, "double"));
+			rack = BLOCKS.register("tool_rack_double_" + woodType, () -> DualToolRack.create(6, "double"));
 			items_rack4.add(FromBlock(rack));
 			blocks_rack.add(rack);
 		}

@@ -3,13 +3,17 @@ package moonfather.workshop_for_handsome_adventurer.block_entities.screens;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableDataSlots;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screen_components.SimpleButton;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screen_components.SlightlyNicerEditBox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.*;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.StateSwitchingButton;
+import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -17,16 +21,17 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.function.Function;
 
+@ParametersAreNonnullByDefault
 public class InventoryAccessComponent extends GuiComponent implements Widget, GuiEventListener, NarratableEntry
 {
     public static final int PANEL_WIDTH = 176;
@@ -59,8 +64,8 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         {
             this.initVisuals();
         }
-        this.parent.getMenu().registerClientHandlerForDataSlot(this.parent.getMenu().DATA_SLOT_TABS_NEED_UPDATE, this::onTabListChangedOnServer);
-        this.parent.getMenu().registerClientHandlerForDataSlot(this.parent.getMenu().DATA_SLOT_UPPER_CONTAINER_TRUE_SIZE, this::onContainerSizeChangedOnServer);
+        this.parent.getMenu().registerClientHandlerForDataSlot(SimpleTableDataSlots.DATA_SLOT_TABS_NEED_UPDATE, this::onTabListChangedOnServer);
+        this.parent.getMenu().registerClientHandlerForDataSlot(SimpleTableDataSlots.DATA_SLOT_UPPER_CONTAINER_TRUE_SIZE, this::onContainerSizeChangedOnServer);
         this.parent.getMinecraft().keyboardHandler.setSendRepeatsToGui(true);
     }
 
@@ -70,13 +75,14 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     {
         this.xOffset = (this.parent.width - this.parent.getImageWidth() - PANEL_WIDTH) / 2;
         int bottomY = (this.parent.height - parent.getYSize()) / 2 + PANEL_HEIGHT_WITH_TABS;
-        if (this.renameBox == null) {
+        if (this.renameBox == null)
+        {
             this.renameBox = new SlightlyNicerEditBox(this.parent.getMinecraft().font, this.xOffset, bottomY - 18, 120, 9 + 5, Component.literal("Input box for new name for container"));
             this.renameBox.setMaxLength(50);
             this.renameBox.setBordered(false);  // draw bg myself because some dumbass hardcoded black as background
             this.renameBox.setVisible(true);
             this.renameBox.setTextColor(0xcccccc);
-            this.renameButton = new SimpleButton(this.xOffset, bottomY - 23, 25, 18, 181, 105, 18+1, BG_CHEST_LOCATION_3_ROWS, 256, 256, p_93751_ -> this.renameButtonClicked(), Component.literal("Rename container"));
+            this.renameButton = new SimpleButton(this.xOffset, bottomY - 23, 25, 18, 181, 105, 18 + 1, BG_CHEST_LOCATION_3_ROWS, 256, 256, p_93751_ -> this.renameButtonClicked(), Component.literal("Rename container"));
             this.renameButton.setTooltipKey(renameTooltipKey);
             this.renameButton.setTooltipInset(Component.literal(""));
             this.renameButton.active = false;
@@ -86,12 +92,15 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         this.renameButton.x = this.xOffset + 7 + this.renameBox.getWidth() + 7;
         this.renameButton.y = bottomY - 23;
 
-        if (! this.tabsInitialized) {
+        if (!this.tabsInitialized)
+        {
             this.tabButtons.clear();
             this.selectedTab = null;
-            for (int i = SimpleTableMenu.TABS_SLOT_START; i < SimpleTableMenu.TABS_SLOT_END; i += 2) {
+            for (int i = SimpleTableMenu.TABS_SLOT_START; i < SimpleTableMenu.TABS_SLOT_END; i += 2)
+            {
                 ItemStack stack = this.parent.getMenu().slots.get(i).getItem();
-                if (stack.isEmpty()) {
+                if (stack.isEmpty())
+                {
                     break;
                 }
                 TabButton button = new TabButton();
@@ -102,14 +111,16 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
                 button.parent = this;
                 //button.setClickHandler( this::tabChanged ); //doesn't work
                 this.tabButtons.add(button);
-                if (button.chestIndex == this.parent.getMenu().selectedTab) {
+                if (button.chestIndex == this.parent.getMenu().selectedTab)
+                {
                     this.tabChanged(button, true);
                 }
             }
         }
         this.tabsInitialized = true;
 
-        if (this.selectedTab == null && this.tabButtons.size() > 0) {
+        if (this.selectedTab == null && this.tabButtons.size() > 0)
+        {
             this.tabChanged(this.tabButtons.get(0), true);
             this.parent.getMenu().updateAccessSlotsOnClient();
         }
@@ -120,14 +131,17 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
 
     private Boolean tabChanged(TabButton button, boolean dontSendToServer)
     {
-        if (! button.equals(this.selectedTab)) {
-            if (this.selectedTab != null) {
+        if (!button.equals(this.selectedTab))
+        {
+            if (this.selectedTab != null)
+            {
                 this.selectedTab.setStateTriggered(false);
             }
             button.setStateTriggered(true);
             this.selectedTab = button;
             this.parent.getMenu().selectedTab = button.chestIndex; // we separately set this here as we need it in listener. this value change only happens on client and is only needed here.
-            if (! dontSendToServer) {
+            if (!dontSendToServer)
+            {
                 PacketSender.sendTabChangeToServer(button.chestIndex);
             }
             this.renameButton.setTooltipInset(button.itemMain.getHoverName());
@@ -143,29 +157,39 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
 
     private Boolean tabChanged(TabButton button)
     {
-        return  this.tabChanged(button, false);
+        return this.tabChanged(button, false);
     }
 
 
-    private void onTabListChangedOnServer(Integer flag) {
-        if (flag % 2 == 0) return;
+    private void onTabListChangedOnServer(Integer flag)
+    {
+        if (flag % 2 == 0)
+        {
+            return;
+        }
         this.tabsInitialized = false;
         this.parent.getMenu().selectedTab = -1;
         this.initVisuals();
-        if (this.tabButtons.size() > 0) {
+        if (this.tabButtons.size() > 0)
+        {
             this.tabChanged(this.tabButtons.get(0));
         }
     }
 
 
 
-    private void onContainerSizeChangedOnServer(Integer value) {  }
+    private void onContainerSizeChangedOnServer(Integer value)
+    {
+    }
 
-    public boolean areSlotRowsFourToSixVisible() { return this.slotRowsFourToSixVisible; }
+    public boolean areSlotRowsFourToSixVisible()
+    {
+        return this.slotRowsFourToSixVisible;
+    }
 
     public int getWidth()
     {
-        if (this.isVisibleAccordingToMenuData() && ! this.widthTooNarrow2 && (! this.tabsInitialized || this.tabButtons.size() > 0))
+        if (this.isVisibleAccordingToMenuData() && !this.widthTooNarrow2 && (!this.tabsInitialized || this.tabButtons.size() > 0))
         {
             return PANEL_WIDTH;
         }
@@ -204,8 +228,10 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
 
 
 
-    private ResourceLocation getBackground() {
-        if (this.selectedTab != null && this.slotRowsFourToSixVisible) {
+    private ResourceLocation getBackground()
+    {
+        if (this.selectedTab != null && this.slotRowsFourToSixVisible)
+        {
             return BG_CHEST_LOCATION_6_ROWS;
         }
         return BG_CHEST_LOCATION_3_ROWS;
@@ -213,13 +239,15 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
 
     public void renderTooltip(PoseStack poseStack, int mouseX, int mouseY)
     {
-        if (this.isVisibleTotal()) {
+        if (this.isVisibleTotal())
+        {
             this.renameButton.renderTooltipsSeparately(poseStack, mouseX, mouseY);
-            for(StateSwitchingButton tabButton : this.tabButtons)
+            for (StateSwitchingButton tabButton : this.tabButtons)
             {
                 if (tabButton.isHoveredOrFocused())
                 {
-                    if (this.parent.getMinecraft().screen != null) {
+                    if (this.parent.getMinecraft().screen != null)
+                    {
                         this.parent.getMinecraft().screen.renderTooltip(poseStack, tabButton.getMessage(), mouseX, mouseY);
                     }
                     break;
@@ -237,42 +265,65 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     }
 
     @Override
-    public void updateNarration(NarrationElementOutput output) {
+    public void updateNarration(NarrationElementOutput output)
+    {
         List<NarratableEntry> list = Lists.newArrayList();
         list.addAll(this.tabButtons);
         Screen.NarratableSearchResult screen$narratablesearchresult = Screen.findNarratableWidget(list, (NarratableEntry) null);
-        if (screen$narratablesearchresult != null) {
+        if (screen$narratablesearchresult != null)
+        {
             screen$narratablesearchresult.entry.updateNarration(output.nest());
         }
     }
 
-    public boolean isMouseOver(double p_100353_, double p_100354_) {
+    public boolean isMouseOver(double p_100353_, double p_100354_)
+    {
         return false;
     }
-    public boolean changeFocus(boolean p_100372_) {
+
+    public boolean changeFocus(boolean p_100372_)
+    {
         return false;
     }
-    public void removed() {
+
+    public void removed()
+    {
         this.parent.getMinecraft().keyboardHandler.setSendRepeatsToGui(false);
     }
-    public void toggleVisibility() {
+
+    public void toggleVisibility()
+    {
         this.setVisible(!this.isVisible());
     }
-    public boolean isVisible() {
+
+    public boolean isVisible()
+    {
         return this.visible && this.tabButtons.size() > 0;
     }
-    public boolean isVisibleTotal() { return this.isVisible() && (! this.tabsInitialized || this.tabButtons.size() > 0) && ! this.widthTooNarrow2;  }
-    private boolean isVisibleAccordingToMenuData() { return this.parent.getMenu().showInventoryAccess(); }
+
+    public boolean isVisibleTotal()
+    {
+        return this.isVisible() && (!this.tabsInitialized || this.tabButtons.size() > 0) && !this.widthTooNarrow2;
+    }
+
+    private boolean isVisibleAccordingToMenuData()
+    {
+        return this.parent.getMenu().showInventoryAccess();
+    }
 
 
 
     protected void setVisible(boolean value)
     {
-        boolean changeTab = value && ! this.visible;
-        if (value) { this.initVisuals(); }
+        boolean changeTab = value && !this.visible;
+        if (value)
+        {
+            this.initVisuals();
+        }
         this.visible = value;
         this.updateSlotPositions();
-        if (changeTab) {
+        if (changeTab)
+        {
             this.tabChanged(this.tabButtons.get(0), true); // just to update visuals
         }
     }
@@ -283,7 +334,8 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         if (this.tickCount < 5 || this.tickCount % 10 == 6)
         {
             boolean flag = this.isVisibleAccordingToMenuData();
-            if (this.visible != flag) {
+            if (this.visible != flag)
+            {
                 this.setVisible(flag);
                 this.parent.setPositionsX();
             }
@@ -291,7 +343,8 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         if (this.isVisibleTotal() && this.renameBox != null)
         {
             this.renameBox.tick();
-            if (this.tickCount % 10 == 5) {
+            if (this.tickCount % 10 == 5)
+            {
                 this.suppressRenameButton = false;
                 this.renameButton.active = !this.renameBox.getValue().isEmpty() && (this.parent.getMinecraft().player.experienceLevel > 0 || this.parent.getMinecraft().player.isCreative());
             }
@@ -301,9 +354,12 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     ///////////////////////////////////////////
 
     @Override
-    public boolean keyPressed(int p_94745_, int p_94746_, int p_94747_) {
-        if (this.renameBox.isFocused()) {
-            if (this.renameBox.keyPressed(p_94745_, p_94746_, p_94747_) || this.renameBox.canConsumeInput()) {
+    public boolean keyPressed(int p_94745_, int p_94746_, int p_94747_)
+    {
+        if (this.renameBox.isFocused())
+        {
+            if (this.renameBox.keyPressed(p_94745_, p_94746_, p_94747_) || this.renameBox.canConsumeInput())
+            {
                 return true;
             }
         }
@@ -312,9 +368,12 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
     }
 
     @Override
-    public boolean charTyped(char p_94732_, int p_94733_) {
-        if (this.renameBox.isFocused()) {
-            if (this.renameBox.charTyped(p_94732_, p_94733_)) {
+    public boolean charTyped(char p_94732_, int p_94733_)
+    {
+        if (this.renameBox.isFocused())
+        {
+            if (this.renameBox.charTyped(p_94732_, p_94733_))
+            {
                 return true;
             }
         }
@@ -325,16 +384,21 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
 
     private int lastInventoryAccessRange = 0;
 
-    private void updateWidth(boolean widthTooNarrow) {
-        if (this.widthTooNarrow2 != widthTooNarrow) {
+    private void updateWidth(boolean widthTooNarrow)
+    {
+        if (this.widthTooNarrow2 != widthTooNarrow)
+        {
             this.widthTooNarrow2 = widthTooNarrow;
             this.updateSlotPositions();
         }
     }
 
-    private void updateSlotPositions() {
-        if (this.isVisibleTotal() && ! this.slotsMoved) {
-            for (int k = 0; k < this.parent.getMenu().slots.size(); k++) {
+    private void updateSlotPositions()
+    {
+        if (this.isVisibleTotal() && !this.slotsMoved)
+        {
+            for (int k = 0; k < this.parent.getMenu().slots.size(); k++)
+            {
                 this.parent.getMenu().slots.get(k).x += PANEL_WIDTH + 2;
             }
             this.slotsMoved = true;
@@ -346,8 +410,10 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
                 }
             }
         }
-        else if (! this.isVisibleTotal() && this.slotsMoved) {
-            for (int k = 0; k < this.parent.getMenu().slots.size(); k++) {
+        else if (!this.isVisibleTotal() && this.slotsMoved)
+        {
+            for (int k = 0; k < this.parent.getMenu().slots.size(); k++)
+            {
                 this.parent.getMenu().slots.get(k).x -= PANEL_WIDTH + 2;
             }
             this.slotsMoved = false;
@@ -360,6 +426,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             }
         }
     }
+
     private boolean slotsMoved = false;
 
 
@@ -369,7 +436,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         int startx = this.xOffset + 3;
         int starty = (this.parent.height - this.parent.getYSize()) / 2;
         int counter = 0;
-        for(StateSwitchingButton tabButton : this.tabButtons)
+        for (StateSwitchingButton tabButton : this.tabButtons)
         {
             tabButton.setPosition(startx + (TabButton.WIDTH - 1 /*overlap 1px*/) * counter, starty);
             counter++;
@@ -384,28 +451,35 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
 
     public boolean hasClickedOutside(double mouseX, double mouseY, int leftPos, int topPos, int width, int height, int mouseButton)
     {
-        if (! this.isVisibleTotal()) {
+        if (!this.isVisibleTotal())
+        {
             return true;
-        } else {
+        }
+        else
+        {
             return mouseX < leftPos
-                || mouseX > leftPos + PANEL_WIDTH
-                || mouseY < topPos
-                || mouseY > topPos + height;
+                    || mouseX > leftPos + PANEL_WIDTH
+                    || mouseY < topPos
+                    || mouseY > topPos + height;
         }
     }
 
-    public boolean mouseClicked(double v1, double v2, int mouseButton) {
-        if (this.renameBox != null) {
-            if (this.renameBox.isMouseOver(v1, v2)) {
+    public boolean mouseClicked(double v1, double v2, int mouseButton)
+    {
+        if (this.renameBox != null)
+        {
+            if (this.renameBox.isMouseOver(v1, v2))
+            {
                 //System.out.println("~~~mousecl E  " + this.renameBox.isFocused() + "/" + this.renameBox.isHoveredOrFocused());
                 this.renameBox.setFocus(true);
                 return true;
             }
-            else {
+            else
+            {
                 this.renameBox.setFocus(false);
             }
         }
-        for(TabButton tabButton : this.tabButtons)
+        for (TabButton tabButton : this.tabButtons)
         {
             if (tabButton.isMouseOver(v1, v2))
             {
@@ -413,7 +487,8 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
                 return true;
             }
         }
-        if (this.renameButton != null && this.renameButton.active && ! this.suppressRenameButton && this.renameButton.isMouseOver(v1, v2)) {
+        if (this.renameButton != null && this.renameButton.active && !this.suppressRenameButton && this.renameButton.isMouseOver(v1, v2))
+        {
             this.suppressRenameButton = true;
             this.renameButton.mouseClicked(v1, v2, mouseButton);
             return true;
@@ -421,9 +496,11 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         //System.out.println("~~~mousecl  " + v1 + "   " + v2 + "    " + mouseButton + "/" + this.renameBox.isFocused());
         return false;
     }
+
     private boolean suppressRenameButton = false;
 
-    private void renameButtonClicked() {
+    private void renameButtonClicked()
+    {
         PacketSender.sendRenameRequestToServer(this.renameBox.getValue());
         this.selectedTab.setMessage(Component.literal(this.renameBox.getValue())); // fake it
         this.renameBox.setValue("");
@@ -438,6 +515,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         public InventoryAccessComponent parent;
         private ItemStack itemMain = ItemStack.EMPTY, itemSub = ItemStack.EMPTY;
         private int chestIndex;
+
         public TabButton()
         {
             super(0, 0, WIDTH, HEIGHT, false);
@@ -453,8 +531,14 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             RenderSystem.disableDepthTest();
             int texX = this.xTexStart;
             int texY = this.yTexStart;
-            if (this.isStateTriggered) { texX += this.xDiffTex; }
-            if (this.isHoveredOrFocused()) { texY += this.yDiffTex; } //not a thing
+            if (this.isStateTriggered)
+            {
+                texX += this.xDiffTex;
+            }
+            if (this.isHoveredOrFocused())
+            {
+                texY += this.yDiffTex;
+            } //not a thing
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             this.blit(poseStack, this.x, this.y, texX, texY, this.width, this.height);
             RenderSystem.enableDepthTest();
@@ -462,17 +546,21 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
         }
 
         boolean checkedForSpecialScaling = false, doSpecialScaling = false;
+
         private void renderIcon(ItemRenderer itemRenderer)
         {
-            if (! this.checkedForSpecialScaling) {
-                this.doSpecialScaling = ! (itemMain.getItem() instanceof BlockItem);
+            if (!this.checkedForSpecialScaling)
+            {
+                this.doSpecialScaling = !(itemMain.getItem() instanceof BlockItem);
                 this.checkedForSpecialScaling = true;
             }
-            if (! this.doSpecialScaling) {
+            if (!this.doSpecialScaling)
+            {
                 // main image - block   (chests, barrels)
                 itemRenderer.renderAndDecorateFakeItem(itemMain, this.x + 1, this.y + 2);
             }
-            else {
+            else
+            {
                 // main image - item    (belt, backpack...)
                 int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
                 int y = (this.parent.parent.height - this.parent.parent.getYSize()) / 2;
@@ -481,7 +569,7 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
                 posestack.scale(0.667F, 0.667F, 0.667F);
                 posestack.translate(0, 0, +100.0D);
                 RenderSystem.applyModelViewMatrix();
-                itemRenderer.renderAndDecorateFakeItem(itemMain, (int)((x + this.chestIndex * (WIDTH-1) + 7) * 1.5d), (int)((y+6)*1.5d));
+                itemRenderer.renderAndDecorateFakeItem(itemMain, (int) ((x + this.chestIndex * (WIDTH - 1) + 7) * 1.5d), (int) ((y + 6) * 1.5d));
                 posestack.popPose();
                 RenderSystem.applyModelViewMatrix();
             }
@@ -493,12 +581,13 @@ public class InventoryAccessComponent extends GuiComponent implements Widget, Gu
             posestack.scale(0.667F, 0.667F, 0.667F);
             posestack.translate(0, 0, +100.0D);
             RenderSystem.applyModelViewMatrix();
-            itemRenderer.renderAndDecorateFakeItem(itemSub, (int)((x + this.chestIndex * (WIDTH-1) + 13) * 1.5d), (int)((y+12)*1.5d));
+            itemRenderer.renderAndDecorateFakeItem(itemSub, (int) ((x + this.chestIndex * (WIDTH - 1) + 13) * 1.5d), (int) ((y + 12) * 1.5d));
             posestack.popPose();
             RenderSystem.applyModelViewMatrix();
         }
 
         private Function<TabButton, Boolean> handler = null;
+
         public void setClickHandler(Function<TabButton, Boolean> handler)
         {
             this.handler = handler;
