@@ -80,13 +80,14 @@ public class WthitPlugin implements IWailaPlugin {
                         count = shelf.GetRemainingItems(slot);
                         room = shelf.GetRemainingRoom(slot);
                     }
-                    tooltip.addLine(Component.translatable(message, count, count+room));
-                    tooltip.addLine(shelf.GetItem(slot).getHoverName());
+                    if (count > 0)
+                    {
+                        tooltip.addLine(Component.translatable(message, count, count + room));
+                        tooltip.addLine(shelf.GetItem(slot).getHoverName());
+                        return;
+                    }
                 }
-                else
-                {
-                    tooltip.addLine(Component.translatable(message, 0, shelf.GetRemainingRoom(slot)));
-                }
+                tooltip.addLine(Component.translatable(message, 0, shelf.GetRemainingRoom(slot)));
             }
         }
 

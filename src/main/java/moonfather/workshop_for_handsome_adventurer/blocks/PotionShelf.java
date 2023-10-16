@@ -177,8 +177,8 @@ public class PotionShelf extends ToolRack
             else {
                 player.displayClientMessage(WrongPotionMessage, true);
             }
-            level.sendBlockUpdated(pos, blockState, blockState, 2);
         }
+        level.sendBlockUpdated(pos, blockState, blockState, 2);
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
