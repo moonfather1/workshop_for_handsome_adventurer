@@ -25,7 +25,7 @@ public class BaseContainerBlockEntity extends BlockEntity
     ///////////////////////////////////
 
     private final List<ItemStack> items = new ArrayList<ItemStack>(9);
-    protected int capacity = 9;
+    private int capacity = 9;
 
     public void setCapacity(int value)
     {
@@ -126,5 +126,10 @@ public class BaseContainerBlockEntity extends BlockEntity
         this.VerifyCapacity();
         this.items.set(slot, ItemStack.EMPTY);
         this.setChanged();
+    }
+
+    public int getCapacity()
+    {
+        return capacity;
     }
 }

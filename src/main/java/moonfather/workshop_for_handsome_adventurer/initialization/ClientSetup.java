@@ -1,9 +1,11 @@
 package moonfather.workshop_for_handsome_adventurer.initialization;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
+import moonfather.workshop_for_handsome_adventurer.block_entities.renderers.DualTableTESR;
+import moonfather.workshop_for_handsome_adventurer.block_entities.renderers.SimpleTableTESR;
+import moonfather.workshop_for_handsome_adventurer.block_entities.renderers.ToolRackTESR;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screens.DualTableCraftingScreen;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screens.SimpleTableCraftingScreen;
-import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackTESR;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -27,8 +29,10 @@ public class ClientSetup
 
 	public static void RegisterRenderers(EntityRenderersEvent.RegisterRenderers event)
 	{
-		event.registerBlockEntityRenderer(Registration.TOOL_RACK_BE.get(),	ToolRackTESR::new);
-		event.registerBlockEntityRenderer(Registration.POTION_SHELF_BE.get(),	ToolRackTESR::new);
+		event.registerBlockEntityRenderer(Registration.TOOL_RACK_BE.get(), ToolRackTESR::new);
+		event.registerBlockEntityRenderer(Registration.POTION_SHELF_BE.get(), ToolRackTESR::new);
+		event.registerBlockEntityRenderer(Registration.DUAL_TABLE_BE.get(), DualTableTESR::new);
+		event.registerBlockEntityRenderer(Registration.SIMPLE_TABLE_BE.get(), SimpleTableTESR::new);
 	}
 
 	public static void StitchTextures(TextureStitchEvent.Pre event)

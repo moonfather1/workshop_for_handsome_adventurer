@@ -25,11 +25,13 @@ public class SimpleTableDataSlots
             this.slots[i] = new DualTableMenu.DataSlotWithNotification(0);
         }
     }
+
     private final SimpleTableMenu menu;
 
     /////////////  events  /////////////////////////
 
-    public void registerClientHandlerForDataSlot(int dataSlot, Consumer<Integer> event)	{
+    public void registerClientHandlerForDataSlot(int dataSlot, Consumer<Integer> event)
+    {
         DualTableMenu.DataSlotWithNotification slot = null;
         slot = this.slots[dataSlot];  // NPE is fine on not found
         slot.setEvent(event);
@@ -37,7 +39,8 @@ public class SimpleTableDataSlots
 
     /////////// flags //////////////////////////////////////
 
-    public void resetDataSlotFlagForClientFlag(int dataSlot) {
+    public void resetDataSlotFlagForClientFlag(int dataSlot)
+    {
         DataSlot slot = null;
         if (this.isFlagSlot(dataSlot))
         {
@@ -54,7 +57,8 @@ public class SimpleTableDataSlots
         return dataSlot == DATA_SLOT_TABS_NEED_UPDATE || dataSlot == DATA_SLOT_LOWER_ACCESS_NEEDS_UPDATE;
     }
 
-    public void raiseDataSlotFlagForClientFlag(int dataSlot) {
+    public void raiseDataSlotFlagForClientFlag(int dataSlot)
+    {
         DataSlot slot = null;
         if (this.isFlagSlot(dataSlot))
         {
@@ -91,5 +95,6 @@ public class SimpleTableDataSlots
             this.menu.addDataSlot(this.slots[i]);
         }
     }
+
     private final DualTableMenu.DataSlotWithNotification[] slots;
 }

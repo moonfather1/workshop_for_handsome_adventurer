@@ -157,25 +157,26 @@ public class SimpleTableMenu extends AbstractContainerMenu
     }
 
 
-    protected static void slotChangedCraftingGrid(AbstractContainerMenu p_150547_, Level p_150548_, Player p_150549_, CraftingContainer p_150550_, ResultContainer p_150551_)
+    protected static void slotChangedCraftingGrid(AbstractContainerMenu menu, Level level, BlockPos tablePos, Player player, CraftingContainer craftingContainer, ResultContainer resultContainer)
     {
-        if (!p_150548_.isClientSide)
+        if (!level.isClientSide)
         {
-            ServerPlayer serverplayer = (ServerPlayer) p_150549_;
+            ServerPlayer serverplayer = (ServerPlayer) player;
             ItemStack itemstack = ItemStack.EMPTY;
-            Optional<CraftingRecipe> optional = p_150548_.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, p_150550_, p_150548_);
+            Optional<CraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingContainer, level);
             if (optional.isPresent())
             {
                 CraftingRecipe craftingrecipe = optional.get();
-                if (p_150551_.setRecipeUsed(p_150548_, serverplayer, craftingrecipe))
+                if (resultContainer.setRecipeUsed(level, serverplayer, craftingrecipe))
                 {
-                    itemstack = craftingrecipe.assemble(p_150550_);
+                    itemstack = craftingrecipe.assemble(craftingContainer);
                 }
             }
 
-            p_150551_.setItem(0, itemstack);
-            p_150547_.setRemoteSlot(0, itemstack);
-            serverplayer.connection.send(new ClientboundContainerSetSlotPacket(p_150547_.containerId, p_150547_.incrementStateId(), 0, itemstack));
+            resultContainer.setItem(0, itemstack);
+            menu.setRemoteSlot(0, itemstack);
+            serverplayer.connection.send(new ClientboundContainerSetSlotPacket(menu.containerId, menu.incrementStateId(), 0, itemstack));
+            updateInventoryOnClientSide(level, tablePos);  // syncs inventory of client BE from sever BE. needed for renderer. all these months, until 1.09 client BE had item list what was read when loading level, and we were fine - menu would get fresh items and BE would stay oblivious.
         }
     }
 
@@ -183,9 +184,9 @@ public class SimpleTableMenu extends AbstractContainerMenu
     {
         if (isCraftingGrid(container))
         {
-            this.access.execute((p_39386_, p_39387_) ->
+            this.access.execute((level, pos) ->
             {
-                slotChangedCraftingGrid(this, p_39386_, this.player, this.craftSlots, this.resultSlots);
+                slotChangedCraftingGrid(this, level, pos, this.player, this.craftSlots, this.resultSlots);
             });
         }
         else
@@ -208,6 +209,14 @@ public class SimpleTableMenu extends AbstractContainerMenu
         this.access.execute((level, pos) -> this.storeDataValues(level, pos));
         this.access.execute((level, pos) -> this.storeCustomizationsToWorld(this.customizationSlots, level, pos));
         this.access.execute((level, pos) -> updateDrawerInWorld(level, pos, hasDrawer));
+        this.access.execute( (level, pos) -> this.updateDrawerInWorld(level, pos, hasDrawer));
+        this.access.execute( (level, pos) -> updateInventoryOnClientSide(level, pos)); // see comment for the same call in this file
+    }
+
+    private static void updateInventoryOnClientSide(Level level, BlockPos pos)
+    {
+        BlockState state = level.getBlockState(pos);
+        level.sendBlockUpdated(pos, state, state, 2);
     }
 
     protected void storeDataValues(Level level, BlockPos pos)
