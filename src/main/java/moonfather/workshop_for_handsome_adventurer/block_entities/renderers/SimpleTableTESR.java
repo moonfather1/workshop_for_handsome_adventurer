@@ -5,7 +5,6 @@ import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
@@ -15,6 +14,9 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Quaternionf;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
 public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEntity>
@@ -33,21 +35,16 @@ public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEnti
         {
             // special option: direction is dependent on where the player looks
             direction = Direction.fromYRot(Minecraft.getInstance().player.yHeadRot + 180);
-            if (direction.getStepZ() == 0)
-            {
-                direction = direction.getOpposite(); // z is inverted... arghh
-            }
         }
         else
         {
             // normal option: direction is dependent only on player position
-            direction = Direction.getNearest(playerDX, 0, -1 * playerDZ);
-            // why -1? i dunno
+            direction = Direction.getNearest(-1 * playerDX, 0, -1 * playerDZ);
         } // ok we have direction. now to draw...
-        render3x3(poseStack, direction, bufferSource, combinedLight, combinedOverlay, table, 0, false);
+        render3x3(poseStack, direction, bufferSource, combinedLight, combinedOverlay, table, 0, false, false);
     }
 
-    public static void render3x3(PoseStack poseStack, Direction direction, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay, SimpleTableBlockEntity table, int tableInventoryOffset, boolean secondary)
+    public static void render3x3(PoseStack poseStack, Direction direction, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay, SimpleTableBlockEntity table, int tableInventoryOffset, boolean unused, boolean secondary)
     {
         for (int j = 0; j < 3*3; ++j)
         {
@@ -56,28 +53,40 @@ public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEnti
             {
                 poseStack.pushPose();
                 poseStack.translate(0, 1.01f, 0);   // on top
-                int tableOffset = secondary ? +1 : 0;
-                poseStack.translate(tableOffset + 0.5D, 0, 0.5D); // center
-                poseStack.mulPose(YRot[((int) direction.toYRot()) / 90]); // rotate towards player  // Vector3f.YP.rotationDegrees(direction.toYRot())
+                int tableOffsetX = secondary ? direction.getStepX() : 0;
+                int tableOffsetZ = secondary ? direction.getStepZ() : 0;
+                poseStack.translate(0.5D + tableOffsetZ, 0, 0.5D - tableOffsetX); // center
+                poseStack.mulPose(getYRotation(direction, direction.getStepZ() == 0));  // rotate towards player
                 double positionScale = 0.63f;
-                poseStack.translate(j % 3 * 0.3D * positionScale, 0, j / 3 * 0.3D * positionScale);
-                poseStack.translate(-0.19D, 0, -0.19D);
-                poseStack.mulPose(XMinus90); // lay them horizontal // Vector3f.XP.rotationDegrees(-90.0F)
+                poseStack.translate(j % 3 * 0.3D * positionScale, 0, j / 3 * 0.3D * positionScale); // spread into grid
+                poseStack.translate(-0.19D, 0, -0.19D); // center the grid
+                poseStack.mulPose(XPlus90); // lay items horizontal
+                poseStack.mulPose(ZPlus180); // lay items horizontal
                 float itemScale = 0.15f;
-                poseStack.scale(itemScale, itemScale, itemScale/3); // last part flattens them a little. i don't know how else to deal with blocks
-                Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, poseStack, bufferSource, table.getLevel(), j);
+                poseStack.scale(itemScale, itemScale, itemScale / 3); // last part flattens them a little. i don't know how else to deal with blocks
+                Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, poseStack, bufferSource, null, j);
                 poseStack.popPose();
             }
         }
     }
-    private static final Quaternionf XMinus90 = new Quaternionf().fromAxisAngleDeg(1, 0, 0, -90);
-    private static final Quaternionf[] YRot = new Quaternionf[]
+    private static final Quaternionf XPlus90 = new Quaternionf().fromAxisAngleDeg(1, 0, 0, 90);
+    private static final Quaternionf ZPlus180 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 180);
+    private static final Map<Integer, Quaternionf> YRotCache = new HashMap<>();
+
+
+
+    private static Quaternionf getYRotation(Direction directionToPlayer, boolean invert)
     {
-        new Quaternionf().fromAxisAngleDeg(0, 1, 0,   0),
-        new Quaternionf().fromAxisAngleDeg(0, 1, 0,  90),
-        new Quaternionf().fromAxisAngleDeg(0, 1, 0, 180),
-        new Quaternionf().fromAxisAngleDeg(0, 1, 0, 270)
-    };
+        int one = invert ? -1 : 1;
+        int y = (int) directionToPlayer.toYRot() * one;
+        Quaternionf result = YRotCache.getOrDefault(y, null);
+        if (result == null)
+        {
+            result = new Quaternionf().fromAxisAngleDeg(0, 1, 0, y);
+            YRotCache.put(y, result);
+        }
+        return result;
+    }
 
 
 
