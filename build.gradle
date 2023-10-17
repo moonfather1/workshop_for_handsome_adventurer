@@ -192,10 +192,12 @@ dependencies {
     compileOnly fg.deobf("curse.maven:the-one-probe-245211:4579432")
 
     // runtimeOnly fg.deobf("curse.maven:carry-on-274259:4628675")
-    runtimeOnly fg.deobf("curse.maven:packing-tape-238659:4574130")
+    //runtimeOnly fg.deobf("curse.maven:packing-tape-238659:4574130")
 
     //runtimeOnly fg.deobf("curse.maven:balm-531761:4757228")
     compileOnly fg.deobf("curse.maven:crafting-tweaks-233071:4757229")
+
+    implementation fg.deobf("curse.maven:dynamic-asset-generator-577096:4670363")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
