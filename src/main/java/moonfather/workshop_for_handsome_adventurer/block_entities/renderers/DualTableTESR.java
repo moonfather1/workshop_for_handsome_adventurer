@@ -28,8 +28,8 @@ public class DualTableTESR implements BlockEntityRenderer<DualTableBlockEntity>
     public void render(DualTableBlockEntity table, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay)
     {
         Direction direction = table.getDirection(); // no rotation in case of dual tables.
-        SimpleTableTESR.render3x3(poseStack, direction, bufferSource, combinedLight, combinedOverlay, table, 0, false);
-        SimpleTableTESR.render3x3(poseStack, direction, bufferSource, combinedLight, combinedOverlay, table, 3*3+4, true);
+        SimpleTableTESR.render3x3(poseStack, direction, bufferSource, combinedLight, combinedOverlay, table, 0, true, false);
+        SimpleTableTESR.render3x3(poseStack, direction, bufferSource, combinedLight, combinedOverlay, table, 3*3+4, true, true);
     }
 
 
