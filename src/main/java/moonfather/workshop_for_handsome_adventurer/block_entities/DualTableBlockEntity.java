@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.AABB;
 
 public class DualTableBlockEntity extends SimpleTableBlockEntity
 {
@@ -57,4 +58,20 @@ public class DualTableBlockEntity extends SimpleTableBlockEntity
         return this.cachedDirection;
     }
     private Direction cachedDirection;
+
+
+
+    // run TESR even if main block isn't visible.
+    @Override
+    public AABB getRenderBoundingBox()
+    {
+        if (this.cachedRenderingAABB == null && ! this.worldPosition.equals(BlockPos.ZERO))
+        {
+            this.cachedRenderingAABB = new AABB(this.worldPosition.getX() - 1, this.worldPosition.getY() + 0, this.worldPosition.getZ() - 1,
+                                                this.worldPosition.getX() + 2, this.worldPosition.getY() + 1, this.worldPosition.getZ() + 2);
+            // 3x3 bounding box. i should make a 2x1 or 1x2, but it's complicated and i don't think it would make any impact on game speed.
+        }
+        return this.cachedRenderingAABB;
+    }
+    private AABB cachedRenderingAABB = null;
 }
