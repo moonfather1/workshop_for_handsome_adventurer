@@ -79,10 +79,15 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 	}
 
 	private void createJeiButton() {
-		if (ModList.get().isLoaded("jei")) {
+		if (ModList.get().isLoaded("jei") || ModList.get().isLoaded("roughlyenoughitems")) {
 			this.getBackgroundImage();
 			this.jeiButton = new DestinationPickerButton(0, 0, DestinationPickerButton.JEI_BUTTON_WIDTH, DestinationPickerButton.JEI_BUTTON_HEIGTH, false);  // last par is initial state
-			this.jeiButton.initTextureValues(DestinationPickerButton.JEI_BUTTON_POSX, DestinationPickerButton.JEI_BUTTON_POSY, DestinationPickerButton.JEI_BUTTON_WIDTH + DestinationPickerButton.JEI_BUTTON_MARGIN, DestinationPickerButton.JEI_BUTTON_HEIGTH + DestinationPickerButton.JEI_BUTTON_MARGIN, BACKGROUND_LOCATION[0]);
+			int texturePosY = DestinationPickerButton.JEI_BUTTON_POSY;
+			if (ModList.get().isLoaded("roughlyenoughitems"))
+			{
+				texturePosY = DestinationPickerButton.JEI_BUTTON_POSY + 2 * DestinationPickerButton.JEI_BUTTON_HEIGTH + 2 * DestinationPickerButton.JEI_BUTTON_MARGIN;
+			}
+			this.jeiButton.initTextureValues(DestinationPickerButton.JEI_BUTTON_POSX, texturePosY, DestinationPickerButton.JEI_BUTTON_WIDTH + DestinationPickerButton.JEI_BUTTON_MARGIN, DestinationPickerButton.JEI_BUTTON_HEIGTH + DestinationPickerButton.JEI_BUTTON_MARGIN, BACKGROUND_LOCATION[0]);
 			this.jeiButton.setPosition(DestinationPickerButton.JEI_BUTTON_RENDERX + this.renderLeftPos, DestinationPickerButton.JEI_BUTTON_RENDERY + this.topPos);
 			this.jeiButton.setStateTriggered(((DualTableMenu) this.menu).getRecipeTargetGrid() == 2);
 			this.addRenderableWidget(this.jeiButton);

@@ -193,20 +193,8 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.4'
 
-    // Real mod deobf dependency examples - these get remapped to your current mappings
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
-    // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}") // Adds the full JEI mod as a runtime dependency
-    // implementation fg.deobf("com.tterrag.registrate:Registrate:MC${mc_version}-${registrate_version}") // Adds registrate as a dependency
-
     // Examples using mod jars from ./libs
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
-
-    // For more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-	
-	// fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-    //runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 
     compileOnly fg.deobf("curse.maven:jade-324717:3865918")
     implementation fg.deobf("curse.maven:the-one-probe-245211:3671753")
@@ -234,6 +222,10 @@ dependencies {
     compileOnly fg.deobf("curse.maven:crafting-tweaks-233071:4513973")
     //implementation fg.deobf("curse.maven:crafting-tweaks-233071:4513973")
     //runtimeOnly fg.deobf("curse.maven:balm-531761:4442615")
+
+    compileOnly fg.deobf("curse.maven:roughly-enough-items-310111:4774383")
+    //runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4521465")
+    //runtimeOnly fg.deobf("curse.maven:cloth-config-348521:4633387")
 
     //implementation fg.deobf("maven.modrinth:jei:9.7.2.1001")
     //runtimeOnly fg.deobf("maven.modrinth:carry-on:1.17.1.12")
