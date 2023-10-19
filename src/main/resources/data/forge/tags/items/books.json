@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:book",
+    "minecraft:enchanted_book",
+    "minecraft:knowledge_book",
+
+    { "id": "quark:ancient_tome", "required": false }
+  ]
+}
