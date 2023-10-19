@@ -173,13 +173,17 @@ dependencies {
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
     // at runtime, use the full JEI jar for Forge
-    runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
+    //runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
 
     implementation fg.deobf("curse.maven:crafting-tweaks-233071:4669914")
     runtimeOnly fg.deobf("curse.maven:balm-531761:4751735")
 
     implementation fg.deobf("curse.maven:tetra-289712:4746630")
     runtimeOnly fg.deobf("curse.maven:mutil-351914:3941314")
+	
+	runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4555749")
+	runtimeOnly fg.deobf("curse.maven:cloth-config-348521:4633416")
+	implementation fg.deobf("curse.maven:roughly-enough-items-310111:4774386")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
