@@ -24,6 +24,13 @@ import org.slf4j.Logger;
 @Mod(Constants.MODID)
 public class ModWorkshop
 {
+    //test advancement on table crafted
+
+    //test optional recipes     nope
+    //test mixed wood recipe
+
+//[20:20:33] [Render thread/ERROR] [minecraft/RecipeManager]: Parsing error loading recipe minecraft:crafting_table
+//com.google.gson.JsonParseException: Missing forge:condition, expected to find a JsonObject
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public ModWorkshop()

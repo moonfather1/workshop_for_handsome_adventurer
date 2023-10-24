@@ -26,6 +26,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -161,13 +162,17 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		{
 			ServerPlayer serverplayer = (ServerPlayer)player;
 			ItemStack itemstack = ItemStack.EMPTY;
-			Optional<CraftingRecipe> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingContainer, level);
+			Optional<RecipeHolder<CraftingRecipe>> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftingContainer, level);
 			if (optional.isPresent())
 			{
-				CraftingRecipe craftingrecipe = optional.get();
-				if (resultContainer.setRecipeUsed(level, serverplayer, craftingrecipe))
+				CraftingRecipe craftingrecipe = optional.get().value();
+				if (resultContainer.setRecipeUsed(level, serverplayer, optional.get()))
 				{
 					itemstack = craftingrecipe.assemble(craftingContainer, level.registryAccess());
+					if (! itemstack.isItemEnabled(level.enabledFeatures()))
+					{
+						itemstack = ItemStack.EMPTY;
+					}
 				}
 			}
 

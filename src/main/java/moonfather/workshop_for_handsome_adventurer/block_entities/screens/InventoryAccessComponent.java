@@ -3,6 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.block_entities.screens;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableDataSlots;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
@@ -35,6 +36,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     public static final int PANEL_HEIGHT_WITH_TABS = 166;
     protected static final ResourceLocation BG_CHEST_LOCATION_3_ROWS = new ResourceLocation("workshop_for_handsome_adventurer:textures/gui/left_panel_normal_chest.png");
     protected static final ResourceLocation BG_CHEST_LOCATION_6_ROWS = new ResourceLocation("workshop_for_handsome_adventurer:textures/gui/left_panel_double_chest.png");
+    private static final String RENAME_BUTTON_LOCATION = "workshop_for_handsome_adventurer:textures/gui/rename_%s.png";
     private final String renameTooltipKey = "message.workshop_for_handsome_adventurer.rename";
 
     private int xOffset;
@@ -76,7 +78,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             this.renameBox.setBordered(false);  // draw bg myself because some dumbass hardcoded black as background
             this.renameBox.setVisible(true);
             this.renameBox.setTextColor(0xcccccc);
-            this.renameButton = new SimpleButton(this.xOffset, bottomY - 23, 25, 18, 181, 105, 18+1, BG_CHEST_LOCATION_3_ROWS, 256, 256, p_93751_ -> this.renameButtonClicked(), Component.literal("Rename container"));
+            this.renameButton = new SimpleButton(this.xOffset, bottomY - 23, 25, 18, RENAME_BUTTON_LOCATION, "normal", "hovered", "disabled",  32, 32, p_93751_ -> this.renameButtonClicked(), Component.literal("Rename container"));
             this.renameButton.setTooltipKey(renameTooltipKey);
             this.renameButton.setTooltipInset(Component.literal(""));
             this.renameButton.active = false;
@@ -182,9 +184,10 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     {
         if (this.isVisibleTotal())
         {
-            graphics.pose().pushPose();
-            graphics.pose().translate(0.0D, 0.0D, 100.0D);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.disableDepthTest();
+        //    graphics.pose().pushPose();
+        //    graphics.pose().translate(0.0D, 0.0D, 0.0D);
+        //    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             int x = this.parent.getGuiLeft();
             int y = (this.parent.height - parent.getYSize()) / 2;
             graphics.blit(this.getBackground(), x, y,0, 0, PANEL_WIDTH, PANEL_HEIGHT_WITH_TABS, 256, 256);
@@ -196,7 +199,8 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             {
                 tabButton.render(graphics, p_100320_, p_100321_, p_100322_);
             }
-            graphics.pose().popPose();
+        //    graphics.pose().popPose();
+            RenderSystem.enableDepthTest();
         }
     }
 
@@ -293,7 +297,6 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         }
         if (this.isVisibleTotal() && this.renameBox != null)
         {
-            this.renameBox.tick();
             if (this.tickCount % 10 == 5) {
                 this.suppressRenameButton = false;
                 this.renameButton.active = !this.renameBox.getValue().isEmpty() && (this.parent.getMinecraft().player.experienceLevel > 0 || this.parent.getMinecraft().player.isCreative());
@@ -434,28 +437,29 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
 
     ///////////////////////////////////////////////////////
 
-    private class TabButton extends StateSwitchingButton
+    private static class TabButton extends StateSwitchingButton
     {
         public static final int WIDTH = 22;
         public static final int HEIGHT = 26;
         public InventoryAccessComponent parent;
         private ItemStack itemMain = ItemStack.EMPTY, itemSub = ItemStack.EMPTY;
         private int chestIndex;
+        private static final ResourceLocation imageActiveTab = new ResourceLocation(Constants.MODID, "textures/gui/tab_top_active.png"); // no need for WidgetSprites class
+        private static final ResourceLocation imageInactiveTab = new ResourceLocation(Constants.MODID, "textures/gui/tab_top_inactive.png");
+
         public TabButton()
         {
             super(0, 0, WIDTH, HEIGHT, false);
-            this.initTextureValues(0, 168, 54, 0, BG_CHEST_LOCATION_3_ROWS);
+            // not calling initTextureValues. will do things manually it requires atlas for this control.
         }
 
 
         @Override
         public void renderWidget(GuiGraphics graphics, int p_100458_, int p_100459_, float p_100460_)
         {
-            int texX = this.xTexStart;
-            int texY = this.yTexStart;
-            if (this.isStateTriggered) { texX += this.xDiffTex; }
-            if (this.isHoveredOrFocused()) { texY += this.yDiffTex; } //not a thing
-            graphics.blit(this.resourceLocation, this.getX(), this.getY(), texX, texY, this.width, this.height, 256, 256);
+            int texX = 2;
+            int texY = 2;  // ignoring isHoveredOrFocused()
+            graphics.blit(this.isStateTriggered ? imageActiveTab : imageInactiveTab, this.getX(), this.getY(), texX, texY, this.width, this.height, 32, 32);
             this.renderIcon(graphics);
         }
 

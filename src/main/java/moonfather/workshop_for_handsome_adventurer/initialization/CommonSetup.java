@@ -12,8 +12,7 @@ public class CommonSetup
 {
 	public static void init(FMLCommonSetupEvent event)
 	{
-		PacketSender.registerMessage();
-		CraftingHelper.register(new OptionalRecipeCondition.Serializer(new ResourceLocation(Constants.MODID, "optional")));
+		PacketSender.registerMessages();
 
 		if (ModList.get().isLoaded("craftingtweaks")) {
 			try {

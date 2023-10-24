@@ -11,6 +11,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ public class JEITransferInfoForDualTable implements IRecipeTransferInfo {
 
     @Override
     public boolean canHandle(AbstractContainerMenu container, Object recipe) {
-        return container instanceof DualTableMenu && recipe instanceof Recipe<?>;
+        return container instanceof DualTableMenu && recipe instanceof RecipeHolder rh && rh.value() instanceof Recipe<?>;
     }
 
     @Override

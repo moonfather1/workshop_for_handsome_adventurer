@@ -20,12 +20,7 @@ import net.minecraft.world.level.block.Blocks;
 
 public class UnsupportedWoodRecipe extends CustomRecipe
 {
-    public UnsupportedWoodRecipe(ResourceLocation id)
-    {
-        super(id, CraftingBookCategory.MISC);
-    }
-
-    public UnsupportedWoodRecipe(ResourceLocation id, CraftingBookCategory craftingBookCategory) { super(id, CraftingBookCategory.MISC); }
+    public UnsupportedWoodRecipe(CraftingBookCategory craftingBookCategory) { super(craftingBookCategory); }
 
     @Override
     public boolean matches(CraftingContainer craftingContainer, Level level)

@@ -1,8 +1,9 @@
 {
   "replace": false,
   "values": [
-    { "id": "quark:ancient_tome", "required": false },
     { "id": "malum:encyclopedia_arcana", "required": false },
-    { "id": "croptopia:guide", "required": false }
+    { "id": "croptopia:guide", "required": false },
+    { "id": "botania:lexicon", "required": false },
+    { "id": "patchouli:guide_book", "required": false }
   ]
 }

@@ -1,10 +1,12 @@
 package moonfather.workshop_for_handsome_adventurer.initialization;
 
+import com.mojang.serialization.Codec;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.*;
 import moonfather.workshop_for_handsome_adventurer.blocks.*;
 import moonfather.workshop_for_handsome_adventurer.items.BlockItemEx;
 import moonfather.workshop_for_handsome_adventurer.other.CreativeTab;
+import moonfather.workshop_for_handsome_adventurer.other.OptionalRecipeCondition;
 import moonfather.workshop_for_handsome_adventurer.other.UnsupportedWoodRecipe;
 import moonfather.workshop_for_handsome_adventurer.items.WorkstationPlacerItem;
 import net.minecraft.core.registries.Registries;
@@ -15,6 +17,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -22,7 +25,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Registration
@@ -32,7 +34,9 @@ public class Registration
 	private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Constants.MODID);
 	private static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Constants.MODID);
 	private static final DeferredRegister<RecipeSerializer<?>> RECIPES = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Constants.MODID);
-	private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Constants.MODID);
+	private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries. CREATIVE_MODE_TAB, Constants.MODID);
+	//private static final DeferredRegister<Codec<? extends ICondition>> CONDITIONS = DeferredRegister.create(ForgeRegistries.CONDITION_SERIALIZERS, Constants.MODID);
+	private static final DeferredRegister<Codec<? extends ICondition>> CONDITIONS2 = DeferredRegister.create(ForgeRegistries.Keys.CONDITION_SERIALIZERS, Constants.MODID);
 
 	public static void init()
 	{
@@ -42,6 +46,7 @@ public class Registration
 		CONTAINER_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 		RECIPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 		CREATIVE_TABS.register(FMLJavaModLoadingContext.get().getModEventBus());
+		CONDITIONS2.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,6 +159,8 @@ public class Registration
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public static final RegistryObject<RecipeSerializer<UnsupportedWoodRecipe>> TABLE_RECIPE = RECIPES.register("table_recipe_unknown_planks", ()-> new SimpleCraftingRecipeSerializer<UnsupportedWoodRecipe>(UnsupportedWoodRecipe::new));
+	//public static final RegistryObject<Codec<OptionalRecipeCondition>> RECIPE_FLAG_CONDITION = CONDITIONS.register("optional", () -> OptionalRecipeCondition.STUPID_CODEC);
+	public static final RegistryObject<Codec<OptionalRecipeCondition>> RECIPE_FLAG_CONDITION = CONDITIONS2.register("optional", () -> OptionalRecipeCondition.STUPID_CODEC_2);
 
 	public static final RegistryObject<CreativeModeTab> CREATIVE_TAB = CREATIVE_TABS.register("tab", CreativeTab::buildTab);
 }
