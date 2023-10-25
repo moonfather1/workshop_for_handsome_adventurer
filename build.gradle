@@ -159,6 +159,12 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven {
+        url "https://api.modrinth.com/maven"
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
 }
 
 dependencies {
@@ -183,9 +189,12 @@ dependencies {
 
     //implementation fg.deobf("curse.maven:dynamic-asset-generator-577096:4670363")
 	
-	implementation fg.deobf("curse.maven:roughly-enough-items-310111:4774395")
+	compileOnly fg.deobf("curse.maven:roughly-enough-items-310111:4774395")
 	runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4663010")
 	runtimeOnly fg.deobf("curse.maven:cloth-config-348521:4633444")
+	
+	//implementation fg.deobf("curse.maven:emi-580555:4806904")
+    implementation fg.deobf("maven.modrinth:emi:ShejnJfY")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
