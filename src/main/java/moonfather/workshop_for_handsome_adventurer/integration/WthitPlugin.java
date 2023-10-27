@@ -2,18 +2,21 @@ package moonfather.workshop_for_handsome_adventurer.integration;
 
 import mcp.mobius.waila.api.*;
 import mcp.mobius.waila.api.component.ItemComponent;
+import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
+import moonfather.workshop_for_handsome_adventurer.block_entities.BookShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
-import moonfather.workshop_for_handsome_adventurer.blocks.DualTableBaseBlock;
-import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
+import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
+import moonfather.workshop_for_handsome_adventurer.blocks.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class WthitPlugin implements IWailaPlugin {
@@ -23,6 +26,9 @@ public class WthitPlugin implements IWailaPlugin {
         registrar.addIcon(new WorkstationProvider(), DualTableBaseBlock.class);
         registrar.addComponent(new PotionShelfProvider(), TooltipPosition.TAIL, PotionShelfBlockEntity.class);
         registrar.addBlockData(new PotionShelfDataProvider(), PotionShelf.class);
+        registrar.addComponent(new BookShelfProvider(), TooltipPosition.TAIL, BookShelfBlockEntity.class);
+        registrar.addComponent(new ToolRackProvider1(), TooltipPosition.TAIL, ToolRackBlockEntity.class);
+        registrar.addComponent(new ToolRackProvider2(), TooltipPosition.TAIL, DualToolRack.class);
     }
 
     ////////////////////////////////////
@@ -100,6 +106,91 @@ public class WthitPlugin implements IWailaPlugin {
                 compoundTag.putInt("Bottles" + i, bottles);
                 int space = serverAccessor.getTarget().GetRemainingRoom(i);
                 compoundTag.putInt("Space" + i, space);
+            }
+        }
+    }
+
+    private static class BookShelfProvider extends WailaBaseProvider implements IBlockComponentProvider
+    {
+        @Override
+        public void appendTail(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
+            if (accessor.getBlockEntity() instanceof BookShelfBlockEntity shelf)
+            {
+                int slot = BookShelf.getBookShelfSlot((BookShelf) accessor.getBlock(), new BlockHitResult(accessor.getHitResult().getLocation(), accessor.getSide(), accessor.getPosition(), false));
+                if (slot >= 0 && ! shelf.GetItem(slot).isEmpty())
+                {
+                    tooltip.addLine().with(new ItemComponent(shelf.GetItem(slot))).with(shelf.GetItem(slot).getHoverName());
+                    if (OptionsHolder.CLIENT.DetailedWailaInfoForEnchantedBooks.get())
+                    {
+                        List<Component> enchantments = this.getEnchantmentParts(shelf.GetItem(slot));
+                        if (enchantments != null)
+                        {
+                            for (int i = 0; i < enchantments.size(); i += 2)
+                            {
+                                tooltip.addLine().with(enchantments.get(i)).with(enchantments.get(i + 1));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static class ToolRackProvider1 extends WailaBaseProvider implements IBlockComponentProvider
+    {
+        @Override
+        public void appendTail(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
+            ItemStack tool = ItemStack.EMPTY;
+            if (accessor.getBlockEntity() instanceof ToolRackBlockEntity rack)
+            {
+                int slot = ToolRack.getToolRackSlot((ToolRack) accessor.getBlock(), new BlockHitResult(accessor.getHitResult().getLocation(), accessor.getSide(), accessor.getPosition(), false));
+                tool = rack.GetItem(slot);
+            }
+            if (tool.isEmpty())
+            {
+                return;
+            }
+            tooltip.addLine().with(new ItemComponent(tool)).with(tool.getHoverName());
+            if (OptionsHolder.CLIENT.DetailedWailaInfoForEnchantedTools.get())
+            {
+                List<Component> enchantments = this.getEnchantmentParts(tool);
+                if (enchantments != null)
+                {
+                    for (int i = 0; i < enchantments.size(); i += 2)
+                    {
+                        tooltip.addLine().with(enchantments.get(i)).with(enchantments.get(i + 1));
+                    }
+                }
+            }
+        }
+    }
+
+    private static class ToolRackProvider2 extends WailaBaseProvider implements IBlockComponentProvider
+    {
+        @Override
+        public void appendTail(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
+            ItemStack tool = ItemStack.EMPTY;
+            if (accessor.getBlock() instanceof DualToolRack block && accessor.getBlockEntity() == null)
+            {
+                ToolRackBlockEntity rack = (ToolRackBlockEntity) accessor.getWorld().getBlockEntity(accessor.getPosition().above());
+                int slot = ToolRack.getToolRackSlot(block, new BlockHitResult(accessor.getHitResult().getLocation(), accessor.getSide(), accessor.getPosition().above(), false));
+                tool = rack.GetItem(slot);
+            }
+            if (tool.isEmpty())
+            {
+                return;
+            }
+            tooltip.addLine().with(new ItemComponent(tool)).with(tool.getHoverName());
+            if (OptionsHolder.CLIENT.DetailedWailaInfoForEnchantedTools.get())
+            {
+                List<Component> enchantments = this.getEnchantmentParts(tool);
+                if (enchantments != null)
+                {
+                    for (int i = 0; i < enchantments.size(); i += 2)
+                    {
+                        tooltip.addLine().with(enchantments.get(i)).with(enchantments.get(i + 1));
+                    }
+                }
             }
         }
     }

@@ -175,11 +175,12 @@ dependencies {
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
 
 	compileOnly fg.deobf("curse.maven:jei-238222:4585879")
-	implementation fg.deobf("curse.maven:jade-324717:4573193")
-	//1200
-    compileOnly fg.deobf("curse.maven:badpackets-615134:4438956")
-    compileOnly fg.deobf("curse.maven:wthit-forge-455982:4576339")
-    compileOnly fg.deobf("curse.maven:the-one-probe-245211:4579432")
+    compileOnly fg.deobf("curse.maven:jade-324717:4573193")
+    implementation fg.deobf("curse.maven:the-one-probe-245211:4629624")
+
+    runtimeOnly fg.deobf("curse.maven:badpackets-615134:4784395")
+    implementation fg.deobf("curse.maven:wthit-forge-455982:4727741")
+
 
     // runtimeOnly fg.deobf("curse.maven:carry-on-274259:4628675")
     //runtimeOnly fg.deobf("curse.maven:packing-tape-238659:4574130")
@@ -190,11 +191,14 @@ dependencies {
     //implementation fg.deobf("curse.maven:dynamic-asset-generator-577096:4670363")
 	
 	compileOnly fg.deobf("curse.maven:roughly-enough-items-310111:4774395")
-	runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4663010")
-	runtimeOnly fg.deobf("curse.maven:cloth-config-348521:4633444")
+	//runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4663010")
+	//runtimeOnly fg.deobf("curse.maven:cloth-config-348521:4633444")
 	
 	//implementation fg.deobf("curse.maven:emi-580555:4806904")
     implementation fg.deobf("maven.modrinth:emi:ShejnJfY")
+    compileOnly fg.deobf("maven.modrinth:curios:opCpnbhi")
+
+    compileOnly fg.deobf("maven.modrinth:travelersbackpack:xocqrLoW")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
