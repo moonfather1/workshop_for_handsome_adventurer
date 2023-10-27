@@ -1,0 +1,18 @@
+{
+  "aliases": [
+    {
+      "stacks": [
+        "item:workshop_for_handsome_adventurer:simple_table_oak",
+        "item:workshop_for_handsome_adventurer:simple_table_spruce",
+        "item:workshop_for_handsome_adventurer:simple_table_birch",
+        "item:workshop_for_handsome_adventurer:simple_table_dark_oak",
+        "item:workshop_for_handsome_adventurer:simple_table_jungle",
+        "item:workshop_for_handsome_adventurer:simple_table_mangrove",
+        "item:workshop_for_handsome_adventurer:simple_table_cherry"
+      ],
+      "text": [
+        "alias.emi.workbench"
+      ]
+    }
+  ]
+}
