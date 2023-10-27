@@ -674,7 +674,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			s.setHoverName(Component.literal(newName));
 			player.giveExperienceLevels(-1);
 		}
-		else if (this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.LEGGINGS) || this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.CHESTSLOT) || this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.BACKSLOT))
+		else if (this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.LEGGINGS) || this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.CHESTSLOT)
+				|| this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.BACKSLOT) || this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.FLOATING))
 		{
 			ItemStack s = InventoryAccessHelper.getItemFromNamedSlot(player, this.inventoryAccessHelper.currentType);
 			s.setHoverName(Component.literal(newName));

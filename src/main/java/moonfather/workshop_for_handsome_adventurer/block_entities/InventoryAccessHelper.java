@@ -4,6 +4,7 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.container_tran
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
 import moonfather.workshop_for_handsome_adventurer.integration.CuriosAccessor;
 import moonfather.workshop_for_handsome_adventurer.integration.TetraBeltSupport;
+import moonfather.workshop_for_handsome_adventurer.integration.TravelersBackpack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -12,6 +13,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.DirectionalBlock;
@@ -23,6 +25,7 @@ import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.ModList;
@@ -203,7 +206,24 @@ public class InventoryAccessHelper
                 record.ItemFirst = ItemStack.EMPTY;
                 record.Index = this.adjacentInventories.size();
                 this.adjacentInventories.add(record);
-            });
+            } );
+        }
+        // traveller's backpack. not sure why i support this.
+        if (ModList.get().isLoaded("travelersbackpack"))
+        {
+            TravelersBackpack backpack = TravelersBackpack.getInstance(player);
+            if (backpack.isPresent() && backpack.slotCount() <= 54 && ! backpack.getTabIcon().isEmpty())
+            {
+                InventoryAccessRecord record = new InventoryAccessRecord();
+                record.ItemChest = backpack.getTabIcon();  // when empty, player still has capability but backpack is somewhere on the ground
+                record.Nameable = true;
+                record.Name = record.ItemChest.getHoverName();
+                record.Type = RecordTypes.FLOATING;
+                record.VisibleSlotCount = backpack.slotCount() <= 27 ? 27 : 54;
+                record.ItemFirst = backpack.getFirst();
+                record.Index = this.adjacentInventories.size();
+                this.adjacentInventories.add(record);
+            }
         }
     }
 
@@ -235,13 +255,23 @@ public class InventoryAccessHelper
                         }
                         InventoryAccessRecord record = new InventoryAccessRecord();
                         record.ItemChest = be.getBlockState().getBlock().asItem().getDefaultInstance();
-                        if (this.chosenContainerForRename instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity bcbe) {
-                            record.Name = bcbe.getName();  // Nameable interface doesn't have a set method so i'd have to check for ToolboxBlockEntity and every other separately... doable but meh.
-                            record.Nameable = true;
-                        }
-                        else {
+                        if (record.ItemChest.isEmpty()) {
+                            record.ItemChest = be.getBlockState().getCloneItemStack(new BlockHitResult(pos2.getCenter(), Direction.UP, pos2, false), level, pos2, player);
                             record.Name = record.ItemChest.getHoverName();
-                            record.Nameable = false;
+                            if (record.ItemChest.isEmpty()) {
+                                record.ItemChest = Items.BARREL.getDefaultInstance();
+                                record.Name = be.getBlockState().getBlock().getName();
+                            }
+                        }
+                        if (record.Name == null)   {
+                            if (this.chosenContainerForRename instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity bcbe) {
+                                record.Name = bcbe.getName();  // Nameable interface doesn't have a set method so i'd have to check for ToolboxBlockEntity and every other separately... doable but meh.
+                                record.Nameable = true;
+                            }
+                            else {
+                                record.Name = record.ItemChest.getHoverName();
+                                record.Nameable = false;
+                            }
                         }
                         record.x = pos2.getX(); record.y = pos2.getY(); record.z = pos2.getZ();
                         record.Type = RecordTypes.BLOCK;
@@ -330,6 +360,22 @@ public class InventoryAccessHelper
                 this.currentType = record.Type;
             });
             return this.chosenContainerTrueSize > 0;
+        }
+        else if (record.Type.equals(RecordTypes.FLOATING))
+        {
+            // traveller's backpack. not sure why i support this.
+            if (ModList.get().isLoaded("travelersbackpack"))     // add other containers attached to player here
+            {
+                TravelersBackpack backpack = TravelersBackpack.getInstance(player);
+                if (backpack.isPresent() && backpack.slotCount() <= 54 && ! backpack.getTabIcon().isEmpty())
+                {
+                    this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(backpack.getItems());
+                    this.chosenContainerTrueSize = backpack.slotCount();
+                    this.currentType = RecordTypes.FLOATING;
+                    return true;
+                }
+            }
+            return false;
         }
         else {
             return false;
@@ -431,6 +477,7 @@ public class InventoryAccessHelper
         public static final String LEGGINGS = "leggings_item";
         public static final String CHESTSLOT = "chest_item";
         public static final String BACKSLOT = "back_item";
+        public static final String FLOATING = "floating";
         public static final String[] NAMED_SLOTS = { LEGGINGS, CHESTSLOT, BACKSLOT };
     }
 }
