@@ -145,5 +145,6 @@
 	"config.jade.plugin_workshop_for_handsome_adventurer.jade_plugin1" : "Jade config for WfHA",
 	"config.jade.plugin_workshop_for_handsome_adventurer.jade_plugin2" : "Jade config for WfHA",
 	"config.jade.plugin_workshop_for_handsome_adventurer.jade_plugin3" : "Jade config for WfHA",
-	"alias.emi.workbench": "Радна клупа"
+	"alias.emi.workbench": "Радна клупа",
+	"tag.item.workshop_for_handsome_adventurer.label_components": "Main item for constructing a chest label"
 }

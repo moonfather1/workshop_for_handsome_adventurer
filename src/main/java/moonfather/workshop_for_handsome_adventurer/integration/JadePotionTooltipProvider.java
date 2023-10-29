@@ -65,5 +65,5 @@ public class JadePotionTooltipProvider implements IBlockComponentProvider, IServ
     public ResourceLocation getUid() {
         return this.pluginId;
     }
-    private final ResourceLocation pluginId = new ResourceLocation(Constants.MODID, "jade_plugin_potions");
+    private final ResourceLocation pluginId = new ResourceLocation(Constants.MODID, "jade_plugin1");
 }

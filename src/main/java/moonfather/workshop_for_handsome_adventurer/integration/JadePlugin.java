@@ -3,6 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.integration;
 import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.blocks.BookShelf;
 import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
+import moonfather.workshop_for_handsome_adventurer.blocks.ToolRack;
 import snownee.jade.api.*;
 
 @WailaPlugin
@@ -19,5 +20,6 @@ public class JadePlugin implements IWailaPlugin
     {
         registration.registerBlockComponent(JadePotionTooltipProvider.getInstance(), PotionShelf.class);
         registration.registerBlockComponent(JadeBookTooltipProvider.getInstance(), BookShelf.class);
+        registration.registerBlockComponent(JadeToolTooltipProvider.getInstance(), ToolRack.class);
     }
 }

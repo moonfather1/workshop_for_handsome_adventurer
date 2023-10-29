@@ -149,12 +149,12 @@ dependencies {
 
     implementation fg.deobf("curse.maven:curios-309927:4523009")
 
-    implementation fg.deobf("curse.maven:the-one-probe-245211:3965693")
+    compileOnly fg.deobf("curse.maven:the-one-probe-245211:3965693")
     //implementation fg.deobf("curse.maven:jade-324717:4318618")
-    compileOnly (fg.deobf("curse.maven:jade-324717:4318618"))
+    implementation (fg.deobf("curse.maven:jade-324717:4318618"))
 
-    implementation fg.deobf("curse.maven:badpackets-615134:4073854")
-    implementation fg.deobf("curse.maven:wthit-forge-455982:4534202")
+    //runtimeOnly fg.deobf("curse.maven:badpackets-615134:4073854")
+    compileOnly fg.deobf("curse.maven:wthit-forge-455982:4534202")
 
     compileOnly fg.deobf("curse.maven:crafting-tweaks-233071:4669914")
     //runtimeOnly fg.deobf("curse.maven:balm-531761:4751735")
