@@ -54,14 +54,26 @@ public class OptionsHolder
 	public static class Client
 	{
 		private static final boolean defaultRenderItemsOnTable = false;
+		private static final boolean defaultDetailedWailaInfoForEnchantedTools = false;
+		private static final boolean defaultDetailedWailaInfoForEnchantedBooks = true;
 
 		public final ConfigValue<Boolean> RenderItemsOnTable;
+		public final ConfigValue<Boolean> DetailedWailaInfoForEnchantedTools;
+		public final ConfigValue<Boolean> DetailedWailaInfoForEnchantedBooks;
 
 		public Client(ForgeConfigSpec.Builder builder)
 		{
 			builder.push("Tables");
-			this.RenderItemsOnTable = builder.comment("Crafting tables can permanently hold items if you put a chest into a customization slot. Here you set whether the items are rendered.").worldRestart()
+			this.RenderItemsOnTable = builder.comment("Crafting tables can permanently hold items if you put a chest into a customization slot. Here you set whether the items are rendered.")
 											 .define("Render items on top of tables", defaultRenderItemsOnTable);
+			builder.pop();
+			builder.push("Bookshelves");
+			this.DetailedWailaInfoForEnchantedBooks = builder.comment("If this option is turned you'll see a list of enchantments for your books.")
+															 .define("Detailed info for enchanted books in Jade/TOP/WTHIT", defaultDetailedWailaInfoForEnchantedBooks);
+			builder.pop();
+			builder.push("Toolracks");
+			this.DetailedWailaInfoForEnchantedTools = builder.comment("If this option is turned you'll see a list of enchantments for your tools.")
+															 .define("Detailed info for enchanted tools in Jade/TOP/WTHIT", defaultDetailedWailaInfoForEnchantedTools);
 			builder.pop();
 		}
 	}

@@ -6,15 +6,17 @@ import mcp.mobius.waila.api.ITooltip;
 import mcp.mobius.waila.api.config.IPluginConfig;
 import mcp.mobius.waila.api.ui.IElement;
 import mcp.mobius.waila.impl.ui.ItemStackElement;
+import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.block_entities.BookShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.blocks.BookShelf;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class JadeBookTooltipProvider implements IComponentProvider
+public class JadeBookTooltipProvider extends JadeBaseTooltipProvider implements IComponentProvider
 {
     private static final JadeBookTooltipProvider instance = new JadeBookTooltipProvider();
     public static JadeBookTooltipProvider getInstance() { return instance; }
@@ -28,12 +30,16 @@ public class JadeBookTooltipProvider implements IComponentProvider
             int slot = BookShelf.getBookShelfSlot((BookShelf) accessor.getBlock(), accessor.getHitResult());
             if (slot >= 0 && ! shelf.GetItem(slot).isEmpty())
             {
-                List<IElement> list = new ArrayList<>(3);
-                list.add(tooltip.getElementHelper().item(shelf.GetItem(slot)));
-                list.add(tooltip.getElementHelper().spacer(4, 12));
-                list.add(tooltip.getElementHelper().text(shelf.GetItem(slot).getHoverName()));
-                tooltip.add(list);
+                this.appendTooltipInternal(tooltip, shelf.GetItem(slot));
             }
         }
+    }
+
+
+
+    @Override
+    protected ForgeConfigSpec.ConfigValue<Boolean> getOption()
+    {
+        return OptionsHolder.CLIENT.DetailedWailaInfoForEnchantedBooks;
     }
 }

@@ -13,6 +13,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.DirectionalBlock;
@@ -24,6 +25,8 @@ import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -236,13 +239,19 @@ public class InventoryAccessHelper
                         }
                         InventoryAccessRecord record = new InventoryAccessRecord();
                         record.ItemChest = be.getBlockState().getBlock().asItem().getDefaultInstance();
+                        record.Name = record.ItemChest.getHoverName();
+                        record.Nameable = false;
+                        if (record.ItemChest.isEmpty()) {
+                            record.ItemChest = be.getBlockState().getCloneItemStack(new BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos2, false), level, pos2, player);
+                            record.Name = record.ItemChest.getHoverName();
+                            if (record.ItemChest.isEmpty()) {
+                                record.ItemChest = Items.BARREL.getDefaultInstance();
+                                record.Name = be.getBlockState().getBlock().getName();
+                            }
+                        } // weird containers
                         if (this.chosenContainerForRename instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity bcbe) {
                             record.Name = bcbe.getName();  // Nameable interface doesn't have a set method so i'd have to check for ToolboxBlockEntity and every other separately... doable but meh.
                             record.Nameable = true;
-                        }
-                        else {
-                            record.Name = record.ItemChest.getHoverName();
-                            record.Nameable = false;
                         }
                         record.x = pos2.getX(); record.y = pos2.getY(); record.z = pos2.getZ();
                         record.Type = RecordTypes.BLOCK;

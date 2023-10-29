@@ -341,6 +341,12 @@ public class ToolRack extends Block implements EntityBlock
 		//return super.use(blockState, level, pos, player, hand, blockHitResult);
 	}
 
+
+
+	public static int getToolRackSlot(ToolRack block, BlockHitResult blockHitResult)
+	{
+		return block.getTargetedSlot(blockHitResult);
+	}
 	protected int getTargetedSlot(BlockHitResult blockHitResult)
 	{
 		int aboveThisRow = 0;

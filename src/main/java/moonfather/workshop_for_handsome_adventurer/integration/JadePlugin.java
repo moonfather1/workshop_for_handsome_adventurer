@@ -4,6 +4,7 @@ import mcp.mobius.waila.api.*;
 import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.blocks.BookShelf;
 import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
+import moonfather.workshop_for_handsome_adventurer.blocks.ToolRack;
 
 @WailaPlugin
 public class JadePlugin implements IWailaPlugin
@@ -19,5 +20,6 @@ public class JadePlugin implements IWailaPlugin
     {
         registration.registerComponentProvider(JadePotionTooltipProvider.getInstance(), TooltipPosition.BODY, PotionShelf.class);
         registration.registerComponentProvider(JadeBookTooltipProvider.getInstance(), TooltipPosition.BODY, BookShelf.class);
+        registration.registerComponentProvider(JadeToolTooltipProvider.getInstance(), TooltipPosition.BODY, ToolRack.class);
     }
 }
