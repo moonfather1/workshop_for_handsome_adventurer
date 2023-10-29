@@ -3,6 +3,8 @@ package moonfather.workshop_for_handsome_adventurer.integration;
 import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
+import dev.emi.emi.api.widget.Bounds;
+import moonfather.workshop_for_handsome_adventurer.block_entities.screens.SimpleTableCraftingScreen;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 
 @EmiEntrypoint
@@ -13,5 +15,13 @@ public class EMITransferSupport implements EmiPlugin
     {
         emiRegistry.addRecipeHandler(Registration.CRAFTING_DUAL_MENU_TYPE.get(), new EMIRecipeHandlerForDualTable());
         emiRegistry.addRecipeHandler(Registration.CRAFTING_SINGLE_MENU_TYPE.get(), new EMIRecipeHandlerForSmallTable());
+
+        emiRegistry.addGenericExclusionArea((screen, consumer) ->
+        {
+            if (screen instanceof SimpleTableCraftingScreen workshopTableScreen)
+            {
+                consumer.accept(new Bounds(workshopTableScreen.getGuiLeft(), workshopTableScreen.getGuiTop(), workshopTableScreen.getXSize(), workshopTableScreen.height));
+            }
+        });
     }
 }
