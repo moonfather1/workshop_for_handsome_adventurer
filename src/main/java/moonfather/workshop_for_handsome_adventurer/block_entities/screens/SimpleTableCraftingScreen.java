@@ -72,11 +72,6 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 
 	@Override
 	public void render(GuiGraphics graphics, int p_98480_, int p_98481_, float p_98482_) {
-		this.renderBackground(graphics);
-		if (this.inventoryComponent.isVisibleTotal())
-		{
-			this.inventoryComponent.render(graphics, p_98480_, p_98481_, p_98482_);
-		}
 		super.render(graphics, p_98480_, p_98481_, p_98482_);
 
 		// super.render() calls renderSlot() only for active slot. we want to draw X over inactive slots
@@ -104,6 +99,21 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	}
 	private TextureAtlasSprite excessSlotSprite = null;
 	private static final ResourceLocation EXCESS_SLOT_BG = new ResourceLocation(Constants.MODID, "gui/x_slot");
+
+	@Override
+	protected void renderBg(GuiGraphics graphics, float p_98475_, int p_98476_, int p_98477_) {
+		int i = this.renderLeftPos;
+		int j = (this.height - this.imageHeight) / 2;
+		graphics.blit(this.getBackgroundImage(), i, j, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
+	}
+
+	public void renderBackground(GuiGraphics graphics, int p_297538_, int p_300104_, float p_298759_) {
+		super.renderBackground(graphics, p_297538_, p_300104_, p_298759_); // renders gray shading in the back, than calls renderBg
+		if (this.inventoryComponent.isVisibleTotal())
+		{
+			this.inventoryComponent.render(graphics, p_297538_, p_300104_, p_298759_);
+		}
+	}
 
 
 
@@ -150,13 +160,6 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 
 
 
-	@Override
-	protected void renderBg(GuiGraphics graphics, float p_98475_, int p_98476_, int p_98477_) {
-		int i = this.renderLeftPos;
-		int j = (this.height - this.imageHeight) / 2;
-		graphics.blit(this.getBackgroundImage(), i, j, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
-	}
-
 	protected ResourceLocation getBackgroundImage()
 	{
 		if (CRAFTING_TABLE_LOCATION[0] == null)
@@ -165,8 +168,13 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 			CRAFTING_TABLE_LOCATION[1] = new ResourceLocation("workshop_for_handsome_adventurer:textures/gui/gui_simple_table_1_slots.png");
 			CRAFTING_TABLE_LOCATION[2] = new ResourceLocation("workshop_for_handsome_adventurer:textures/gui/gui_simple_table_2_slots.png");
 		}
-		return CRAFTING_TABLE_LOCATION[OptionsHolder.COMMON.SimpleTableNumberOfSlots.get()];
+		if (this.backgroundImageLocation == null)
+		{
+			this.backgroundImageLocation = CRAFTING_TABLE_LOCATION[OptionsHolder.COMMON.SimpleTableNumberOfSlots.get()];
+		}
+		return this.backgroundImageLocation;
 	}
+	protected ResourceLocation backgroundImageLocation = null;
 
 
 

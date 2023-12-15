@@ -2,13 +2,11 @@
   "type": "forge:conditional",
   "recipes": [
     {
-      "conditions": [
+        "forge:condition":
         {
           "type": "workshop_for_handsome_adventurer:optional",
           "flag_code": "dont_replace_vanilla_crafting_table"
-        }
-      ],
-      "recipe": {
+        },
         "type": "minecraft:crafting_shaped",
         "pattern": [
           "##",
@@ -22,7 +20,6 @@
         "result": {
           "item": "minecraft:crafting_table"
         }
-      }
     }
   ]
 }

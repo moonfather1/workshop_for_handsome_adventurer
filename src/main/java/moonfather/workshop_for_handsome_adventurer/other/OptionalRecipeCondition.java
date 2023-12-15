@@ -1,27 +1,20 @@
 package moonfather.workshop_for_handsome_adventurer.other;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 
 public class OptionalRecipeCondition implements ICondition
 {
 	private final String flagCode;
-	private final ResourceLocation conditionId;
 
-	private OptionalRecipeCondition(ResourceLocation id, String value)
+	private OptionalRecipeCondition(String value)
 	{
-		this.conditionId = id;
 		this.flagCode = value;
 	}
 
-	@Override
-	public ResourceLocation getID()
-	{
-		return this.conditionId;
-	}
+
 
 	@Override
 	public boolean test(IContext context)
@@ -43,31 +36,15 @@ public class OptionalRecipeCondition implements ICondition
 
 	/////////////////////////////////////////////////////
 
-	public static class Serializer implements IConditionSerializer<OptionalRecipeCondition>
+	@Override
+	public Codec<? extends ICondition> codec()
 	{
-		private final ResourceLocation conditionId;
-
-		public Serializer(ResourceLocation id)
-		{
-			this.conditionId = id;
-		}
-
-		@Override
-		public void write(JsonObject json, OptionalRecipeCondition condition)
-		{
-			json.addProperty("flag_code", condition.flagCode);
-		}
-
-		@Override
-		public OptionalRecipeCondition read(JsonObject json)
-		{
-			return new OptionalRecipeCondition(this.conditionId, json.getAsJsonPrimitive("flag_code").getAsString());
-		}
-
-		@Override
-		public ResourceLocation getID()
-		{
-			return this.conditionId;
-		}
+		return CODEC;
 	}
+
+	public static Codec<OptionalRecipeCondition> CODEC = RecordCodecBuilder.create(
+			builder -> builder
+					.group(
+							Codec.STRING.fieldOf("flag_code").forGetter(orc -> orc.flagCode))
+					.apply(builder, OptionalRecipeCondition::new));
 }

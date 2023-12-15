@@ -85,7 +85,7 @@ public class AdvancedTableTopSecondary extends DualTableBaseBlock
 
 
 	@Override
-	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player)
 	{
 		BlockPos posMain = pos.below();
 		BlockState stateMain = level.getBlockState(posMain);

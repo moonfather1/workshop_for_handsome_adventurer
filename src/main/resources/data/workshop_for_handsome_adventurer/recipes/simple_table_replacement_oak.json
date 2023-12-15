@@ -14,12 +14,9 @@
     "item": "workshop_for_handsome_adventurer:simple_table_oak",
     "count": 1
   },
-  "conditions":
-  [
+  "forge:condition":
     {
       "type": "workshop_for_handsome_adventurer:optional",
       "flag_code": "replace_vanilla_crafting_table"
     }
-  ]
-
 }

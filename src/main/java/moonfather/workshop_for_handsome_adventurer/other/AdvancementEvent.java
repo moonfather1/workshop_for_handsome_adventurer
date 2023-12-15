@@ -1,7 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.other;
 
 import moonfather.workshop_for_handsome_adventurer.items.BlockItemEx;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -25,8 +25,8 @@ public class AdvancementEvent
 
 
 
-    private static Advancement GetAdvancement(ServerPlayer sp, String namespace, String name)
+    private static AdvancementHolder GetAdvancement(ServerPlayer sp, String namespace, String name)
     {
-        return sp.getServer().getAdvancements().getAdvancement(new ResourceLocation(namespace, name));
+        return sp.getServer().getAdvancements().get(new ResourceLocation(namespace, name));
     }
 }
