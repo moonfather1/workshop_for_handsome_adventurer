@@ -176,7 +176,7 @@ dependencies {
 
 	compileOnly fg.deobf("curse.maven:jei-238222:4585879")
     compileOnly fg.deobf("curse.maven:jade-324717:4573193")
-    implementation fg.deobf("curse.maven:the-one-probe-245211:4629624")
+    compileOnly fg.deobf("curse.maven:the-one-probe-245211:4629624")
 
     runtimeOnly fg.deobf("curse.maven:badpackets-615134:4784395")
     implementation fg.deobf("curse.maven:wthit-forge-455982:4727741")
@@ -196,9 +196,12 @@ dependencies {
 	
 	//implementation fg.deobf("curse.maven:emi-580555:4806904")
     implementation fg.deobf("maven.modrinth:emi:ShejnJfY")
-    compileOnly fg.deobf("maven.modrinth:curios:opCpnbhi")
+    implementation fg.deobf("maven.modrinth:curios:opCpnbhi")
 
     compileOnly fg.deobf("maven.modrinth:travelersbackpack:xocqrLoW")
+	
+	implementation fg.deobf("curse.maven:tetra-289712:4857842")
+	runtimeOnly fg.deobf("curse.maven:mutil-351914:4824501")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

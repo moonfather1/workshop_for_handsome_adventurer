@@ -7,11 +7,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ToolAction;
+import se.mickelus.tetra.blocks.IToolProviderBlock;
 
 
 import java.util.Collection;
 
-public class TetraCompatibleToolRack extends ToolRack //implements IToolProviderBlock
+public class TetraCompatibleToolRack extends ToolRack implements IToolProviderBlock
 {
     private ToolRack rack;
     public TetraCompatibleToolRack(int itemCount, String subType)

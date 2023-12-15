@@ -1,19 +1,18 @@
 package moonfather.workshop_for_handsome_adventurer.integration;
 
-import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.ModList;
-/*import se.mickelus.tetra.items.modular.impl.toolbelt.ToolbeltHelper;
+import se.mickelus.tetra.items.modular.impl.toolbelt.ToolbeltHelper;
 import se.mickelus.tetra.items.modular.impl.toolbelt.inventory.StorageInventory;
-*/
+
 public class TetraBeltSupport
 {
     public static Object findToolbelt(Player player)
     {
         if (! ModList.get().isLoaded("tetra")) { return null; }
-        /*return ToolbeltHelper.findToolbelt(player);*/         return null;
+        return ToolbeltHelper.findToolbelt(player);
     }
 
     public static boolean hasToolbelt(Object searchResult)
@@ -38,16 +37,16 @@ public class TetraBeltSupport
 
     public static Container getToolbeltStorage(Object searchResult)
     {
-        /*return new StorageInventory((ItemStack) searchResult);*/
-        return null;
+        return new StorageInventory((ItemStack) searchResult);
     }
 
     public static Container getToolbeltStorage(Player player)
     {
-        /*ItemStack belt = ToolbeltHelper.findToolbelt(player);
-        if (! belt.isEmpty()) {
+        ItemStack belt = ToolbeltHelper.findToolbelt(player);
+        if (! belt.isEmpty())
+        {
             return new StorageInventory(belt);
-        }*/
+        }
         return null;
     }
 }

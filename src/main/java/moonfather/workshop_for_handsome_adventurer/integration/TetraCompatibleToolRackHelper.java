@@ -8,6 +8,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.common.ToolAction;
+import se.mickelus.tetra.module.ItemUpgradeRegistry;
+import se.mickelus.tetra.properties.IToolProvider;
 
 
 import java.util.Collection;
@@ -57,7 +59,7 @@ public class TetraCompatibleToolRackHelper
     public static Collection<ToolAction> getTools(Level world, BlockPos pos, int itemCount)
     {
         Collection<ToolAction> result = new HashSet<>();
-        /*if (world.getBlockEntity(pos) instanceof ToolRackBlockEntity be)
+        if (world.getBlockEntity(pos) instanceof ToolRackBlockEntity be)
         {
             for (int slot = 0; slot < itemCount; slot++)
             {
@@ -77,7 +79,7 @@ public class TetraCompatibleToolRackHelper
                     }
                 }
             }
-        }*/
+        }
         return result;
     }
 
@@ -85,7 +87,7 @@ public class TetraCompatibleToolRackHelper
 
     public static int getToolLevel(Level world, BlockPos pos, int itemCount, ToolAction toolAction)
     {
-        int result = -1;/*
+        int result = -1;
         if (world.getBlockEntity(pos) instanceof ToolRackBlockEntity be)
         {
             for (int slot = 0; slot < itemCount; slot++)
@@ -104,12 +106,12 @@ public class TetraCompatibleToolRackHelper
                     }
                 }
             }
-        }*/
+        }
         return result;
     }
 
     public static ItemStack onCraftConsumeTool(Level world, BlockPos pos, int itemCount, ItemStack targetStack, Player player, ToolAction requiredTool, int requiredLevel, boolean consumeResources)
-    {/*
+    {
         if (world.getBlockEntity(pos) instanceof ToolRackBlockEntity be)
         {
             for (int slot = 0; slot < itemCount; slot++)
@@ -128,14 +130,14 @@ public class TetraCompatibleToolRackHelper
                     }
                 }
             }
-        }*/
+        }
         return null;
     }
 
 
 
     public static ItemStack onActionConsumeTool(Level world, BlockPos pos, int itemCount, ItemStack targetStack, Player player, ToolAction requiredTool, int requiredLevel, boolean consumeResources)
-    {/*
+    {
         if (world.getBlockEntity(pos) instanceof ToolRackBlockEntity be)
         {
             for (int slot = 0; slot < itemCount; slot++)
@@ -154,7 +156,7 @@ public class TetraCompatibleToolRackHelper
                     }
                 }
             }
-        }*/
+        }
         return null;
     }
 }

@@ -68,11 +68,11 @@ public class OptionsHolder
 											 .define("Render items on top of tables", defaultRenderItemsOnTable);
 			builder.pop();
 			builder.push("Bookshelves");
-			this.DetailedWailaInfoForEnchantedBooks = builder.comment("If this option is turned you'll see a list of enchantments for your books.")
+			this.DetailedWailaInfoForEnchantedBooks = builder.comment("If this option is turned on, you'll see a list of enchantments for your books.")
 															 .define("Detailed info for enchanted books in Jade/TOP/WTHIT", defaultDetailedWailaInfoForEnchantedBooks);
 			builder.pop();
 			builder.push("Toolracks");
-			this.DetailedWailaInfoForEnchantedTools = builder.comment("If this option is turned you'll see a list of enchantments for your tools.")
+			this.DetailedWailaInfoForEnchantedTools = builder.comment("If this option is turned on, you'll see a list of enchantments for your tools.")
 															 .define("Detailed info for enchanted tools in Jade/TOP/WTHIT", defaultDetailedWailaInfoForEnchantedTools);
 			builder.pop();
 		}
