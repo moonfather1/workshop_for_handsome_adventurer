@@ -41,7 +41,7 @@ public class WailaBaseProvider
             }
             else
             {
-                result.add(Component.translatable(" " + level).withStyle(ChatFormatting.DARK_GRAY));
+                result.add(Component.literal(" " + level).withStyle(ChatFormatting.DARK_GRAY));
             }
         }
         enchantmentCache.put(item.hashCode(), result);
