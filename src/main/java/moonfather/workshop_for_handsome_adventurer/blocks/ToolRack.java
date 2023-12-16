@@ -9,12 +9,9 @@ import moonfather.workshop_for_handsome_adventurer.integration.PackingTape;
 import moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleToolRackHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.*;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -375,11 +372,9 @@ public class ToolRack extends Block implements EntityBlock
 		if (mainHandItem.getTag() != null && mainHandItem.getTag().contains("Potion")) {
 			return false;
 		}
-		if (mainHandItem.is(blacklisted) || mainHandItem.is(ItemTags.BOOKSHELF_BOOKS))
-		{
+		if (mainHandItem.is(Constants.Tags.NOT_ALLOWED_ON_TOOLRACK) || mainHandItem.is(ItemTags.BOOKSHELF_BOOKS)) {
 			return false;
 		}
 		return true;
 	}
-	private final TagKey<Item> blacklisted = TagKey.create(Registries.ITEM, new ResourceLocation(Constants.MODID, "dont_allow_onto_toolrack"));
 }
