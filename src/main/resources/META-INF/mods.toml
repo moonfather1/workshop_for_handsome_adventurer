@@ -62,3 +62,7 @@ description='''${mod_description}'''
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
+
+[modproperties.workshop_for_handsome_adventurer]
+    catalogueImageIcon="textures/gui/catalogue.png"
+    configuredBackground="minecraft:textures/block/spruce_planks.png"
