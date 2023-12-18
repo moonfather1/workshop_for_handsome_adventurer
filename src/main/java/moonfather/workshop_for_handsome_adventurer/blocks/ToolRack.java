@@ -1,7 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.blocks;
 
+import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.block_entities.BaseContainerBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
@@ -34,8 +34,8 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.common.ToolActions;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -240,7 +240,7 @@ public class ToolRack extends Block implements EntityBlock
 			BlockPos above = pos.above();
 			return this.use(level.getBlockState(above), level, above, player, hand, blockHitResult.withPosition(above));
 		}
-		boolean doOffhand = OptionsHolder.COMMON.OffhandInteractsWithToolRack.get();
+		boolean doOffhand = CommonConfig.OffhandInteractsWithToolRack.get();
 		if (hand == InteractionHand.OFF_HAND)
 		{
 			return InteractionResult.PASS;

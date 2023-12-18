@@ -1,120 +1,16 @@
 plugins {
+    id 'java-library'
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
-    id 'org.spongepowered.mixin' version '0.7.+'
+    id 'net.neoforged.gradle.userdev' version '7.0.57'
 }
 
 version = mod_version
 group = mod_group_id
 
-base {
-        archivesName = "$mod_id--mc$minecraft_version--forge-"
-}
-
-// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-
-println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
-minecraft {
-    // The mappings can be changed at any time and must be in the following format.
-    // Channel:   Version:
-    // official   MCVersion             Official field/method names from Mojang mapping files
-    // parchment  YYYY.MM.DD-MCVersion  Open community-sourced parameter names and javadocs layered on top of official
-    //
-    // You must be aware of the Mojang license when using the 'official' or 'parchment' mappings.
-    // See more information here: https://github.com/MinecraftForge/MCPConfig/blob/master/Mojang.md
-    //
-    // Parchment is an unofficial project maintained by ParchmentMC, separate from MinecraftForge
-    // Additional setup is needed to use their mappings: https://parchmentmc.org/docs/getting-started
-    //
-    // Use non-default mappings at your own risk. They may not always work.
-    // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: mapping_channel, version: mapping_version
-
-    // When true, this property will have all Eclipse/IntelliJ IDEA run configurations run the "prepareX" task for the given run configuration before launching the game.
-    // In most cases, it is not necessary to enable.
-    // enableEclipsePrepareRuns = true
-    // enableIdeaPrepareRuns = true
-
-    // This property allows configuring Gradle's ProcessResources task(s) to run on IDE output locations before launching the game.
-    // It is REQUIRED to be set to true for this template to function.
-    // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
-    copyIdeResources = true
-
-    // When true, this property will add the folder name of all declared run configurations to generated IDE run configurations.
-    // The folder name can be set on a run configuration using the "folderName" property.
-    // By default, the folder name of a run configuration is the name of the Gradle project containing it.
-    // generateRunFolders = true
-
-    // This property enables access transformers for use in development.
-    // They will be applied to the Minecraft artifact.
-    // The access transformer file can be anywhere in the project.
-    // However, it must be at "META-INF/accesstransformer.cfg" in the final mod jar to be loaded by Forge.
-    // This default location is a best practice to automatically put the file in the right place in the final jar.
-    // See https://docs.minecraftforge.net/en/latest/advanced/accesstransformers/ for more information.
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
-    runs {
-        // applies to all the run configs below
-        configureEach {
-            workingDirectory project.file('../run1204')
-
-            // Recommended logging data for a userdev environment
-            // The markers can be added/remove as needed separated by commas.
-            // "SCAN": For mods scan.
-            // "REGISTRIES": For firing of registry events.
-            // "REGISTRYDUMP": For getting the contents of all registries.
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            // Recommended logging level for the console
-            // You can set various levels here.
-            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-            property 'forge.logging.console.level', 'debug'
-        }
-
-        client {
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', mod_id
-        }
-
-        server {
-            property 'forge.enabledGameTestNamespaces', mod_id
-            args '--nogui'
-        }
-
-        // This run config launches GameTestServer and runs all registered gametests, then exits.
-        // By default, the server will crash when no gametests are provided.
-        // The gametest system is also enabled by default for other run configs under the /test command.
-        gameTestServer {
-            property 'forge.enabledGameTestNamespaces', mod_id
-        }
-
-        data {
-            // example of overriding the workingDirectory set in configureEach above
-            workingDirectory project.file('run-data')
-
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-        }
-    }
-}
-
-// Include resources generated by data generators.
-sourceSets.main.resources { srcDir 'src/generated/resources' }
-
 repositories {
-    // Put repositories for dependencies here
-    // ForgeGradle automatically adds the Forge maven and Maven Central for you
-
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html#sub:flat_dir_resolver
-    // flatDir {
-    //     dir 'libs'
-    // }
+    mavenLocal()
     maven {
         url "https://cursemaven.com"
         content {
@@ -127,65 +23,167 @@ repositories {
             includeGroup "maven.modrinth"
         }
     }
+
 }
+
+base {
+    archivesName = "$mod_id--mc$minecraft_version--neoforge-"
+}
+
+// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
+//minecraft.accessTransformers.entry public net.minecraft.client.Minecraft textureManager # textureManager
+
+// Default run configurations.
+// These can be tweaked, removed, or duplicated as needed.
+runs {
+    // applies to all the run configs below
+    configureEach {
+        // Recommended logging data for a userdev environment
+        // The markers can be added/remove as needed separated by commas.
+        // "SCAN": For mods scan.
+        // "REGISTRIES": For firing of registry events.
+        // "REGISTRYDUMP": For getting the contents of all registries.
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
+
+        // Recommended logging level for the console
+        // You can set various levels here.
+        // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+        systemProperty 'forge.logging.console.level', 'debug'
+
+        modSource project.sourceSets.main
+		workingDirectory project.file('run_nf1204')
+    }
+
+    client {
+        // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    }
+
+    server {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+        programArgument '--nogui'
+    }
+
+    // This run config launches GameTestServer and runs all registered gametests, then exits.
+    // By default, the server will crash when no gametests are provided.
+    // The gametest system is also enabled by default for other run configs under the /test command.
+    gameTestServer {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    }
+
+    data {
+        // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
+        // workingDirectory project.file('run-data')
+
+        // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+    }
+}
+
+// Include resources generated by data generators.
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
 
 dependencies {
     // Specify the version of Minecraft to use.
-    // Any artifact can be supplied so long as it has a "userdev" classifier artifact and is a compatible patcher artifact.
-    // The "userdev" classifier will be requested and setup by ForgeGradle.
-    // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
-    // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    // Depending on the plugin applied there are several options. We will assume you applied the userdev plugin as shown above.
+    // The group for userdev is net.neoforged, the module name is neoforge, and the version is the same as the neoforge version.
+    // You can however also use the vanilla plugin (net.neoforged.gradle.vanilla) to use a version of Minecraft without the neoforge loader.
+    // And its provides the option to then use net.minecraft as the group, and one of; client, server or joined as the module name, plus the game version as version.
+    // For all intends and purposes: You can treat this dependency as if it is a normal library you would use.
+    implementation "net.neoforged:neoforge:${neo_version}"
 
-    // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
+    // Example mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
-    // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+    // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
+    // compileOnly "mezz.jei:jei-${mc_version}-forge-api:${jei_version}"
+    // runtimeOnly "mezz.jei:jei-${mc_version}-forge:${jei_version}"
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"
-    // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
+    // implementation "blank:coolmod-${mc_version}:${coolmod_version}"
 
-	compileOnly fg.deobf("curse.maven:jei-238222:4767571")   // not out for 1.20.4
-    compileOnly fg.deobf("curse.maven:jade-324717:4939358")      //   +
-    compileOnly fg.deobf("curse.maven:the-one-probe-245211:4629624")   // not out for 1.20.4
+    // Example mod dependency using a file as dependency
+    // implementation files("libs/coolmod-${mc_version}-${coolmod_version}.jar")
 
-	runtimeOnly fg.deobf("curse.maven:badpackets-615134:4838087")         // dep
-    implementation fg.deobf("curse.maven:wthit-forge-455982:4946204")       // + (and also on nf)
+    // Example project dependency using a sister or child project:
+    // implementation project(":myproject")
 
+    // For more info:
+    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
+    // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    // runtimeOnly fg.deobf("curse.maven:carry-on-274259:4628675")         // not out for 1.20.4
-    //runtimeOnly fg.deobf("curse.maven:packing-tape-238659:4574130")     // not out for 1.20.4
+    // not out for 1.20.4
+	compileOnly "curse.maven:jei-238222:4767571"
+    // not out for NF 1.20.4
+    compileOnly "curse.maven:jade-324717:4845321"
+    // not out for 1.20.4
+    compileOnly "curse.maven:the-one-probe-245211:4629624"
 
-    //runtimeOnly fg.deobf("curse.maven:balm-531761:4757228")
-    compileOnly fg.deobf("curse.maven:crafting-tweaks-233071:4939892")  // only 1.20.2 for nf and lf separately
+    // +
+	runtimeOnly "curse.maven:badpackets-615134:4838088"
+    implementation "curse.maven:wthit-forge-455982:4946205"
 
-	implementation fg.deobf("curse.maven:roughly-enough-items-310111:4951152")      //    +    (and also on nf)
-	runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4942617")             // dep
-	runtimeOnly fg.deobf("curse.maven:cloth-config-348521:4943533")              // dep
+    // not out for 1.20.4
+    // runtimeOnly "curse.maven:carry-on-274259:4628675"
+    // not out for 1.20.4
+    //runtimeOnly "curse.maven:packing-tape-238659:4574130"
+
+    // only 1.20.2 for nf and lf separately
+	//runtimeOnly "curse.maven:balm-531761:4757228" old?
+	//runtimeOnly "curse.maven:balm-531761:4943587"
+    compileOnly "curse.maven:crafting-tweaks-233071:4939898"
+
+    //    +    (and also on lf)
+	implementation "curse.maven:roughly-enough-items-310111:4951154"
+	runtimeOnly "curse.maven:architectury-api-419699:4942618"
+	runtimeOnly "curse.maven:cloth-config-348521:4943534"
+
+    // not out for 1.20.4
+	compileOnly "curse.maven:emi-580555:4960419"
+	//was 4923766
+	//compileOnly "maven.modrinth:curios:opCpnbhi"
+    // out for neoforge on 1.20.4 but not on lexforge
+	compileOnly "curse.maven:curios-309927:4960347"
+	//was 4937602"
+
+    //compileOnly "curse.maven:travelers-backpack-321117:4836245"     // not out for 1.20.4
 	
-	compileOnly fg.deobf("curse.maven:emi-580555:4923766")          // not out for 1.20.4
-    compileOnly fg.deobf("maven.modrinth:curios:opCpnbhi")         // out for neoforge on 1.20.4 but not on lexforge
+	//compileOnly "curse.maven:tetra-289712:4857842"       // not out for 1.20.4
+	////runtimeOnly "curse.maven:mutil-351914:4824501"      // dep
 
-    compileOnly fg.deobf("curse.maven:travelers-backpack-321117:4836245")     // not out for 1.20.4
-	
-	compileOnly fg.deobf("curse.maven:tetra-289712:4857842")       // not out for 1.20.4
-	//runtimeOnly fg.deobf("curse.maven:mutil-351914:4824501")      // dep
+//compileOnly files("libs/jei-1.20.2-forge-16.0.0.28.jar")
+//compileOnly files("libs/emi-1.0.28+1.20.2+forge.jar")
+//implementation files("libs/RoughlyEnoughItems-14.0.687-neoforge.jar")
+//runtimeOnly files("libs/architectury-11.0.8-neoforge.jar")
+//runtimeOnly files("libs/cloth-config-13.0.114-neoforge.jar")
+
+//compileOnly files("libs/Jade-1.20.2-neoforge-12.1.8.jar")
+//implementation files("libs/wthit-neo-10.0.1.jar	")
+//runtimeOnly files("libs/badpackets-neo-0.5.4.jar")
+//compileOnly files("libs/theoneprobe-1.20.1-10.0.1.jar")
+
+//compileOnly files("libs/craftingtweaks-neoforge-1.20.2-19.0.2.jar")
+//runtimeOnly files("libs/balm-neoforge-1.20.2-8.0.4.jar")
+
+//implementation files("libs/curios-neoforge-7.0.0-beta.3+1.20.4.jar")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.
 // When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
 // See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
-tasks.named('processResources', ProcessResources).configure {
+tasks.withType(ProcessResources).configureEach {
     var replaceProperties = [
-            minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
-            forge_version: forge_version, forge_version_range: forge_version_range,
+            minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
+            neo_version         : neo_version, neo_version_range: neo_version_range,
             loader_version_range: loader_version_range,
-            mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
-            mod_authors: mod_authors, mod_description: mod_description,
+            mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
+            mod_authors         : mod_authors, mod_description: mod_description, pack_format_number: pack_format_number,
     ]
     inputs.properties replaceProperties
 
@@ -194,59 +192,20 @@ tasks.named('processResources', ProcessResources).configure {
     }
 }
 
-// Example for how to get properties into the manifest for reading at runtime.
-tasks.named('jar', Jar).configure {
-    manifest {
-        attributes([
-            'Specification-Title'     : mod_id,
-            'Specification-Vendor'    : mod_authors,
-            'Specification-Version'   : '1', // We are version 1 of ourselves
-            'Implementation-Title'    : project.name,
-            'Implementation-Version'  : project.jar.archiveVersion,
-            'Implementation-Vendor'   : mod_authors
-        ])
-    }
-
-    // This is the preferred method to reobfuscate your jar file
-    finalizedBy 'reobfJar'
-}
-
-// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing:
-// tasks.named('publish').configure {
-//     dependsOn 'reobfJar'
-// }
-
 // Example configuration to allow publishing using the maven-publish plugin
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
-            artifact jar
+            from components.java
         }
     }
     repositories {
         maven {
-            url "file://${project.projectDir}/mcmodsrepo"
+            url "file://${project.projectDir}/repo"
         }
     }
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
-}
-
-eclipse {
-    // Run everytime eclipse builds the code
-    //autoBuildTasks genEclipseRuns
-    // Run when importing the project
-    synchronizationTasks 'genEclipseRuns'
-}
-
-// Merge the resources and classes into the same directory. 
-// This is done because java expects modules to be in a single directory.
-// And if we have it in multiple we have to do performance intensive hacks like having the UnionFileSystem
-// This will eventually be migrated to ForgeGradle so modders don't need to manually do it. But that is later.
-sourceSets.each {
-    def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
-    it.output.resourcesDir = dir
-    it.java.destinationDirectory = dir
 }

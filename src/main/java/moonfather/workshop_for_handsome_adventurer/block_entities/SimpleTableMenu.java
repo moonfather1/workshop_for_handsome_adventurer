@@ -1,7 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
+import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.IExcessSlotManager;
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
@@ -9,6 +9,7 @@ import moonfather.workshop_for_handsome_adventurer.blocks.SimpleTable;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.integration.TetraBeltSupport;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -30,9 +31,8 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -152,7 +152,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 
 
-	public int getCustomizationSlotCount()	{ return OptionsHolder.COMMON.SimpleTableNumberOfSlots.get(); }
+	public int getCustomizationSlotCount()	{ return CommonConfig.SimpleTableNumberOfSlots.get(); }
 
 
 
@@ -808,7 +808,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		{
 			if (accessItem == null)
 			{
-				accessItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(OptionsHolder.COMMON.AccessCustomizationItem.get()));
+				accessItem = BuiltInRegistries.ITEM.get(new ResourceLocation(CommonConfig.AccessCustomizationItem.get()));
 				if (accessItem.equals(Items.AIR)) { accessItem = Items.NAME_TAG; }
 			}
 			return accessItem;

@@ -1,16 +1,14 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities.screens;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
+import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -19,14 +17,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static com.mojang.blaze3d.platform.InputConstants.KEY_ESCAPE;
 
@@ -129,7 +125,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 			{
 				if (hasShiftDown()) {
 					if (tooltipCustomizationsFull == null) {
-						String itemKey = ForgeRegistries.ITEMS.getValue(new ResourceLocation(OptionsHolder.COMMON.AccessCustomizationItem.get())).getDescriptionId();
+						String itemKey = BuiltInRegistries.ITEM.get(new ResourceLocation(CommonConfig.AccessCustomizationItem.get())).getDescriptionId();
 						String itemName = Language.getInstance().getOrDefault(itemKey);
 						tooltipCustomizationsFull = new ArrayList<>(15);
 						tooltipCustomizationsFull.add(tooltipCustomizationsTitle);
@@ -170,7 +166,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		}
 		if (this.backgroundImageLocation == null)
 		{
-			this.backgroundImageLocation = CRAFTING_TABLE_LOCATION[OptionsHolder.COMMON.SimpleTableNumberOfSlots.get()];
+			this.backgroundImageLocation = CRAFTING_TABLE_LOCATION[CommonConfig.SimpleTableNumberOfSlots.get()];
 		}
 		return this.backgroundImageLocation;
 	}

@@ -2,7 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.integration;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.ui.IElement;
 
@@ -41,7 +41,7 @@ public abstract class JadeBaseTooltipProvider extends WailaBaseProvider
         }
     }
 
-    protected abstract ForgeConfigSpec.ConfigValue<Boolean> getOption();
+    protected abstract ModConfigSpec.ConfigValue<Boolean> getOption();
 
     private int optionsCacheTime = 0;
     private boolean optionEnchantments = false;

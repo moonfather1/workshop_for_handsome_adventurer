@@ -5,7 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
 public class CreativeTab
 {
@@ -15,18 +15,18 @@ public class CreativeTab
         {
             int i = 0;
             for (String woodType: Registration.woodTypes) {
-                event.accept(Registration.items_table1.get(i));
-                event.accept(Registration.items_table2.get(i));
-                event.accept(Registration.items_rack1.get(i));
-                event.accept(Registration.items_rack2.get(i));
-                event.accept(Registration.items_rack3.get(i));
-                event.accept(Registration.items_rack4.get(i));
-                event.accept(Registration.items_pshelf.get(i));
-                event.accept(Registration.items_bshelf1.get(i));
-                event.accept(Registration.items_bshelf2.get(i));
-                event.accept(Registration.items_bshelf3.get(i));
-                event.accept(Registration.items_bshelf4.get(i));
-                event.accept(Registration.items_bshelf5.get(i));
+                event.accept(Registration.items_table1.get(i).get());
+                event.accept(Registration.items_table2.get(i).get());
+                event.accept(Registration.items_rack1.get(i).get());
+                event.accept(Registration.items_rack2.get(i).get());
+                event.accept(Registration.items_rack3.get(i).get());
+                event.accept(Registration.items_rack4.get(i).get());
+                event.accept(Registration.items_pshelf.get(i).get());
+                event.accept(Registration.items_bshelf1.get(i).get());
+                event.accept(Registration.items_bshelf2.get(i).get());
+                event.accept(Registration.items_bshelf3.get(i).get());
+                event.accept(Registration.items_bshelf4.get(i).get());
+                event.accept(Registration.items_bshelf5.get(i).get());
                 i++;
             }
         }

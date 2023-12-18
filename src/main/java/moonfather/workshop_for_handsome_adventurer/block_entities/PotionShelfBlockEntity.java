@@ -1,6 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
-import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
+import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -165,16 +165,16 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
         if (this.GetItem(slot).isEmpty()) {
             return false;
         }
-        return this.itemCounts.get(slot) >= Math.min(OptionsHolder.COMMON.SlotRoomMaximum.get(), this.GetItem(slot).getMaxStackSize() * OptionsHolder.COMMON.SlotRoomMultiplier.get());
+        return this.itemCounts.get(slot) >= Math.min(CommonConfig.SlotRoomMaximum.get(), this.GetItem(slot).getMaxStackSize() * CommonConfig.SlotRoomMultiplier.get());
     }
 
     public Integer GetRemainingRoom(int slot)
     {
         this.VerifyCapacity();
         if (this.itemCounts.get(slot) == 0) {
-            return OptionsHolder.COMMON.SlotRoomMaximum.get();
+            return CommonConfig.SlotRoomMaximum.get();
         }
-        return Math.min(OptionsHolder.COMMON.SlotRoomMaximum.get(), this.GetItem(slot).getMaxStackSize() * OptionsHolder.COMMON.SlotRoomMultiplier.get()) - this.itemCounts.get(slot);
+        return Math.min(CommonConfig.SlotRoomMaximum.get(), this.GetItem(slot).getMaxStackSize() * CommonConfig.SlotRoomMultiplier.get()) - this.itemCounts.get(slot);
     }
 
     public Integer GetRemainingItems(int slot) {

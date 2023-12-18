@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 
 import javax.annotation.Nullable;
 

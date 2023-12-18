@@ -4,8 +4,8 @@ import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoProvider;
 import mcjty.theoneprobe.api.ProbeMode;
+import moonfather.workshop_for_handsome_adventurer.ClientConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.block_entities.BookShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
@@ -36,8 +36,8 @@ public class TOPInfoProvider extends WailaBaseProvider implements IProbeInfoProv
     {
         if (this.optionsCacheTime <= 0)
         {
-            this.optionsTools = OptionsHolder.CLIENT.DetailedWailaInfoForEnchantedTools.get();
-            this.optionBooks = OptionsHolder.CLIENT.DetailedWailaInfoForEnchantedBooks.get();
+            this.optionsTools = ClientConfig.DetailedWailaInfoForEnchantedTools.get();
+            this.optionBooks = ClientConfig.DetailedWailaInfoForEnchantedBooks.get();
             this.optionsCacheTime = 55;
         }
         if (blockState.getBlock() instanceof PotionShelf)

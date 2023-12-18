@@ -2,7 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.integration;
 
 import mcp.mobius.waila.api.*;
 import mcp.mobius.waila.api.component.ItemComponent;
-import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
+import moonfather.workshop_for_handsome_adventurer.ClientConfig;
 import moonfather.workshop_for_handsome_adventurer.block_entities.BookShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
@@ -120,7 +120,7 @@ public class WthitPlugin implements IWailaPlugin {
                 if (slot >= 0 && ! shelf.GetItem(slot).isEmpty())
                 {
                     tooltip.addLine().with(new ItemComponent(shelf.GetItem(slot))).with(shelf.GetItem(slot).getHoverName());
-                    if (OptionsHolder.CLIENT.DetailedWailaInfoForEnchantedBooks.get())
+                    if (ClientConfig.DetailedWailaInfoForEnchantedBooks.get())
                     {
                         List<Component> enchantments = this.getEnchantmentParts(shelf.GetItem(slot));
                         if (enchantments != null)
@@ -151,7 +151,7 @@ public class WthitPlugin implements IWailaPlugin {
                 return;
             }
             tooltip.addLine().with(new ItemComponent(tool)).with(tool.getHoverName());
-            if (OptionsHolder.CLIENT.DetailedWailaInfoForEnchantedTools.get())
+            if (ClientConfig.DetailedWailaInfoForEnchantedTools.get())
             {
                 List<Component> enchantments = this.getEnchantmentParts(tool);
                 if (enchantments != null)
@@ -181,7 +181,7 @@ public class WthitPlugin implements IWailaPlugin {
                 return;
             }
             tooltip.addLine().with(new ItemComponent(tool)).with(tool.getHoverName());
-            if (OptionsHolder.CLIENT.DetailedWailaInfoForEnchantedTools.get())
+            if (ClientConfig.DetailedWailaInfoForEnchantedTools.get())
             {
                 List<Component> enchantments = this.getEnchantmentParts(tool);
                 if (enchantments != null)

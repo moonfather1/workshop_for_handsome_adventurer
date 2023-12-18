@@ -7,13 +7,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ToolAction;
-import se.mickelus.tetra.blocks.IToolProviderBlock;
+import net.neoforged.neoforge.common.ToolAction;
+//import se.mickelus.tetra.blocks.IToolProviderBlock;
 
 
 import java.util.Collection;
 
-public class TetraCompatibleDualToolRack extends DualToolRack implements IToolProviderBlock
+public class TetraCompatibleDualToolRack extends DualToolRack /*implements IToolProviderBlock*/
 {
     private ToolRack rack;
     public TetraCompatibleDualToolRack(int itemCount, String subType)
@@ -22,7 +22,7 @@ public class TetraCompatibleDualToolRack extends DualToolRack implements IToolPr
     }
 
     ////////////////////////////////////////////////
-
+/*
     public boolean canProvideTools(Level world, BlockPos pos, BlockPos targetPos) {
         return true;
     }
@@ -46,4 +46,6 @@ public class TetraCompatibleDualToolRack extends DualToolRack implements IToolPr
     {
         return TetraCompatibleToolRackHelper.onActionConsumeTool(world, pos, this.itemCount, targetStack, player, requiredTool, requiredLevel, consumeResources);
     }
+
+ */
 }

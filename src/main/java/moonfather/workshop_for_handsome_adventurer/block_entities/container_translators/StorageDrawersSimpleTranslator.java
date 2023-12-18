@@ -1,7 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities.container_translators;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 
 public class StorageDrawersSimpleTranslator extends BaseItemHandlerTranslator
 {

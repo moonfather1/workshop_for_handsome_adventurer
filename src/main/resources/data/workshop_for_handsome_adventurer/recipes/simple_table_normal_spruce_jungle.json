@@ -16,9 +16,11 @@
     "item": "workshop_for_handsome_adventurer:simple_table_jungle",
     "count": 1
   },
-  "forge:condition":
+  "neoforge:conditions":
+  [
     {
       "type": "workshop_for_handsome_adventurer:optional",
       "flag_code": "dont_replace_vanilla_crafting_table"
     }
+  ]
 }

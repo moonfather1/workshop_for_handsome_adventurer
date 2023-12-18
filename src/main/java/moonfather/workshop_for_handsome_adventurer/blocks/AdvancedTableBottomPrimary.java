@@ -6,6 +6,7 @@ import moonfather.workshop_for_handsome_adventurer.initialization.ExternalWoodSu
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
@@ -33,7 +34,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements EntityBlock
@@ -113,9 +113,9 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements En
 	@Override
 	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player)
 	{
-		String wood = ForgeRegistries.BLOCKS.getKey(this).getPath();
+		String wood = BuiltInRegistries.BLOCK.getKey(this).getPath();
 		wood = wood.substring(wood.indexOf("_left_") + 6);
-		return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(ExternalWoodSupport.getHostMod(wood), ExternalWoodSupport.getPrefix(wood) + "workstation_placer_" + wood)));
+		return new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(ExternalWoodSupport.getHostMod(wood), ExternalWoodSupport.getPrefix(wood) + "workstation_placer_" + wood)));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -15,9 +15,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ToolActions;
+import net.minecraft.world.phys.AABB;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.ToolActions;
 import org.joml.Quaternionf;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -168,5 +169,12 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			result.getTag().remove("Enchantments");
 		}
 		return result;
+	}
+
+	// run TESR even if main block isn't visible.
+	@Override
+	public AABB getRenderBoundingBox(ToolRackBlockEntity blockEntity)
+	{
+		return blockEntity.getRenderBoundingBox();
 	}
 }

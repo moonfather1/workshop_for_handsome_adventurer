@@ -1,7 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities.screens;
 
+import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
@@ -11,9 +11,9 @@ import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.ModList;
 
 @OnlyIn(Dist.CLIENT)
 public class DualTableCraftingScreen extends SimpleTableCraftingScreen
@@ -44,7 +44,7 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 		}
 		if (this.backgroundImageLocation == null)
 		{
-			this.backgroundImageLocation = BACKGROUND_LOCATION[OptionsHolder.COMMON.DualTableNumberOfSlots.get()];
+			this.backgroundImageLocation = BACKGROUND_LOCATION[CommonConfig.DualTableNumberOfSlots.get()];
 		}
 		return this.backgroundImageLocation;
 	}

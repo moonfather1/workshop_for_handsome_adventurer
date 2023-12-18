@@ -1,26 +1,15 @@
 package moonfather.workshop_for_handsome_adventurer.integration;
 
-
+import moonfather.workshop_for_handsome_adventurer.ClientConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.block_entities.BookShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.blocks.BookShelf;
-import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.EnchantedBookItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
-import snownee.jade.api.ui.IElement;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class JadeBookTooltipProvider extends JadeBaseTooltipProvider implements IBlockComponentProvider
@@ -43,9 +32,9 @@ public class JadeBookTooltipProvider extends JadeBaseTooltipProvider implements 
     }
 
     @Override
-    protected ForgeConfigSpec.ConfigValue<Boolean> getOption()
+    protected ModConfigSpec.ConfigValue<Boolean> getOption()
     {
-        return OptionsHolder.CLIENT.DetailedWailaInfoForEnchantedBooks;
+        return ClientConfig.DetailedWailaInfoForEnchantedBooks;
     }
 
 

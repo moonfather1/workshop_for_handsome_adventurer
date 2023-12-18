@@ -1,8 +1,8 @@
 package moonfather.workshop_for_handsome_adventurer.other;
 
 
+import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -26,7 +26,7 @@ public class UnsupportedWoodRecipe extends CustomRecipe
     @Override
     public boolean matches(CraftingContainer craftingContainer, Level level)
     {
-        if (! OptionsHolder.COMMON.SimpleTableReplacesVanillaTable.get())
+        if (! CommonConfig.SimpleTableReplacesVanillaTable.get())
         {
             return false;
         }
@@ -70,7 +70,7 @@ public class UnsupportedWoodRecipe extends CustomRecipe
     @Override
     public ItemStack assemble(CraftingContainer craftingContainer, RegistryAccess access)
     {
-        if (! OptionsHolder.COMMON.SimpleTableReplacesVanillaTable.get())
+        if (! CommonConfig.SimpleTableReplacesVanillaTable.get())
         {
             return null;
         }

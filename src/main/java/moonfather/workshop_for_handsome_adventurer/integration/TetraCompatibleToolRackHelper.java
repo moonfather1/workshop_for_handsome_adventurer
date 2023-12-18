@@ -1,18 +1,16 @@
 package moonfather.workshop_for_handsome_adventurer.integration;
 
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
+import moonfather.workshop_for_handsome_adventurer.blocks.DualToolRack;
 import moonfather.workshop_for_handsome_adventurer.blocks.ToolRack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraftforge.common.ToolAction;
-import se.mickelus.tetra.module.ItemUpgradeRegistry;
-import se.mickelus.tetra.properties.IToolProvider;
+//import se.mickelus.tetra.module.ItemUpgradeRegistry;
+//import se.mickelus.tetra.properties.IToolProvider;
 
-
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -22,11 +20,13 @@ public class TetraCompatibleToolRackHelper
     {
         if (dual)
         {
-            return new moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleDualToolRack(itemCount, subType);
+            return new DualToolRack(itemCount, subType);
+            //return new moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleDualToolRack(itemCount, subType);
         }
         else
         {
-            return new moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleToolRack(itemCount, subType);
+            return new ToolRack(itemCount, subType);
+            //return new moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleToolRack(itemCount, subType);
         }
     }
 
@@ -34,11 +34,13 @@ public class TetraCompatibleToolRackHelper
     {
         if (dual)
         {
-            return new moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleDualToolRack(itemCount, subType);
+            return new DualToolRack(itemCount, subType);
+            //return new moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleDualToolRack(itemCount, subType);
         }
         else
         {
-            return new moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleToolRack(itemCount, mainType, subType);
+            return new ToolRack(itemCount, mainType, subType);
+            //return new moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleToolRack(itemCount, mainType, subType);
         }
     }
 
@@ -46,16 +48,18 @@ public class TetraCompatibleToolRackHelper
     {
         if (dual)
         {
-            return new moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleDualToolRack(itemCount, subType);
+            return new DualToolRack(itemCount, subType);
+            //return new moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleDualToolRack(itemCount, subType);
         }
         else
         {
-            return new moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleToolRack(itemCount, mainType, subType, properties);
+            return new ToolRack(itemCount, mainType, subType, properties);
+            //return new moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleToolRack(itemCount, mainType, subType, properties);
         }
     }
 
     ///////////////////////////////////
-
+    /*
     public static Collection<ToolAction> getTools(Level world, BlockPos pos, int itemCount)
     {
         Collection<ToolAction> result = new HashSet<>();
@@ -158,5 +162,5 @@ public class TetraCompatibleToolRackHelper
             }
         }
         return null;
-    }
+    }*/
 }

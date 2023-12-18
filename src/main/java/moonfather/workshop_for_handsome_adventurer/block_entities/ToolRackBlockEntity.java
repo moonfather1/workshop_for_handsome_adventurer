@@ -27,7 +27,6 @@ public class ToolRackBlockEntity extends BaseContainerBlockEntity
 
 
 	// run TESR even if main block isn't visible.
-	@Override
 	public AABB getRenderBoundingBox()
 	{
 		if (this.cachedRenderingAABB == null && ! this.worldPosition.equals(BlockPos.ZERO))

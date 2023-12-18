@@ -2,8 +2,8 @@ package moonfather.workshop_for_handsome_adventurer.block_entities.container_tra
 
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 public abstract class BaseItemHandlerTranslator extends SimpleContainer
 {

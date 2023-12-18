@@ -1,8 +1,8 @@
 package moonfather.workshop_for_handsome_adventurer.initialization;
 
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
 public class CommonSetup
 {

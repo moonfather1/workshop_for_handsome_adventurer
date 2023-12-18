@@ -3,11 +3,11 @@ package moonfather.workshop_for_handsome_adventurer.block_entities.messaging;
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 public class PacketHandler
 {
-    public static void handleTabChange(TabChangeMessage msg, CustomPayloadEvent.Context context) {
+    public static void handleTabChange(TabChangeMessage msg, NetworkEvent.Context context) {
         context.enqueueWork(() -> {
             // Work that needs to be threadsafe (most work)
             ServerPlayer player = context.getSender(); // the client that sent this packet
@@ -20,7 +20,7 @@ public class PacketHandler
         context.setPacketHandled(true);
     }
 
-    public static void handleGridChange(GridChangeMessage msg, CustomPayloadEvent.Context context) {
+    public static void handleGridChange(GridChangeMessage msg, NetworkEvent.Context context) {
         context.enqueueWork(() -> {
             // Work that needs to be threadsafe (most work)
             ServerPlayer player = context.getSender(); // the client that sent this packet
@@ -33,7 +33,7 @@ public class PacketHandler
         context.setPacketHandled(true);
     }
 
-    public static void handleClientRequest(ClientRequestMessage msg, CustomPayloadEvent.Context context) {
+    public static void handleClientRequest(ClientRequestMessage msg, NetworkEvent.Context context) {
         context.enqueueWork(() -> {
             // Work that needs to be threadsafe (most work)
             ServerPlayer player = context.getSender(); // the client that sent this packet
@@ -49,7 +49,7 @@ public class PacketHandler
         context.setPacketHandled(true);
     }
 
-    public static void handleChestRename(ChestRenameMessage msg, CustomPayloadEvent.Context context) {
+    public static void handleChestRename(ChestRenameMessage msg, NetworkEvent.Context context) {
         context.enqueueWork(() -> {
             // Work that needs to be threadsafe (most work)
             ServerPlayer player = context.getSender(); // the client that sent this packet

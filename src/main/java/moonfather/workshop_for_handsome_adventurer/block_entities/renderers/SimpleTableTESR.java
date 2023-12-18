@@ -1,7 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
+import moonfather.workshop_for_handsome_adventurer.ClientConfig;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -11,8 +11,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Quaternionf;
 
 import java.util.HashMap;
@@ -95,7 +95,7 @@ public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEnti
     {
         if (blockEntity.hasLevel() && blockEntity.getLevel().getLevelData().getGameTime() % 40 == 7)
         {
-            this.shouldRender = OptionsHolder.CLIENT.RenderItemsOnTable.get();
+            this.shouldRender = ClientConfig.RenderItemsOnTable.get();
         }
         return this.shouldRender;
     }

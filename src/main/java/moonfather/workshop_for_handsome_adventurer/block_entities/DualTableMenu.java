@@ -1,6 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
-import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
+import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.blocks.DualTableBaseBlock;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
@@ -81,7 +81,7 @@ public class DualTableMenu extends SimpleTableMenu
 
 
 	@Override
-	public int getCustomizationSlotCount()	{ return OptionsHolder.COMMON.DualTableNumberOfSlots.get(); }
+	public int getCustomizationSlotCount()	{ return CommonConfig.DualTableNumberOfSlots.get(); }
 
 
 	@Override

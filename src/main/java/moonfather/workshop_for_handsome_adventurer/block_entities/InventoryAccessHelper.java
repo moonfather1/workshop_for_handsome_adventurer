@@ -4,7 +4,6 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.container_tran
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
 import moonfather.workshop_for_handsome_adventurer.integration.CuriosAccessor;
 import moonfather.workshop_for_handsome_adventurer.integration.TetraBeltSupport;
-import moonfather.workshop_for_handsome_adventurer.integration.TravelersBackpack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -26,10 +25,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
 
 import java.util.LinkedList;
 
@@ -127,20 +125,24 @@ public class InventoryAccessHelper
             //}
         }
         // IItemHandler capability
-        LazyOptional<IItemHandler> oih = be.getCapability(ForgeCapabilities.ITEM_HANDLER);
-        if (! oih.isPresent()) {
-            oih = be.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.UP);
-        }
-        oih.ifPresent( ih -> {
-            if (ih.getSlots() <= 54) {
-                this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(ih);
-                this.chosenContainerTrueSize = ih.getSlots();
-                this.chosenContainerVisibleSize = ih.getSlots() <= 27 ? 27 : 54;
-                this.chosenContainerForRename = be;
-                this.currentType = RecordTypes.BLOCK;
-                return;
+
+        IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);
+        if (handler == null)
+        {
+            handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, Direction.UP);
+            if (handler != null)
+            {
+                if (handler.getSlots() <= 54)
+                {
+                    this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(handler);
+                    this.chosenContainerTrueSize = handler.getSlots();
+                    this.chosenContainerVisibleSize = handler.getSlots() <= 27 ? 27 : 54;
+                    this.chosenContainerForRename = be;
+                    this.currentType = RecordTypes.BLOCK;
+                    return;
+                }
             }
-        } );
+        }
     }
 
     private static boolean canOpenShulkerBox(Level level, BlockState blockState, BlockPos pos) {
@@ -195,35 +197,24 @@ public class InventoryAccessHelper
         for (int slot = 0; slot < RecordTypes.NAMED_SLOTS.length; slot++) {
             String slotName = RecordTypes.NAMED_SLOTS[slot];
             ItemStack maybeStorageItem = getItemFromNamedSlot(player, slotName);
-            LazyOptional<IItemHandler> pockets = maybeStorageItem.getCapability(ForgeCapabilities.ITEM_HANDLER);
-            pockets.ifPresent(inventory -> {
+
+            IItemHandler itemHandler = maybeStorageItem.getCapability(Capabilities.ItemHandler.ITEM, null);
+            if (itemHandler != null)
+            {
                 InventoryAccessRecord record = new InventoryAccessRecord();
                 record.ItemChest = maybeStorageItem.copy();
                 record.Nameable = true;
                 record.Name = record.ItemChest.getHoverName();
                 record.Type = slotName;
-                record.VisibleSlotCount = inventory.getSlots() <= 27 ? 27 : 54;
+                record.VisibleSlotCount = itemHandler.getSlots() <= 27 ? 27 : 54;
                 record.ItemFirst = ItemStack.EMPTY;
                 record.Index = this.adjacentInventories.size();
                 this.adjacentInventories.add(record);
-            } );
+            }
         }
         // traveller's backpack. not sure why i support this.
         if (ModList.get().isLoaded("travelersbackpack"))
         {
-            TravelersBackpack backpack = TravelersBackpack.getInstance(player);
-            if (backpack.isPresent() && backpack.slotCount() <= 54 && ! backpack.getTabIcon().isEmpty())
-            {
-                InventoryAccessRecord record = new InventoryAccessRecord();
-                record.ItemChest = backpack.getTabIcon();  // when empty, player still has capability but backpack is somewhere on the ground
-                record.Nameable = true;
-                record.Name = record.ItemChest.getHoverName();
-                record.Type = RecordTypes.FLOATING;
-                record.VisibleSlotCount = backpack.slotCount() <= 27 ? 27 : 54;
-                record.ItemFirst = backpack.getFirst();
-                record.Index = this.adjacentInventories.size();
-                this.adjacentInventories.add(record);
-            }
         }
     }
 
@@ -353,28 +344,18 @@ public class InventoryAccessHelper
         }
         else if (record.Type.equals(RecordTypes.LEGGINGS) || record.Type.equals(RecordTypes.CHESTSLOT) || record.Type.equals(RecordTypes.BACKSLOT)) {
             ItemStack item = getItemFromNamedSlot(player, record.Type);
-            LazyOptional<IItemHandler> pockets = item.getCapability(ForgeCapabilities.ITEM_HANDLER);
-            pockets.ifPresent(inventory -> {
-                this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(inventory);
-                this.chosenContainerTrueSize = inventory.getSlots();
+            IItemHandler itemHandler = item.getCapability(Capabilities.ItemHandler.ITEM, null);
+            if (itemHandler != null)
+            {
+                this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(itemHandler);
+                this.chosenContainerTrueSize = itemHandler.getSlots();
                 this.currentType = record.Type;
-            });
+            }
             return this.chosenContainerTrueSize > 0;
         }
         else if (record.Type.equals(RecordTypes.FLOATING))
         {
-            // traveller's backpack. not sure why i support this.
-            if (ModList.get().isLoaded("travelersbackpack"))     // add other containers attached to player here
-            {
-                TravelersBackpack backpack = TravelersBackpack.getInstance(player);
-                if (backpack.isPresent() && backpack.slotCount() <= 54 && ! backpack.getTabIcon().isEmpty())
-                {
-                    this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(backpack.getItems());
-                    this.chosenContainerTrueSize = backpack.slotCount();
-                    this.currentType = RecordTypes.FLOATING;
-                    return true;
-                }
-            }
+            // traveller's backpack. this should be in an addon.
             return false;
         }
         else {

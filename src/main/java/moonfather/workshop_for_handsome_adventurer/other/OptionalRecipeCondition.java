@@ -2,8 +2,8 @@ package moonfather.workshop_for_handsome_adventurer.other;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
-import net.minecraftforge.common.crafting.conditions.ICondition;
+import moonfather.workshop_for_handsome_adventurer.CommonConfig;
+import net.neoforged.neoforge.common.conditions.ICondition;
 
 public class OptionalRecipeCondition implements ICondition
 {
@@ -21,11 +21,11 @@ public class OptionalRecipeCondition implements ICondition
 	{
 		if (this.flagCode.equals("replace_vanilla_crafting_table"))
 		{
-			return OptionsHolder.COMMON.SimpleTableReplacesVanillaTable.get();
+			return CommonConfig.SimpleTableReplacesVanillaTable.get();
 		}
 		else if (this.flagCode.equals("dont_replace_vanilla_crafting_table"))
 		{
-			return ! OptionsHolder.COMMON.SimpleTableReplacesVanillaTable.get();
+			return ! CommonConfig.SimpleTableReplacesVanillaTable.get();
 		}
 		else
 		{

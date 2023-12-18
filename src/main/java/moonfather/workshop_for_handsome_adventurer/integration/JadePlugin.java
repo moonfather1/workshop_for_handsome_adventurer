@@ -4,7 +4,10 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlo
 import moonfather.workshop_for_handsome_adventurer.blocks.BookShelf;
 import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
 import moonfather.workshop_for_handsome_adventurer.blocks.ToolRack;
-import snownee.jade.api.*;
+import snownee.jade.api.IWailaClientRegistration;
+import snownee.jade.api.IWailaCommonRegistration;
+import snownee.jade.api.IWailaPlugin;
+import snownee.jade.api.WailaPlugin;
 
 @WailaPlugin
 public class JadePlugin implements IWailaPlugin

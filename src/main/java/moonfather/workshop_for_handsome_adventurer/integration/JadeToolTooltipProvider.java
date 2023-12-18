@@ -1,13 +1,13 @@
 package moonfather.workshop_for_handsome_adventurer.integration;
 
 
+import moonfather.workshop_for_handsome_adventurer.ClientConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.blocks.ToolRack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
@@ -45,9 +45,9 @@ public class JadeToolTooltipProvider extends JadeBaseTooltipProvider implements 
     }
 
     @Override
-    protected ForgeConfigSpec.ConfigValue<Boolean> getOption()
+    protected ModConfigSpec.ConfigValue<Boolean> getOption()
     {
-        return OptionsHolder.CLIENT.DetailedWailaInfoForEnchantedTools;
+        return ClientConfig.DetailedWailaInfoForEnchantedTools;
     }
 
 

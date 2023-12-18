@@ -20,6 +20,7 @@ build
 # other
 eclipse
 run
-
-# Files from Forge MDK
-forge*changelog.txt
+runs
+run-data
+run_nf1204
+repo

@@ -4,8 +4,8 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.screens.DualTa
 import moonfather.workshop_for_handsome_adventurer.block_entities.screens.SimpleTableCraftingScreen;
 import moonfather.workshop_for_handsome_adventurer.block_entities.renderers.*;
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 public class ClientSetup
 {
