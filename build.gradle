@@ -141,7 +141,7 @@ dependencies {
     //    +    (and also on lf)
 	implementation "curse.maven:roughly-enough-items-310111:4951154"
 	runtimeOnly "curse.maven:architectury-api-419699:4942618"
-	runtimeOnly "curse.maven:cloth-config-348521:4943534"
+	implementation "curse.maven:cloth-config-348521:4943534"
 
     // not out for 1.20.4
 	compileOnly "curse.maven:emi-580555:4960419"
