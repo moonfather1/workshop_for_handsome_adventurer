@@ -375,11 +375,9 @@ public class ToolRack extends Block implements EntityBlock
 		if (mainHandItem.getTag() != null && mainHandItem.getTag().contains("Potion")) {
 			return false;
 		}
-		if (mainHandItem.is(blacklisted) || mainHandItem.is(ItemTags.BOOKSHELF_BOOKS))
-		{
+		if (mainHandItem.is(Constants.Tags.NOT_ALLOWED_ON_TOOLRACK) || mainHandItem.is(ItemTags.BOOKSHELF_BOOKS)) {
 			return false;
 		}
 		return true;
 	}
-	private final TagKey<Item> blacklisted = TagKey.create(Registries.ITEM, new ResourceLocation(Constants.MODID, "dont_allow_onto_toolrack"));
 }

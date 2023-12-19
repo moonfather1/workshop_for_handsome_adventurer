@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:honey_bottle",
+    { "id": "farmersdelight:milk_bottle", "required": false }
+  ]
+}

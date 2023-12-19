@@ -1,5 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.blocks;
 
+import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
@@ -45,6 +46,10 @@ public class PotionShelf extends ToolRack
             return true;
         }
         if (mainHandItem.is(Items.GLASS_BOTTLE))
+        {
+            return true;
+        }
+        if (mainHandItem.is(Constants.Tags.ALLOWED_ON_POTION_SHELF))
         {
             return true;
         }
