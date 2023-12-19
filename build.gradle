@@ -189,13 +189,13 @@ dependencies {
     compileOnly fg.deobf("curse.maven:crafting-tweaks-233071:4757229")
 
     //implementation fg.deobf("curse.maven:dynamic-asset-generator-577096:4670363")
-	
-	compileOnly fg.deobf("curse.maven:roughly-enough-items-310111:4774395")
-	//runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4663010")
-	//runtimeOnly fg.deobf("curse.maven:cloth-config-348521:4633444")
+
+    implementation fg.deobf("curse.maven:roughly-enough-items-310111:4774395")
+	runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4663010")
+    implementation fg.deobf("curse.maven:cloth-config-348521:4633444")
 	
 	//implementation fg.deobf("curse.maven:emi-580555:4806904")
-    implementation fg.deobf("maven.modrinth:emi:ShejnJfY")
+    compileOnly fg.deobf("maven.modrinth:emi:ShejnJfY")
     implementation fg.deobf("maven.modrinth:curios:opCpnbhi")
 
     compileOnly fg.deobf("maven.modrinth:travelersbackpack:xocqrLoW")
