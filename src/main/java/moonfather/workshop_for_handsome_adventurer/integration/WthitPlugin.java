@@ -84,7 +84,9 @@ public class WthitPlugin implements IWailaPlugin {
                         room = shelf.GetRemainingRoom(slot);
                     }
                     tooltip.addLine(Component.translatable(message, count, count+room));
-                    tooltip.addLine(shelf.GetItem(slot).getHoverName());
+                    ItemStack bottle = shelf.GetItem(slot);
+                    tooltip.addLine().with(new ItemComponent(bottle)).with(bottle.getHoverName());
+                    tooltip.addLine(bottle.getHoverName());
                 }
                 else
                 {
@@ -143,6 +145,10 @@ public class WthitPlugin implements IWailaPlugin {
             ItemStack tool = ItemStack.EMPTY;
             if (accessor.getBlockEntity() instanceof ToolRackBlockEntity rack)
             {
+                if (accessor.getBlockEntity() instanceof PotionShelfBlockEntity || accessor.getBlockEntity() instanceof BookShelfBlockEntity)
+                {
+                    return;
+                }
                 int slot = ToolRack.getToolRackSlot((ToolRack) accessor.getBlock(), new BlockHitResult(accessor.getHitResult().getLocation(), accessor.getSide(), accessor.getPosition(), false));
                 tool = rack.GetItem(slot);
             }
