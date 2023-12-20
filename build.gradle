@@ -151,10 +151,10 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:the-one-probe-245211:3965693")
     //implementation fg.deobf("curse.maven:jade-324717:4318618")
-    implementation (fg.deobf("curse.maven:jade-324717:4318618"))
+    compileOnly (fg.deobf("curse.maven:jade-324717:4318618"))
 
-    //runtimeOnly fg.deobf("curse.maven:badpackets-615134:4073854")
-    compileOnly fg.deobf("curse.maven:wthit-forge-455982:4534202")
+    runtimeOnly fg.deobf("curse.maven:badpackets-615134:4073854")
+    implementation fg.deobf("curse.maven:wthit-forge-455982:4534202")
 
     compileOnly fg.deobf("curse.maven:crafting-tweaks-233071:4669914")
     //runtimeOnly fg.deobf("curse.maven:balm-531761:4751735")
@@ -163,10 +163,10 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:mutil-351914:3941314")
 	
 	//runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4555749")
-	//runtimeOnly fg.deobf("curse.maven:cloth-config-348521:4633416")
-	compileOnly fg.deobf("curse.maven:roughly-enough-items-310111:4774386")
-	
-	implementation fg.deobf("maven.modrinth:emi:VldBzgSe")
+    compileOnly fg.deobf("curse.maven:cloth-config-348521:4633416")
+    compileOnly fg.deobf("curse.maven:roughly-enough-items-310111:4774386")
+
+    implementation fg.deobf("maven.modrinth:emi:VldBzgSe")
     compileOnly fg.deobf("maven.modrinth:jei:6ImKQVtc")
 }
 

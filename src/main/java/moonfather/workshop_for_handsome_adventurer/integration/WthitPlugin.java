@@ -86,7 +86,8 @@ public class WthitPlugin implements IWailaPlugin {
                     if (count > 0)
                     {
                         tooltip.addLine(Component.translatable(message, count, count + room));
-                        tooltip.addLine(shelf.GetItem(slot).getHoverName());
+                        ItemStack bottle = shelf.GetItem(slot);
+                        tooltip.addLine().with(new ItemComponent(bottle)).with(bottle.getHoverName());
                         return;
                     }
                 }
