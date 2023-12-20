@@ -386,11 +386,10 @@ public class ToolRack extends Block implements EntityBlock
 		{
 			return false;
 		}
-		if (mainHandItem.is(blacklisted) || mainHandItem.is(BookShelf.BOOKSHELF_BOOKS) || mainHandItem.is(BookShelf.FORGE_BOOKS))
+		if (mainHandItem.is(Constants.Tags.NOT_ALLOWED_ON_TOOLRACK) || mainHandItem.is(BookShelf.BOOKSHELF_BOOKS) || mainHandItem.is(BookShelf.FORGE_BOOKS))
 		{
 			return false;
 		}
 		return true;
 	}
-	private final TagKey<Item> blacklisted = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(Constants.MODID, "dont_allow_onto_toolrack"));
 }
