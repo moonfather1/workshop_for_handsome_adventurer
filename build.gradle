@@ -212,7 +212,7 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:carry-on-274259:4628664")
     runtimeOnly fg.deobf("curse.maven:storage-drawers-223852:3807626")
     //implementation fg.deobf("curse.maven:jei-238222:4593548")
-    implementation fg.deobf("curse.maven:jei-238222:4351311")
+    compileOnly fg.deobf("curse.maven:jei-238222:4351311")
 
     //runtimeOnly fg.deobf("curse.maven:lodestone-616457:4631609")
     //runtimeOnly fg.deobf("curse.maven:malum-484064:4631612")
@@ -223,9 +223,9 @@ dependencies {
     //implementation fg.deobf("curse.maven:crafting-tweaks-233071:4513973")
     //runtimeOnly fg.deobf("curse.maven:balm-531761:4442615")
 
-    compileOnly fg.deobf("curse.maven:roughly-enough-items-310111:4774383")
-    //runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4521465")
-    //runtimeOnly fg.deobf("curse.maven:cloth-config-348521:4633387")
+    implementation fg.deobf("curse.maven:roughly-enough-items-310111:4774383")
+    runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4521465")
+    implementation fg.deobf("curse.maven:cloth-config-348521:4633387")
 
     //implementation fg.deobf("maven.modrinth:jei:9.7.2.1001")
     //runtimeOnly fg.deobf("maven.modrinth:carry-on:1.17.1.12")

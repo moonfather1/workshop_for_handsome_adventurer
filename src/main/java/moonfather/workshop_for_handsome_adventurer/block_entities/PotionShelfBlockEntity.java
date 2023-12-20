@@ -121,7 +121,6 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
         this.VerifyCapacity();
         int count = Math.min(itemStack.getCount(), this.GetRemainingRoom(slot));
         if (this.itemCounts.get(slot) == 0) {
-            count = itemStack.getCount(); // GetRemainingRoom doesn't work on empty slots
             ItemStack copy = itemStack.copy();
             copy.setCount(1);
             itemStack.shrink(count);
@@ -166,16 +165,16 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
         if (this.GetItem(slot).isEmpty()) {
             return false;
         }
-        return this.itemCounts.get(slot) >= Math.min(64, this.GetItem(slot).getMaxStackSize() * OptionsHolder.COMMON.SlotRoomMultiplier.get());
+        return this.itemCounts.get(slot) >= Math.min(OptionsHolder.COMMON.SlotRoomMaximum.get(), this.GetItem(slot).getMaxStackSize() * OptionsHolder.COMMON.SlotRoomMultiplier.get());
     }
 
     public Integer GetRemainingRoom(int slot)
     {
         this.VerifyCapacity();
         if (this.itemCounts.get(slot) == 0) {
-            return OptionsHolder.COMMON.SlotRoomMultiplier.get(); //may not be true but we'll go with that
+            return OptionsHolder.COMMON.SlotRoomMaximum.get();
         }
-        return Math.min(64, this.GetItem(slot).getMaxStackSize() * OptionsHolder.COMMON.SlotRoomMultiplier.get()) - this.itemCounts.get(slot);
+        return Math.min(OptionsHolder.COMMON.SlotRoomMaximum.get(), this.GetItem(slot).getMaxStackSize() * OptionsHolder.COMMON.SlotRoomMultiplier.get()) - this.itemCounts.get(slot);
     }
 
     public Integer GetRemainingItems(int slot)
