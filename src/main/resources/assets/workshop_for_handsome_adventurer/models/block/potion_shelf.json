@@ -76,7 +76,7 @@
 			"to": [15, 15, 0.01],
 			"faces": {
 				"north": {"uv": [1, 0, 15, 14], "texture": "#stripped_log"},
-				"south": {"uv": [1, 0, 15, 14], "texture": "#stripped_log", "cullface": "south"}
+				"south": {"uv": [1, 0, 15, 14], "texture": "#stripped_log"}
 			}
 		}
 	],
