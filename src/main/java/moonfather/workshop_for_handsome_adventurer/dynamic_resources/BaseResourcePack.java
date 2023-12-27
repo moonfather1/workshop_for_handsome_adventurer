@@ -1,7 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 
 import com.google.common.base.Stopwatch;
-import com.mojang.logging.LogUtils;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -19,7 +18,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public abstract class BaseResourcePack implements PackResources
@@ -52,7 +50,7 @@ public abstract class BaseResourcePack implements PackResources
                                             .map(ResourceLocation::getNamespace)
                                             .collect(Collectors.toSet());
             stopwatch.stop();
-            LogUtils.getLogger().info("~~~Generated dynamic {} in {} ms.", this.type.toString(), stopwatch.elapsed(TimeUnit.MILLISECONDS));
+            //LogUtils.getLogger().info("~~~Generated dynamic {} in {} ms.", this.type.toString(), stopwatch.elapsed(TimeUnit.MILLISECONDS));
         }
     }
 
@@ -82,9 +80,9 @@ public abstract class BaseResourcePack implements PackResources
     @Override
     public void listResources(PackType type, String namespace, String path, ResourceOutput output)
     {
-        this.buildOnDemand();
         if (type == this.type)
         {
+            this.buildOnDemand();
             this.dataCache.keySet()
                      .stream()
                      .filter(loc -> loc.getNamespace().equals(namespace))

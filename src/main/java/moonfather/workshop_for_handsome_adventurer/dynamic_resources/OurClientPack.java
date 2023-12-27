@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class OurClientPack extends BaseResourcePack
 {
@@ -66,7 +65,7 @@ public class OurClientPack extends BaseResourcePack
                         }
                         for (String wood: WoodTypeLister.getWoodIds())
                         {
-                            if (!first)
+                            if (! first)
                             {
                                 builder.append(",\n");
                             }

@@ -1,10 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 
 import com.google.common.base.Stopwatch;
-import com.mojang.logging.LogUtils;
-import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
@@ -44,23 +41,29 @@ public class WoodTypeLister
                     if (ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(id.getNamespace(), id.getPath().replace(planks, slab)))
                         && ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(id.getNamespace(), LOG1 + wood + LOG2)))
                     {
-                        ids.add(wood);
-                        woodToHostMap.put(wood, id.getNamespace());
+                        if (! ids.contains(wood))
+                        {
+                            ids.add(wood);
+                            woodToHostMap.put(wood, id.getNamespace());
+                        }
+                        else
+                        {
+                            dupeIds.add(new ResourceLocation(id.getNamespace(),wood));
+                        }
                     }
                 }
             }
-
-            //ids.add("willow");
-            //woodToHostMap.put("willow", "biomesoplenty");
             s.stop();
-            LogUtils.getLogger().info("~~~ woods ids gathered in " + s.elapsed().toMillis() + "ms.");
+            ///LogUtils.getLogger().info("~~~ woods ids gathered in " + s.elapsed().toMillis() + "ms.");
         }
         return ids;
     }
     public static String getHostMod(String wood) { return woodToHostMap.get(wood); }
+    public static List<ResourceLocation> getDuplicateWoods() { return dupeIds; }
 
     private static List<String> ids = null;
     private static final HashMap<String, String> woodToHostMap = new HashMap<>();
+    private static final List<ResourceLocation> dupeIds = new ArrayList<>();
 
     /////////////////////////////////////////////////////
 

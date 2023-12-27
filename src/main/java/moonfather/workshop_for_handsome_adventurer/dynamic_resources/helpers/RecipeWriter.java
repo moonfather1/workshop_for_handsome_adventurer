@@ -25,6 +25,14 @@ public class RecipeWriter
                         .replace(SPRUCE, wood);
                 cache.put(new ResourceLocation(Constants.MODID, file.replace(SPRUCE, wood)), newRecipe);
             }
+            for (ResourceLocation duplicate: WoodTypeLister.getDuplicateWoods()) // once again, with feeling
+            {
+                String newRecipe = original
+                        .replace("minecraft:stripped_spruce", duplicate.getNamespace() + ":stripped_" + duplicate.getPath())
+                        .replace("minecraft:spruce", duplicate.toString())
+                        .replace(SPRUCE, duplicate.getPath());
+                cache.put(new ResourceLocation(Constants.MODID, file.replace(SPRUCE, duplicate.getPath() + "_" + duplicate.getNamespace())), newRecipe);
+            }
         }
     }
 
