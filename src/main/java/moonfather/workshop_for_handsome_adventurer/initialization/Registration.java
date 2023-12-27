@@ -1,13 +1,17 @@
 package moonfather.workshop_for_handsome_adventurer.initialization;
 
+import com.mojang.logging.LogUtils;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.*;
 import moonfather.workshop_for_handsome_adventurer.blocks.*;
+import moonfather.workshop_for_handsome_adventurer.dynamic_resources.SecondCreativeTab;
+import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLister;
 import moonfather.workshop_for_handsome_adventurer.items.BlockItemEx;
 import moonfather.workshop_for_handsome_adventurer.other.CreativeTab;
 import moonfather.workshop_for_handsome_adventurer.other.UnsupportedWoodRecipe;
 import moonfather.workshop_for_handsome_adventurer.items.WorkstationPlacerItem;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -17,13 +21,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.registries.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class Registration
 {
@@ -45,11 +49,11 @@ public class Registration
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public static final List<RegistryObject<Block>> blocks_table1 = new ArrayList<>();
-	public static final List<RegistryObject<Block>> blocks_table2 = new ArrayList<>();
-	public static final List<RegistryObject<Block>> blocks_rack = new ArrayList<>();
-	public static final List<RegistryObject<Block>> blocks_pshelf = new ArrayList<>();
-	public static final List<RegistryObject<Block>> blocks_bshelf = new ArrayList<>();
+	public static final List<Supplier<Block>> blocks_table1 = new ArrayList<>();
+	public static final List<Supplier<Block>> blocks_table2 = new ArrayList<>();
+	public static final List<Supplier<Block>> blocks_rack = new ArrayList<>();
+	public static final List<Supplier<Block>> blocks_pshelf = new ArrayList<>();
+	public static final List<Supplier<Block>> blocks_bshelf = new ArrayList<>();
 	public static final List<RegistryObject<Item>> items_table1 = new ArrayList<>();
 	public static final List<RegistryObject<Item>> items_table2 = new ArrayList<>(); // because of sorting in creative tabs, we can't just dump into one list
 	public static final List<RegistryObject<Item>> items_rack1 = new ArrayList<>();
@@ -63,7 +67,7 @@ public class Registration
 	public static final List<RegistryObject<Item>> items_bshelf4 = new ArrayList<>();
 	public static final List<RegistryObject<Item>> items_bshelf5 = new ArrayList<>();
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public static final String[] woodTypes = {"oak", "spruce", "jungle", "birch", "dark_oak", "mangrove", "cherry"};
+	public static final List<String> woodTypes = new ArrayList<>(Arrays.asList("oak", "spruce", "jungle", "birch", "dark_oak", "mangrove", "cherry"));
 
 	// static initialization
 	static {
@@ -134,7 +138,7 @@ public class Registration
 		return ITEMS.register(block.getId().getPath(), () -> new BlockItemEx(block.get(), properties));
 	}
 
-	private static Block[] ListToArray(List<RegistryObject<Block>> list) {
+	private static Block[] ListToArray(List<Supplier<Block>> list) {
 		Block[] result = new Block[list.size()];
 		for (int i = 0; i < list.size(); i++) {
 			result[i] = list.get(i).get();
@@ -156,4 +160,58 @@ public class Registration
 	public static final RegistryObject<RecipeSerializer<UnsupportedWoodRecipe>> TABLE_RECIPE = RECIPES.register("table_recipe_unknown_planks", ()-> new SimpleCraftingRecipeSerializer<UnsupportedWoodRecipe>(UnsupportedWoodRecipe::new));
 
 	public static final RegistryObject<CreativeModeTab> CREATIVE_TAB = CREATIVE_TABS.register("tab", CreativeTab::buildTab);
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public static void registerSingleBlockForThirdPartyWood(Block block, String prefix, String wood, List<Supplier<Block>> listForBlockEntities, List<Item> listForCreativeTab)
+	{
+		Item item = new BlockItemEx(block, new Item.Properties());
+		ForgeRegistries.BLOCKS.register(prefix + wood, block);
+		ForgeRegistries.ITEMS.register(prefix + wood, item);
+		listForCreativeTab.add(item);
+		if (listForBlockEntities != null)
+		{
+			listForBlockEntities.add(() -> block); // for the block entity
+		}
+	}
+
+	public static void registerBlocksForThirdPartyWood(RegisterEvent event)
+	{
+		try  // because of unfreeze fuckery
+		{
+			((ForgeRegistry) ForgeRegistries.BLOCKS).unfreeze();
+			for (String wood : WoodTypeLister.getWoodIds())
+			{
+				// can't just add wood types to Registration.woodTypes; def registry is filled at mod constructor. wood list is available much later, after RegisterEvent for blocks. that's why we do things here.
+				// anyway...
+				// small tables
+				registerSingleBlockForThirdPartyWood(new SimpleTable(), "simple_table_", wood, blocks_table1, SecondCreativeTab.items_table1);
+				// dual tables
+				Block primary = new AdvancedTableBottomPrimary();
+				ForgeRegistries.BLOCKS.register("dual_table_bottom_left_" + wood, primary);
+				ForgeRegistries.BLOCKS.register("dual_table_bottom_right_" + wood, new AdvancedTableBottomSecondary());
+				ForgeRegistries.BLOCKS.register("dual_table_top_left_" + wood, new AdvancedTableTopSecondary());
+				ForgeRegistries.BLOCKS.register("dual_table_top_right_" + wood, new AdvancedTableTopSecondary());
+				Item placer = new WorkstationPlacerItem(wood);
+				ForgeRegistries.ITEMS.register("workstation_placer_" + wood, placer);
+				blocks_table2.add(() -> primary); // for the block entity
+				SecondCreativeTab.items_table2.add(placer);
+				ExternalWoodSupport.registerHostMod(wood, Constants.MODID);
+				// toolracks
+				registerSingleBlockForThirdPartyWood(ToolRack.create(2, "single"), "tool_rack_single_", wood, blocks_rack, SecondCreativeTab.items_rack1);
+				registerSingleBlockForThirdPartyWood(DualToolRack.create(6, "framed"), "tool_rack_framed_", wood, blocks_rack, SecondCreativeTab.items_rack2);
+				registerSingleBlockForThirdPartyWood(DualToolRack.create(6, "pframed"), "tool_rack_pframed_", wood, blocks_rack, SecondCreativeTab.items_rack3);
+				registerSingleBlockForThirdPartyWood(DualToolRack.create(6, "double"), "tool_rack_double_", wood, blocks_rack, SecondCreativeTab.items_rack4);
+				// potion shelves
+				registerSingleBlockForThirdPartyWood(new PotionShelf(), "potion_shelf_", wood, blocks_pshelf, SecondCreativeTab.items_pshelf);
+				// book shelves
+				registerSingleBlockForThirdPartyWood(new BookShelf.Dual("double"), "book_shelf_double_", wood, blocks_bshelf, SecondCreativeTab.items_bshelf1);
+				registerSingleBlockForThirdPartyWood(new BookShelf.Dual("open_double"), "book_shelf_open_double_", wood, blocks_bshelf, SecondCreativeTab.items_bshelf2);
+				registerSingleBlockForThirdPartyWood(new BookShelf.TopSimple("minimal"), "book_shelf_minimal_", wood, blocks_bshelf, SecondCreativeTab.items_bshelf3);
+				registerSingleBlockForThirdPartyWood(new BookShelf.TopSimple("open_minimal"), "book_shelf_open_minimal_", wood, blocks_bshelf, SecondCreativeTab.items_bshelf4);
+				registerSingleBlockForThirdPartyWood(new BookShelf.TopWithLanterns("with_lanterns"), "book_shelf_with_lanterns_", wood, blocks_bshelf, SecondCreativeTab.items_bshelf5);
+			}
+			((ForgeRegistry) ForgeRegistries.BLOCKS).freeze();
+		}
+		catch (Exception ignored)	{ }
+	}
 }

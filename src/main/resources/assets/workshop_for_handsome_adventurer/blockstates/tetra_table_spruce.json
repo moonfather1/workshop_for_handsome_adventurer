@@ -1,0 +1,6 @@
+{
+    "variants":
+    {
+        "": { "model": "tetra_tables:block/tetra_table_spruce" }
+    }
+}

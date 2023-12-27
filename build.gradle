@@ -188,7 +188,9 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:balm-531761:4757228")
     compileOnly fg.deobf("curse.maven:crafting-tweaks-233071:4757229")
 
-    //implementation fg.deobf("curse.maven:dynamic-asset-generator-577096:4670363")
+    implementation fg.deobf("curse.maven:dynamic-asset-generator-577096:4670363")
+	runtimeOnly fg.deobf("curse.maven:biomes-o-plenty-220318:4617259")
+	runtimeOnly fg.deobf("curse.maven:terrablender-563928:4647094")
 
     implementation fg.deobf("curse.maven:roughly-enough-items-310111:4774395")
 	runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4663010")

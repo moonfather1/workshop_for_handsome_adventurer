@@ -28,6 +28,7 @@ public class OptionsHolder
 
 		public final ConfigValue<Boolean> OffhandInteractsWithToolRack;
 
+
 		public Common(ForgeConfigSpec.Builder builder)
 		{
 			builder.push("Tables");
