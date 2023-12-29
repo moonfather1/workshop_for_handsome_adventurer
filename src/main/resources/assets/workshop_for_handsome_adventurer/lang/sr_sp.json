@@ -124,6 +124,7 @@
 	"block.workshop_for_handsome_adventurer.tool_rack_pframed_mangrove": "Држач за алатке (са стубовима, од мангрове)",
 	"block.workshop_for_handsome_adventurer.tool_rack_single_mangrove": "Држач за алатке (један ред, од мангрове)",
 	"block.workshop_for_handsome_adventurer.potion_shelf_mangrove": "Полица за напитке (од мангрове)",
+	"block.tetra_tables.tetra_table_spruce": "Workbench (spruce)",
 
 	"message.workshop_for_handsome_adventurer.no_room_for_workstation": "Ту нема места за радну станицу.",
 	"message.workshop_for_handsome_adventurer.workshop_table_obscured": "Не можеш прићи радној површини стола.",

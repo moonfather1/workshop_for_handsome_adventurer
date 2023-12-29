@@ -175,6 +175,7 @@ dependencies {
 	runtimeOnly fg.deobf("curse.maven:immersive-engineering-231951:4780537")
     //runtimeOnly fg.deobf("curse.maven:geckolib-388172:4407241")
     //runtimeOnly fg.deobf("curse.maven:corgilib-693313:4554111")
+    implementation fg.deobf("curse.maven:dynamic-asset-generator-577096:4122975")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

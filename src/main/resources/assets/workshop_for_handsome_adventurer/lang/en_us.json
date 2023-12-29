@@ -133,6 +133,7 @@
 	"block.workshop_for_handsome_adventurer.tool_rack_pframed_mangrove": "Tool Rack (mangrove, partly framed)",
 	"block.workshop_for_handsome_adventurer.tool_rack_single_mangrove": "Tool Rack (mangrove, single)",
 	"block.workshop_for_handsome_adventurer.potion_shelf_mangrove": "Potion Shelf (mangrove)",
+	"block.tetra_tables.tetra_table_spruce": "Workbench (spruce)",
 
 	"message.workshop_for_handsome_adventurer.extension_slot1": "Put a chest or a storage drawer here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests.",
 	"message.workshop_for_handsome_adventurer.extension_slot2": "Put a chest or a storage drawer here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests. \n(optionally one more [ITEM] for a range of two blocks)\n \nOr two lanterns to make them part of the workstation \nand light up the surroundings (put two in one slot).",
