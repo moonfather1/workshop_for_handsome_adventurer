@@ -168,6 +168,13 @@ dependencies {
 
     implementation fg.deobf("maven.modrinth:emi:VldBzgSe")
     compileOnly fg.deobf("maven.modrinth:jei:6ImKQVtc")
+	
+	runtimeOnly fg.deobf("curse.maven:biomes-o-plenty-220318:4473556")
+	runtimeOnly fg.deobf("curse.maven:terrablender-563928:4618490")
+	//runtimeOnly fg.deobf("curse.maven:oh-the-biomes-youll-go-247560:4841635")
+	runtimeOnly fg.deobf("curse.maven:immersive-engineering-231951:4780537")
+    //runtimeOnly fg.deobf("curse.maven:geckolib-388172:4407241")
+    //runtimeOnly fg.deobf("curse.maven:corgilib-693313:4554111")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
