@@ -13,12 +13,20 @@ public class SecondCreativeTab
 {
     public static final List<Item> items_table1 = new ArrayList<>();
 
-    public static final CreativeModeTab TAB_DYNAMIC = new CreativeModeTab(Constants.MODID)
+    private static CreativeModeTab tab = null;
+    public static  CreativeModeTab getInstance()
     {
-        public ItemStack makeIcon()
+        if (tab == null)
         {
-            int iconIndex = (new Random()).nextInt(SecondCreativeTab.items_table1.size());
-            return new ItemStack(SecondCreativeTab.items_table1.get(iconIndex));
+            tab = new CreativeModeTab(Constants.MODID)
+            {
+                public ItemStack makeIcon()
+                {
+                    int iconIndex = (new Random()).nextInt(SecondCreativeTab.items_table1.size());
+                    return new ItemStack(SecondCreativeTab.items_table1.get(iconIndex));
+                }
+            };
         }
-    };
+        return tab;
+    }
 }

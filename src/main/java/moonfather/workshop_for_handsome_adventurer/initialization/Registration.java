@@ -167,7 +167,7 @@ public class Registration
 		}
 		try  // because of unfreeze fuckery
 		{
-			CreativeModeTab tab = DynamicAssetConfig.separateCreativeTab() ? SecondCreativeTab.TAB_DYNAMIC : CreativeTab.TAB_WORKSHOP;
+			CreativeModeTab tab = DynamicAssetConfig.separateCreativeTab() ? SecondCreativeTab.getInstance() : CreativeTab.TAB_WORKSHOP;
 			((ForgeRegistry) ForgeRegistries.BLOCKS).unfreeze();
 			for (String wood : WoodTypeLister.getWoodIds())
 			{

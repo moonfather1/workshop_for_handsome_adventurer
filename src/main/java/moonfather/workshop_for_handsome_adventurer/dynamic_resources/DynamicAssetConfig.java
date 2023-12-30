@@ -157,7 +157,7 @@ public class DynamicAssetConfig
         public boolean generate_blocks_for_mod_added_woods = true;
 
         public String stripped_log_substitution_comment = "For wood types that do not have stripped logs, you can specify table top block here. If you do not, we are skipping that wood type.";
-        public String stripped_log_substitution_list_for_recipes = "bamboo=minecraft:cut_sandstone, treated_wood=minecraft:polished_blackstone,  embur=byg:stripped_embur_pedu,  sythian=byg:stripped_sythian_stem, bulbis=minecraft:smooth_stone";
+        public String stripped_log_substitution_list_for_recipes = "bamboo=minecraft:smooth_sandstone, treated_wood=minecraft:polished_blackstone,  embur=byg:stripped_embur_pedu,  sythian=byg:stripped_sythian_stem, bulbis=minecraft:smooth_stone";
     }
 
     private static class InstantConfigClient // because the other kind is unavailable early
@@ -166,7 +166,7 @@ public class DynamicAssetConfig
         public int minimum_number_of_sets_for_separate_creative_tab = 4;
 
         public String stripped_log_substitution_comment = "For wood types that do not have stripped logs, you can specify table top block here. If you do not, we are skipping that wood type.";
-        public String stripped_log_substitution_list_for_textures = "embur=embur, sythian=sythian";
+        public String stripped_log_substitution_list_for_textures = "embur=embur, sythian=sythian, bamboo=stripped_bamboo_block";
 
         public String texture_template1_comment = "Tells us where to find plank textures, in case mod uses subdirectories (like byg) or different file names. Second %s below is the wood type. Separate using commas.";
         public String texture_template1_list = "byg=%s:block/%s/planks";
