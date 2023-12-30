@@ -2,13 +2,10 @@ package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.helpers.*;
-import net.minecraft.Util;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 public class OurServerPack extends BaseResourcePack
 {

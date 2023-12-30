@@ -1,6 +1,5 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources.helpers;
 
-import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLister;
 import net.minecraft.resources.ResourceLocation;
 
@@ -27,7 +26,7 @@ public class BlockTagWriter1
             {
                 first = false;
             }
-            builder.append(line + wood + '"');
+            builder.append(line).append(wood).append('"');
         }
         builder.append("\n  ]\n}\n");
         cache.put(new ResourceLocation("forge", "tags/blocks/workbench.json"), builder.toString());

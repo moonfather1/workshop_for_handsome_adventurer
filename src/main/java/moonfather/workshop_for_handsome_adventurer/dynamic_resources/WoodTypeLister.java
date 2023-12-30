@@ -26,6 +26,8 @@ public class WoodTypeLister
             }
             ids.add("acacia");
             woodToHostMap.put("acacia", "minecraft");
+
+            // ready:
             final String mc = "minecraft";
             final String planks = "_planks";
             final String slab = "_slab";
@@ -36,19 +38,31 @@ public class WoodTypeLister
             {
                 if (! id.getNamespace().equals(mc) && id.getPath().endsWith(planks) && ! id.getPath().contains(vertical))
                 {
-                    // looks like wood so far. let's check for slabs and logs as we need them for recipes
+                    // looks like wood so far. let's check for slabs as we need them for recipes
                     String wood = id.getPath().replace(planks, "");
-                    if (ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(id.getNamespace(), id.getPath().replace(planks, slab)))
-                        && ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(id.getNamespace(), LOG1 + wood + LOG2)))
+                    if (ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(id.getNamespace(), id.getPath().replace(planks, slab))))
                     {
                         if (! ids.contains(wood))
                         {
+                            // check for stripped logs. if we don't have them, we allow a substitution:
+                            if (! ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(id.getNamespace(), LOG1 + wood + LOG2)))
+                            {
+                                String substitute = DynamicAssetConfig.getLogRecipeSubstitution(wood);
+                                if (substitute == null || ! ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(substitute)))
+                                {
+                                    continue;
+                                }
+                            }
                             ids.add(wood);
                             woodToHostMap.put(wood, id.getNamespace());
                         }
                         else
                         {
-                            dupeIds.add(new ResourceLocation(id.getNamespace(),wood));
+                            if (ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(id.getNamespace(), LOG1 + wood + LOG2)))
+                            {
+                                dupeIds.add(new ResourceLocation(id.getNamespace(), wood));
+                                // don't care for the final case.
+                            }
                         }
                     }
                 }
@@ -60,12 +74,16 @@ public class WoodTypeLister
     }
     public static String getHostMod(String wood) { return woodToHostMap.get(wood); }
     public static List<ResourceLocation> getDuplicateWoods() { return dupeIds; }
+    public static String getLogRecipeSubstitute(String wood) { return DynamicAssetConfig.getLogRecipeSubstitution(wood); }
+    public static String getLogTextureSubstitute(String wood) { return DynamicAssetConfig.getLogTexSubstitution(wood); }
+    public static String getTexture1Template(String wood) { return DynamicAssetConfig.getPlankPath(getHostMod(wood)); }
+    public static String getTexture2Template(String wood) { return DynamicAssetConfig.getLogPath(getHostMod(wood)); }
+    public static String getTexture2TemplateForMod(String namespace) { return DynamicAssetConfig.getLogPath(namespace); }
+    public static boolean isUsingDarkerWorkstation(String wood) { return DynamicAssetConfig.isUsingDarkerWorkstation(wood); }
 
     private static List<String> ids = null;
     private static final HashMap<String, String> woodToHostMap = new HashMap<>();
     private static final List<ResourceLocation> dupeIds = new ArrayList<>();
-
-    /////////////////////////////////////////////////////
 
 
 }

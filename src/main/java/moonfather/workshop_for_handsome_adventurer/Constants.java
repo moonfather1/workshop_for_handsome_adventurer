@@ -9,8 +9,8 @@ public class Constants
 { 
     public static final String MODID = "workshop_for_handsome_adventurer";
 
-    public static final int DYN_PACK_SERVER_FORMAT = 9;
-    public static final int DYN_PACK_RESOURCE_FORMAT = 8;
+    public static final int DYN_PACK_SERVER_FORMAT = 10;
+    public static final int DYN_PACK_RESOURCE_FORMAT = 9;
 
     public static class Tags
     {

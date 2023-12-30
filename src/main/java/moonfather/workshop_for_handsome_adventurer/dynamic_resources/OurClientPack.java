@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,8 +28,6 @@ public class OurClientPack extends BaseResourcePack
         final String SPRUCE_PLANKS = "minecraft:block/spruce_planks";
         final String SPRUCE_LOG = "minecraft:block/stripped_spruce_log";
         final String SPRUCE = "spruce";
-        final String TEMPLATE_PLANKS = "%s:block/%s_planks";
-        final String TEMPLATE_LOG = "%s:block/stripped_%s_log";
         String json;
         for (String spruceFile: files)
         {
@@ -38,9 +37,13 @@ public class OurClientPack extends BaseResourcePack
                 for (String wood: WoodTypeLister.getWoodIds())
                 {
                     String replaced = json
-                        .replace(SPRUCE_PLANKS, TEMPLATE_PLANKS.formatted(WoodTypeLister.getHostMod(wood), wood))
-                        .replace(SPRUCE_LOG, TEMPLATE_LOG.formatted(WoodTypeLister.getHostMod(wood), wood))
+                        .replace(SPRUCE_PLANKS, getPlanks(wood))
+                        .replace(SPRUCE_LOG, getStrippedLog(wood))
                         .replace(SPRUCE, wood);
+                    if (WoodTypeLister.isUsingDarkerWorkstation(wood))
+                    {
+                        replaced = replaced.replace("/stripped_dark_oak_log", "/stripped_spruce_log");
+                    }
                     String namespace = spruceFile.contains("tetra") ? "tetra_tables" : Constants.MODID;
                     cache.put(new ResourceLocation(namespace, spruceFile.replace(SPRUCE, wood)), replaced);
                 }
@@ -74,7 +77,17 @@ public class OurClientPack extends BaseResourcePack
                             {
                                 first = false;
                             }
-                            builder.append(line.replace(SPRUCE, wood));
+                            String replacement;
+                            if (! wood.contains("_"))
+                            {
+                                replacement = line.replace(SPRUCE, wood);
+                            }
+                            else
+                            {
+                                String[] temp = line.split(":", 2);  // translation is difficult. this replace call is a trivial version.
+                                replacement = temp[0].replace(SPRUCE, wood) + ':' + temp[1].replace(SPRUCE, wood.replace('_', ' '));
+                            }
+                            builder.append(replacement);
                         }
                     }
                 }
@@ -113,6 +126,68 @@ public class OurClientPack extends BaseResourcePack
         builder.append("    }\n  ]\n}\n");
         cache.put(new ResourceLocation("emi", "aliases/list2.json"), builder.toString());
     }
+
+    private String getPlanks(String wood)
+    {
+        String template = WoodTypeLister.getTexture1Template(wood);
+        if (template == null)
+        {
+            return TEMPLATE_PLANKS.formatted(WoodTypeLister.getHostMod(wood), wood);
+        }
+        return template.formatted(WoodTypeLister.getHostMod(wood), wood);
+    }
+
+    private String getStrippedLog(String wood)
+    {
+        if (strippedLogCache.containsKey(wood))
+        {
+            return strippedLogCache.get(wood);
+        }
+        String result;
+        String sub = WoodTypeLister.getLogRecipeSubstitute(wood);
+        if (sub == null)
+        {
+            String template = WoodTypeLister.getTexture2Template(wood);
+            if (template != null)
+            {
+                result = template.formatted(WoodTypeLister.getHostMod(wood), wood);
+            }
+            else
+            {
+                result = TEMPLATE_LOG.formatted(WoodTypeLister.getHostMod(wood), wood);
+            }
+        }
+        else
+        {
+            ResourceLocation rl = new ResourceLocation(sub);
+            String namespace = rl.getNamespace(), path = rl.getPath();
+            String sub2 = WoodTypeLister.getLogTextureSubstitute(wood);
+            if (sub2 != null)
+            {
+                path = sub2;
+                if (WoodTypeLister.getHostMod(sub2) != null)
+                {
+                    namespace = WoodTypeLister.getHostMod(sub2);
+                }
+                else
+                {
+                    namespace = "minecraft";
+                }
+            }
+            String template = WoodTypeLister.getTexture2TemplateForMod(rl.getNamespace());
+            if (template == null)
+            {
+                template = TEMPLATE_ANY_BLOCK;
+            }
+            result = template.formatted(namespace, path);
+        }
+        strippedLogCache.put(wood, result);
+        return result;
+    }
+    private final Map<String, String> strippedLogCache = new HashMap<>(); // will be remade on reload
+    private static final String TEMPLATE_PLANKS = "%s:block/%s_planks";
+    private static final String TEMPLATE_LOG = "%s:block/stripped_%s_log";
+    private static final String TEMPLATE_ANY_BLOCK = "%s:block/%s";
 
     private static final String[] files =
             {
