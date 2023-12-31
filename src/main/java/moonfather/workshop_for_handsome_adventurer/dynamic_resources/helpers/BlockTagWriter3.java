@@ -1,5 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources.helpers;
 
+import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLister;
 import net.minecraft.resources.ResourceLocation;
 
@@ -14,14 +15,15 @@ public class BlockTagWriter3
         builder.append("  \"replace\": false,\n");
         builder.append("  \"values\": [\n");
 
-        String[] lines = {
-                          "\"workshop_for_handsome_adventurer:dual_table_bottom_left_",
-                          "\"workshop_for_handsome_adventurer:tool_rack_double_",
-                          "\"workshop_for_handsome_adventurer:tool_rack_pframed_",
-                          "\"workshop_for_handsome_adventurer:tool_rack_framed_"
+        final String[] files = {
+                "dual_table_bottom_left_",
+                "tool_rack_double_",
+                "tool_rack_pframed_",
+                "tool_rack_framed_"
         };
+        final String template = "\"%s:%s%s\"";
         boolean first = true;
-        for (String line: lines)
+        for (String file: files)
         {
             for (String wood : WoodTypeLister.getWoodIds())
             {
@@ -33,7 +35,7 @@ public class BlockTagWriter3
                 {
                     first = false;
                 }
-                builder.append(line + wood + '"');
+                builder.append(template.formatted(Constants.MODID, file, wood));
             }
         }
         builder.append("  ]\n}\n");

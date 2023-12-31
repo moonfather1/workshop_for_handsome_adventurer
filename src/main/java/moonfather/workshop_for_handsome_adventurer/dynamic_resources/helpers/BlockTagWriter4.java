@@ -1,5 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources.helpers;
 
+import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLister;
 import net.minecraft.resources.ResourceLocation;
 
@@ -14,20 +15,21 @@ public class BlockTagWriter4
         builder.append("  \"replace\": false,\n");
         builder.append("  \"values\": [\n");
 
-        String[] lines = {
-                          "\"workshop_for_handsome_adventurer:tool_rack_single_",
-                          "\"workshop_for_handsome_adventurer:tool_rack_double_",
-                          "\"workshop_for_handsome_adventurer:tool_rack_pframed_",
-                          "\"workshop_for_handsome_adventurer:tool_rack_framed_",
-                          "\"workshop_for_handsome_adventurer:potion_shelf_",
-                          "\"workshop_for_handsome_adventurer:book_shelf_minimal_",
-                          "\"workshop_for_handsome_adventurer:book_shelf_open_minimal_",
-                          "\"workshop_for_handsome_adventurer:book_shelf_double_",
-                          "\"workshop_for_handsome_adventurer:book_shelf_open_double_",
-                          "\"workshop_for_handsome_adventurer:book_shelf_with_lanterns_"
+        final String[] files = {
+                "tool_rack_single_",
+                "tool_rack_double_",
+                "tool_rack_pframed_",
+                "tool_rack_framed_",
+                "potion_shelf_",
+                "book_shelf_minimal_",
+                "book_shelf_open_minimal_",
+                "book_shelf_double_",
+                "book_shelf_open_double_",
+                "book_shelf_with_lanterns_"
         };
+        final String template = "\"%s:%s%s\"";
         boolean first = true;
-        for (String line: lines)
+        for (String file: files)
         {
             for (String wood : WoodTypeLister.getWoodIds())
             {
@@ -39,7 +41,7 @@ public class BlockTagWriter4
                 {
                     first = false;
                 }
-                builder.append(line + wood + '"');
+                builder.append("\"").append(Constants.MODID).append(":").append(file).append(wood).append("\"");
             }
         }
         builder.append("  ]\n}\n");

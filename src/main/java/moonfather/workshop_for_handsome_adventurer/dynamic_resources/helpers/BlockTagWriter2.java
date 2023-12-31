@@ -1,5 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources.helpers;
 
+import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLister;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.ModList;
@@ -17,9 +18,9 @@ public class BlockTagWriter2
         boolean first = true;
         for (String wood : WoodTypeLister.getWoodIds())
         {
-            for (String line: lines)
+            for (String file: files)
             {
-                if (!first)
+                if (! first)
                 {
                     builder.append(",\n");
                 }
@@ -27,7 +28,7 @@ public class BlockTagWriter2
                 {
                     first = false;
                 }
-                builder.append(line).append(wood).append('"');
+                builder.append(template.formatted(Constants.MODID, file, wood));
             }
             if (ModList.get().isLoaded("tetra_tables"))
             {
@@ -40,22 +41,23 @@ public class BlockTagWriter2
 
 
 
-    private static final String[] lines = {
-            "\"workshop_for_handsome_adventurer:simple_table_",
-            "\"workshop_for_handsome_adventurer:dual_table_bottom_left_",
-            "\"workshop_for_handsome_adventurer:dual_table_bottom_right_",
-            "\"workshop_for_handsome_adventurer:dual_table_top_left_",
-            "\"workshop_for_handsome_adventurer:dual_table_top_right_",
-            "\"workshop_for_handsome_adventurer:tool_rack_single_",
-            "\"workshop_for_handsome_adventurer:tool_rack_double_",
-            "\"workshop_for_handsome_adventurer:tool_rack_pframed_",
-            "\"workshop_for_handsome_adventurer:tool_rack_framed_",
-            "\"workshop_for_handsome_adventurer:potion_shelf_",
-            "\"workshop_for_handsome_adventurer:book_shelf_minimal_",
-            "\"workshop_for_handsome_adventurer:book_shelf_open_minimal_",
-            "\"workshop_for_handsome_adventurer:book_shelf_double_",
-            "\"workshop_for_handsome_adventurer:book_shelf_open_double_",
-            "\"workshop_for_handsome_adventurer:book_shelf_with_lanterns_"
+    private static final String template = "\"%s:%s%s\"";
+    private static final String[] files = {
+            "simple_table_",
+            "dual_table_bottom_left_",
+            "dual_table_bottom_right_",
+            "dual_table_top_left_",
+            "dual_table_top_right_",
+            "tool_rack_single_",
+            "tool_rack_double_",
+            "tool_rack_pframed_",
+            "tool_rack_framed_",
+            "potion_shelf_",
+            "book_shelf_minimal_",
+            "book_shelf_open_minimal_",
+            "book_shelf_double_",
+            "book_shelf_open_double_",
+            "book_shelf_with_lanterns_"
     };
     private static final String lineTetra = "\"tetra_tables:tetra_table_";
 }
