@@ -68,6 +68,30 @@ public class FinderEvents
                         PackSource.DEFAULT
                 ));
             });
+
+            event.addRepositorySource((packConsumer) ->
+            {
+                @SuppressWarnings("resource")
+                PackResources pack = new OurServerPack2();
+
+                packConsumer.accept(Pack.create(
+                        Constants.MODID + "_server2",
+                        Component.literal("Workshop - server-side generated tags"),
+                        true,
+                        s -> pack,
+                        new Pack.Info(
+                                Component.literal(pack.packId()),
+                                Constants.DYN_PACK_SERVER_FORMAT,
+                                Constants.DYN_PACK_RESOURCE_FORMAT,
+                                FeatureFlagSet.of(),
+                                true
+                        ),
+                        PackType.SERVER_DATA,
+                        Pack.Position.BOTTOM,
+                        true,
+                        PackSource.DEFAULT
+                ));
+            });
         }
     }
 }

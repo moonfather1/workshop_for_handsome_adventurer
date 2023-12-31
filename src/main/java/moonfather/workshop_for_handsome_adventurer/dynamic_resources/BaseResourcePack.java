@@ -103,9 +103,13 @@ public abstract class BaseResourcePack implements PackResources
     @Override
     public Set<String> getNamespaces(PackType type)
     {
-        this.buildOnDemand();
-        return type == this.type ? this.namespaces : Set.of();
+        if (type != this.type) return Set.of();
+        if (this.namespaces == null) return fixedNamespaces;
+        return this.namespaces;  //i'm an idiot. this optimization killed tags when portin to 1.19.2 and i wasted two days hitting my head on the table to figure out why.
     }
+    private final Set<String> fixedNamespaces = Set.of(Constants.MODID, "tetra_tables");
+
+
 
     @Nullable
     @Override
