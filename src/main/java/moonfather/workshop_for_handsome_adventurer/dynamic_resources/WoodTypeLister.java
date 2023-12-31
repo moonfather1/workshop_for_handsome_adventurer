@@ -26,6 +26,8 @@ public class WoodTypeLister
             }
             ids.add("acacia");
             woodToHostMap.put("acacia", "minecraft");
+            ids.add("bamboo");
+            woodToHostMap.put("bamboo", "minecraft");
             final String mc = "minecraft";
             final String planks = "_planks";
             final String slab = "_slab";

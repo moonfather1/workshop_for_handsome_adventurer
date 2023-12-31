@@ -4,6 +4,7 @@
     { "id": "malum:encyclopedia_arcana", "required": false },
     { "id": "croptopia:guide", "required": false },
     { "id": "botania:lexicon", "required": false },
-    { "id": "patchouli:guide_book", "required": false }
+    { "id": "patchouli:guide_book", "required": false },
+    { "id": "byg:biomepedia", "required": false }
   ]
 }

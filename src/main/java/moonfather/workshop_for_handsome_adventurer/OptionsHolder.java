@@ -58,7 +58,7 @@ public class OptionsHolder
 
 	public static class Client
 	{
-		private static final boolean defaultRenderItemsOnTable = false;
+		private static final boolean defaultRenderItemsOnTable = true;
 		private static final boolean defaultDetailedWailaInfoForEnchantedTools = false;
 		private static final boolean defaultDetailedWailaInfoForEnchantedBooks = true;
 

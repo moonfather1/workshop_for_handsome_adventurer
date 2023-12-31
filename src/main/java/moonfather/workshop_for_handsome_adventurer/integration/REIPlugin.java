@@ -1,6 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.integration;
 
-import moonfather.workshop_for_handsome_adventurer.block_entities.screens.DualTableCraftingScreen;
+import moonfather.workshop_for_handsome_adventurer.block_entities.screens.SimpleTableCraftingScreen;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.screen.ExclusionZones;
@@ -23,7 +23,7 @@ public class REIPlugin implements REIClientPlugin
     @Override
     public void registerExclusionZones(ExclusionZones zones)
     {
-        zones.register(DualTableCraftingScreen.class, screen ->
+        zones.register(SimpleTableCraftingScreen.class, screen ->
         {
             Collection<Rectangle> result = new HashSet<>();
             result.add(new me.shedaniel.math.Rectangle(screen.getGuiLeft(), screen.getGuiTop(), screen.getXSize(), screen.getYSize()));

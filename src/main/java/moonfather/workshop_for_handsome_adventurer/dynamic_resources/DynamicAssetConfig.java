@@ -105,11 +105,14 @@ public class DynamicAssetConfig
         public String comment1 = "Unicorn-magic-powered system that automatically adds tables/racks/shelves for all wood types in the game (yes, modded ones too, that is the point of this system). If you turn this off (does not work? please report!), workshop blocks will only be added in vanilla wood types.";
         public String comment2 = "Option requires game restart. Will synchronize it in future versions, for now users need to be careful.";
         public boolean generate_blocks_for_mod_added_woods = true;
+        //public String stripped_log_substitution_list_for_recipes = "bamboo=minecraft:stripped_bamboo_block, treated_wood=minecraft:polished_blackstone,  embur=byg:stripped_embur_pedu,  sythian=byg:stripped_sythian_stem, bulbis=minecraft:smooth_stone";
     }
 
     private static class InstantConfigClient // because the other kind is unavailable early
     {
         public String comment1 = "How many wood sets are needed for this mod to use a second tab in creative mode for dynamically created blocks. Set to a high number to disable second tab and shove everything into first.";
         public int minimum_number_of_sets_for_separate_creative_tab = 4;
+
+        //public String stripped_log_substitution_list_for_textures = "embur=embur, sythian=sythian, bamboo=stripped_bamboo_block";
     }
 }

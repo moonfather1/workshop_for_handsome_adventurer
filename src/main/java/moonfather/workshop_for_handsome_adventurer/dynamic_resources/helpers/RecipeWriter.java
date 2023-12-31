@@ -45,8 +45,6 @@ public class RecipeWriter
             "recipes/book_shelf_with_lanterns_spruce.json",
             "recipes/potion_shelf_spruce.json",
             "recipes/simple_table_normal_spruce.json",
-            "recipes/simple_table_normal_spruce_dark_oak.json",
-            "recipes/simple_table_normal_spruce_jungle.json",
             "recipes/simple_table_replacement_spruce.json",
             "recipes/tool_rack_double_spruce.json",
             "recipes/tool_rack_framed_spruce.json",
