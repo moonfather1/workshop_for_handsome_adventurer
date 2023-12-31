@@ -164,14 +164,16 @@ public class OurClientPack extends BaseResourcePack
             String sub2 = WoodTypeLister.getLogTextureSubstitute(wood);
             if (sub2 != null)
             {
-                path = sub2;
-                if (WoodTypeLister.getHostMod(sub2) != null)
+                if (sub2.contains(":"))
                 {
-                    namespace = WoodTypeLister.getHostMod(sub2);
+                    ResourceLocation rl2 = new ResourceLocation(sub2);
+                    namespace = rl2.getNamespace();
+                    path = rl2.getPath();
                 }
                 else
                 {
-                    namespace = "minecraft";
+                    namespace = WoodTypeLister.getHostMod(wood);
+                    path = sub2;
                 }
             }
             String template = WoodTypeLister.getTexture2TemplateForMod(rl.getNamespace());

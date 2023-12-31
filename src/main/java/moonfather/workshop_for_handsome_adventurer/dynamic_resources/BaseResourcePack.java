@@ -110,9 +110,10 @@ public abstract class BaseResourcePack implements PackResources
     public Set<String> getNamespaces(PackType type)
     {
         if (type != this.type) return Set.of();
-        if (this.namespaces == null) return Set.of(Constants.MODID, "tetra_tables");
-        return this.namespaces;
+        if (this.namespaces == null) return fixedNamespaces;
+        return this.namespaces;  //i'm an idiot. this optimization killed tags and i wasted two days hitting my head on the table to figure out why.
     }
+    private final Set<String> fixedNamespaces = Set.of(Constants.MODID, "tetra_tables");
 
     @Nullable
     @Override

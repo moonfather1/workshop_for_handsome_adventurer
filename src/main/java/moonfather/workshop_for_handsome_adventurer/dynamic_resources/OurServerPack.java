@@ -17,11 +17,6 @@ public class OurServerPack extends BaseResourcePack
     @Override
     protected void buildResources(Map<ResourceLocation, String> cache)
     {
-        BlockTagWriter1.writeFiles(cache);
-        BlockTagWriter2.writeFiles(cache);
-        BlockTagWriter3.writeFiles(cache);
-        BlockTagWriter4.writeFiles(cache);
-        ItemTagWriter1.writeFiles(cache);
         RecipeWriter.writeFiles(cache);
         LootTableWriter.writeFiles(cache);
     }

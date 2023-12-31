@@ -49,6 +49,20 @@ public class FinderEvents
                         PackSource.DEFAULT
                 ));
             });
+            event.addRepositorySource((packConsumer, packConstructor) ->
+            {
+                @SuppressWarnings("resource")
+                PackResources pack = new OurServerPack2();
+
+                packConsumer.accept(Pack.create(
+                        Constants.MODID + "_server2",
+                        true,
+                        () -> pack,
+                        packConstructor,
+                        Pack.Position.BOTTOM,
+                        PackSource.DEFAULT
+                ));
+            });
         }
     }
 }
