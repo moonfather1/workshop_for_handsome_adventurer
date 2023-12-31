@@ -159,7 +159,7 @@ public class DynamicAssetConfig
         //public String stripped_log_substitution_list_for_recipes = "bamboo=minecraft:stripped_bamboo_block, treated_wood=minecraft:polished_blackstone,  embur=byg:stripped_embur_pedu,  sythian=byg:stripped_sythian_stem, bulbis=minecraft:smooth_stone";
 
         public String stripped_log_substitution_comment = "For wood types that do not have stripped logs, you can specify table top block here. If you do not, we are skipping that wood type.";
-        public String stripped_log_substitution_list_for_recipes = "bamboo=minecraft:stripped_bamboo_block, treated_wood=minecraft:polished_blackstone,  embur=byg:stripped_embur_pedu,  sythian=byg:stripped_sythian_stem, bulbis=byg:stripped_bulbis_stem";
+        public String stripped_log_substitution_list_for_recipes = "bamboo=minecraft:stripped_bamboo_block, treated_wood=minecraft:polished_blackstone,  embur=byg:stripped_embur_pedu,  sythian=byg:stripped_sythian_stem, bulbis=byg:stripped_bulbis_stem, yellow_bioshroom=regions_unexplored:yellow_bioshroom_stem";
 
     }
 
@@ -177,6 +177,6 @@ public class DynamicAssetConfig
         public String texture_template2_list = "byg=%s:block/%s/stripped_log";
 
         public String use_darker_workstation_comment = "Slightly different model. Do not worry about this. Or just list dark woods here.";
-        public String use_darker_workstation_model = "embur,hellbark,bulbis,cika,lament";
+        public String use_darker_workstation_model = "embur,hellbark,bulbis,cika,lament,dead,blackwood";
     }
 }
