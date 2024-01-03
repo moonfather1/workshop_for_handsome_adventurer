@@ -1,6 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 
 import com.google.common.base.Stopwatch;
+import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -43,7 +44,7 @@ public class WoodTypeLister
                     String wood = id.getPath().replace(planks, "");
                     if (ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(id.getNamespace(), id.getPath().replace(planks, slab))))
                     {
-                        if (! ids.contains(wood))
+                        if (! ids.contains(wood) && ! Registration.woodTypes.contains(wood))  // normal dupes and vanilla dupes get recipes only
                         {
                             // check for stripped logs. if we don't have them, we allow a substitution:
                             if (! ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(id.getNamespace(), LOG1 + wood + LOG2)))
