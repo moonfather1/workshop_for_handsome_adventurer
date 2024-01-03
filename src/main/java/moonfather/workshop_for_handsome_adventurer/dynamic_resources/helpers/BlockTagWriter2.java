@@ -42,7 +42,7 @@ public class BlockTagWriter2
 
 
     private static final String template = "\"%s:%s%s\"";
-    private static final String[] files = {
+    public static final String[] files = {
             "simple_table_",
             "dual_table_bottom_left_",
             "dual_table_bottom_right_",
