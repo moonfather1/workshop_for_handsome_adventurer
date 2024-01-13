@@ -214,6 +214,9 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:beachparty-858691:4984446")
     runtimeOnly fg.deobf("curse.maven:vinery-704465:4932395")
     runtimeOnly fg.deobf("curse.maven:aether-255308:4976547")
+
+    runtimeOnly fg.deobf("curse.maven:growthcraft-community-edition-235092:4844338")
+    //runtimeOnly fg.deobf("curse.maven:immersive-engineering-231951:4782978")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
