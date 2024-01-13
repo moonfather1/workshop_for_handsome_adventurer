@@ -42,7 +42,7 @@ public class WoodTypeLister
                     String wood = id.getPath().replace(planks, "");
                     if (ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(id.getNamespace(), id.getPath().replace(planks, slab))))
                     {
-                        if (! ids.contains(wood))
+                        if (! ids.contains(wood) && ! Registration.woodTypes.contains(wood))  // second part isn't an issue before 1.20, but some mods adding cherry (vinery) or bamboo made 1.20 crash because of dupes
                         {
                             // check for stripped logs. if we don't have them, we allow a substitution:
                             if (! ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(id.getNamespace(), LOG1 + wood + LOG2)))
