@@ -3,15 +3,23 @@ package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import moonfather.workshop_for_handsome_adventurer.Constants;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.IoSupplier;
 import net.minecraftforge.fml.loading.FMLConfig;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class DynamicAssetConfig
 {
@@ -115,13 +123,15 @@ public class DynamicAssetConfig
     {
         return getFromSplitConfig(getClient().stripped_log_substitution_list_for_textures, subTextureList, wood);
     }
-    public static String getPlankPath(String wood)
+
+
+    public static String getPlankPath(String modId)
     {
-        return getFromSplitConfig(getClient().texture_template1_list, plankPathList, wood);
+        return getFromSplitConfig(getClient().texture_template1_list, plankPathList, modId);
     }
-    public static String getLogPath(String wood)
+    public static String getLogPath(String modId)
     {
-        return getFromSplitConfig(getClient().texture_template2_list, logPathList, wood);
+        return getFromSplitConfig(getClient().texture_template2_list, logPathList, modId);
     }
     public static boolean isUsingDarkerWorkstation(String wood)
     {
@@ -172,9 +182,9 @@ public class DynamicAssetConfig
         public String stripped_log_substitution_list_for_textures = "embur=embur, sythian=sythian, bamboo=stripped_bamboo_block, bulbis=bulbis";
 
         public String texture_template1_comment = "Tells us where to find plank textures, in case mod uses subdirectories (like byg) or different file names. Second %s below is the wood type. Separate using commas.";
-        public String texture_template1_list = "byg=%s:block/%s/planks";
+        public String texture_template1_list = "byg=%s:block/%s/planks, aether=%s:block/construction/%s_planks";
         public String texture_template2_comment = "Tells us where to find stripped log textures, in case mod uses subdirectories (like byg) or different file names. Second %s below is the wood type. Separate using commas.";
-        public String texture_template2_list = "byg=%s:block/%s/stripped_log";
+        public String texture_template2_list = "byg=%s:block/%s/stripped_log,  aether=%s:block/natural/stripped_%s_log";
 
         public String use_darker_workstation_comment = "Slightly different model. Do not worry about this. Or just list dark woods here.";
         public String use_darker_workstation_model = "embur,hellbark,bulbis,cika,lament,dead,blackwood";

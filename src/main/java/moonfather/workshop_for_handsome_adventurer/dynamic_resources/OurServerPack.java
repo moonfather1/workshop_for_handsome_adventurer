@@ -33,5 +33,13 @@ public class OurServerPack extends BaseResourcePack
 
 
     @Override
+    protected boolean isNotOurRecipe(String namespace)
+    {
+        return ! namespace.equals(Constants.MODID) && ! namespace.equals("tetra_tables");
+    }
+
+
+
+    @Override
     public String packId() { return "Workshop - auto-generated recipes and loot tables"; }
 }

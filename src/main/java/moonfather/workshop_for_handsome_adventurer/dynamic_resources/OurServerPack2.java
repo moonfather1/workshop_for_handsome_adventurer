@@ -38,6 +38,12 @@ public class OurServerPack2  extends BaseResourcePack
 
 
     @Override
+    protected boolean isNotOurRecipe(String namespace)
+    {
+        return ! namespaces.contains(namespace);
+    }
+
+    @Override
     public Set<String> getNamespaces(PackType type)
     {
         if (type != PackType.SERVER_DATA) return Set.of();

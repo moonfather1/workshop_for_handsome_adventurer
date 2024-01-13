@@ -36,6 +36,7 @@ public abstract class BaseResourcePack implements PackResources
     ////////////////////////////////////
 
     protected abstract void buildResources(Map<ResourceLocation, String> cache);
+    protected abstract boolean isNotOurRecipe(String namespace);
 
     ////////////////////////////////////////////////////////////
 
@@ -66,6 +67,7 @@ public abstract class BaseResourcePack implements PackResources
     @Override
     public IoSupplier<InputStream> getResource(PackType type, ResourceLocation location)
     {
+        if (this.isNotOurRecipe(location.getNamespace())) { return null; }
         if (this.namespaces == null && ! (location.getNamespace().equals(Constants.MODID) && (location.getPath().contains("spruce") || location.getPath().contains("en_us"))))
         {
             this.buildOnDemand(); // so normally we do, but we allow this one to pass.
@@ -77,9 +79,12 @@ public abstract class BaseResourcePack implements PackResources
         return null;
     }
 
+
+
     @Override
     public void listResources(PackType type, String namespace, String path, ResourceOutput output)
     {
+        if (this.isNotOurRecipe(namespace)) { return; }
         if (type == this.type)
         {
             this.buildOnDemand();
@@ -105,7 +110,7 @@ public abstract class BaseResourcePack implements PackResources
     {
         if (type != this.type) return Set.of();
         if (this.namespaces == null) return fixedNamespaces;
-        return this.namespaces;  //i'm an idiot. this optimization killed tags when portin to 1.19.2 and i wasted two days hitting my head on the table to figure out why.
+        return this.namespaces;  //i'm an idiot. this optimization killed tags when portinh to 1.19.2 and i wasted two days hitting my head on the table to figure out why.
     }
     private final Set<String> fixedNamespaces = Set.of(Constants.MODID, "tetra_tables");
 

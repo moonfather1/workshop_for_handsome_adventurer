@@ -39,7 +39,7 @@ public class OurClientPack extends BaseResourcePack
                         .replace(SPRUCE_PLANKS, getPlanks(wood))
                         .replace(SPRUCE_LOG, getStrippedLog(wood))
                         .replace(SPRUCE, wood);
-                    if (WoodTypeLister.isUsingDarkerWorkstation(wood))
+                    if (WoodTypeManager.isUsingDarkerWorkstation(wood))
                     {
                         replaced = replaced.replace("/stripped_dark_oak_log", "/stripped_spruce_log");
                     }
@@ -127,17 +127,29 @@ public class OurClientPack extends BaseResourcePack
         cache.put(new ResourceLocation("emi", "aliases/list2.json"), builder.toString());
     }
 
+    @Override
+    protected boolean isNotOurRecipe(String namespace)
+    {
+        return ! namespace.equals(Constants.MODID) && ! namespace.equals("tetra_tables");
+    }
 
+    //////////////////////////////////
 
     private String getPlanks(String wood)
     {
-        String template = WoodTypeLister.getTexture1Template(wood);
+        String auto = WoodTypeManager.getPlankTextureAuto(WoodTypeLister.getHostMod(wood), wood);
+        if (auto != null)
+        {
+            return JOIN.formatted(WoodTypeLister.getHostMod(wood), auto);
+        }
+        String template = WoodTypeManager.getTexture1Template(wood);
         if (template == null)
         {
             return TEMPLATE_PLANKS.formatted(WoodTypeLister.getHostMod(wood), wood);
         }
         return template.formatted(WoodTypeLister.getHostMod(wood), wood);
     }
+    private final String JOIN = "%s:%s";
 
     private String getStrippedLog(String wood)
     {
@@ -145,11 +157,26 @@ public class OurClientPack extends BaseResourcePack
         {
             return strippedLogCache.get(wood);
         }
+        String sub = WoodTypeManager.getLogRecipeSubstitute(wood);
+        String auto;
+        if (sub != null)
+        {
+            int start = sub.indexOf(":");
+            start = start == -1 ? 0 : start + 1;
+            auto = WoodTypeManager.getLogTextureAuto(WoodTypeLister.getHostMod(wood), wood, sub.substring(start));
+        }
+        else
+        {
+            auto = WoodTypeManager.getLogTextureAuto(WoodTypeLister.getHostMod(wood), wood);
+        }
+        if (auto != null)
+        {
+            return JOIN.formatted(WoodTypeLister.getHostMod(wood), auto);
+        }
         String result;
-        String sub = WoodTypeLister.getLogRecipeSubstitute(wood);
         if (sub == null)
         {
-            String template = WoodTypeLister.getTexture2Template(wood);
+            String template = WoodTypeManager.getTexture2Template(wood);
             if (template != null)
             {
                 result = template.formatted(WoodTypeLister.getHostMod(wood), wood);
@@ -163,7 +190,7 @@ public class OurClientPack extends BaseResourcePack
         {
             ResourceLocation rl = new ResourceLocation(sub);
             String namespace = rl.getNamespace(), path = rl.getPath();
-            String sub2 = WoodTypeLister.getLogTextureSubstitute(wood);
+            String sub2 = WoodTypeManager.getLogTextureSubstitute(wood);
             if (sub2 != null)
             {
                 if (sub2.contains(":"))
@@ -178,7 +205,7 @@ public class OurClientPack extends BaseResourcePack
                     path = sub2;
                 }
             }
-            String template = WoodTypeLister.getTexture2TemplateForMod(rl.getNamespace());
+            String template = WoodTypeManager.getTexture2TemplateForMod(rl.getNamespace());
             if (template == null)
             {
                 template = TEMPLATE_ANY_BLOCK;
