@@ -1,6 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 
 import com.google.common.base.Stopwatch;
+import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -74,12 +75,6 @@ public class WoodTypeLister
     }
     public static String getHostMod(String wood) { return woodToHostMap.get(wood); }
     public static List<ResourceLocation> getDuplicateWoods() { return dupeIds; }
-    public static String getLogRecipeSubstitute(String wood) { return DynamicAssetConfig.getLogRecipeSubstitution(wood); }
-    public static String getLogTextureSubstitute(String wood) { return DynamicAssetConfig.getLogTexSubstitution(wood); }
-    public static String getTexture1Template(String wood) { return DynamicAssetConfig.getPlankPath(getHostMod(wood)); }
-    public static String getTexture2Template(String wood) { return DynamicAssetConfig.getLogPath(getHostMod(wood)); }
-    public static String getTexture2TemplateForMod(String namespace) { return DynamicAssetConfig.getLogPath(namespace); }
-    public static boolean isUsingDarkerWorkstation(String wood) { return DynamicAssetConfig.isUsingDarkerWorkstation(wood); }
 
     private static List<String> ids = null;
     private static final HashMap<String, String> woodToHostMap = new HashMap<>();

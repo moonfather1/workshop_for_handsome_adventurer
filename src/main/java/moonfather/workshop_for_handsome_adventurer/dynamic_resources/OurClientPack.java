@@ -40,7 +40,7 @@ public class OurClientPack extends BaseResourcePack
                         .replace(SPRUCE_PLANKS, getPlanks(wood))
                         .replace(SPRUCE_LOG, getStrippedLog(wood))
                         .replace(SPRUCE, wood);
-                    if (WoodTypeLister.isUsingDarkerWorkstation(wood))
+                    if (WoodTypeManager.isUsingDarkerWorkstation(wood))
                     {
                         replaced = replaced.replace("/stripped_dark_oak_log", "/stripped_spruce_log");
                     }
@@ -127,15 +127,44 @@ public class OurClientPack extends BaseResourcePack
         cache.put(new ResourceLocation("emi", "aliases/list2.json"), builder.toString());
     }
 
+
+
+    @Override
+    protected boolean isNotOurFile(String namespace)
+    {
+        return ! namespace.equals(Constants.MODID) && ! namespace.equals("tetra_tables");
+    }
+
+    ////////////////////////////////
+
     private String getPlanks(String wood)
     {
-        String template = WoodTypeLister.getTexture1Template(wood);
-        if (template == null)
+        if (plankCache.containsKey(wood))
         {
-            return TEMPLATE_PLANKS.formatted(WoodTypeLister.getHostMod(wood), wood);
+            return plankCache.get(wood);
         }
-        return template.formatted(WoodTypeLister.getHostMod(wood), wood);
+        String auto = WoodTypeManager.getFinder().getTexturePathForPlanks(WoodTypeLister.getHostMod(wood), wood);
+        String result = null;
+        if (auto != null)
+        {
+            result = JOIN.formatted(WoodTypeLister.getHostMod(wood), auto);
+        }
+        if (result == null)
+        {
+            String template = WoodTypeManager.getTexture1Template(wood);
+            if (template == null)
+            {
+                result = TEMPLATE_PLANKS.formatted(WoodTypeLister.getHostMod(wood), wood);
+            }
+            else
+            {
+                result = template.formatted(WoodTypeLister.getHostMod(wood), wood);
+            }
+        }
+        plankCache.put(wood, result);
+        return result;
     }
+    private final String JOIN = "%s:%s";
 
     private String getStrippedLog(String wood)
     {
@@ -143,50 +172,69 @@ public class OurClientPack extends BaseResourcePack
         {
             return strippedLogCache.get(wood);
         }
-        String result;
-        String sub = WoodTypeLister.getLogRecipeSubstitute(wood);
-        if (sub == null)
+        String sub = WoodTypeManager.getLogRecipeSubstitute(wood);
+        String auto;
+        if (sub != null)
         {
-            String template = WoodTypeLister.getTexture2Template(wood);
-            if (template != null)
-            {
-                result = template.formatted(WoodTypeLister.getHostMod(wood), wood);
-            }
-            else
-            {
-                result = TEMPLATE_LOG.formatted(WoodTypeLister.getHostMod(wood), wood);
-            }
+            int start = sub.indexOf(":");
+            start = start == -1 ? 0 : start + 1;
+            auto = WoodTypeManager.getFinder().getTexturePathForLogs(WoodTypeLister.getHostMod(wood), wood, sub.substring(start));
         }
         else
         {
-            ResourceLocation rl = new ResourceLocation(sub);
-            String namespace = rl.getNamespace(), path = rl.getPath();
-            String sub2 = WoodTypeLister.getLogTextureSubstitute(wood);
-            if (sub2 != null)
+            auto = WoodTypeManager.getFinder().getTexturePathForLogs(WoodTypeLister.getHostMod(wood), wood);
+        }
+        String result = null;
+        if (auto != null)
+        {
+            result = JOIN.formatted(WoodTypeLister.getHostMod(wood), auto);
+        }
+        if (result == null)
+        {
+            if (sub == null)
             {
-                if (sub2.contains(":"))
+                String template = WoodTypeManager.getTexture2Template(wood);
+                if (template != null)
                 {
-                    ResourceLocation rl2 = new ResourceLocation(sub2);
-                    namespace = rl2.getNamespace();
-                    path = rl2.getPath();
+                    result = template.formatted(WoodTypeLister.getHostMod(wood), wood);
                 }
                 else
                 {
-                    namespace = WoodTypeLister.getHostMod(wood);
-                    path = sub2;
+                    result = TEMPLATE_LOG.formatted(WoodTypeLister.getHostMod(wood), wood);
                 }
             }
-            String template = WoodTypeLister.getTexture2TemplateForMod(rl.getNamespace());
-            if (template == null)
+            else
             {
-                template = TEMPLATE_ANY_BLOCK;
+                ResourceLocation rl = new ResourceLocation(sub);
+                String namespace = rl.getNamespace(), path = rl.getPath();
+                String sub2 = WoodTypeManager.getLogTextureSubstitute(wood);
+                if (sub2 != null)
+                {
+                    if (sub2.contains(":"))
+                    {
+                        ResourceLocation rl2 = new ResourceLocation(sub2);
+                        namespace = rl2.getNamespace();
+                        path = rl2.getPath();
+                    }
+                    else
+                    {
+                        namespace = WoodTypeLister.getHostMod(wood);
+                        path = sub2;
+                    }
+                }
+                String template = WoodTypeManager.getTexture2TemplateForMod(rl.getNamespace());
+                if (template == null)
+                {
+                    template = TEMPLATE_ANY_BLOCK;
+                }
+                result = template.formatted(namespace, path);
             }
-            result = template.formatted(namespace, path);
         }
         strippedLogCache.put(wood, result);
         return result;
     }
     private final Map<String, String> strippedLogCache = new HashMap<>(); // will be remade on reload
+    private final Map<String, String> plankCache = new HashMap<>(); // same thing
     private static final String TEMPLATE_PLANKS = "%s:block/%s_planks";
     private static final String TEMPLATE_LOG = "%s:block/stripped_%s_log";
     private static final String TEMPLATE_ANY_BLOCK = "%s:block/%s";

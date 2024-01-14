@@ -39,6 +39,7 @@ public abstract class BaseResourcePack implements PackResources
     ////////////////////////////////////
 
     protected abstract void buildResources(Map<ResourceLocation, String> cache);
+    protected abstract boolean isNotOurFile(String namespace);
 
     ////////////////////////////////////////////////////////////
 
@@ -69,6 +70,7 @@ public abstract class BaseResourcePack implements PackResources
     @Override
     public InputStream getResource(PackType type, ResourceLocation location) throws IOException
     {
+        if (this.isNotOurFile(location.getNamespace())) { return null; }
         if (this.namespaces == null && ! (location.getNamespace().equals(Constants.MODID) && (location.getPath().contains("spruce") || location.getPath().contains("en_us"))))
         {
             this.buildOnDemand(); // so normally we do, but we allow this one to pass.
@@ -83,6 +85,8 @@ public abstract class BaseResourcePack implements PackResources
     @Override
     public Collection<ResourceLocation> getResources(PackType type, String namespace, String path, Predicate<ResourceLocation> givenFilter)
     {
+        if (this.isNotOurFile(namespace)) { return EMPTY; }
+        if (path.equals("dynamic_asset_generator")) { return EMPTY; }
         if (type == this.type)
         {
             this.buildOnDemand();
@@ -101,7 +105,13 @@ public abstract class BaseResourcePack implements PackResources
     @Override
     public boolean hasResource(PackType type, ResourceLocation location)
     {
-        return type == this.type && this.dataCache.containsKey(location);
+        if (this.isNotOurFile(location.getNamespace())) { return false; }
+        if (type != this.type)
+        {
+            return false;
+        }
+        this.buildOnDemand();
+        return this.dataCache.containsKey(location);
     }
 
 

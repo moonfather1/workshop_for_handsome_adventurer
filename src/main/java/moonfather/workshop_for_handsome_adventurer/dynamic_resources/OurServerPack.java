@@ -24,5 +24,13 @@ public class OurServerPack extends BaseResourcePack
 
 
     @Override
+    protected boolean isNotOurFile(String namespace)
+    {
+        return ! namespace.equals(Constants.MODID) && ! namespace.equals("tetra_tables");
+    }
+
+
+
+    @Override
     public String getName() { return "Workshop - auto-generated recipes and loot tables"; }
 }

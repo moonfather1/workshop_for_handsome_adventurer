@@ -3,6 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.dynamic_resources.helpers;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.AssetReader;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLister;
+import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 
@@ -42,7 +43,7 @@ public class RecipeWriter
 
     private static String getStrippedLog(String wood)
     {
-        String sub = WoodTypeLister.getLogRecipeSubstitute(wood);
+        String sub = WoodTypeManager.getLogRecipeSubstitute(wood);
         if (sub != null)
         {
             return sub;

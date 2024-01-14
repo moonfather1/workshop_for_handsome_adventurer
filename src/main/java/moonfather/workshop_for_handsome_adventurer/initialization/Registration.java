@@ -51,7 +51,7 @@ public class Registration
 	public static final List<Supplier<Block>> blocks_pshelf = new ArrayList<>();
 	public static final List<Supplier<Block>> blocks_bshelf = new ArrayList<>();
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public static final String[] woodTypes = {"oak", "spruce", "jungle", "birch", "dark_oak", "mangrove"};
+	public static final List<String> woodTypes = List.of("oak", "spruce", "jungle", "birch", "dark_oak", "mangrove");
 
 	// static initialization
 	static {

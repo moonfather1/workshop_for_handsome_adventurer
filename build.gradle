@@ -183,7 +183,6 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:do-api-864599:4676882")
 
     runtimeOnly fg.deobf("curse.maven:immersive-engineering-231951:4535935")
-    runtimeOnly fg.deobf("curse.maven:growthcraft-community-edition-235092:4844338")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

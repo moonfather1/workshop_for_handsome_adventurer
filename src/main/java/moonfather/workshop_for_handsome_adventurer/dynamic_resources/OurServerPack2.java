@@ -39,5 +39,13 @@ public class OurServerPack2  extends BaseResourcePack
 
 
     @Override
+    protected boolean isNotOurFile(String namespace)
+    {
+        return ! namespaces.contains(namespace);
+    }
+
+
+
+    @Override
     public String getName() { return "Workshop - auto-generated tags"; }
 }
