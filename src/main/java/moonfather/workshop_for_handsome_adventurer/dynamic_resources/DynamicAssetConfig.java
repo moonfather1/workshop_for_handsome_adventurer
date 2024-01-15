@@ -10,10 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class DynamicAssetConfig
 {
@@ -130,10 +127,20 @@ public class DynamicAssetConfig
     {
         return getClient().use_darker_workstation_model.contains(wood);
     }
+    public static boolean isBlackListed(String modId, String wood)
+    {
+        if (blackList == null)
+        {
+            blackList = Arrays.asList(getCommon().blacklist.split(", *"));
+        }
+        return blackList.contains(modId + ":" + wood) || blackList.contains(modId + ":*");
+    }
+    
     private static final Map<String, String> plankPathList = new HashMap<>();
     private static final Map<String, String> subRecipeList = new HashMap<>();
     private static final Map<String, String> subTextureList = new HashMap<>();
     private static final Map<String, String> logPathList = new HashMap<>();
+    private static List<String> blackList = null;
 
     private static String getFromSplitConfig(String input, Map<String, String> list, String wood)
     {
@@ -202,11 +209,14 @@ public class DynamicAssetConfig
         public String generate_blocks_comment2 = "Option requires game restart. Will synchronize it in future versions, for now users need to be careful.";
         public boolean generate_blocks_for_mod_added_woods = true;
 
+        public String blacklist_comment = "First and obvious use is to blacklist wood types that you really, really hate to see. Second and non-obvious use: say you have a duplicate wood type; normally it just gets recipes that give blocks of other type of same name; but if you really, really wish to have blocks of this type, black-list them here so that they are not added to dupes list and in blocks_with_dumbass_names setting in this file, add them in format modid:planks/slab/strippedlog; good example is Vinery mod which insists on cherry wood even in 1.20; if you do this, you get workshop blocks in vanilla cherry (light pink) and Vinery's cherry (dark red) separately. Oh, and asterisk after the colon works.";
+        public String blacklist = "vinery:cherry";
+
         public String stripped_log_substitution_comment = "For wood types that do not have stripped logs, you can specify table top block here. If you do not, we are skipping that wood type.";
         public String stripped_log_substitution_list_for_recipes = "bamboo=minecraft:smooth_stone, treated_wood_horizontal=minecraft:polished_blackstone,  embur=byg:stripped_embur_pedu,  sythian=byg:stripped_sythian_stem, bulbis=minecraft:smooth_stone";
 
         public String blocks_with_dumbass_names_comment = "This is a list of blocks that do not follow usual naming scheme. Set consists of planks, slab and log, separated by slashes. Separate all sets with comma. You can use stripped_log_substitution for these. Example is IE's treated wood as it has no logs.";
-        public String blocks_with_dumbass_names = "immersiveengineering:treated_wood_horizontal/slab_treated_wood_horizontal/no_log_for_this_one, growthcraft_apples:apple_plank/apple_plank_slab/apple_wood_log_stripped";
+        public String blocks_with_dumbass_names = "immersiveengineering:treated_wood_horizontal/slab_treated_wood_horizontal/no_log_for_this_one,  growthcraft_apples:apple_plank/apple_plank_slab/apple_wood_log_stripped,   vinery:cherry_planks/cherry_slab/stripped_cherry_log";
     }
 
     private static class InstantConfigClient // because the other kind is unavailable early
@@ -216,7 +226,6 @@ public class DynamicAssetConfig
 
         public String disable_autosearching_for_textures_comment = "No reason to disable this. If you do, you need to set texture paths like in this file. While this is enabled, settings here that are texture paths are unused and unneeded.";
         public String disable_autosearching_for_textures = "false";
-
         public String stripped_log_substitution_comment = "For wood types that do not have stripped logs, you can specify table top block here. If you do not, we are skipping that wood type.";
         public String stripped_log_substitution_list_for_textures = "embur=embur, sythian=sythian, bamboo=stripped_bamboo_block";
 
