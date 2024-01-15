@@ -10,6 +10,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -150,6 +152,49 @@ public class DynamicAssetConfig
         return list.getOrDefault(wood, null);
     }
     ////////////////////////////
+    public static Collection<WoodSet> getWoodSetsWithDumbassNames()
+    {
+        if (woodSetsWithDumbassNames.isEmpty())
+        {
+            String[] temp1 = getCommon().blocks_with_dumbass_names.split(", *");
+            for (String s : temp1)
+            {
+                String[] temp2 = s.split(":");
+                if (temp2.length == 2)
+                {
+                    String[] temp3 = temp2[1].split("/");
+                    if (temp3.length == 3)
+                    {
+                        woodSetsWithDumbassNames.add(new WoodSet(temp2[0], temp3[0], temp3[1], temp3[2]));
+                    }
+                }
+            }
+        }
+        return woodSetsWithDumbassNames;
+    }
+    private static final Collection<WoodSet> woodSetsWithDumbassNames = new ArrayList<>();
+
+    public static WoodSet getWoodSet(String wood)
+    {
+        for (WoodSet set: woodSetsWithDumbassNames)
+        {
+            if (wood.equals("sx_" + set.planks)) { return  set; }
+        }
+        return null;
+    }
+
+    public static class WoodSet
+    {
+        private final String modId, planks, slab, log; private boolean verified = false;
+        public WoodSet(String modId, String planks, String slab, String log) { this.modId = modId; this.planks = planks; this.slab = slab; this.log = log; }
+        public void setVerified() { this.verified = true; }
+        public boolean isVerified() { return this.verified; }
+        public String getPlanks() { return this.planks; }
+        public String getSlab() { return this.slab; }
+        public String getLog() { return this.log; }
+        public String getModId() { return this.modId; }
+    }
+    ////////////////////////////
 
     private static class InstantConfigServer // because the other kind is unavailable early
     {
@@ -158,7 +203,10 @@ public class DynamicAssetConfig
         public boolean generate_blocks_for_mod_added_woods = true;
 
         public String stripped_log_substitution_comment = "For wood types that do not have stripped logs, you can specify table top block here. If you do not, we are skipping that wood type.";
-        public String stripped_log_substitution_list_for_recipes = "bamboo=minecraft:smooth_stone, treated_wood=minecraft:polished_blackstone,  embur=byg:stripped_embur_pedu,  sythian=byg:stripped_sythian_stem, bulbis=minecraft:smooth_stone";
+        public String stripped_log_substitution_list_for_recipes = "bamboo=minecraft:smooth_stone, treated_wood_horizontal=minecraft:polished_blackstone,  embur=byg:stripped_embur_pedu,  sythian=byg:stripped_sythian_stem, bulbis=minecraft:smooth_stone";
+
+        public String blocks_with_dumbass_names_comment = "This is a list of blocks that do not follow usual naming scheme. Set consists of planks, slab and log, separated by slashes. Separate all sets with comma. You can use stripped_log_substitution for these. Example is IE's treated wood as it has no logs.";
+        public String blocks_with_dumbass_names = "immersiveengineering:treated_wood_horizontal/slab_treated_wood_horizontal/no_log_for_this_one, growthcraft_apples:apple_plank/apple_plank_slab/apple_wood_log_stripped";
     }
 
     private static class InstantConfigClient // because the other kind is unavailable early

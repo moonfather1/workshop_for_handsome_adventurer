@@ -4,12 +4,26 @@ public interface ITextureFinder
 {
     default String getTexturePathForPlanks(String modId, String wood)
     {
-        return getTexturePathForPlanks(modId, wood, "%s_planks");
+        if (! wood.startsWith("sx_"))
+        {
+            return getTexturePathForPlanks(modId, wood, "%s_planks");
+        }
+        else
+        {
+            return getTexturePathForPlanks(modId, wood, wood.substring(3));
+        }
     }
 
     default String getTexturePathForLogs(String modId, String wood)
     {
-        return getTexturePathForLogs(modId, wood, "stripped_%s_log");
+        if (! wood.startsWith("sx_"))
+        {
+            return getTexturePathForLogs(modId, wood, "stripped_%s_log");
+        }
+        else
+        {
+            return getTexturePathForLogs(modId, wood, wood.substring(3));
+        }
     }
 
     String getTexturePathForPlanks(String modId, String wood, String blockNameTemplate);

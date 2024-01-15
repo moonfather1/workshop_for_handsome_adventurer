@@ -78,14 +78,14 @@ public class OurClientPack extends BaseResourcePack
                                 first = false;
                             }
                             String replacement;
-                            if (! wood.contains("_"))
+                            if (! wood.contains("_"))  // also, we don't want specials (sx_wood) in this branch
                             {
                                 replacement = line.replace(SPRUCE, wood);
                             }
                             else
                             {
                                 String[] temp = line.split(":", 2);  // translation is difficult. this replace call is a trivial version.
-                                replacement = temp[0].replace(SPRUCE, wood) + ':' + temp[1].replace(SPRUCE, wood.replace('_', ' '));
+                                replacement = temp[0].replace(SPRUCE, wood) + ':' + temp[1].replace(SPRUCE, stripPrefix(wood).replace('_', ' '));
                             }
                             builder.append(replacement);
                         }
@@ -129,6 +129,13 @@ public class OurClientPack extends BaseResourcePack
 
 
 
+    private String stripPrefix(String wood)
+    {
+        return wood.startsWith("sx_") ? wood.substring(3) : wood;
+    }
+
+
+
     @Override
     protected boolean isNotOurFile(String namespace)
     {
@@ -151,14 +158,19 @@ public class OurClientPack extends BaseResourcePack
         }
         if (result == null)
         {
+            DynamicAssetConfig.WoodSet specialSet = DynamicAssetConfig.getWoodSet(wood);
             String template = WoodTypeManager.getTexture1Template(wood);
-            if (template == null)
+            if (template != null)
             {
-                result = TEMPLATE_PLANKS.formatted(WoodTypeLister.getHostMod(wood), wood);
+                result = template.formatted(WoodTypeLister.getHostMod(wood), stripPrefix(wood));
+            }
+            else if (specialSet != null)
+            {
+                result = TEMPLATE_PLANKS.replace("_planks", "").formatted(specialSet.getModId(), specialSet.getPlanks());
             }
             else
             {
-                result = template.formatted(WoodTypeLister.getHostMod(wood), wood);
+                result = TEMPLATE_PLANKS.formatted(WoodTypeLister.getHostMod(wood), wood);
             }
         }
         plankCache.put(wood, result);
@@ -172,13 +184,18 @@ public class OurClientPack extends BaseResourcePack
         {
             return strippedLogCache.get(wood);
         }
-        String sub = WoodTypeManager.getLogRecipeSubstitute(wood);
+        DynamicAssetConfig.WoodSet specialSet = DynamicAssetConfig.getWoodSet(wood);
+        String sub = WoodTypeManager.getLogRecipeSubstitute(stripPrefix(wood));
         String auto;
         if (sub != null)
         {
             int start = sub.indexOf(":");
-            start = start == -1 ? 0 : start + 1;
-            auto = WoodTypeManager.getFinder().getTexturePathForLogs(WoodTypeLister.getHostMod(wood), wood, sub.substring(start));
+            String mod = start == -1 ? WoodTypeLister.getHostMod(wood) : sub.substring(0, start);
+            auto = WoodTypeManager.getFinder().getTexturePathForLogs(mod, wood, sub.substring(start + 1));
+        }
+        else if (specialSet != null)
+        {
+            auto = WoodTypeManager.getFinder().getTexturePathForLogs(specialSet.getModId(), wood, specialSet.getLog());
         }
         else
         {
@@ -196,11 +213,11 @@ public class OurClientPack extends BaseResourcePack
                 String template = WoodTypeManager.getTexture2Template(wood);
                 if (template != null)
                 {
-                    result = template.formatted(WoodTypeLister.getHostMod(wood), wood);
+                    result = template.formatted(WoodTypeLister.getHostMod(wood), stripPrefix(wood));
                 }
                 else
                 {
-                    result = TEMPLATE_LOG.formatted(WoodTypeLister.getHostMod(wood), wood);
+                    result = TEMPLATE_LOG.formatted(WoodTypeLister.getHostMod(wood), stripPrefix(wood));
                 }
             }
             else
