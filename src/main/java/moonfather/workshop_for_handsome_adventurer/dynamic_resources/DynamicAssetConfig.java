@@ -135,7 +135,7 @@ public class DynamicAssetConfig
         }
         return blackList.contains(modId + ":" + wood) || blackList.contains(modId + ":*");
     }
-    
+
     private static final Map<String, String> plankPathList = new HashMap<>();
     private static final Map<String, String> subRecipeList = new HashMap<>();
     private static final Map<String, String> subTextureList = new HashMap<>();
