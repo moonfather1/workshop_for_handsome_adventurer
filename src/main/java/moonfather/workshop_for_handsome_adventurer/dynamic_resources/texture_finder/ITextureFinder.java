@@ -1,10 +1,12 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources.texture_finder;
 
+import moonfather.workshop_for_handsome_adventurer.dynamic_resources.CustomTripletSupport;
+
 public interface ITextureFinder
 {
     default String getTexturePathForPlanks(String modId, String wood)
     {
-        if (! wood.startsWith("sx_"))
+        if (! CustomTripletSupport.isSpecial(wood))
         {
             return getTexturePathForPlanks(modId, wood, "%s_planks");
         }
@@ -16,7 +18,7 @@ public interface ITextureFinder
 
     default String getTexturePathForLogs(String modId, String wood)
     {
-        if (! wood.startsWith("sx_"))
+        if (! CustomTripletSupport.isSpecial(wood))
         {
             return getTexturePathForLogs(modId, wood, "stripped_%s_log");
         }

@@ -178,7 +178,7 @@ public class DynamicAssetConfig
     {
         for (WoodSet set: woodSetsWithDumbassNames)
         {
-            if (wood.equals("sx_" + set.planks)) { return  set; }
+            if (CustomTripletSupport.addPrefixTo(set.planks).equals(wood)) { return  set; }
         }
         return null;
     }

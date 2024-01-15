@@ -99,8 +99,8 @@ public class WoodTypeLister
                     }
                 }
                 woodSet.setVerified();
-                idsWithSpecials.add("sx_" + woodSet.getPlanks());
-                woodToHostMap.put("sx_" + woodSet.getPlanks(), woodSet.getModId());
+                idsWithSpecials.add(CustomTripletSupport.addPrefixTo(woodSet.getPlanks()));
+                woodToHostMap.put(CustomTripletSupport.addPrefixTo(woodSet.getPlanks()), woodSet.getModId());
             }
         }
     }

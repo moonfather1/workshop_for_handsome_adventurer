@@ -85,7 +85,7 @@ public class OurClientPack extends BaseResourcePack
                             else
                             {
                                 String[] temp = line.split(":", 2);  // translation is difficult. this replace call is a trivial version.
-                                replacement = temp[0].replace(SPRUCE, wood) + ':' + temp[1].replace(SPRUCE, stripPrefix(wood).replace('_', ' '));
+                                replacement = temp[0].replace(SPRUCE, wood) + ':' + temp[1].replace(SPRUCE, CustomTripletSupport.stripPrefix(wood).replace('_', ' '));
                             }
                             builder.append(replacement);
                         }
@@ -129,13 +129,6 @@ public class OurClientPack extends BaseResourcePack
 
 
 
-    private String stripPrefix(String wood)
-    {
-        return wood.startsWith("sx_") ? wood.substring(3) : wood;
-    }
-
-
-
     @Override
     protected boolean isNotOurFile(String namespace)
     {
@@ -162,7 +155,7 @@ public class OurClientPack extends BaseResourcePack
             String template = WoodTypeManager.getTexture1Template(wood);
             if (template != null)
             {
-                result = template.formatted(WoodTypeLister.getHostMod(wood), stripPrefix(wood));
+                result = template.formatted(WoodTypeLister.getHostMod(wood), CustomTripletSupport.stripPrefix(wood));
             }
             else if (specialSet != null)
             {
@@ -185,7 +178,7 @@ public class OurClientPack extends BaseResourcePack
             return strippedLogCache.get(wood);
         }
         DynamicAssetConfig.WoodSet specialSet = DynamicAssetConfig.getWoodSet(wood);
-        String sub = WoodTypeManager.getLogRecipeSubstitute(stripPrefix(wood));
+        String sub = WoodTypeManager.getLogRecipeSubstitute(wood);
         String auto;
         if (sub != null)
         {
@@ -213,11 +206,11 @@ public class OurClientPack extends BaseResourcePack
                 String template = WoodTypeManager.getTexture2Template(wood);
                 if (template != null)
                 {
-                    result = template.formatted(WoodTypeLister.getHostMod(wood), stripPrefix(wood));
+                    result = template.formatted(WoodTypeLister.getHostMod(wood), CustomTripletSupport.stripPrefix(wood));
                 }
                 else
                 {
-                    result = TEMPLATE_LOG.formatted(WoodTypeLister.getHostMod(wood), stripPrefix(wood));
+                    result = TEMPLATE_LOG.formatted(WoodTypeLister.getHostMod(wood), CustomTripletSupport.stripPrefix(wood));
                 }
             }
             else
