@@ -5,6 +5,8 @@
     "minecraft:enchanted_book",
     "minecraft:knowledge_book",
 
-    { "id": "quark:ancient_tome", "required": false }
+    { "id": "quark:ancient_tome", "required": false },
+    { "id": "botania:lexicon", "required": false },
+    { "id": "byg:biomepedia", "required": false }
   ]
 }

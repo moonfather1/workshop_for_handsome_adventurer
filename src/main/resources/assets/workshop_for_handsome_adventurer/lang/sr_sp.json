@@ -140,6 +140,8 @@
 	"message.workshop_for_handsome_adventurer.shelf_wrong_potion": "Није исти напитак. Стави овај на друго место.",
 	"message.workshop_for_handsome_adventurer.shelf_probe_tooltip": "Број бочица: %d, има места за %d укупно.",
 
+	"block.tetra_tables.tetra_table_spruce": "Workbench (spruce)",
+
 	"message.workshop_for_handsome_adventurer.extension_slot1": "Стави овде сандук или фиоку да \nомогућиш да стварчице остају у гриду. \n \nИли, стави [ITEM] овде\nза приступ суседним сандуцима.",
 	"message.workshop_for_handsome_adventurer.extension_slot2": "Стави овде сандук или фиоку да \nомогућиш да стварчице остају у гриду. \n \nИли, стави [ITEM] овде\nза приступ суседним сандуцима. \n(опционо још један за домет од два блока)\n \nИли две светиљке да постану део радне станице\nи осветљавају околину.",
 	"message.workshop_for_handsome_adventurer.extension_slotT": "Прилагођавање стола",

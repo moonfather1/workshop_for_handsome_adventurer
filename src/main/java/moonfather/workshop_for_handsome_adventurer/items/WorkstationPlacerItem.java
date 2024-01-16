@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -28,9 +29,9 @@ import java.util.List;
 
 public class WorkstationPlacerItem extends Item
 {
-	public WorkstationPlacerItem(String wood, Properties properties)
+	public WorkstationPlacerItem(String wood, CreativeModeTab tab)
 	{
-		super(properties);
+		super(new Properties().stacksTo(1).tab(tab));
 		this.Tooltip1 = new TranslatableComponent("item.workshop_for_handsome_adventurer.workstation_placer.tooltip1").withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
 		this.Tooltip2 = new TranslatableComponent("item.workshop_for_handsome_adventurer.workstation_placer.tooltip2").withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
 		this.woodType = wood;
@@ -38,7 +39,7 @@ public class WorkstationPlacerItem extends Item
 
 	public WorkstationPlacerItem(String wood)
 	{
-		this(wood, new Properties().stacksTo(1).tab(CreativeTab.TAB_WORKSHOP));
+		this(wood, CreativeTab.TAB_WORKSHOP);
 	}
 	private final String woodType;
 

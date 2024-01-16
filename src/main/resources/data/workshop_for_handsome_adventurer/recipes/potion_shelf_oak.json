@@ -2,15 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "group": "",
   "pattern": [
-    "sns",
-    "sns"
+    "sps",
+    "sps"
   ],
   "key": {
     "s": {
       "item": "minecraft:oak_slab"
     },
-	"n": {
-      "item": "minecraft:iron_nugget"
+	"p": {
+      "tag": "minecraft:wooden_pressure_plates"
     }
   },
   "result": {
