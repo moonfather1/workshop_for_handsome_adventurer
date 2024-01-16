@@ -1,0 +1,13 @@
+{"type":"minecraft:crafting_shaped","group":"crafting_table","key":{"P":{"item":"byg:green_enchanted_planks"}},"pattern":["PP","PP"],"result":{"item":"byg:green_enchanted_crafting_table"},
+  "conditions":
+  [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "byg"
+    },
+    {
+      "type": "workshop_for_handsome_adventurer:optional",
+      "flag_code": "dont_replace_vanilla_crafting_table"
+    }
+  ]
+}

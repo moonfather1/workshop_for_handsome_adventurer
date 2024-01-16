@@ -216,8 +216,14 @@ dependencies {
 
     //runtimeOnly fg.deobf("curse.maven:lodestone-616457:4631609")
     //runtimeOnly fg.deobf("curse.maven:malum-484064:4631612")
-    //runtimeOnly fg.deobf("curse.maven:every-compat-628539:4702870")
-    //runtimeOnly fg.deobf("curse.maven:selene-499980:4702486")
+    //runtimeOnly fg.deobf("curse.maven:every-compat-628539:4702870")      ?
+    //runtimeOnly fg.deobf("curse.maven:selene-499980:4702486")    ?
+
+    //runtimeOnly fg.deobf("curse.maven:every-compat-628539:4727496")      // 4977635 is newest but no wfha blocks
+    //runtimeOnly fg.deobf("curse.maven:selene-499980:4747959")
+    //runtimeOnly fg.deobf("curse.maven:mosaic-carpentry-690226:4071275")
+    //runtimeOnly fg.deobf("curse.maven:premium-wood-353515:3781130")
+    //runtimeOnly fg.deobf("curse.maven:decorative-blocks-362528:3965454")
 
     compileOnly fg.deobf("curse.maven:crafting-tweaks-233071:4513973")
     //implementation fg.deobf("curse.maven:crafting-tweaks-233071:4513973")
