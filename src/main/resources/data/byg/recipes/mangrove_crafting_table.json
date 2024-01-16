@@ -15,8 +15,8 @@
 "conditions":
   [
     {
-      "type": "forge:mod_loaded"
-      "modid": "byg",
+      "type": "forge:mod_loaded",
+      "modid": "byg"
     },
     {
       "type": "workshop_for_handsome_adventurer:optional",

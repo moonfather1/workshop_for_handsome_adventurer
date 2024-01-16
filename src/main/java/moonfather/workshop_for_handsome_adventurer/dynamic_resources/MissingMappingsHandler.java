@@ -17,7 +17,8 @@ public class MissingMappingsHandler
         {
             for (String prefix : BlockTagWriter2.files)
             {
-                if (mapping.key.getPath().startsWith(prefix))
+                if (mapping.key.getPath().startsWith(prefix)      // our blocks for removed woods
+                    || (mapping.key.getPath().startsWith("wfha") && mapping.key.getPath().contains(prefix))) // every compat
                 {
                     mapping.remap(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Constants.MODID, prefix + "oak")));
                     break;
