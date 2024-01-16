@@ -52,7 +52,7 @@ public class TextureAutoFinder implements ITextureFinder
             InputStream is2 = mod1.get().getMod().getClass().getResourceAsStream("/assets/%s/models/%s.json".formatted(modId, path1)); //let's assume it's in the same mod
             BufferedReader br2 = new BufferedReader(new InputStreamReader(is2));
             String file2 = br2.lines().collect(Collectors.joining("\n"));
-            Matcher m2 = (textureIsSide ? PATTERN_IN_MODEL_SIDE : PATTERN_IN_MODEL_ALL).matcher(file2); // %s is all for planks and side for logs
+            Matcher m2 = (textureIsSide ? PATTERN_IN_MODEL_SIDE : PATTERN_IN_MODEL_ALL).matcher(file2);
             m2.find();
             String result = m2.group(3); // texture
 
@@ -64,7 +64,7 @@ public class TextureAutoFinder implements ITextureFinder
     }
     private static final Pattern PATTERN_IN_BLOCKSTATE = Pattern.compile("\"(model)\"\\s*:\\s*\"([a-z0-9_]+:)?(.+?)\"");
     private static final Pattern PATTERN_IN_MODEL_ALL = Pattern.compile("\"(all|south)\"\\s*:\\s*\"([a-z0-9_]+:)?(.+?)\"");
-    private static final Pattern PATTERN_IN_MODEL_SIDE = Pattern.compile("\"(side)\"\\s*:\\s*\"([a-z0-9_]+:)?(.+?)\"");
+    private static final Pattern PATTERN_IN_MODEL_SIDE = Pattern.compile("\"(side|south)\"\\s*:\\s*\"([a-z0-9_]+:)?(.+?)\"");
 
     //////////////////////////////
 
