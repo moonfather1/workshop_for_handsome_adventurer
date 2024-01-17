@@ -2,6 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.dynamic_resources.helpers;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.AssetReader;
+import moonfather.workshop_for_handsome_adventurer.dynamic_resources.DynamicAssetConfig;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLister;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeManager;
 import net.minecraft.resources.ResourceLocation;
@@ -23,7 +24,8 @@ public class RecipeWriter
             {
                 String newRecipe = original
                         .replace("minecraft:stripped_spruce_log", getStrippedLog(wood))
-                        .replace("minecraft:spruce", WoodTypeLister.getHostMod(wood) + ":" + wood)
+                        .replace("minecraft:spruce_slab", getSlab(wood))
+                        .replace("minecraft:spruce_planks", getPlanks(wood))
                         .replace(SPRUCE, wood);
                 cache.put(new ResourceLocation(Constants.MODID, file.replace(SPRUCE, wood)), newRecipe);
             }
@@ -50,8 +52,42 @@ public class RecipeWriter
         {
             return sub;
         }
-        return WoodTypeLister.getHostMod(wood) + ":stripped_" + wood + "_log";
+        DynamicAssetConfig.WoodSet specialSet = DynamicAssetConfig.getWoodSet(wood);
+        if (specialSet != null)
+        {
+            return JOIN.formatted(specialSet.modId(), specialSet.log());
+        }
+        return TEMPLATE_LOG.formatted(WoodTypeLister.getHostMod(wood), wood);
     }
+    private static final String JOIN = "%s:%s";
+    private static final String JOIN3 = "%s:%s%s";
+    private static final String TEMPLATE_LOG = "%s:stripped_%s_log";
+
+
+
+    private static String getSlab(String wood)
+    {
+        DynamicAssetConfig.WoodSet specialSet = DynamicAssetConfig.getWoodSet(wood);
+        if (specialSet != null)
+        {
+            return JOIN.formatted(specialSet.modId(), specialSet.slab());
+        }
+        return JOIN3.formatted(WoodTypeLister.getHostMod(wood), wood, "_slab");
+    }
+
+
+
+    static String getPlanks(String wood)
+    {
+        DynamicAssetConfig.WoodSet specialSet = DynamicAssetConfig.getWoodSet(wood);
+        if (specialSet != null)
+        {
+            return JOIN.formatted(specialSet.modId(), specialSet.planks());
+        }
+        return JOIN3.formatted(WoodTypeLister.getHostMod(wood), wood, "_planks");
+    }
+
+
 
     private static final String[] allRecipes = {
             "recipes/book_shelf_double_spruce.json",

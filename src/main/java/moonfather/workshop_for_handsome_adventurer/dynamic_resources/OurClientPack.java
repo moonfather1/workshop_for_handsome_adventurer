@@ -78,14 +78,14 @@ public class OurClientPack extends BaseResourcePack
                             }
                             //used to be a simple   builder.append(line.replace(SPRUCE, wood));     ...here...
                             String replacement;
-                            if (! wood.contains("_"))
+                            if (! wood.contains("_"))  // also, we don't want specials (sx_wood) in this branch
                             {
                                 replacement = line.replace(SPRUCE, wood);
                             }
                             else
                             {
                                 String[] temp = line.split(":", 2);  // translation is difficult. this replace call is a trivial version.
-                                replacement = temp[0].replace(SPRUCE, wood) + ':' + temp[1].replace(SPRUCE, wood.replace('_', ' '));
+                                replacement = temp[0].replace(SPRUCE, wood) + ':' + temp[1].replace(SPRUCE, CustomTripletSupport.stripPrefix(wood).replace('_', ' '));
                             }
                             builder.append(replacement);
                         }
@@ -137,17 +137,35 @@ public class OurClientPack extends BaseResourcePack
 
     private String getPlanks(String wood)
     {
-        String auto = WoodTypeManager.getPlankTextureAuto(WoodTypeLister.getHostMod(wood), wood);
+        if (plankCache.containsKey(wood))
+        {
+            return plankCache.get(wood);
+        }
+        String auto = WoodTypeManager.getFinder().getTexturePathForPlanks(WoodTypeLister.getHostMod(wood), wood);
+        String result = null;
         if (auto != null)
         {
-            return JOIN.formatted(WoodTypeLister.getHostMod(wood), auto);
+            result = JOIN.formatted(WoodTypeLister.getHostMod(wood), auto);
         }
-        String template = WoodTypeManager.getTexture1Template(wood);
-        if (template == null)
+        if (result == null)
         {
-            return TEMPLATE_PLANKS.formatted(WoodTypeLister.getHostMod(wood), wood);
+            DynamicAssetConfig.WoodSet specialSet = DynamicAssetConfig.getWoodSet(wood);
+            String template = WoodTypeManager.getTexture1Template(wood);
+            if (template != null)
+            {
+                result = template.formatted(WoodTypeLister.getHostMod(wood), CustomTripletSupport.stripPrefix(wood));
+            }
+            else if (specialSet != null)
+            {
+                result = TEMPLATE_PLANKS.replace("_planks", "").formatted(specialSet.modId(), specialSet.planks());
+            }
+            else
+            {
+                result = TEMPLATE_PLANKS.formatted(WoodTypeLister.getHostMod(wood), wood);
+            }
         }
-        return template.formatted(WoodTypeLister.getHostMod(wood), wood);
+        plankCache.put(wood, result);
+        return result;
     }
     private final String JOIN = "%s:%s";
 
@@ -157,65 +175,74 @@ public class OurClientPack extends BaseResourcePack
         {
             return strippedLogCache.get(wood);
         }
+        DynamicAssetConfig.WoodSet specialSet = DynamicAssetConfig.getWoodSet(wood);
         String sub = WoodTypeManager.getLogRecipeSubstitute(wood);
         String auto;
         if (sub != null)
         {
             int start = sub.indexOf(":");
-            start = start == -1 ? 0 : start + 1;
-            auto = WoodTypeManager.getLogTextureAuto(WoodTypeLister.getHostMod(wood), wood, sub.substring(start));
+            String mod = start == -1 ? WoodTypeLister.getHostMod(wood) : sub.substring(0, start);
+            auto = WoodTypeManager.getFinder().getTexturePathForLogs(mod, wood, sub.substring(start + 1));
+        }
+        else if (specialSet != null)
+        {
+            auto = WoodTypeManager.getFinder().getTexturePathForLogs(specialSet.modId(), wood, specialSet.log());
         }
         else
         {
-            auto = WoodTypeManager.getLogTextureAuto(WoodTypeLister.getHostMod(wood), wood);
+            auto = WoodTypeManager.getFinder().getTexturePathForLogs(WoodTypeLister.getHostMod(wood), wood);
         }
+        String result = null;
         if (auto != null)
         {
-            return JOIN.formatted(WoodTypeLister.getHostMod(wood), auto);
+            result = JOIN.formatted(WoodTypeLister.getHostMod(wood), auto);
         }
-        String result;
-        if (sub == null)
+        if (result == null)
         {
-            String template = WoodTypeManager.getTexture2Template(wood);
-            if (template != null)
+            if (sub == null)
             {
-                result = template.formatted(WoodTypeLister.getHostMod(wood), wood);
-            }
-            else
-            {
-                result = TEMPLATE_LOG.formatted(WoodTypeLister.getHostMod(wood), wood);
-            }
-        }
-        else
-        {
-            ResourceLocation rl = new ResourceLocation(sub);
-            String namespace = rl.getNamespace(), path = rl.getPath();
-            String sub2 = WoodTypeManager.getLogTextureSubstitute(wood);
-            if (sub2 != null)
-            {
-                if (sub2.contains(":"))
+                String template = WoodTypeManager.getTexture2Template(wood);
+                if (template != null)
                 {
-                    ResourceLocation rl2 = new ResourceLocation(sub2);
-                    namespace = rl2.getNamespace();
-                    path = rl2.getPath();
+                    result = template.formatted(WoodTypeLister.getHostMod(wood), CustomTripletSupport.stripPrefix(wood));
                 }
                 else
                 {
-                    namespace = WoodTypeLister.getHostMod(wood);
-                    path = sub2;
+                    result = TEMPLATE_LOG.formatted(WoodTypeLister.getHostMod(wood), CustomTripletSupport.stripPrefix(wood));
                 }
             }
-            String template = WoodTypeManager.getTexture2TemplateForMod(rl.getNamespace());
-            if (template == null)
+            else
             {
-                template = TEMPLATE_ANY_BLOCK;
+                ResourceLocation rl = new ResourceLocation(sub);
+                String namespace = rl.getNamespace(), path = rl.getPath();
+                String sub2 = WoodTypeManager.getLogTextureSubstitute(wood);
+                if (sub2 != null)
+                {
+                    if (sub2.contains(":"))
+                    {
+                        ResourceLocation rl2 = new ResourceLocation(sub2);
+                        namespace = rl2.getNamespace();
+                        path = rl2.getPath();
+                    }
+                    else
+                    {
+                        namespace = WoodTypeLister.getHostMod(wood);
+                        path = sub2;
+                    }
+                }
+                String template = WoodTypeManager.getTexture2TemplateForMod(rl.getNamespace());
+                if (template == null)
+                {
+                    template = TEMPLATE_ANY_BLOCK;
+                }
+                result = template.formatted(namespace, path);
             }
-            result = template.formatted(namespace, path);
         }
         strippedLogCache.put(wood, result);
         return result;
     }
     private final Map<String, String> strippedLogCache = new HashMap<>(); // will be remade on reload
+    private final Map<String, String> plankCache = new HashMap<>(); // same thing
     private static final String TEMPLATE_PLANKS = "%s:block/%s_planks";
     private static final String TEMPLATE_LOG = "%s:block/stripped_%s_log";
     private static final String TEMPLATE_ANY_BLOCK = "%s:block/%s";

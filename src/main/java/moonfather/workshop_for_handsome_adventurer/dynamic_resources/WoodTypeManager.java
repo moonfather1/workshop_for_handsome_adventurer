@@ -1,19 +1,17 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 
-import moonfather.workshop_for_handsome_adventurer.dynamic_resources.texture_finder.ITextureFinder;
-import moonfather.workshop_for_handsome_adventurer.dynamic_resources.texture_finder.TextureAutoFinder;
-import moonfather.workshop_for_handsome_adventurer.dynamic_resources.texture_finder.TextureFinderFallback;
+import moonfather.workshop_for_handsome_adventurer.dynamic_resources.texture_finder.*;
 import net.minecraftforge.fml.ModList;
 
 public class WoodTypeManager
 {
-    public static String getLogRecipeSubstitute(String wood) { return DynamicAssetConfig.getLogRecipeSubstitution(wood); }
-    public static String getLogTextureSubstitute(String wood) { return DynamicAssetConfig.getLogTexSubstitution(wood); }
+    public static String getLogRecipeSubstitute(String wood) { return DynamicAssetConfig.getLogRecipeSubstitution(CustomTripletSupport.stripPrefix(wood)); }
+    public static String getLogTextureSubstitute(String wood) { return DynamicAssetConfig.getLogTexSubstitution(CustomTripletSupport.stripPrefix(wood)); }
 
     public static String getTexture1Template(String wood) { return DynamicAssetConfig.getPlankPath(WoodTypeLister.getHostMod(wood)); }
     public static String getTexture2Template(String wood) { return DynamicAssetConfig.getLogPath(WoodTypeLister.getHostMod(wood)); }
     public static String getTexture2TemplateForMod(String namespace) { return DynamicAssetConfig.getLogPath(namespace); }
-    public static boolean isUsingDarkerWorkstation(String wood) { return DynamicAssetConfig.isUsingDarkerWorkstation(wood); }
+    public static boolean isUsingDarkerWorkstation(String wood) { return DynamicAssetConfig.isUsingDarkerWorkstation(CustomTripletSupport.stripPrefix(wood)); }
 
     public static String getPlankTextureAuto(String modId, String wood)
     {
@@ -35,9 +33,16 @@ public class WoodTypeManager
     {
         if (textureFinder == null)
         {
-            if (ModList.get().isLoaded("dynamic_asset_generator"))
+            if (DynamicAssetConfig.autoSearchEnabled())
             {
-                textureFinder = TextureAutoFinder.create();
+                if (ModList.get().isLoaded("dynamic_asset_generator"))
+                {
+                    textureFinder = TextureAutoFinderDAG.create();
+                }
+                else
+                {
+                    textureFinder = TextureAutoFinderBackup.create();
+                }
             }
             else
             {

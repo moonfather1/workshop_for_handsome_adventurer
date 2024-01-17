@@ -6,7 +6,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.IoSupplier;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -15,11 +14,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class TextureAutoFinder implements ITextureFinder
+public class TextureAutoFinderDAG implements ITextureFinder
 {
     public static ITextureFinder create()
     {
-        return new TextureAutoFinder();
+        return new TextureAutoFinderBackup();
     }
 
     public String getTexturePathForPlanks(String modId, String wood, String blockNameTemplate)

@@ -18,7 +18,17 @@ public class WoodTypeLister
 
 
 
+    public static List<String> getWoodIds(boolean includeSpecials)
+    {
+        generateIfNeeded();
+        return includeSpecials ? idsWithSpecials : ids;
+    }
     public static List<String> getWoodIds()
+    {
+        generateIfNeeded();
+        return idsWithSpecials;
+    }
+    public static void generateIfNeeded()
     {
         if (ids == null)
         {
@@ -42,6 +52,10 @@ public class WoodTypeLister
                 {
                     // looks like wood so far. let's check for slabs as we need them for recipes
                     String wood = id.getPath().replace(planks, "");
+                    if (DynamicAssetConfig.isBlackListed(id.getNamespace(), wood))
+                    {
+                        continue;
+                    }
                     if (ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(id.getNamespace(), id.getPath().replace(planks, slab))))
                     {
                         if (! ids.contains(wood) && ! Registration.woodTypes.contains(wood))  // normal dupes and vanilla dupes get recipes only
@@ -71,13 +85,30 @@ public class WoodTypeLister
             }
             s.stop();
             ///LogUtils.getLogger().info("~~~ woods ids gathered in " + s.elapsed().toMillis() + "ms.");
+            // ok, now about blocks with non-standard names (treated wood)
+            idsWithSpecials = new ArrayList<>(ids);
+            for (DynamicAssetConfig.WoodSet woodSet: DynamicAssetConfig.getWoodSetsWithDumbassNames())
+            {
+                if (! ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(woodSet.modId(), woodSet.planks()))) { continue; }
+                if (! ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(woodSet.modId(), woodSet.slab()))) { continue; }
+                if (! ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(woodSet.modId(), woodSet.log())))
+                {
+                    String substitute = DynamicAssetConfig.getLogRecipeSubstitution(woodSet.planks());
+                    if (substitute == null || ! ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(substitute)))
+                    {
+                        continue;
+                    }
+                }
+                idsWithSpecials.add(CustomTripletSupport.addPrefixTo(woodSet.planks()));
+                woodToHostMap.put(CustomTripletSupport.addPrefixTo(woodSet.planks()), woodSet.modId());
+            }
         }
-        return ids;
     }
     public static String getHostMod(String wood) { return woodToHostMap.get(wood); }
     public static List<ResourceLocation> getDuplicateWoods() { return dupeIds; }
 
     private static List<String> ids = null;
+    private static List<String> idsWithSpecials = null;
     private static final HashMap<String, String> woodToHostMap = new HashMap<>();
     private static final List<ResourceLocation> dupeIds = new ArrayList<>();
 }

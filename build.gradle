@@ -193,14 +193,13 @@ dependencies {
 	runtimeOnly fg.deobf("curse.maven:terrablender-563928:4647094")
     runtimeOnly fg.deobf("curse.maven:regions-unexplored-659110:4779426")
     //runtimeOnly fg.deobf("curse.maven:growthcraft-community-edition-235092:4844338")
-    //runtimeOnly fg.deobf("curse.maven:immersive-engineering-231951:4782978")
 
-    implementation fg.deobf("curse.maven:roughly-enough-items-310111:4774395")
+    compileOnly fg.deobf("curse.maven:roughly-enough-items-310111:4774395") //implementation
 	runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4663010")
-    implementation fg.deobf("curse.maven:cloth-config-348521:4633444")
+    compileOnly fg.deobf("curse.maven:cloth-config-348521:4633444")  //implementation
 	
 	//implementation fg.deobf("curse.maven:emi-580555:4806904")
-    compileOnly fg.deobf("maven.modrinth:emi:ShejnJfY")
+    implementation fg.deobf("maven.modrinth:emi:ShejnJfY")  //compileOnly
     implementation fg.deobf("maven.modrinth:curios:opCpnbhi")
 
     compileOnly fg.deobf("maven.modrinth:travelersbackpack:xocqrLoW")
@@ -216,7 +215,6 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:aether-255308:4976547")
 
     runtimeOnly fg.deobf("curse.maven:growthcraft-community-edition-235092:4844338")
-    //runtimeOnly fg.deobf("curse.maven:immersive-engineering-231951:4782978")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

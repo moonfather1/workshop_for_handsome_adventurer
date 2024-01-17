@@ -15,7 +15,6 @@ public class ItemTagWriter1
         builder.append("  \"replace\": false,\n");
         builder.append("  \"values\": [\n");
 
-        String pattern = "\"%s:%s_planks\"";
         boolean first = true;
         for (String wood: WoodTypeLister.getWoodIds())
         {
@@ -27,7 +26,7 @@ public class ItemTagWriter1
             {
                 first = false;
             }
-            builder.append(pattern.formatted(WoodTypeLister.getHostMod(wood), wood));
+            builder.append("\"").append(RecipeWriter.getPlanks(wood)).append("\"");
         }
         builder.append("\n  ]\n}\n");
         cache.put(new ResourceLocation(Constants.MODID, "tags/items/supported_planks.json"), builder.toString());

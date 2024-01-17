@@ -30,5 +30,18 @@ public class MissingMappingsHandler
                 }
             }
         }
+        blockList = event.getMappings(Registries.BLOCK, "every_compat");
+        for (MissingMappingsEvent.Mapping<Block> mapping : blockList)
+        {
+            for (String prefix : BlockTagWriter2.files)
+            {
+                if (mapping.getKey().getPath().startsWith("wfha") && mapping.getKey().getPath().contains(prefix))
+                {
+                    mapping.remap(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Constants.MODID, prefix + "oak")));
+                    break;
+                }
+            }
+        }
+
     }
 }
