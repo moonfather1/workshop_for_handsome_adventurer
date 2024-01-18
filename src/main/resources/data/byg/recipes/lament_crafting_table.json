@@ -1,0 +1,13 @@
+{"type":"minecraft:crafting_shaped","group":"crafting_table","key":{"P":{"item":"byg:lament_planks"}},"pattern":["PP","PP"],"result":{"item":"byg:lament_crafting_table"},
+  "conditions":
+  [
+    {
+      "modid": "byg",
+      "type": "forge:mod_loaded"
+    },
+    {
+      "type": "workshop_for_handsome_adventurer:optional",
+      "flag_code": "dont_replace_vanilla_crafting_table"
+    }
+  ]
+}

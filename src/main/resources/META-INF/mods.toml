@@ -62,3 +62,13 @@ description='''${mod_description}'''
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.workshop_for_handsome_adventurer]]
+    modId="byg"
+    mandatory=false
+    versionRange="[2.0.0.10, )"
+    ordering="AFTER"
+    side="BOTH"
+	
+[modproperties.workshop_for_handsome_adventurer]
+    catalogueImageIcon="textures/gui/catalogue.png"
