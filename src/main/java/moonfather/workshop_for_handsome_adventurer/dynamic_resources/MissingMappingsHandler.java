@@ -17,8 +17,19 @@ public class MissingMappingsHandler
         {
             for (String prefix : BlockTagWriter2.files)
             {
-                if (mapping.key.getPath().startsWith(prefix)      // our blocks for removed woods
-                    || (mapping.key.getPath().startsWith("wfha") && mapping.key.getPath().contains(prefix))) // every compat
+                if (mapping.key.getPath().startsWith(prefix))      // our blocks for removed woods
+                {
+                    mapping.remap(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Constants.MODID, prefix + "oak")));
+                    break;
+                }
+            }
+        }
+        blockList = event.getMappings("everycomp");
+        for (RegistryEvent.MissingMappings.Mapping<Block> mapping : blockList)
+        {
+            for (String prefix : BlockTagWriter2.files)
+            {
+                if (mapping.key.getPath().startsWith("wfha") && mapping.key.getPath().contains(prefix)) // every compat
                 {
                     mapping.remap(ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Constants.MODID, prefix + "oak")));
                     break;

@@ -4,8 +4,7 @@ import com.mojang.logging.LogUtils;
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
-import moonfather.workshop_for_handsome_adventurer.dynamic_resources.FinderEvents;
-import moonfather.workshop_for_handsome_adventurer.dynamic_resources.MissingMappingsHandler;
+import moonfather.workshop_for_handsome_adventurer.dynamic_resources.*;
 import moonfather.workshop_for_handsome_adventurer.initialization.ClientSetup;
 import moonfather.workshop_for_handsome_adventurer.initialization.CommonSetup;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
@@ -83,6 +82,9 @@ public class ModWorkshop
     {
         //if (event.getRegistry Key().equals(Registry.ITEM_REGISTRY))  // Registries.BLOCK is too early
         // above is always true in 1.18
-        Registration.registerBlocksForThirdPartyWood();
+        if (DynamicAssetConfig.masterLeverOn())
+        {
+            Registration.registerBlocksForThirdPartyWood();
+        }
     }
 }
