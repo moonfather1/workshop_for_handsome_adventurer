@@ -30,7 +30,7 @@ public class MissingMappingsHandler
                 }
             }
         }
-        blockList = event.getMappings(Registries.BLOCK, "every_compat");
+        blockList = event.getMappings(Registries.BLOCK, "everycomp");
         for (MissingMappingsEvent.Mapping<Block> mapping : blockList)
         {
             for (String prefix : BlockTagWriter2.files)

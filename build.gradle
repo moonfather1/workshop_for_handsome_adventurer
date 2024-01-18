@@ -188,7 +188,7 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:balm-531761:4757228")
     compileOnly fg.deobf("curse.maven:crafting-tweaks-233071:4757229")
 
-    implementation fg.deobf("curse.maven:dynamic-asset-generator-577096:4670363")
+    compileOnly fg.deobf("curse.maven:dynamic-asset-generator-577096:4670363")       //!//
 	runtimeOnly fg.deobf("curse.maven:biomes-o-plenty-220318:4617259")
 	runtimeOnly fg.deobf("curse.maven:terrablender-563928:4647094")
     runtimeOnly fg.deobf("curse.maven:regions-unexplored-659110:4779426")
@@ -210,11 +210,13 @@ dependencies {
     runtimeOnly fg.deobf("curse.maven:lets-do-herbal-brews-951221:4994262")
     runtimeOnly fg.deobf("curse.maven:do-api-864599:4833128")
     runtimeOnly fg.deobf("curse.maven:welcome-to-meadow-821483:4871109")
-    runtimeOnly fg.deobf("curse.maven:beachparty-858691:4984446")
+    //!//runtimeOnly fg.deobf("curse.maven:beachparty-858691:4984446")
     runtimeOnly fg.deobf("curse.maven:vinery-704465:4932395")
-    runtimeOnly fg.deobf("curse.maven:aether-255308:4976547")
+    //!//runtimeOnly fg.deobf("curse.maven:aether-255308:4976547")
+    //!//runtimeOnly fg.deobf("curse.maven:growthcraft-community-edition-235092:4844338")
 
-    runtimeOnly fg.deobf("curse.maven:growthcraft-community-edition-235092:4844338")
+    //!//runtimeOnly fg.deobf("curse.maven:selene-499980:5025566")
+    //!//runtimeOnly fg.deobf("curse.maven:every-compat-628539:5038746")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

@@ -68,7 +68,10 @@ public class ModWorkshop
     {
         if (event.getRegistryKey().equals(Registries.ITEM))  // Registries.BLOCK is too early
         {
-            Registration.registerBlocksForThirdPartyWood(event);
+            if (DynamicAssetConfig.masterLeverOn())
+            {
+                Registration.registerBlocksForThirdPartyWood(event);
+            }
         }
         if (event.getRegistryKey().equals(Registries.CREATIVE_MODE_TAB))
         {
