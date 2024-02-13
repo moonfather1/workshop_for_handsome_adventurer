@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    { "id": "quark:ancient_tome", "required": false }
+    { "id": "quark:ancient_tome", "required": false },
+    { "id": "silentgear:blueprint_book", "required": false },
+    { "id": "map_atlases:atlas", "required": false }
   ]
 }
