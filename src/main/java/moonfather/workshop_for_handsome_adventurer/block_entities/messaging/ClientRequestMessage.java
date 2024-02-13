@@ -1,31 +1,29 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities.messaging;
 
+import moonfather.workshop_for_handsome_adventurer.Constants;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 
-public class ClientRequestMessage
+public record ClientRequestMessage(int value) implements CustomPacketPayload
 {
-    private int value = -1;
-    public ClientRequestMessage(int value)
+    public static final ResourceLocation ID = new ResourceLocation(Constants.MODID, "message_request");
+
+    public ClientRequestMessage(final FriendlyByteBuf buffer)
     {
-        this.value = value;
+        this(buffer.readInt());
     }
 
-    public void encode(FriendlyByteBuf buffer) {
+    @Override
+    public void write(final FriendlyByteBuf buffer) {
         buffer.writeInt(value);
     }
 
-    public static ClientRequestMessage decode(FriendlyByteBuf buffer) {
-        ClientRequestMessage result = new ClientRequestMessage(-1);
-        result.value = buffer.readInt();
-        return result;
+    @Override
+    public ResourceLocation id()
+    {
+        return ID;
     }
 
-    public int getValue() {
-        return this.value;
-    }
-
-    public boolean isRemoteUpdateRequest() {
-        return this.value == REQUEST_REMOTE_UPDATE;
-    }
     public static final int REQUEST_REMOTE_UPDATE = 5;
 }

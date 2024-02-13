@@ -1,30 +1,27 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities.messaging;
 
+import moonfather.workshop_for_handsome_adventurer.Constants;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 
-public class TabChangeMessage
+public record TabChangeMessage(int tab) implements CustomPacketPayload
 {
-    private int value = -1;
-    public TabChangeMessage(int value)
+    public static final ResourceLocation ID = new ResourceLocation(Constants.MODID, "message_tabchange");
+
+    public TabChangeMessage(final FriendlyByteBuf buffer)
     {
-        this.value = value;
+        this(buffer.readInt());
     }
 
-    public void encode(FriendlyByteBuf buffer) {
-        buffer.writeInt(value);
+    @Override
+    public void write(final FriendlyByteBuf buffer) {
+        buffer.writeInt(tab);
     }
 
-    public static TabChangeMessage decode(FriendlyByteBuf buffer) {
-        TabChangeMessage result = new TabChangeMessage(-1);
-        result.value = buffer.readInt();
-        return result;
-    }
-
-    public int getValue() {
-        return this.value;
-    }
-
-    public int getTab() {
-        return this.value;
+    @Override
+    public ResourceLocation id()
+    {
+        return ID;
     }
 }

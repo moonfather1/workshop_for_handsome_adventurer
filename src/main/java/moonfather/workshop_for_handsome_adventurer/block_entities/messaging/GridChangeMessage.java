@@ -1,26 +1,27 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities.messaging;
 
+import moonfather.workshop_for_handsome_adventurer.Constants;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 
-public class GridChangeMessage
+public record GridChangeMessage(int destination) implements CustomPacketPayload
 {
-    private int value = -1;
-    public GridChangeMessage(int value)
+    public static final ResourceLocation ID = new ResourceLocation(Constants.MODID, "message_gridchange");
+
+    public GridChangeMessage(final FriendlyByteBuf buffer)
     {
-        this.value = value;
+        this(buffer.readInt());
     }
 
-    public void encode(FriendlyByteBuf buffer) {
-        buffer.writeInt(value);
+    @Override
+    public void write(final FriendlyByteBuf buffer) {
+        buffer.writeInt(destination);
     }
 
-    public static GridChangeMessage decode(FriendlyByteBuf buffer) {
-        GridChangeMessage result = new GridChangeMessage(-1);
-        result.value = buffer.readInt();
-        return result;
-    }
-
-    public int getDestinationGrid() {
-        return this.value;
+    @Override
+    public ResourceLocation id()
+    {
+        return ID;
     }
 }

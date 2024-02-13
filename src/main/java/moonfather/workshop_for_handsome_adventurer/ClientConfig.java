@@ -4,7 +4,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class ClientConfig
 {
-    private static final boolean defaultRenderItemsOnTable = false;
+    private static final boolean defaultRenderItemsOnTable = true;
     private static final boolean defaultDetailedWailaInfoForEnchantedTools = false;
     private static final boolean defaultDetailedWailaInfoForEnchantedBooks = true;
     ///---------------------------------------------

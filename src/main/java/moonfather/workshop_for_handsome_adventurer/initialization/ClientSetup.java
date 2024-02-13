@@ -4,23 +4,35 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.screens.DualTa
 import moonfather.workshop_for_handsome_adventurer.block_entities.screens.SimpleTableCraftingScreen;
 import moonfather.workshop_for_handsome_adventurer.block_entities.renderers.*;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientSetup
 {
-	//public static final MenuType<CraftingMenu> CRAFTING1 = register("crafting1", SimpleTableMenu::new);
-
+	@SubscribeEvent
 	public static void Initialize(FMLClientSetupEvent event)
 	{
-		event.enqueueWork(() -> MenuScreens.register(Registration.CRAFTING_SINGLE_MENU_TYPE.get(), SimpleTableCraftingScreen::new));
-		event.enqueueWork(() -> MenuScreens.register(Registration.CRAFTING_DUAL_MENU_TYPE.get(), DualTableCraftingScreen::new));
 		//ItemBlockRenderTypes.setRenderLayer(Registration.SIMPLE_TABLE.get(), RenderType.cutoutMipped()); // apparently unnecessary.
 		//BlockEntityRenderers.register(Registration.TOOL_RACK.get(), ToolRackTESR::new); //maybe this would be ok too
 	}
 
 
 
+	@SubscribeEvent
+	public static void RegisterScreens(RegisterMenuScreensEvent event)
+	{
+		event.register(Registration.CRAFTING_SINGLE_MENU_TYPE.get(), SimpleTableCraftingScreen::new);
+		event.register(Registration.CRAFTING_DUAL_MENU_TYPE.get(), DualTableCraftingScreen::new);
+	}
+
+
+
+	@SubscribeEvent
 	public static void RegisterRenderers(EntityRenderersEvent.RegisterRenderers event)
 	{
 		event.registerBlockEntityRenderer(Registration.TOOL_RACK_BE.get(), ToolRackTESR::new);

@@ -117,39 +117,35 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    // not out for 1.20.4
-	compileOnly "curse.maven:jei-238222:4767571"
-    // not out for NF 1.20.4
-    compileOnly "curse.maven:jade-324717:4845321"
-    // not out for 1.20.4
-    compileOnly "curse.maven:the-one-probe-245211:4629624"
+    // +
+	compileOnly "curse.maven:jei-238222:5101381"
+    // +
+    compileOnly "curse.maven:jade-324717:4980188"
+    // + only on nf
+    implementation "curse.maven:the-one-probe-245211:5084077"
 
     // +
-	runtimeOnly "curse.maven:badpackets-615134:4838088"
-    implementation "curse.maven:wthit-forge-455982:4946205"
+	//runtimeOnly "curse.maven:badpackets-615134:5034255"
+    compileOnly "curse.maven:wthit-forge-455982:5073587"
 
     // not out for 1.20.4
     // runtimeOnly "curse.maven:carry-on-274259:4628675"
-    // not out for 1.20.4
-    //runtimeOnly "curse.maven:packing-tape-238659:4574130"
-
-    // only 1.20.2 for nf and lf separately
-	//runtimeOnly "curse.maven:balm-531761:4757228" old?
-	//runtimeOnly "curse.maven:balm-531761:4943587"
-    compileOnly "curse.maven:crafting-tweaks-233071:4939898"
+    // +  only on nf
+    //runtimeOnly "curse.maven:packing-tape-238659:4991026"
 
     //    +    (and also on lf)
-	implementation "curse.maven:roughly-enough-items-310111:4951154"
-	runtimeOnly "curse.maven:architectury-api-419699:4942618"
-	implementation "curse.maven:cloth-config-348521:4943534"
+	//runtimeOnly "curse.maven:balm-531761:5034381"
+    compileOnly "curse.maven:crafting-tweaks-233071:4991559"
 
-    // not out for 1.20.4
-	compileOnly "curse.maven:emi-580555:4960419"
-	//was 4923766
-	//compileOnly "maven.modrinth:curios:opCpnbhi"
+    //    +    (and also on lf)
+	implementation "curse.maven:roughly-enough-items-310111:4973489"
+	runtimeOnly "curse.maven:architectury-api-419699:5084477"
+	implementation "curse.maven:cloth-config-348521:4973457"
+
+	compileOnly "curse.maven:emi-580555:5096949"
     // out for neoforge on 1.20.4 but not on lexforge
+    //compileOnly "maven.modrinth:curios:opCpnbhi"
 	compileOnly "curse.maven:curios-309927:4960347"
-	//was 4937602"
 
     //compileOnly "curse.maven:travelers-backpack-321117:4836245"     // not out for 1.20.4
 	

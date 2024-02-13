@@ -1,15 +1,13 @@
 package moonfather.workshop_for_handsome_adventurer;
 
 import com.mojang.logging.LogUtils;
+import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.MessagingInitialization;
 import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
-import moonfather.workshop_for_handsome_adventurer.initialization.ClientSetup;
 import moonfather.workshop_for_handsome_adventurer.initialization.CommonSetup;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.integration.TOPRegistration;
 import moonfather.workshop_for_handsome_adventurer.other.CreativeTab;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.DistExecutor;
 import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
@@ -32,10 +30,9 @@ public class ModWorkshop
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         Registration.init(modBus);
         modBus.addListener(CommonSetup::init);
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modBus.addListener(ClientSetup::Initialize));
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modBus.addListener(ClientSetup::RegisterRenderers));
         modBus.addListener(this::enqueueIMC);
         modBus.addListener(CreativeTab::OnCreativeTabPopulation);
+        modBus.addListener(MessagingInitialization::register);
         NeoForge.EVENT_BUS.addListener(PotionShelf::onRightClickBlock);
     }
 

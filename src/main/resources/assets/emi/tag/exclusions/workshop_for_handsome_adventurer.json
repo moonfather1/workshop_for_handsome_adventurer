@@ -4,6 +4,7 @@
     "workshop_for_handsome_adventurer:dont_rotate_on_toolrack",
     "workshop_for_handsome_adventurer:label_components",
     "workshop_for_handsome_adventurer:lanterns",
-    "workshop_for_handsome_adventurer:supported_planks"
+    "workshop_for_handsome_adventurer:supported_planks",
+    "workshop_for_handsome_adventurer:allowed_on_potion_shelf"
   ]
 }

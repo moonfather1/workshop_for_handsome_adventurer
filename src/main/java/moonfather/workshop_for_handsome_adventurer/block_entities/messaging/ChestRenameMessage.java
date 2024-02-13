@@ -1,26 +1,29 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities.messaging;
 
+import moonfather.workshop_for_handsome_adventurer.Constants;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 
-public class ChestRenameMessage
+import java.util.Optional;
+
+public record ChestRenameMessage(String value) implements CustomPacketPayload
 {
-    private String value = "";
-    public ChestRenameMessage(String value)
+    public static final ResourceLocation ID = new ResourceLocation(Constants.MODID, "message_rename");
+
+    public ChestRenameMessage(final FriendlyByteBuf buffer)
     {
-        this.value = value;
+        this(Optional.of(buffer.readUtf()).orElse(""));
     }
 
-    public void encode(FriendlyByteBuf buffer) {
+    @Override
+    public void write(final FriendlyByteBuf buffer) {
         buffer.writeUtf(value);
     }
 
-    public static ChestRenameMessage decode(FriendlyByteBuf buffer) {
-        ChestRenameMessage result = new ChestRenameMessage("");
-        result.value = buffer.readUtf();
-        return result;
-    }
-
-    public String getValue() {
-        return this.value;
+    @Override
+    public ResourceLocation id()
+    {
+        return ID;
     }
 }
