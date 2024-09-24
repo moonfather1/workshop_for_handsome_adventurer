@@ -132,7 +132,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		//---slots to sneak tab images to the client---
 		for (int i = 0; i < this.tabElements.getContainerSize(); i++)
 		{
-			this.addSlot(new Slot(this.tabElements, i, 9009, 9009+i*30));
+			this.addSlot(new TransferCheatSlot(this.tabElements, i, 9009, 9009+i*30));
 		}
 		this.storeAdjacentInventoriesInSlots();
 
@@ -860,6 +860,11 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 		private boolean acceptsLanterns = false;
 		public void setAcceptsLanterns(boolean value) { this.acceptsLanterns = value; }
+
+		// may or may not help with inventory profiles
+
+		@Override
+		public boolean isFake() { return true; }
 	}
 
 	//////////////////////////////////////////////////////////////
@@ -907,6 +912,35 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		public DisabledContainer(int size)
 		{
 			super(size);
+		}
+	}
+
+	/////////////////////////////////////////////////////////////////////////
+
+	public static class TransferCheatSlot extends Slot
+	{
+		public TransferCheatSlot(Container container, int slot, int x, int y) { super(container, slot, x, y); }
+
+		@Override
+		public boolean isFake()
+		{
+			return true;
+		}
+		@Override
+		public boolean isHighlightable() {
+			return false;
+		}
+		@Override
+		public boolean mayPickup(Player player) {
+			return false;
+		}
+		@Override
+		public boolean isActive() {
+			return false;
+		}
+		@Override
+		public boolean mayPlace(ItemStack stack) {
+			return false;
 		}
 	}
 
