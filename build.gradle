@@ -131,22 +131,21 @@ dependencies {
 	//runtimeOnly "curse.maven:superflat-world-no-slimes-344185:5425631"
 	//runtimeOnly "curse.maven:collective-342584:5482423"
 
-    compileOnly "curse.maven:wthit-forge-455982:5447978"
-    //runtimeOnly "curse.maven:badpackets-615134:5430629"
-    implementation "curse.maven:jade-324717:5444008"
+	implementation "curse.maven:wthit-forge-455982:5721811"
+    runtimeOnly "curse.maven:badpackets-615134:5430629"
+    compileOnly "curse.maven:jade-324717:5846105"
     compileOnly "curse.maven:the-one-probe-245211:5431197"
 
     compileOnly "curse.maven:jei-238222:5466551"
-    implementation "curse.maven:emi-580555:5436759"
-    compileOnly "curse.maven:roughly-enough-items-310111:5435024"
-	//runtimeOnly "curse.maven:architectury-api-419699:5424664"
-	compileOnly "curse.maven:cloth-config-348521:5424576"
-	//implementation "curse.maven:cloth-config-348521:5424576"
+    compileOnly "curse.maven:emi-580555:5436759"
+	implementation "curse.maven:roughly-enough-items-310111:5846953"
+	runtimeOnly "curse.maven:architectury-api-419699:5786327"
+	implementation "curse.maven:cloth-config-348521:5729127"
 
     compileOnly "curse.maven:crafting-tweaks-233071:5426925"
 	//runtimeOnly "curse.maven:balm-531761:5442096"
 	
-    implementation "curse.maven:polymorph-388800:5480541"
+    compileOnly "curse.maven:polymorph-388800:5480541"
 	
     compileOnly "curse.maven:dynamic-asset-generator-577096:5471770"
     //implementation "curse.maven:dynamic-asset-generator-577096:5471770"
@@ -155,8 +154,13 @@ dependencies {
     runtimeOnly "curse.maven:glitchcore-955399:5429863"
 
     compileOnly "curse.maven:inventory-tweaks-refoxed-976858:5610776"
-	implementation "curse.maven:adorned-1036809:5684431"
-    implementation "curse.maven:travelers-backpack-321117:5602831"
+	//implementation "curse.maven:adorned-1036809:5684431"
+    //implementation "curse.maven:travelers-backpack-321117:5602831"
+	
+	implementation "curse.maven:accessories-938917:5848473"
+	runtimeOnly "curse.maven:resource-backpacks-971140:5709976"
+	
+	implementation "curse.maven:storage-drawers-223852:5873879"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
