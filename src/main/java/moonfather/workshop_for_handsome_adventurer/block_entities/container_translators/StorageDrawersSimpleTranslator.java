@@ -19,6 +19,49 @@ public class StorageDrawersSimpleTranslator extends BaseItemHandlerTranslator
     }
 
     @Override
+    public void setItem(int slot, ItemStack itemStack)
+    {
+        ItemStack old = this.getItem(slot);
+        ItemStack resto;
+        if (old.isEmpty())
+        {
+            resto = this.internal.insertItem(this.translateVisibleToInternalSlot(slot), itemStack, false);
+        }
+        else if (ItemStack.isSameItemSameComponents(itemStack, old))
+        {
+            if (itemStack.getCount() > old.getCount())
+            {
+                itemStack.shrink(old.getCount());
+                resto = this.internal.insertItem(this.translateVisibleToInternalSlot(slot), itemStack, false);
+            }
+            else
+            {
+                resto = this.internal.extractItem(this.translateVisibleToInternalSlot(slot), old.getCount() - itemStack.getCount(), false);
+            }
+        }
+    }
+
+    @Override
+    public int getMaxStackSize()
+    {
+        return super.getMaxStackSize();
+    }
+
+    @Override
+    public int getMaxStackSize(ItemStack itemStack)
+    {
+        for (int i = 0; i < this.internal.getSlots(); i++)
+        {
+            ItemStack old = this.getItem(i);
+            if (ItemStack.isSameItemSameComponents(itemStack, old))
+            {
+                return this.internal.getSlotLimit(i);
+            }
+        }
+        return super.getMaxStackSize();
+    }
+
+    @Override
     protected int translateVisibleToInternalSlot(int slot)
     {
         return slot + 1;

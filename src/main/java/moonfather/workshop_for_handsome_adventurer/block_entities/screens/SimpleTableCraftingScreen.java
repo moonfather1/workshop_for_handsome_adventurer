@@ -17,9 +17,11 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -114,6 +116,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		graphics.blit(this.getBackgroundImage(), i, j, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
 	}
 
+	@Override
 	public void renderBackground(GuiGraphics graphics, int p_297538_, int p_300104_, float p_298759_)
 	{
 		super.renderBackground(graphics, p_297538_, p_300104_, p_298759_); // renders gray shading in the back, than calls renderBg
@@ -121,6 +124,28 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		{
 			this.inventoryComponent.render(graphics, p_297538_, p_300104_, p_298759_);
 		}
+	}
+
+	@Override
+	protected void renderSlotContents(GuiGraphics guiGraphics, ItemStack itemstack, Slot slot, @Nullable String countString) {
+		int x = slot.x;
+		int y = slot.y;
+		int index = slot.x + slot.y * this.imageWidth;
+		if (slot.isFake()) {
+			guiGraphics.renderFakeItem(itemstack, x, y, index);
+		} else {
+			guiGraphics.renderItem(itemstack, x, y, index);
+		}
+		float scale = 1.0f, dx = 0f, dy = 0f;
+		if (itemstack.getCount() > 99) { scale = 0.75f; dx = 4; dy = 5; }
+		if (itemstack.getCount() > 999) { scale = 0.50f; dx = 14f; dy = 16f; }
+		guiGraphics.pose().pushPose();
+		guiGraphics.pose().scale(scale, scale, 1f);
+		guiGraphics.pose().translate(dx, dy, 0f);
+		x = (int) (x * (1/scale));
+		y = (int) (y * (1/scale));
+		guiGraphics.renderItemDecorations(this.font, itemstack, x, y, countString);
+		guiGraphics.pose().popPose();
 	}
 
 

@@ -900,7 +900,13 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		@Override
 		public int getMaxStackSize()
 		{
-			return this.disabled ? MARKER_FOR_DISABLED : super.getMaxStackSize()/*999*/;
+			return this.disabled ? MARKER_FOR_DISABLED : 1048576;
+		}
+
+		@Override
+		public int getMaxStackSize(ItemStack stack)
+		{
+			return 2 * 1048576;
 		}
 
 		@Override
@@ -992,6 +998,14 @@ public class SimpleTableMenu extends AbstractContainerMenu
 				super.set(stack);
 			}
 		}
+
+		@Override
+		public int getMaxStackSize() {
+			return this.container.getMaxStackSize();
+		}
+
+		@Override
+		public int getMaxStackSize(ItemStack stack) { return this.container.getMaxStackSize(stack); }
 
 		public int getContainerTrueSize() { return this.containerTrueSizeGetter.get(); }
 
