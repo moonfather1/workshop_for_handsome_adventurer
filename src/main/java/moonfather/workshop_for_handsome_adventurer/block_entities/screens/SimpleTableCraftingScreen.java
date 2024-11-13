@@ -126,6 +126,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		}
 	}
 
+	/// this is to make small numbers for item stacks with 100+ and 1000+ pieces.
 	@Override
 	protected void renderSlotContents(GuiGraphics guiGraphics, ItemStack itemstack, Slot slot, @Nullable String countString) {
 		int x = slot.x;
