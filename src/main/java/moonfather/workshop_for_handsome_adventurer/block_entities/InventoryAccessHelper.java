@@ -144,9 +144,10 @@ public class InventoryAccessHelper
                 return;
             }
         }
-//        if (be.getBlockState().getBlock().getDescriptionId().contains("functionalstorage"))
-//        {
-//        }
+        if (be.getBlockState().getBlock().getDescriptionId().contains("functionalstorage"))
+        {
+            return;
+        }
         // IItemHandler capability
         IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);
         if (handler == null)

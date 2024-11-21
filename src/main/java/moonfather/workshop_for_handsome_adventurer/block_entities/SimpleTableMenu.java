@@ -2,6 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
+import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.BaseItemHandlerWrapper;
 import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.IExcessSlotManager;
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
@@ -36,7 +37,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -1103,85 +1103,42 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	//////////////////////////////////////////////////////////////////////////
 
-	public static class VariableSizeItemStackHandlerWrapper extends SimpleContainer
+	/// just takes care of excess slots. prevents interaction with them.
+	public static class VariableSizeItemStackHandlerWrapper extends BaseItemHandlerWrapper
 	{
-		private final IItemHandler internal;
+		private final int slotCount;
 		public VariableSizeItemStackHandlerWrapper(IItemHandler wrapped)
 		{
-			super(54);
-			this.internal = wrapped;
+			super(wrapped);
+			this.slotCount = wrapped.getSlots();
 		}
 
 		@Override
-		public boolean canPlaceItem(int slot, ItemStack itemStack) { return slot < internal.getSlots() && internal.isItemValid(slot, itemStack); }
+		public boolean canPlaceItem(int slot, ItemStack itemStack) { return slot < slotCount && super.canPlaceItem(slot, itemStack); }
 
 		@Override
-		public ItemStack getItem(int slot) { return slot < internal.getSlots() ? internal.getStackInSlot(slot) : ItemStack.EMPTY; }
+		public ItemStack getItem(int slot) { return slot < slotCount ? super.getItem(slot) : ItemStack.EMPTY; }
 
 		@Override
-		public ItemStack removeItem(int slot, int count) { return slot < internal.getSlots() ? internal.extractItem(slot, count, false) : ItemStack.EMPTY; }
+		public ItemStack removeItem(int slot, int count) { return slot < slotCount ? super.removeItem(slot, count) : ItemStack.EMPTY; }
 
 		@Override
-		public ItemStack removeItemNoUpdate(int slot) {	return slot < internal.getSlots() ? internal.extractItem(slot, 9999, false) : ItemStack.EMPTY; }
+		public ItemStack removeItemNoUpdate(int slot) {	return slot < slotCount ? super.removeItemNoUpdate(slot) : ItemStack.EMPTY; }
 
 		@Override
-		public void setItem(int slot, ItemStack itemStack)
-		{
-			if (slot < internal.getSlots())
-			{
-				if (internal instanceof IItemHandlerModifiable i2)
-				{
-					i2.setStackInSlot(slot, itemStack);
-				}
-				else
-				{
-					ItemStack old = this.getItem(slot);
-					ItemStack resto;
-					if (old.isEmpty())
-					{
-						resto = this.internal.insertItem(slot, itemStack, false);
-					}
-					else if (itemStack.isEmpty())
-					{
-						resto = this.internal.extractItem(slot, old.getCount(), false);
-					}
-					else if (ItemStack.isSameItemSameComponents(itemStack, old))
-					{
-						if (itemStack.getCount() > old.getCount())
-						{
-							itemStack.shrink(old.getCount());
-							resto = this.internal.insertItem(slot, itemStack, false);
-						}
-						else
-						{
-							resto = this.internal.extractItem(slot, old.getCount() - itemStack.getCount(), false);
-						}
-					}
-				}
-			}
-		}
+		public void setItem(int slot, ItemStack itemStack) { if (slot < slotCount) { super.setItem(slot, itemStack); } }
 
 		@Override
-		public boolean isEmpty()
-		{
-			for (int i = 0; i < internal.getSlots(); i++)
-			{
-				if (! internal.getStackInSlot(i).isEmpty())
-				{
-					return false;
-				}
-			}
-			return true;
-		}
+		public boolean isEmpty() { return super.isEmpty(); }
 
 		@Override
 		public void setChanged() { }
 
 		@Override
-		public int getMaxStackSize() { return internal.getSlots() > 1 ? internal.getSlotLimit(1) : 64; }
+		public int getMaxStackSize() { return super.getMaxStackSize(); }
 
 		@Override
-		public int getMaxStackSize(ItemStack itemStack) { return internal.getSlots() > 1 ? internal.getSlotLimit(1) : 64; }
+		public int getMaxStackSize(ItemStack itemStack) { return super.getMaxStackSize(itemStack); }
 	}
 	/////////////////////////////////////////////////////////////////////////
 

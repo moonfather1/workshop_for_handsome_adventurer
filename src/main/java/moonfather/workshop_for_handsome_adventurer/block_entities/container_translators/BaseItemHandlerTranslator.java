@@ -1,82 +1,42 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities.container_translators;
 
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
-public abstract class BaseItemHandlerTranslator extends SimpleContainer
+///
+///  remaps slot numbers between visible and internal
+///
+public abstract class BaseItemHandlerTranslator extends BaseItemHandlerWrapper
 {
-    public BaseItemHandlerTranslator(IItemHandler wrapped, int totalSize)
-    {
-        super(totalSize);
-        this.internal = wrapped;
-    }
-
     public BaseItemHandlerTranslator(IItemHandler wrapped)
     {
-        super(wrapped.getSlots());
-        this.internal = wrapped;
+        super(wrapped);
+    }
+
+    public BaseItemHandlerTranslator(IItemHandler wrapped, int usableSlotCount)
+    {
+        super(wrapped, usableSlotCount);
     }
 
     protected abstract int translateVisibleToInternalSlot(int slot);
     protected abstract int translateInternalToVisibleSlot(int slot);
 
     ///////////////////////////////////////////////////
-    ///////////////////////////////////////////////////
-    protected final IItemHandler internal;
 
     @Override
-    public boolean canPlaceItem(int slot, ItemStack itemStack) { return internal.isItemValid(this.translateVisibleToInternalSlot(slot), itemStack); }
+    public boolean canPlaceItem(int slot, ItemStack itemStack) { return super.canPlaceItem(this.translateVisibleToInternalSlot(slot), itemStack); }
 
     @Override
-    public ItemStack getItem(int slot) { return internal.getStackInSlot(this.translateVisibleToInternalSlot(slot)); }
+    public ItemStack getItem(int slot) { return super.getItem(this.translateVisibleToInternalSlot(slot)); }
 
     @Override
-    public ItemStack removeItem(int slot, int count)
-    {
-        int formalStackSize = this.getItem(slot).getMaxStackSize(); //todo zashto
-        count =  Math.min(count, formalStackSize);  //todo zashto
-
-        return internal.extractItem(this.translateVisibleToInternalSlot(slot), count, false);
-    }
+    public ItemStack removeItem(int slot, int count) { return super.removeItem(this.translateVisibleToInternalSlot(slot), count); }
 
     @Override
-    public ItemStack removeItemNoUpdate(int slot) {	return internal.extractItem(this.translateVisibleToInternalSlot(slot), 5555555, false); }
+    public ItemStack removeItemNoUpdate(int slot) {	return super.removeItemNoUpdate(this.translateVisibleToInternalSlot(slot)); }
 
     @Override
-    public void setItem(int slot, ItemStack itemStack)
-    {
-        if (internal instanceof IItemHandlerModifiable i2)
-        {
-            i2.setStackInSlot(this.translateVisibleToInternalSlot(slot), itemStack);  // todo UNTESTED!
-        }
-        else
-        {
-            ItemStack old = this.getItem(slot);
-            ItemStack resto;
-            if (old.isEmpty())
-            {
-                resto = this.internal.insertItem(this.translateVisibleToInternalSlot(slot), itemStack, false);
-            }
-            else if (itemStack.isEmpty())
-            {
-                resto = this.internal.extractItem(this.translateVisibleToInternalSlot(slot), old.getCount(), false);
-            }
-            else if (ItemStack.isSameItemSameComponents(itemStack, old))
-            {
-                if (itemStack.getCount() > old.getCount())
-                {
-                    itemStack.shrink(old.getCount());
-                    resto = this.internal.insertItem(this.translateVisibleToInternalSlot(slot), itemStack, false);
-                }
-                else
-                {
-                    resto = this.internal.extractItem(this.translateVisibleToInternalSlot(slot), old.getCount() - itemStack.getCount(), false);
-                }
-            }
-        }
-    }
+    public void setItem(int slot, ItemStack itemStack) { super.setItem(this.translateVisibleToInternalSlot(slot), itemStack); }
 
     @Override
     public boolean isEmpty()
