@@ -166,6 +166,8 @@ dependencies {
 //    runtimeOnly "curse.maven:resource-config-api-975801:5628623"
 	
 	implementation "curse.maven:storage-drawers-223852:5873879"
+    implementation "curse.maven:functional-storage-556861:5861256"
+    runtimeOnly "curse.maven:titanium-287342:5889342"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

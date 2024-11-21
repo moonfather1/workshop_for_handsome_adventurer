@@ -340,12 +340,12 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			}
 			else
 			{
-				slot.setChanged();
+				slot.set(itemstack1); // just setChanged doesn't work for storage drawers
 			}
 
 			if (itemstack1.getCount() == itemstack.getCount())
 			{
-				return ItemStack.EMPTY;
+				return ItemStack.EMPTY; // couldn't move anything
 			}
 
 			slot.onTake(player, itemstack1);
@@ -353,6 +353,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			{
 				player.drop(itemstack1, false);
 			}
+
+			return itemstack1; // remaining. don't know while original code doesn't have it.
 		}
 
 		return itemstack;
@@ -399,19 +401,19 @@ public class SimpleTableMenu extends AbstractContainerMenu
 				if (! itemStackInDestination.isEmpty() && ItemStack.isSameItemSameComponents(itemStackBeingMoved, itemStackInDestination))
 				{
 					int j = itemStackInDestination.getCount() + itemStackBeingMoved.getCount();
-					int maxSize = Math.min(slot.getMaxStackSize(), itemStackBeingMoved.getMaxStackSize());
+					int maxSize = slot.getMaxStackSize(itemStackInDestination);
 					if (j <= maxSize)
 					{
 						itemStackBeingMoved.setCount(0);
 						itemStackInDestination.setCount(j);
-						slot.setChanged();
+						slot.set(itemStackInDestination); //slot.setChanged();
 						result = true;
 					}
 					else if (itemStackInDestination.getCount() < maxSize)
 					{
 						itemStackBeingMoved.shrink(maxSize - itemStackInDestination.getCount());
 						itemStackInDestination.setCount(maxSize);
-						slot.setChanged();
+						slot.set(itemStackInDestination); //slot.setChanged();
 						result = true;
 					}
 				}
@@ -952,7 +954,41 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	/////////////////////////////////////////////////////////////////////////
 
-	public static class VariableSizeContainerSlot extends Slot
+	public static class UnrestrainedSlot extends Slot  // for storage drawers. will not refuse to add to slots with hundreds of items already there.
+	{
+		public UnrestrainedSlot(Container container, int slot, int x, int y) { super(container, slot, x, y); }
+
+		@Override
+		public Optional<ItemStack> tryRemove(int count, int decrement, Player player)
+		{
+			return super.tryRemove(count, decrement, player);
+		}
+
+		@Override
+		public ItemStack safeInsert(ItemStack stack, int increment)
+		{
+			if (stack.isEmpty() || ! this.mayPlace(stack))
+			{
+				return stack;
+			}
+			ItemStack itemstack = this.getItem();
+			int i = Math.min(Math.min(increment, stack.getCount()), this.getMaxStackSize(stack) - itemstack.getCount());
+			if (itemstack.isEmpty())
+			{
+				this.setByPlayer(stack.split(i));
+			}
+			else if (ItemStack.isSameItemSameComponents(itemstack, stack))
+			{
+				stack.shrink(i);
+				itemstack.grow(i);
+				this.setByPlayer(itemstack);
+			}
+			return stack;
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////
+
+	public static class VariableSizeContainerSlot extends UnrestrainedSlot
 	{
 		private Supplier<Integer> containerTrueSizeGetter = null;
 		private Function<Integer, Boolean> excessSettingGetter = null;
@@ -1056,6 +1092,9 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		public int getMaxStackSize() { return internal.getMaxStackSize(); }
 
 		@Override
+		public int getMaxStackSize(ItemStack stack) { return internal.getMaxStackSize(stack); }
+
+		@Override
 		public boolean isSlotSpecificallyDisabled(int slotIndex)
 		{
 			return this.excessManager != null && this.excessManager.isSlotSpecificallyDisabled(slotIndex);
@@ -1086,7 +1125,41 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		public ItemStack removeItemNoUpdate(int slot) {	return slot < internal.getSlots() ? internal.extractItem(slot, 9999, false) : ItemStack.EMPTY; }
 
 		@Override
-		public void setItem(int slot, ItemStack itemStack) { if (slot < internal.getSlots()) { if (internal instanceof IItemHandlerModifiable i2) i2.setStackInSlot(slot, itemStack); else internal.insertItem(slot, itemStack, false); } }
+		public void setItem(int slot, ItemStack itemStack)
+		{
+			if (slot < internal.getSlots())
+			{
+				if (internal instanceof IItemHandlerModifiable i2)
+				{
+					i2.setStackInSlot(slot, itemStack);
+				}
+				else
+				{
+					ItemStack old = this.getItem(slot);
+					ItemStack resto;
+					if (old.isEmpty())
+					{
+						resto = this.internal.insertItem(slot, itemStack, false);
+					}
+					else if (itemStack.isEmpty())
+					{
+						resto = this.internal.extractItem(slot, old.getCount(), false);
+					}
+					else if (ItemStack.isSameItemSameComponents(itemStack, old))
+					{
+						if (itemStack.getCount() > old.getCount())
+						{
+							itemStack.shrink(old.getCount());
+							resto = this.internal.insertItem(slot, itemStack, false);
+						}
+						else
+						{
+							resto = this.internal.extractItem(slot, old.getCount() - itemStack.getCount(), false);
+						}
+					}
+				}
+			}
+		}
 
 		@Override
 		public boolean isEmpty()
@@ -1106,6 +1179,9 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 		@Override
 		public int getMaxStackSize() { return internal.getSlots() > 1 ? internal.getSlotLimit(1) : 64; }
+
+		@Override
+		public int getMaxStackSize(ItemStack itemStack) { return internal.getSlots() > 1 ? internal.getSlotLimit(1) : 64; }
 	}
 	/////////////////////////////////////////////////////////////////////////
 

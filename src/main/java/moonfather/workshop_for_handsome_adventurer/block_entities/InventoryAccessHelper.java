@@ -134,20 +134,19 @@ public class InventoryAccessHelper
         }
         if (be.getBlockState().getBlock().getDescriptionId().contains("storagedrawers"))
         {
-            // support for storage drawers is killed as there is a nasty duplication issue and i have no strength now.
             IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);
-            if (handler != null)
+            if (handler != null)  //&& handler.getSlots() <= 54  ?
             {
                 this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new StorageDrawersSimpleTranslator(handler));
                 this.chosenContainerTrueSize = handler.getSlots() - 1;
+                this.chosenContainerVisibleSize = this.chosenContainerTrueSize <= 27 ? 27 : 54;
                 this.currentType = RecordTypes.BLOCK;
                 return;
             }
         }
-        if (be.getBlockState().getBlock().getDescriptionId().contains("functionalstorage"))
-        {
-            // support for storage drawers is killed as there is a nasty duplication issue and i have no strength now.
-        }
+//        if (be.getBlockState().getBlock().getDescriptionId().contains("functionalstorage"))
+//        {
+//        }
         // IItemHandler capability
         IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);
         if (handler == null)
@@ -160,7 +159,7 @@ public class InventoryAccessHelper
             {
                 this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(handler);
                 this.chosenContainerTrueSize = handler.getSlots();
-                this.chosenContainerVisibleSize = handler.getSlots() <= 27 ? 27 : 54;
+                this.chosenContainerVisibleSize = this.chosenContainerTrueSize <= 27 ? 27 : 54;
                 this.chosenContainerForRename = be;
                 this.currentType = RecordTypes.BLOCK;
                 return;
