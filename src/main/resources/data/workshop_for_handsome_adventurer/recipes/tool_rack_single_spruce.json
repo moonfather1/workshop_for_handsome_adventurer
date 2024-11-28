@@ -9,7 +9,7 @@
       "item": "minecraft:spruce_slab"
     },
 	"n": {
-      "item": "minecraft:iron_nugget"
+      "tag": "workshop_for_handsome_adventurer:metal_nuggets"
     }
   },
   "result": {

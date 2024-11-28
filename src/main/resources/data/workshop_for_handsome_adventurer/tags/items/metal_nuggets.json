@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:nuggets/iron",
+    { "id": "#forge:nuggets/bronze", "required": false },
+    { "id": "#forge:nuggets/brass", "required": false }
+  ]
+}

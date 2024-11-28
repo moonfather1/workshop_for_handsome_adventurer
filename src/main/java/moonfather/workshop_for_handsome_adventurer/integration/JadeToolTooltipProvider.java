@@ -3,6 +3,8 @@ package moonfather.workshop_for_handsome_adventurer.integration;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
+import moonfather.workshop_for_handsome_adventurer.block_entities.BookShelfBlockEntity;
+import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.blocks.ToolRack;
 import net.minecraft.resources.ResourceLocation;
@@ -23,7 +25,8 @@ public class JadeToolTooltipProvider extends JadeBaseTooltipProvider implements 
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config)
     {
-        if (accessor.getBlockEntity() instanceof ToolRackBlockEntity rack)
+        if (accessor.getBlockEntity() instanceof ToolRackBlockEntity rack
+                && ! (accessor.getBlockEntity() instanceof PotionShelfBlockEntity) && ! (accessor.getBlockEntity() instanceof BookShelfBlockEntity))
         {
             int slot = ToolRack.getToolRackSlot((ToolRack) accessor.getBlock(), accessor.getHitResult());
             if (slot >= 0 && ! rack.GetItem(slot).isEmpty())
