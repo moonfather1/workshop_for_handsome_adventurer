@@ -46,7 +46,7 @@ public abstract class BaseResourcePack implements PackResources
     {
         if (this.namespaces == null)
         {
-            LogUtils.getLogger().info("(w) Starting dynamic {} : {}.", this.type.toString(), this.hashCode());
+            //LogUtils.getLogger().info("(w) Starting dynamic {} : {}.", this.type.toString(), this.hashCode());
             Stopwatch stopwatch = Stopwatch.createStarted();
             this.buildResources(this.dataCache);
             this.namespaces = this.dataCache.keySet()
@@ -54,7 +54,7 @@ public abstract class BaseResourcePack implements PackResources
                                             .map(ResourceLocation::getNamespace)
                                             .collect(Collectors.toSet());
             stopwatch.stop();
-            LogUtils.getLogger().info("(w) Generated dynamic {} : {} in {} ms.", this.type.toString(), this.hashCode(), stopwatch.elapsed(TimeUnit.MILLISECONDS));
+            //LogUtils.getLogger().info("(w) Generated dynamic {} : {} in {} ms.", this.type.toString(), this.hashCode(), stopwatch.elapsed(TimeUnit.MILLISECONDS));
         }
     }
 

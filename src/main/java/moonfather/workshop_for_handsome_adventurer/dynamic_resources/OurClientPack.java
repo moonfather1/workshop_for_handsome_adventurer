@@ -1,5 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 
+import com.mojang.logging.LogUtils;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import net.minecraft.client.resources.language.LanguageInfo;
 import net.minecraft.client.resources.metadata.language.LanguageMetadataSection;
@@ -35,9 +36,16 @@ public class OurClientPack extends BaseResourcePack
             {
                 for (String wood: WoodTypeLister.getWoodIds())
                 {
+                    String strippedLogReplacement = getStrippedLog(wood);// temporary block because the call returns null and we pass it to replace
+                    if (strippedLogReplacement == null)
+                    {
+                        LogUtils.getLogger().error("* Error: workshop failed to obtain path for {} ({}). * ", wood, WoodTypeLister.getHostMod(wood));
+                        LogUtils.getLogger().error("* Please report this to workshop author.* ");
+                        strippedLogReplacement = SPRUCE_LOG;
+                    } // temporary block ends.
                     String replaced = json
                         .replace(SPRUCE_PLANKS, getPlanks(wood))
-                        .replace(SPRUCE_LOG, getStrippedLog(wood))
+                        .replace(SPRUCE_LOG, strippedLogReplacement)
                         .replace(SPRUCE, wood);
                     if (WoodTypeManager.isUsingDarkerWorkstation(wood))
                     {
