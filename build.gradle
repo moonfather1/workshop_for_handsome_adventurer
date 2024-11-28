@@ -175,8 +175,8 @@ dependencies {
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
 
     compileOnly fg.deobf("curse.maven:jei-238222:4585879")
-    compileOnly fg.deobf("curse.maven:jade-324717:4573193")
-    implementation fg.deobf("curse.maven:the-one-probe-245211:4629624")
+    implementation fg.deobf("curse.maven:jade-324717:4573193")
+    compileOnly fg.deobf("curse.maven:the-one-probe-245211:4629624")
 
     //runtimeOnly fg.deobf("curse.maven:badpackets-615134:4784395")
     compileOnly fg.deobf("curse.maven:wthit-forge-455982:4727741")
