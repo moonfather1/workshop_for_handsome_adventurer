@@ -7,6 +7,7 @@ import net.minecraft.client.resources.metadata.language.LanguageMetadataSection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
+import org.slf4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +22,9 @@ public class OurClientPack extends BaseResourcePack
     {
         super(PackType.CLIENT_RESOURCES, Constants.DYN_PACK_RESOURCE_FORMAT);
     }
+    private static final Logger LOGGER = LogUtils.getLogger();
+
+
 
     @Override
     protected void buildResources(Map<ResourceLocation, String> cache)
@@ -36,16 +40,13 @@ public class OurClientPack extends BaseResourcePack
             {
                 for (String wood: WoodTypeLister.getWoodIds())
                 {
-                    String strippedLogReplacement = getStrippedLog(wood);// temporary block because the call returns null and we pass it to replace
-                    if (strippedLogReplacement == null)
-                    {
-                        LogUtils.getLogger().error("* Error: workshop failed to obtain path for {} ({}). * ", wood, WoodTypeLister.getHostMod(wood));
-                        LogUtils.getLogger().error("* Please report this to workshop author.* ");
-                        strippedLogReplacement = SPRUCE_LOG;
-                    } // temporary block ends.
+                    String plankStringToInsert = getPlanks(wood); // because it might be null
+                    if (plankStringToInsert == null) { plankStringToInsert = SPRUCE_PLANKS; LOGGER.warn("Warning: workshop couldn't find files for " + wood + " planks."); }
+                    String logStringToInsert = getStrippedLog(wood);  // because it might be null
+                    if (logStringToInsert == null) { logStringToInsert = SPRUCE_LOG; LOGGER.warn("Warning: workshop couldn't find files for " + wood + " log."); }
                     String replaced = json
-                        .replace(SPRUCE_PLANKS, getPlanks(wood))
-                        .replace(SPRUCE_LOG, strippedLogReplacement)
+                        .replace(SPRUCE_PLANKS, plankStringToInsert)
+                        .replace(SPRUCE_LOG, logStringToInsert)
                         .replace(SPRUCE, wood);
                     if (WoodTypeManager.isUsingDarkerWorkstation(wood))
                     {
