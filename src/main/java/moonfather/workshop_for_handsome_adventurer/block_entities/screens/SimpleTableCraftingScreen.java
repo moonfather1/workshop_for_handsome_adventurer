@@ -61,6 +61,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		return imageWidth + leftPanel + (leftPanel > 0 ? 2 : 0);
 	}
 
+	@Override
 	public void containerTick()
 	{
 		super.containerTick();
@@ -101,6 +102,9 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	}
 	private TextureAtlasSprite excessSlotSprite = null;
 	private static final ResourceLocation EXCESS_SLOT_BG = new ResourceLocation(Constants.MODID, "gui/x_slot");
+
+
+
 
 
 

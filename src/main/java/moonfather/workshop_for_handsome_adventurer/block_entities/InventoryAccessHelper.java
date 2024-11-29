@@ -1,5 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
+import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.StorageDrawersSimpleTranslator;
 import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.TetraBeltTranslator;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
 import moonfather.workshop_for_handsome_adventurer.integration.*;
@@ -111,18 +112,17 @@ public class InventoryAccessHelper
         }
         if (be.getBlockState().getBlock().getDescriptionId().contains("storagedrawers"))
         {
-            // support for storage drawers is killed as there is a nasty duplication issue and i have no strength now.
-            return;
-            //LazyOptional<IItemHandler> oih = be.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
-            //oih.ifPresent( ih -> {
-            //    this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new StorageDrawersSimpleTranslator(ih));
-            //    this.chosenContainerTrueSize = ih.getSlots() - 1;
-            //    this.currentType = RecordTypes.BLOCK;
-            //} );
-            //if (this.currentType.equals(RecordTypes.BLOCK))
-            //{
-            //    return;
-            //}
+            LazyOptional<IItemHandler> oih = be.getCapability(ForgeCapabilities.ITEM_HANDLER);
+            oih.ifPresent( ih -> {
+                this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new StorageDrawersSimpleTranslator(ih));
+                this.chosenContainerTrueSize = ih.getSlots() - 1;
+                this.chosenContainerVisibleSize = this.chosenContainerTrueSize <= 27 ? 27 : 54;
+                this.currentType = RecordTypes.BLOCK;
+            } );
+            if (this.currentType.equals(RecordTypes.BLOCK))
+            {
+                return; // set in lambda above. leave and don't get overwritten.
+            }
         }
         // IItemHandler capability
         LazyOptional<IItemHandler> oih = be.getCapability(ForgeCapabilities.ITEM_HANDLER);
@@ -133,7 +133,7 @@ public class InventoryAccessHelper
             if (ih.getSlots() <= 54) {
                 this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(ih);
                 this.chosenContainerTrueSize = ih.getSlots();
-                this.chosenContainerVisibleSize = ih.getSlots() <= 27 ? 27 : 54;
+                this.chosenContainerVisibleSize = this.chosenContainerTrueSize <= 27 ? 27 : 54;
                 this.chosenContainerForRename = be;
                 this.currentType = RecordTypes.BLOCK;
                 return;

@@ -5,18 +5,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
-public abstract class BaseItemHandlerTranslator extends SimpleContainer
+///
+///  remaps slot numbers between visible and internal
+///
+public abstract class BaseItemHandlerTranslator extends BaseItemHandlerWrapper
 {
-    public BaseItemHandlerTranslator(IItemHandler wrapped, int totalSize)
-    {
-        super(totalSize);
-        this.internal = wrapped;
-    }
-
     public BaseItemHandlerTranslator(IItemHandler wrapped)
     {
-        super(wrapped.getSlots());
-        this.internal = wrapped;
+        super(wrapped);
+    }
+
+    public BaseItemHandlerTranslator(IItemHandler wrapped, int usableSlotCount)
+    {
+        super(wrapped, usableSlotCount);
     }
 
     protected abstract int translateVisibleToInternalSlot(int slot);
@@ -24,22 +25,21 @@ public abstract class BaseItemHandlerTranslator extends SimpleContainer
 
     ///////////////////////////////////////////////////
     ///////////////////////////////////////////////////
-    protected final IItemHandler internal;
 
     @Override
-    public boolean canPlaceItem(int slot, ItemStack itemStack) { return internal.isItemValid(this.translateVisibleToInternalSlot(slot), itemStack); }
+    public boolean canPlaceItem(int slot, ItemStack itemStack) { return super.canPlaceItem(this.translateVisibleToInternalSlot(slot), itemStack); }
 
     @Override
-    public ItemStack getItem(int slot) { return internal.getStackInSlot(this.translateVisibleToInternalSlot(slot)); }
+    public ItemStack getItem(int slot) { return super.getItem(this.translateVisibleToInternalSlot(slot)); }
 
     @Override
-    public ItemStack removeItem(int slot, int count) { return internal.extractItem(this.translateVisibleToInternalSlot(slot), count, false); }
+    public ItemStack removeItem(int slot, int count) { return super.removeItem(this.translateVisibleToInternalSlot(slot), count); }
 
     @Override
-    public ItemStack removeItemNoUpdate(int slot) {	return internal.extractItem(this.translateVisibleToInternalSlot(slot), this.getMaxStackSize(), false); }
+    public ItemStack removeItemNoUpdate(int slot) {	return super.removeItemNoUpdate(this.translateVisibleToInternalSlot(slot)); }
 
     @Override
-    public void setItem(int slot, ItemStack itemStack) { if (internal instanceof IItemHandlerModifiable i2) i2.setStackInSlot(this.translateVisibleToInternalSlot(slot), itemStack); else internal.insertItem(this.translateVisibleToInternalSlot(slot), itemStack, false); }
+    public void setItem(int slot, ItemStack itemStack) { super.setItem(this.translateVisibleToInternalSlot(slot), itemStack); }
 
     @Override
     public boolean isEmpty()

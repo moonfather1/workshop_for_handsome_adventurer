@@ -3,7 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.block_entities.container_tra
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
-public class StorageDrawersSimpleTranslator extends BaseItemHandlerTranslator
+public class StorageDrawersSimpleTranslator extends BaseItemHandlerTranslator implements IExcessSlotManager
 {
     public StorageDrawersSimpleTranslator(IItemHandler wrapped)
     {
@@ -12,11 +12,12 @@ public class StorageDrawersSimpleTranslator extends BaseItemHandlerTranslator
     }
 
     @Override
-    public ItemStack removeItem(int slot, int count)
+    public int getMaxStackSize()
     {
-        int formalStackSize = this.getItem(slot).getMaxStackSize();
-        return super.removeItem(slot, Math.min(count, formalStackSize));
+        return super.getMaxStackSize();
     }
+
+    ////////////////////////
 
     @Override
     protected int translateVisibleToInternalSlot(int slot)
@@ -28,5 +29,11 @@ public class StorageDrawersSimpleTranslator extends BaseItemHandlerTranslator
     protected int translateInternalToVisibleSlot(int slot)
     {
         return slot - 1;
+    }
+
+    @Override
+    public boolean isSlotSpecificallyDisabled(int slotIndex)
+    {
+        return false;
     }
 }
