@@ -1,5 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
+import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
 import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.StorageDrawersSimpleTranslator;
 import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.TetraBeltTranslator;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
@@ -109,6 +110,10 @@ public class InventoryAccessHelper
             this.chosenContainerVisibleSize = 27;
             this.currentType = RecordTypes.BLOCK;
             return;
+        }
+        if (be.getBlockState().getBlock().getDescriptionId().contains("functionalstorage"))
+        {
+            if (! OptionsHolder.COMMON.DebugFS.get()) return;
         }
         if (be.getBlockState().getBlock().getDescriptionId().contains("storagedrawers"))
         {
