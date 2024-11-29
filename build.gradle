@@ -169,6 +169,9 @@ dependencies {
     runtimeOnly "curse.maven:sophisticated-core-618298:5935141"
     runtimeOnly "curse.maven:sophisticated-backpacks-422301:5927499"
     runtimeOnly "curse.maven:sophisticated-storage-619320:5909296"
+
+    implementation "curse.maven:backpacked-352835:5852973"
+    runtimeOnly "curse.maven:framework-549225:5911998"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
