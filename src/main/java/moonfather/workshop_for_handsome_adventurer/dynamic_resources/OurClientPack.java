@@ -1,5 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 
+import com.mojang.logging.LogUtils;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.resources.language.LanguageInfo;
@@ -8,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
+import org.slf4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,6 +28,8 @@ public class OurClientPack extends BaseResourcePack
         this.locationInfo = locationInfo;
     }
 
+    private static final Logger LOGGER = LogUtils.getLogger();
+
 
 
     @Override
@@ -42,9 +46,13 @@ public class OurClientPack extends BaseResourcePack
             {
                 for (String wood: WoodTypeLister.getWoodIds())
                 {
+                    String plankStringToInsert = getPlanks(wood); // because it might be null
+                    if (plankStringToInsert == null) { plankStringToInsert = SPRUCE_PLANKS; LOGGER.warn("Warning: workshop couldn't find files for " + wood + " planks."); }
+                    String logStringToInsert = getStrippedLog(wood);  // because it might be null
+                    if (logStringToInsert == null) { logStringToInsert = SPRUCE_LOG; LOGGER.warn("Warning: workshop couldn't find files for " + wood + " log."); }
                     String replaced = json
-                        .replace(SPRUCE_PLANKS, getPlanks(wood))
-                        .replace(SPRUCE_LOG, getStrippedLog(wood))
+                        .replace(SPRUCE_PLANKS, plankStringToInsert)
+                        .replace(SPRUCE_LOG, logStringToInsert)
                         .replace(SPRUCE, wood);
                     if (WoodTypeClientManager.isUsingDarkerWorkstation(wood))
                     {
