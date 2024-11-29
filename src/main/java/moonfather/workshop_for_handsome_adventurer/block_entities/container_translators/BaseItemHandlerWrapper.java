@@ -52,7 +52,7 @@ public abstract class BaseItemHandlerWrapper extends SimpleContainer
         }
         else
         {
-            ItemStack old = this.getItem(slot);
+            ItemStack old = internal.getStackInSlot(slot);
             ItemStack resto;
             if (old.isEmpty())
             {

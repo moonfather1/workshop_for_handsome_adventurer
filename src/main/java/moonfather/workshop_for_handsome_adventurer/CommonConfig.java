@@ -22,6 +22,7 @@ public class CommonConfig
     public static final ModConfigSpec.ConfigValue<Integer> SlotRoomMaximum;
     public static final ModConfigSpec.BooleanValue OffhandInteractsWithToolRack;
     public static final ModConfigSpec.BooleanValue OffhandInteractsWithPotionShelf;
+    public static final ModConfigSpec.BooleanValue DebugFS; //todo: delete me
     static final ModConfigSpec SPEC;
 
 
@@ -42,6 +43,9 @@ public class CommonConfig
             SimpleTableReplacesVanillaTable = BUILDER
                 .comment("If set to false (default), simple crafting tables are craftable after you have vanilla crafting table. If set to true (not much reason not to be), this mod's crafting tables are craftable from four planks in 2x2 configuration.").worldRestart()
                 .define("Simple table replaces vanilla table", defaultSimpleTableReplacesVanillaTable);
+            DebugFS = BUILDER
+                .comment("Enable access to functional storage blocks. Disabled due to issues. Only enable if you plan on fixing them.").worldRestart()
+                .define("Enable blocks from functional storage mod", false);
         BUILDER.pop();
         BUILDER.push("Potion shelves");
             SlotRoomMultiplier = BUILDER
@@ -50,7 +54,7 @@ public class CommonConfig
             SlotRoomMaximum = BUILDER
                 .comment("This is a total maximum of number of bottles that fit in a single potion shelf slot. Whatever above math gives you will be clipped to fit this value.")
                 .defineInRange("Maximum number of potions that fit into one shelf slot", defaultSlotRoomMaximum, 1, 64);
-        OffhandInteractsWithPotionShelf = BUILDER
+            OffhandInteractsWithPotionShelf = BUILDER
                 .comment("If set to false, you need to move a bottle from off-hand to main hand (F) before putting it onto a shelf, it's simpler but needs extra actions. If you set this to true you can put bottles from off-hand to potion shelf directly and you can take items directly; quicker but there might be possible unintended interactions with the shelf.")
                 .define("Offhand interacts with potion shelf directly", defaultOffhandInteractsWithPotionShelf);
         BUILDER.pop();

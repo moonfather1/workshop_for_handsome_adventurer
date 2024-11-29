@@ -1,5 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
+import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.StorageDrawersSimpleTranslator;
 import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.TetraBeltTranslator;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
@@ -146,7 +147,7 @@ public class InventoryAccessHelper
         }
         if (be.getBlockState().getBlock().getDescriptionId().contains("functionalstorage"))
         {
-            return;
+            if (CommonConfig.DebugFS.isFalse()) return;
         }
         // IItemHandler capability
         IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);
