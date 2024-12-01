@@ -2,7 +2,6 @@ package moonfather.workshop_for_handsome_adventurer.block_entities.screens;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableDataSlots;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
@@ -10,7 +9,6 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.Pack
 import moonfather.workshop_for_handsome_adventurer.block_entities.screen_components.SimpleButton;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screen_components.SlightlyNicerEditBox;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -19,7 +17,6 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -388,8 +385,15 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         int startx = this.xOffset + 3;
         int starty = (this.parent.height - this.parent.getYSize()) / 2;
         int counter = 0;
-        for(StateSwitchingButton tabButton : this.tabButtons)
+        boolean topRow = true;
+        for (StateSwitchingButton tabButton : this.tabButtons)
         {
+            if (counter >= TabButton.TAB_ROW_COUNT)
+            {
+                topRow = false;
+                counter -= TabButton.TAB_ROW_COUNT;
+                starty += 163;
+            }
             tabButton.setPosition(startx + (TabButton.WIDTH - 1 /*overlap 1px*/) * counter, starty);
             counter++;
             tabButton.visible = true;
@@ -452,13 +456,18 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
 
     private static class TabButton extends StateSwitchingButton
     {
+        private static final int TAB_ROW_COUNT = 8;
         public static final int WIDTH = 22;
         public static final int HEIGHT = 26;
         public InventoryAccessComponent parent;
         private ItemStack itemMain = ItemStack.EMPTY, itemSub = ItemStack.EMPTY;
         private int chestIndex;
-        private static final ResourceLocation imageActiveTab = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/tab_top_active.png"); // no need for WidgetSprites class
-        private static final ResourceLocation imageInactiveTab = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/tab_top_inactive.png");
+
+        private static final ResourceLocation IMAGE_ACTIVE_TAB = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/tab_top_active.png"); // no need for WidgetSprites class
+        private static final ResourceLocation IMAGE_INACTIVE_TAB = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/tab_top_inactive.png");
+        private static final ResourceLocation IMAGE_ACTIVE_BOTTOM_TAB = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/tab_bottom_active.png"); // no need for WidgetSprites class
+        private static final ResourceLocation IMAGE_INACTIVE_BOTTOM_TAB = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/tab_bottom_inactive.png");
+        private ResourceLocation imageActiveTab, imageInactiveTab;
 
         public TabButton()
         {
@@ -470,8 +479,12 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         @Override
         public void renderWidget(GuiGraphics graphics, int p_100458_, int p_100459_, float p_100460_)
         {
-            int texX = 2;
-            int texY = 2;  // ignoring isHoveredOrFocused()
+            int texX = 2;  // ignoring isHoveredOrFocused()
+            int texY = this.chestIndex < TAB_ROW_COUNT ? 2 : 4;
+            if (imageActiveTab == null) {
+                imageActiveTab = this.chestIndex < TAB_ROW_COUNT ? IMAGE_ACTIVE_TAB : IMAGE_ACTIVE_BOTTOM_TAB;
+                imageInactiveTab = this.chestIndex < TAB_ROW_COUNT ? IMAGE_INACTIVE_TAB : IMAGE_INACTIVE_BOTTOM_TAB;
+            }
             graphics.blit(this.isStateTriggered ? imageActiveTab : imageInactiveTab, this.getX(), this.getY(), texX, texY, this.width, this.height, 32, 32);
             this.renderIcon(graphics);
         }
@@ -479,30 +492,40 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         boolean checkedForSpecialScaling = false, doSpecialScaling = false;
         private void renderIcon(GuiGraphics graphics)
         {
+            int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
+            int y = (this.parent.parent.height - this.parent.parent.getYSize()) / 2;
+            int tabIndexInRow = this.chestIndex;
+            int textureYAdjustment = 0; // 0 for top
+            int textureYAdjustment2 = 0; // 0 for top
+            if (this.chestIndex >= TAB_ROW_COUNT) {
+                tabIndexInRow = this.chestIndex - TAB_ROW_COUNT;
+                textureYAdjustment = 3;
+                y = y + this.parent.parent.getYSize() - HEIGHT - 39 - textureYAdjustment;
+                textureYAdjustment2 = 1;
+            }
+
             if (! this.checkedForSpecialScaling) {
                 this.doSpecialScaling = ! (itemMain.getItem() instanceof BlockItem);
                 this.checkedForSpecialScaling = true;
             }
             if (! this.doSpecialScaling) {
                 // main image - block   (chests, barrels)
-                graphics.renderFakeItem(itemMain, this.getX() + 1, this.getY() + 3);
+                graphics.renderFakeItem(itemMain, this.getX() + 1, this.getY() + 3 + textureYAdjustment2);
+                // not using x and y prepared above; still moved above because it is used for first item and for backpack/belt icons.
             }
             else {
                 // main image - item    (belt, backpack...)
-                int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
-                int y = (this.parent.parent.height - this.parent.parent.getYSize()) / 2;
                 graphics.pose().pushPose();
-                graphics.pose().scale(2/3f, 2/3f, 2/3f);
+                graphics.pose().scale(2/3f, 2/3f, 2/3f); // why did i downsize? looks bad but i probably had a reason.
                 graphics.pose().translate(0, 0, +100.0D);
-                graphics.renderFakeItem(itemMain, (int)((x + this.chestIndex * (WIDTH-1) + 7) * 1.5d), (int)((y+6)*1.5d));
-                graphics.pose().popPose();            }
+                graphics.renderFakeItem(itemMain, (int)((x + tabIndexInRow * (WIDTH-1) + 7) * 1.5d), (int)((y+5)*1.5d));
+                graphics.pose().popPose();
+            }
             // sub image
-            int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
-            int y = (this.parent.parent.height - this.parent.parent.getYSize()) / 2;
             graphics.pose().pushPose();
             graphics.pose().scale(2/3f, 2/3f, 2/3f);
             graphics.pose().translate(0, 0, +100.0D);
-            graphics.renderFakeItem(itemSub, (int)((x + this.chestIndex * (WIDTH-1) + 13) * 1.5d), (int)((y+12)*1.5d));
+            graphics.renderFakeItem(itemSub, (int)((x + tabIndexInRow * (WIDTH-1) + 13) * 1.5d), (int)((y+12)*1.5d));
             graphics.pose().popPose();
         }
 

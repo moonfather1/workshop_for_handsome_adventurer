@@ -159,8 +159,9 @@ dependencies {
     //implementation "curse.maven:travelers-backpack-321117:5812815"
     compileOnly "curse.maven:travelers-backpack-321117:5812815"
 
-    compileOnly "curse.maven:accessories-938917:5848473"
+    implementation "curse.maven:accessories-938917:5848473"
     implementation "curse.maven:curios-continuation-1037991:5888964"
+    runtimeOnly "curse.maven:owo-lib-532610:5945693"
 	
 	implementation "curse.maven:storage-drawers-223852:5873879"
     implementation "curse.maven:functional-storage-556861:5861256"
