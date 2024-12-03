@@ -30,7 +30,10 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 {
 	private ItemRenderer itemRenderer = null;
 	private final BlockEntityRendererProvider.Context context;
-	private final TagKey<Item> itemsThatWeShouldntRotate = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "dont_rotate_on_toolrack"));
+	private static final TagKey<Item> TAG_DONT_ROTATE_ON_TOOLRACK = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "dont_rotate_on_toolrack"));
+	private static final TagKey<Item> TAG_LARGER_ON_TOOLRACK_150 = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "larger_on_toolrack_150_percent"));
+	private static final TagKey<Item> TAG_LARGER_ON_TOOLRACK_125 = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "larger_on_toolrack_125_percent"));
+
 
 
 	public ToolRackTESR(BlockEntityRendererProvider.Context context)
@@ -115,6 +118,17 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			matrixStack.mulPose(XMinus90);  // 1.19.4   Vector3f.XP.rotationDegrees(-90.0F)
 			matrixStack.mulPose(YPlus180);  // 1.19.4   Vector3f.YP.rotationDegrees(180.0F)
 
+			if (itemStack.is(TAG_LARGER_ON_TOOLRACK_150)) // first this. apply the rest on top of this.
+			{
+				// seems to be noo need for matrixStack.translate
+				matrixStack.scale(1.50f, 1.10f, 1.50f);
+			}
+			else if (itemStack.is(TAG_LARGER_ON_TOOLRACK_125))
+			{
+				// seems to be noo need for matrixStack.translate
+				matrixStack.scale(1.25f, 1.10f, 1.25f);
+			} // separate from main thing below.
+
 			if (itemStack.getItem().canPerformAction(itemStack, ItemAbilities.SHIELD_BLOCK))
 			{
 				matrixStack.translate(-0.00, -0.10, 0.14);
@@ -140,7 +154,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			{
 				matrixStack.translate(0, 0.1, 0);
 			}
-			else if (itemStack.is(itemsThatWeShouldntRotate))
+			else if (itemStack.is(TAG_DONT_ROTATE_ON_TOOLRACK))
 			{
 				matrixStack.translate(0, 0.1, 0);
 			}
