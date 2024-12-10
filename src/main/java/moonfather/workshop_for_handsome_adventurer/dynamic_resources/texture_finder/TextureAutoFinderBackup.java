@@ -2,11 +2,16 @@ package moonfather.workshop_for_handsome_adventurer.dynamic_resources.texture_fi
 
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
+import net.neoforged.fml.javafmlmod.FMLModContainer;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -37,21 +42,15 @@ public class TextureAutoFinderBackup implements ITextureFinder
         }
         try
         {
-            Optional<? extends ModContainer> mod1 = ModList.get().getModContainerById(modId);
-            if (! mod1.isPresent())
-            {
-                return null;
-            }
-            InputStream is1 = ModList.get().getModFileById(modId).getFile().getClass().getResourceAsStream("/assets/%s/blockstates/%s.json".formatted(modId, blockTemplate.formatted(wood)));
-            BufferedReader br1 = new BufferedReader(new InputStreamReader(is1));
-            String file1 = br1.lines().collect(Collectors.joining("\n"));
+            // old style doesn't work in NF and i didn't notece
+            Path blockStatePath = ModList.get().getModFileById(modId).getFile().findResource("assets", modId, "blockstates", blockTemplate.formatted(wood) + ".json");
+            String file1 = Files.readString(blockStatePath);
             Matcher m1 = PATTERN_IN_BLOCKSTATE.matcher(file1);
             m1.find();
             String path1 = m1.group(3); // model
 
-            InputStream is2 = ModList.get().getModFileById(modId).getFile().getClass().getResourceAsStream("/assets/%s/models/%s.json".formatted(modId, path1)); //let's assume it's in the same mod
-            BufferedReader br2 = new BufferedReader(new InputStreamReader(is2));
-            String file2 = br2.lines().collect(Collectors.joining("\n"));
+            Path modelPath = ModList.get().getModFileById(modId).getFile().findResource("/assets/%s/models/%s.json".formatted(modId, path1));
+            String file2 = Files.readString(modelPath); //let's assume it's in the same mod
             Matcher m2 = (textureIsSide ? PATTERN_IN_MODEL_SIDE : PATTERN_IN_MODEL_ALL).matcher(file2); // %s is all for planks and side for logs
             m2.find();
             String result = m2.group(3); // texture
@@ -59,7 +58,10 @@ public class TextureAutoFinderBackup implements ITextureFinder
             PATH_CACHE.put(key, result);
             return result;
         }
-        catch (Exception ignored) {}
+        catch (Exception e)
+        {
+            System.out.println("!!~~ " + e.getMessage());
+        }
         return null;
     }
     private static final Pattern PATTERN_IN_BLOCKSTATE = Pattern.compile("\"(model)\"\\s*:\\s*\"([a-z0-9_]+:)?(.+?)\"");

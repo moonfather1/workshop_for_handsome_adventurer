@@ -27,13 +27,13 @@ public class DynamicAssetCommonConfig
         BUILDER.push("Other");
         blacklist = BUILDER
                 .comment("First and obvious use is to blacklist wood types that you really, really hate to see. Second and non-obvious use: say you have a duplicate wood type; normally it just gets recipes that give blocks of other type of same name; but if you really, really wish to have blocks of this type, black-list them here so that they are not added to dupes list and in blocks_with_dumbass_names setting in this file, add them in format modid:planks/slab/strippedlog; good example is Vinery mod which insists on cherry wood even in 1.20; if you do this, you get workshop blocks in vanilla cherry (light pink) and Vinery's cherry (dark red) separately. Oh, and asterisk after the colon works.")
-                .define("Blacklist", "vinery:cherry");
+                .define("Blacklist", "vinery:cherry,  twilightforest:mangrove");
         stripped_log_substitution_list_for_recipes = BUILDER
                 .comment("For wood types that do not have stripped logs, you can specify table top block here. If you do not, we are skipping that wood type.")
-                .define("Stripped log substitution list for recipes", "bamboo=minecraft:stripped_bamboo_block, treated_wood_horizontal=minecraft:polished_blackstone,  embur=byg:stripped_embur_pedu,  sythian=byg:stripped_sythian_stem, bulbis=minecraft:smooth_stone, crimson=minecraft:stripped_crimson_stem, warped=minecraft:stripped_warped_stem");
+                .define("Stripped log substitution list for recipes", "bamboo=minecraft:stripped_bamboo_block, treated_wood_horizontal=minecraft:polished_blackstone,  crimson=minecraft:stripped_crimson_stem, warped=minecraft:stripped_warped_stem");
         blocks_with_dumbass_names = BUILDER
                 .comment("This is a list of blocks that do not follow usual naming scheme. Set consists of planks, slab and log, separated by slashes. Separate all sets with comma. You can use stripped_log_substitution together with this. Example is IE's treated wood as it has no logs.")
-                .define("Blocks with dumbass names", "immersiveengineering:treated_wood_horizontal/slab_treated_wood_horizontal/no_log_for_this_one, growthcraft_apples:apple_plank/apple_plank_slab/apple_wood_log_stripped,   vinery:cherry_planks/cherry_slab/stripped_cherry_log");
+                .define("Blocks with dumbass names", "immersiveengineering:treated_wood_horizontal/slab_treated_wood_horizontal/no_log_for_this_one, growthcraft_apples:apple_plank/apple_plank_slab/apple_wood_log_stripped,   vinery:cherry_planks/cherry_slab/stripped_cherry_log,   twilightforest:mangrove_planks/mangrove_slab/stripped_mangrove_log");
         BUILDER.pop();
         SPEC = BUILDER.build();
     }
