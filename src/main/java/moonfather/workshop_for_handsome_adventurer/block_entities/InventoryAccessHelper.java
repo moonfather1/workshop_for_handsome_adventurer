@@ -1,11 +1,13 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import moonfather.workshop_for_handsome_adventurer.CommonConfig;
+import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.ItemContainerContentsWrapper;
 import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.StorageDrawersSimpleTranslator;
 import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.TetraBeltTranslator;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
-import moonfather.workshop_for_handsome_adventurer.integration.CuriosAccessor;
+import moonfather.workshop_for_handsome_adventurer.integration.BackpackAccessor;
+import moonfather.workshop_for_handsome_adventurer.integration.BackpackedBackpack;
 import moonfather.workshop_for_handsome_adventurer.integration.TetraBeltSupport;
 import moonfather.workshop_for_handsome_adventurer.integration.TravelersBackpack;
 import net.minecraft.core.BlockPos;
@@ -229,7 +231,7 @@ public class InventoryAccessHelper
             String slotName = RecordTypes.NAMED_SLOTS[slot];
             ItemStack maybeStorageItem = getItemFromNamedSlot(player, slotName);
 
-            IItemHandler itemHandler = maybeStorageItem.getCapability(Capabilities.ItemHandler.ITEM, null);
+            IItemHandler itemHandler = maybeStorageItem.getCapability(Capabilities.ItemHandler.ITEM, null); // should cover ComponentItemHandler
             if (itemHandler != null)
             {
                 InventoryAccessRecord record = new InventoryAccessRecord();
@@ -244,11 +246,9 @@ public class InventoryAccessHelper
                 record.ModId = "";
                 continue;
             }
-            // what about ComponentItemHandler?
-            //
             // now for DataComponents.CONTAINER... blindly typing this. no idea what to test on.
             ItemContainerContents container = maybeStorageItem.get(DataComponents.CONTAINER);
-            if (container != null)
+            if (container != null && ! maybeStorageItem.getDescriptionId().contains("backpacked"))
             {
                 InventoryAccessRecord record = new InventoryAccessRecord();
                 record.ItemChest = maybeStorageItem.copy();
@@ -256,7 +256,7 @@ public class InventoryAccessHelper
                 record.Nameable = true;
                 record.Name = record.ItemChest.getHoverName();
                 record.Type = slotName;
-                record.VisibleSlotCount = itemHandler.getSlots() <= 27 ? 27 : 54;
+                record.VisibleSlotCount = container.getSlots() <= 27 ? 27 : 54;
                 record.ItemFirst = ItemStack.EMPTY;
                 record.Index = this.adjacentInventories.size();
                 this.adjacentInventories.add(record);
@@ -286,7 +286,23 @@ public class InventoryAccessHelper
         // mr crayfish' backpack
         if (ModList.get().isLoaded("backpacked"))
         {
-            // todo: not out yet
+            if (BackpackedBackpack.isPresent(player) && BackpackedBackpack.slotCount(player) <= 54)
+            {
+                ItemStack icon = BackpackedBackpack.getTabIcon(player);
+                if (! icon.isEmpty()) // probably can't be empty
+                {
+                    InventoryAccessRecord record = new InventoryAccessRecord();
+                    record.ItemChest = icon;
+                    record.Nameable = true;
+                    record.Name = record.ItemChest.getHoverName();
+                    record.Type = RecordTypes.FLOATING;
+                    record.VisibleSlotCount = BackpackedBackpack.slotCount(player) <= 27 ? 27 : 54;
+                    record.ItemFirst = BackpackedBackpack.getFirst(player);
+                    record.Index = this.adjacentInventories.size();
+                    record.ModId = "backpacked";
+                    this.adjacentInventories.add(record);
+                }
+            }
         }
     }
 
@@ -457,6 +473,18 @@ public class InventoryAccessHelper
                 this.chosenContainerItem = item;
                 this.currentType = record.Type;
             }
+            else
+            {
+                ItemContainerContents container = item.get(DataComponents.CONTAINER);
+                if (container != null)
+                {
+                    this.chosenContainer = new ItemContainerContentsWrapper(container, item, container.getSlots());
+                    this.chosenContainerTrueSize = container.getSlots();
+                    this.chosenContainerVisibleSize = container.getSlots() <= 27 ? 27 : 54;
+                    this.chosenContainerItem = item;
+                    this.currentType = record.Type;
+                }
+            }
             return this.chosenContainerTrueSize > 0;
         }
         else if (record.Type.equals(RecordTypes.FLOATING))
@@ -475,15 +503,15 @@ public class InventoryAccessHelper
             }
             if (ModList.get().isLoaded("backpacked") && record.ModId.equals("backpacked"))
             {
-//            // mr crayfish's backpack.
-//            if (BackpackedBackpack.isPresent(player))
-//            {
-//                this.chosenContainer = BackpackedBackpack.getContainer(player);
-//                this.chosenContainerTrueSize = BackpackedBackpack.slotCount(player);
-//                this.chosenContainerItem = BackpackedBackpack.getContainerItem(player);
-//                this.currentType = record.Type;
-//                return true;
-//            }
+                // mr crayfish's backpack.
+                if (BackpackedBackpack.isPresent(player))
+                {
+                    this.chosenContainer = BackpackedBackpack.getContainer(player);
+                    this.chosenContainerTrueSize = BackpackedBackpack.slotCount(player);
+                    this.chosenContainerItem = BackpackedBackpack.getContainerItem(player);
+                    this.currentType = record.Type;
+                    return true;
+                }
             }
             return false;
         }
@@ -503,9 +531,9 @@ public class InventoryAccessHelper
         {
             return player.getInventory().getArmor(2);
         }
-        else if (slot.equals(RecordTypes.BACKSLOT) && ModList.get().isLoaded("curios"))
+        else if (slot.equals(RecordTypes.BACKSLOT))
         {
-            return CuriosAccessor.getFirstItem(player, "back");
+            return BackpackAccessor.getFirstItemFromBackSlot(player);
         }
         else
         {

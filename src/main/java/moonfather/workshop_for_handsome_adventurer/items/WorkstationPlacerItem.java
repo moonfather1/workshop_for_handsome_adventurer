@@ -75,7 +75,10 @@ public class WorkstationPlacerItem extends Item
 		}
 		if (! canPlace)
 		{
-			context.getPlayer().displayClientMessage(Component.translatable("message.workshop_for_handsome_adventurer.no_room_for_workstation"), true);
+			if (context.getPlayer() != null)
+			{
+				context.getPlayer().displayClientMessage(Component.translatable("message.workshop_for_handsome_adventurer.no_room_for_workstation"), true);
+			}
 			return InteractionResult.FAIL;
 		}
 		Direction facingToSet = context.getHorizontalDirection().getOpposite();
@@ -93,6 +96,10 @@ public class WorkstationPlacerItem extends Item
 		context.getLevel().setBlockAndUpdate(position.relative(right), bottomRight.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, false));
 		context.getLevel().setBlockAndUpdate(position.above().relative(right), topRight.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, false));
 
+		if (context.getPlayer() != null && ! context.getPlayer().isCreative())
+		{
+			context.getItemInHand().shrink(1); // consume used to do this? this is probably a wrong method on 1.21
+		}
 		return InteractionResult.CONSUME;
 	}
 	protected String prefix = "";
