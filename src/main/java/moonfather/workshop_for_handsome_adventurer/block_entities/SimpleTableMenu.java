@@ -353,8 +353,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			{
 				player.drop(itemstack1, false);
 			}
-
-			return itemstack1; // remaining. don't know while original code doesn't have it.
+			// don't return itemstack1. mistake caused by retarded names copied from vanilla crafting table.
 		}
 
 		return itemstack;
