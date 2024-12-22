@@ -160,11 +160,12 @@ dependencies {
     //implementation "curse.maven:travelers-backpack-321117:5812815"
     compileOnly "curse.maven:travelers-backpack-321117:5812815"
 
-    implementation "curse.maven:accessories-938917:5848473"
+    //implementation "curse.maven:accessories-938917:5848473"
+    //runtimeOnly "curse.maven:owo-lib-532610:5945693"
+    compileOnly "curse.maven:accessories-938917:5848473"
     implementation "curse.maven:curios-continuation-1037991:5888964"
-    runtimeOnly "curse.maven:owo-lib-532610:5945693"
-	
-	//implementation "curse.maven:storage-drawers-223852:5873879"
+
+	implementation "curse.maven:storage-drawers-223852:5873879"
     //implementation "curse.maven:functional-storage-556861:5861256"
     //runtimeOnly "curse.maven:titanium-287342:5889342"
 
@@ -172,8 +173,9 @@ dependencies {
     //runtimeOnly "curse.maven:sophisticated-backpacks-422301:5927499"
     //runtimeOnly "curse.maven:sophisticated-storage-619320:5909296"
 
-    implementation "curse.maven:backpacked-352835:5852973"
-    runtimeOnly "curse.maven:framework-549225:5911998"
+    //implementation "curse.maven:backpacked-352835:5852973"
+    compileOnly "curse.maven:backpacked-352835:5852973"
+    //runtimeOnly "curse.maven:framework-549225:5911998"
 	
 	//runtimeOnly "curse.maven:the-twilight-forest-227639:5906799"
 	//runtimeOnly "curse.maven:oh-the-biomes-weve-gone-1070751:5932848"
