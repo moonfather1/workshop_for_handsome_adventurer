@@ -1,4 +1,4 @@
-package moonfather.workshop_for_handsome_adventurer.block_entities.container_translators;
+package moonfather.workshop_for_handsome_adventurer.block_entities.containers;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;

@@ -1,9 +1,9 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import moonfather.workshop_for_handsome_adventurer.CommonConfig;
-import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.ItemContainerContentsWrapper;
-import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.StorageDrawersSimpleTranslator;
-import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.TetraBeltTranslator;
+import moonfather.workshop_for_handsome_adventurer.block_entities.containers.ItemContainerContentsWrapper;
+import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.StorageDrawersSimpleTranslator;
+import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.TetraBeltTranslator;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.integration.BackpackAccessor;
@@ -35,7 +35,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.ComponentItemHandler;
 import net.neoforged.neoforge.items.IItemHandler;
 
 import java.util.LinkedList;
@@ -112,7 +111,7 @@ public class InventoryAccessHelper
         }
         if (be instanceof Container container && container.getContainerSize() <= 54)
         {
-            if (be instanceof ShulkerBoxBlockEntity && !canOpenShulkerBox(level, be.getBlockState(), pos))
+            if (be instanceof ShulkerBoxBlockEntity && ! canOpenShulkerBox(level, be.getBlockState(), pos))
             {
                 return;
             }

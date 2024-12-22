@@ -1,6 +1,5 @@
-package moonfather.workshop_for_handsome_adventurer.block_entities.container_translators;
+package moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators;
 
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 

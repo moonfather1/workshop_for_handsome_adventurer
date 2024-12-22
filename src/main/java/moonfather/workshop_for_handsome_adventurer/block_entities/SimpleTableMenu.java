@@ -2,14 +2,14 @@ package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.BaseItemHandlerWrapper;
-import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.IExcessSlotManager;
+import moonfather.workshop_for_handsome_adventurer.block_entities.containers.SimpleContainerEx;
+import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.BaseItemHandlerWrapper;
+import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.IExcessSlotManager;
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
 import moonfather.workshop_for_handsome_adventurer.blocks.SimpleTable;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.integration.PolymorphAccessorServer;
-import moonfather.workshop_for_handsome_adventurer.integration.TetraBeltSupport;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -954,7 +954,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	/////////////////////////////////////////////////////////////////////////
 
-	public static class UnrestrainedSlot extends Slot  // for storage drawers. will not refuse to add to slots with hundreds of items already there.
+	public static class UnrestrainedSlot extends Slot  // for storage drawers. will not refuse to add to a slot with hundreds of items already there.
 	{
 		public UnrestrainedSlot(Container container, int slot, int x, int y) { super(container, slot, x, y); }
 
@@ -1052,7 +1052,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 	}
 
-	public static class VariableSizeContainerWrapper extends SimpleContainer implements IExcessSlotManager
+	public static class VariableSizeContainerWrapper extends SimpleContainerEx implements IExcessSlotManager
 	{
 		private IExcessSlotManager excessManager = null;
 		private final Container internal;

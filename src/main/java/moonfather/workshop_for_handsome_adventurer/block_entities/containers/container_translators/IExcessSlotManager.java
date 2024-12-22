@@ -1,4 +1,4 @@
-package moonfather.workshop_for_handsome_adventurer.block_entities.container_translators;
+package moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators;
 
 public interface IExcessSlotManager
 {

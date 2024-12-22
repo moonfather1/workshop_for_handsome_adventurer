@@ -1,6 +1,6 @@
-package moonfather.workshop_for_handsome_adventurer.block_entities.container_translators;
+package moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators;
 
-import net.minecraft.world.SimpleContainer;
+import moonfather.workshop_for_handsome_adventurer.block_entities.containers.SimpleContainerEx;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
@@ -8,7 +8,7 @@ import net.neoforged.neoforge.items.IItemHandlerModifiable;
 ///
 /// turns item handler into a container. from horse to donkey.
 ///
-public abstract class BaseItemHandlerWrapper extends SimpleContainer
+public abstract class BaseItemHandlerWrapper extends SimpleContainerEx
 {
     public BaseItemHandlerWrapper(IItemHandler wrapped, int totalSize)
     {
