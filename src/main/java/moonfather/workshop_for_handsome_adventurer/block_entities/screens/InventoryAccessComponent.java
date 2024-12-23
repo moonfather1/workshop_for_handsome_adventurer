@@ -379,8 +379,15 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         int startx = this.xOffset + 3;
         int starty = (this.parent.height - this.parent.getYSize()) / 2;
         int counter = 0;
-        for(StateSwitchingButton tabButton : this.tabButtons)
+        boolean topRow = true;
+        for (StateSwitchingButton tabButton : this.tabButtons)
         {
+            if (counter >= TabButton.TAB_ROW_COUNT)
+            {
+                topRow = false;
+                counter -= TabButton.TAB_ROW_COUNT;
+                starty += 163;
+            }
             tabButton.setPosition(startx + (TabButton.WIDTH - 1 /*overlap 1px*/) * counter, starty);
             counter++;
             tabButton.visible = true;
@@ -443,6 +450,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
 
     private class TabButton extends StateSwitchingButton
     {
+        private static final int TAB_ROW_COUNT = 8;
         public static final int WIDTH = 22;
         public static final int HEIGHT = 26;
         public InventoryAccessComponent parent;
@@ -462,6 +470,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             int texY = this.yTexStart;
             if (this.isStateTriggered) { texX += this.xDiffTex; }
             if (this.isHoveredOrFocused()) { texY += this.yDiffTex; } //not a thing
+            if  (this.chestIndex >= TAB_ROW_COUNT) { texX += 2 * this.xDiffTex; texY += 3; } // 2nd row
             graphics.blit(this.resourceLocation, this.getX(), this.getY(), texX, texY, this.width, this.height, 256, 256);
             this.renderIcon(graphics);
         }
@@ -469,30 +478,41 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         boolean checkedForSpecialScaling = false, doSpecialScaling = false;
         private void renderIcon(GuiGraphics graphics)
         {
+            int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
+            int y = (this.parent.parent.height - this.parent.parent.getYSize()) / 2;
+            int tabIndexInRow = this.chestIndex;
+            int textureYAdjustment = 0; // 0 for top
+            int textureYAdjustment2 = 0; // 0 for top
+            if (this.chestIndex >= TAB_ROW_COUNT) {
+                tabIndexInRow = this.chestIndex - TAB_ROW_COUNT;
+                textureYAdjustment = 5;
+                y = y + this.parent.parent.getYSize() - HEIGHT - 39 - textureYAdjustment;
+                textureYAdjustment2 = 0;
+                x -= 1;
+            }
+
             if (! this.checkedForSpecialScaling) {
                 this.doSpecialScaling = ! (itemMain.getItem() instanceof BlockItem);
                 this.checkedForSpecialScaling = true;
             }
             if (! this.doSpecialScaling) {
                 // main image - block   (chests, barrels)
-                graphics.renderFakeItem(itemMain, this.getX() + 1, this.getY() + 3);
+                graphics.renderFakeItem(itemMain, this.getX() + 1, this.getY() + 3 + textureYAdjustment2);
+                // not using x and y prepared above; still moved above because it is used for first item and for backpack/belt icons.
             }
             else {
                 // main image - item    (belt, backpack...)
-                int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
-                int y = (this.parent.parent.height - this.parent.parent.getYSize()) / 2;
                 graphics.pose().pushPose();
-                graphics.pose().scale(2/3f, 2/3f, 2/3f);
+                graphics.pose().scale(2/3f, 2/3f, 2/3f); // why did i downsize? looks bad but i probably had a reason.
                 graphics.pose().translate(0, 0, +100.0D);
-                graphics.renderFakeItem(itemMain, (int)((x + this.chestIndex * (WIDTH-1) + 7) * 1.5d), (int)((y+6)*1.5d));
-                graphics.pose().popPose();            }
+                graphics.renderFakeItem(itemMain, (int)((x + tabIndexInRow * (WIDTH-1) + 7) * 1.5d), (int)((y+5)*1.5d));
+                graphics.pose().popPose();
+            }
             // sub image
-            int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
-            int y = (this.parent.parent.height - this.parent.parent.getYSize()) / 2;
             graphics.pose().pushPose();
             graphics.pose().scale(2/3f, 2/3f, 2/3f);
             graphics.pose().translate(0, 0, +100.0D);
-            graphics.renderFakeItem(itemSub, (int)((x + this.chestIndex * (WIDTH-1) + 13) * 1.5d), (int)((y+12)*1.5d));
+            graphics.renderFakeItem(itemSub, (int)((x + tabIndexInRow * (WIDTH-1) + 13) * 1.5d), (int)((y+12)*1.5d));
             graphics.pose().popPose();
         }
 

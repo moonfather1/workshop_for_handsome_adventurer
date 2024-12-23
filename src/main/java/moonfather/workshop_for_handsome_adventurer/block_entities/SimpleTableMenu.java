@@ -46,7 +46,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 {
 	public static final int CUST_CONTAINER_SIZE = 4;
 	public static final int TAB_SMUGGLING_CONTAINER_SIZE = 32; // 16 tabs max
-	public static final int TAB_SMUGGLING_SOFT_LIMIT = 8; // that much fits above dialog
+	public static final int TAB_SMUGGLING_SOFT_LIMIT = 16; // that much fits above dialog
 	public static final int LEFT_PANEL_WIDTH = 176;
 	public static final int RESULT_SLOT = 0;
 	public static final int CRAFT_SLOT_START = 1;
