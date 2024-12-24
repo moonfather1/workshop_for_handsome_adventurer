@@ -72,6 +72,12 @@ public class BaseItemHandlerWrapper extends SimpleContainer implements IExcessSl
                     resto = this.internal.extractItem(slot, old.getCount() - itemStack.getCount(), false);
                 }
             }
+            else
+            {
+                // replacing. causes issue for SD, we'll se about others.
+                resto = this.internal.extractItem(slot, old.getCount(), false);
+                resto = this.internal.insertItem(slot, itemStack, false);
+            }
         }
     }
     @Override
