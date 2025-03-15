@@ -199,11 +199,12 @@ dependencies {
     compileOnly fg.deobf("curse.maven:cloth-config-348521:4633444")  //implementation
     
     implementation fg.deobf("maven.modrinth:emi:ShejnJfY")  //compileOnly
-    compileOnly fg.deobf("maven.modrinth:curios:opCpnbhi")
+    implementation fg.deobf("maven.modrinth:curios:opCpnbhi")
     //runtimeOnly fg.deobf("maven.modrinth:curios:opCpnbhi")
 
 
-    compileOnly fg.deobf("maven.modrinth:travelersbackpack:xocqrLoW")
+    //compileOnly fg.deobf("maven.modrinth:travelersbackpack:xocqrLoW") OLD
+    compileOnly fg.deobf("maven.modrinth:travelersbackpack:bvGgXL2g")
 
     implementation fg.deobf("curse.maven:tetra-289712:4857842")
     runtimeOnly fg.deobf("curse.maven:mutil-351914:4824501")

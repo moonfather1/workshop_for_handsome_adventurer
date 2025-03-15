@@ -8,6 +8,7 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -28,7 +29,9 @@ public class TravelersBackpack
         {
             this.capability = this.player.getCapability(TravelersBackpackCapability.TRAVELERS_BACKPACK_CAPABILITY);
         }
-        return this.capability.isPresent();
+        AtomicBoolean b = new AtomicBoolean(false);
+        this.capability.ifPresent(c -> { if (c.hasBackpack()) b.set(true); } );
+        return b.get();
     }
 
     public int slotCount()
@@ -38,7 +41,7 @@ public class TravelersBackpack
             this.capability = this.player.getCapability(TravelersBackpackCapability.TRAVELERS_BACKPACK_CAPABILITY);
         }
         AtomicInteger count = new AtomicInteger();
-        this.capability.ifPresent(c -> { count.set(c.getContainer().getHandler().getSlots()); } );
+        this.capability.ifPresent(c -> { count.set(c.getWrapper().getStorage().getSlots()); } );
         return count.get();
     }
 
@@ -49,7 +52,8 @@ public class TravelersBackpack
             this.capability = this.player.getCapability(TravelersBackpackCapability.TRAVELERS_BACKPACK_CAPABILITY);
         }
         AtomicReference<ItemStack> result = new AtomicReference<>(ItemStack.EMPTY);
-        this.capability.ifPresent(c -> { result.set(c.getWearable().copy()); } );
+        this.capability.ifPresent(c -> { result.set(c.getBackpack().copy()); } );
+        result.get().getOrCreateTag().remove("Inventory");
         return result.get();
     }
 
@@ -60,7 +64,7 @@ public class TravelersBackpack
             this.capability = this.player.getCapability(TravelersBackpackCapability.TRAVELERS_BACKPACK_CAPABILITY);
         }
         AtomicReference<ItemStack> result = new AtomicReference<>(ItemStack.EMPTY);
-        this.capability.ifPresent(c -> { result.set(c.getWearable()); } );
+        this.capability.ifPresent(c -> { result.set(c.getBackpack()); } );
         return result.get();
     }
 
@@ -71,7 +75,7 @@ public class TravelersBackpack
             this.capability = this.player.getCapability(TravelersBackpackCapability.TRAVELERS_BACKPACK_CAPABILITY);
         }
         AtomicReference<ItemStack> result = new AtomicReference<>(ItemStack.EMPTY);
-        this.capability.ifPresent(c -> { result.set(c.getContainer().getHandler().getStackInSlot(0)); } );
+        this.capability.ifPresent(c -> { result.set(c.getWrapper().getStorage().getStackInSlot(0)); } );
         return result.get();
     }
 
@@ -83,7 +87,7 @@ public class TravelersBackpack
         }
         if (this.capability.isPresent() && this.capability.resolve().isPresent())
         {
-            return this.capability.resolve().get().getContainer().getHandler();
+            return this.capability.resolve().get().getWrapper().getStorage();
         }
         return null;
     }

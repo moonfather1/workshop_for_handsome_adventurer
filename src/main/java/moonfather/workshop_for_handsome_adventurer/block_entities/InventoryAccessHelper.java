@@ -396,7 +396,7 @@ public class InventoryAccessHelper
         else if (record.Type.equals(RecordTypes.FLOATING))
         {
             // traveller's backpack. not sure why i support this.
-            if (ModList.get().isLoaded("travelersbackpack") && record.ModId.equals("travelersbackpack"))     // add other containers attached to player here
+            if (ModList.get().isLoaded("travelersbackpack") && record.ModId.equals("travelersbackpack"))
             {
                 TravelersBackpack backpack = TravelersBackpack.getInstance(player);
                 if (backpack.isPresent() && backpack.slotCount() <= 54 && ! backpack.getTabIcon().isEmpty())
@@ -420,6 +420,7 @@ public class InventoryAccessHelper
                     return true;
                 }
             }
+            // add other containers attached to player here
             return false;
         }
         else {
