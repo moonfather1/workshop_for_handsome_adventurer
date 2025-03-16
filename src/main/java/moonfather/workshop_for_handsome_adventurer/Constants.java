@@ -1,5 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -16,5 +17,6 @@ public class Constants
     {
         public static final TagKey<Item> NOT_ALLOWED_ON_TOOLRACK = TagKey.create(Registries.ITEM, new ResourceLocation(Constants.MODID, "dont_allow_onto_toolrack"));
         public static final TagKey<Item> ALLOWED_ON_POTION_SHELF = TagKey.create(Registries.ITEM, new ResourceLocation(Constants.MODID, "allowed_on_potion_shelf"));
+        public static final TagKey<Item> FORGE_BOOKS = TagKey.create(Registries.ITEM, new ResourceLocation("forge:books"));
     }
 } 
