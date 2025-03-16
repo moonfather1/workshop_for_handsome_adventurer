@@ -10,6 +10,7 @@ import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPri
 import moonfather.workshop_for_handsome_adventurer.blocks.SimpleTable;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.integration.PolymorphAccessorServer;
+import moonfather.workshop_for_handsome_adventurer.other.TableLockManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -149,6 +150,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			}
 		}
 		this.initialLoading = false;
+		this.access.execute((level, pos) -> TableLockManager.register(this.containerId, level, pos));
 	}
 
 

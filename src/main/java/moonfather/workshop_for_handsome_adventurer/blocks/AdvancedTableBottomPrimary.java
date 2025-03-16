@@ -3,10 +3,12 @@ package moonfather.workshop_for_handsome_adventurer.blocks;
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableMenu;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.other.TableLockManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -127,6 +129,11 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements En
 		if (level.isClientSide)
 		{
 			return InteractionResult.SUCCESS;
+		}
+		else if (TableLockManager.isLocked(level, pos))
+		{
+			player.displayClientMessage(Component.translatable("message.workshop_for_handsome_adventurer.workshop_table_in_use", TableLockManager.getPlayerName(level, pos).copy().withStyle(Style.EMPTY.withColor(0xffeeee11))), true);
+			return InteractionResult.CONSUME;
 		}
 		else
 		{

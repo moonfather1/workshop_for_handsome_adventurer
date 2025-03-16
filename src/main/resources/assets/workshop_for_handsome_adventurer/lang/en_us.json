@@ -148,6 +148,7 @@
 	"message.workshop_for_handsome_adventurer.extension_slotT": "Customization slot",
 	"message.workshop_for_handsome_adventurer.extension_slotS": "(shift for more)",
 	"message.workshop_for_handsome_adventurer.rename": "Rename container %s \nfor the cost of 1 XP level.",
+	"message.workshop_for_handsome_adventurer.workshop_table_in_use": "Crafting table is in use by %s. You need to wait.",
 
 	"itemGroup.workshop_for_handsome_adventurer": "Workshop for handsome adventurer",
 	"config.jade.plugin_workshop_for_handsome_adventurer.jade_plugin1" : "Jade config for WfHA",
@@ -155,5 +156,6 @@
 	"config.jade.plugin_workshop_for_handsome_adventurer.jade_plugin3" : "Jade config for WfHA",
 	"alias.emi.workbench": "Workbench",
 	"tag.item.forge.workbench": "Workbenches",
-	"tag.item.c.player_workstations.crafting_tables": "Workbenches"
+	"tag.item.c.player_workstations.crafting_tables": "Workbenches",
+	"tag.item.workshop_for_handsome_adventurer.metal_nuggets": "Metal nuggets"
 }

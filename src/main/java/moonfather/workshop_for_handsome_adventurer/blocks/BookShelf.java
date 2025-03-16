@@ -1,5 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.blocks;
 
+import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.BookShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
@@ -26,6 +27,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class BookShelf extends ToolRack
@@ -185,7 +187,7 @@ public abstract class BookShelf extends ToolRack
     @Override
     protected boolean canDepositItem(ItemStack mainHandItem)
     {
-        return mainHandItem.is(ItemTags.BOOKSHELF_BOOKS);
+        return mainHandItem.is(ItemTags.BOOKSHELF_BOOKS) || mainHandItem.is(Constants.Tags.COMMON_BOOKS);
     }
 
     //////////////// block entity /////////////

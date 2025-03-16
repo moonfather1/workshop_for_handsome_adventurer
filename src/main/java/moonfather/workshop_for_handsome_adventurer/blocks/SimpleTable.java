@@ -4,6 +4,7 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableBlo
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.integration.TetraHammerSupport;
+import moonfather.workshop_for_handsome_adventurer.other.TableLockManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -120,6 +121,11 @@ public class SimpleTable extends Block implements EntityBlock
         else if (level.isClientSide)
         {
             return InteractionResult.SUCCESS;
+        }
+        else if (TableLockManager.isLocked(level, pos))
+        {
+            player.displayClientMessage(Component.translatable("message.workshop_for_handsome_adventurer.workshop_table_in_use", TableLockManager.getPlayerName(level, pos).copy().withStyle(Style.EMPTY.withColor(0xffeeee11))), true);
+            return InteractionResult.CONSUME;
         }
         else if (ModList.get().isLoaded("tetra_tables") && !player.isCrouching() && TetraHammerSupport.isHammer(player.getMainHandItem()))
         {
