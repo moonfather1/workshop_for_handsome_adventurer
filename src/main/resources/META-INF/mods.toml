@@ -77,5 +77,12 @@ description='''${mod_description}'''
     ordering="NONE"
     side="BOTH"
 
+[[dependencies.workshop_for_handsome_adventurer]]
+    modId="backpacked"
+    mandatory=false
+    versionRange="[3.0.0-beta.9, 3.1)"
+    ordering="NONE"
+    side="BOTH"
+
 [modproperties.workshop_for_handsome_adventurer]
     catalogueImageIcon="textures/gui/catalogue.png"

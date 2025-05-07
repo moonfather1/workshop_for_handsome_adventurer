@@ -16,12 +16,12 @@ public class BackpackedBackpack
 
     public static boolean isPresent(Player player)
     {
-        return player instanceof BackpackedInventoryAccess access && access.getBackpackedInventory() != null;
+        return player instanceof BackpackedInventoryAccess access && access.backpacked$GetBackpackInventory() != null;
     }
 
     public static int slotCount(Player player)
     {
-        return player instanceof BackpackedInventoryAccess access ? access.getBackpackedInventory().getContainerSize() : 0;
+        return player instanceof BackpackedInventoryAccess access ? access.backpacked$GetBackpackInventory().getContainerSize() : 0;
     }
 
     public static ItemStack getTabIcon(Player player)
@@ -33,7 +33,7 @@ public class BackpackedBackpack
 
     public static ItemStack getContainerItem(Player player)
     {
-        return player instanceof BackpackedInventoryAccess access ? access.getBackpackedInventory().getBackpackStack() : Items.DEAD_BUSH.getDefaultInstance();
+        return player instanceof BackpackedInventoryAccess access ? access.backpacked$GetBackpackInventory().getBackpackStack() : Items.DEAD_BUSH.getDefaultInstance();
     }
 
     public static ItemStack getFirst(Player player)
@@ -43,6 +43,6 @@ public class BackpackedBackpack
 
     public static Container getContainer(Player player)
     {
-        return ((BackpackedInventoryAccess) player).getBackpackedInventory();
+        return ((BackpackedInventoryAccess) player).backpacked$GetBackpackInventory();
     }
 }
