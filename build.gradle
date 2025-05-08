@@ -144,19 +144,20 @@ dependencies {
 
     compileOnly "curse.maven:wthit-forge-455982:5721811"
     //runtimeOnly "curse.maven:badpackets-615134:5430629"
-    implementation "curse.maven:jade-324717:5846105"
-    compileOnly "curse.maven:the-one-probe-245211:5431197"
+    compileOnly "curse.maven:jade-324717:5846105"
+    //implementation "curse.maven:the-one-probe-245211:5431197"
+    implementation "curse.maven:the-one-probe-245211:6106998"
 
     compileOnly "curse.maven:jei-238222:5466551"
-    compileOnly "curse.maven:emi-580555:5436759"
-	implementation "curse.maven:roughly-enough-items-310111:5846953"
-	runtimeOnly "curse.maven:architectury-api-419699:5786327"
-	implementation "curse.maven:cloth-config-348521:5729127"
+    implementation "curse.maven:emi-580555:5436759"
+    compileOnly "curse.maven:roughly-enough-items-310111:5846953"
+	//runtimeOnly "curse.maven:architectury-api-419699:5786327"
+    compileOnly "curse.maven:cloth-config-348521:5729127"
 
-    compileOnly "curse.maven:crafting-tweaks-233071:5426925"
-	//runtimeOnly "curse.maven:balm-531761:5442096"
-	
-    compileOnly "curse.maven:polymorph-388800:5480541"
+    compileOnly "curse.maven:crafting-tweaks-233071:6023041"
+	//runtimeOnly "curse.maven:balm-531761:6508667"
+
+    compileOnly "curse.maven:polymorph-388800:6451024"
 	
     compileOnly "curse.maven:dynamic-asset-generator-577096:5471770"
     //implementation "curse.maven:dynamic-asset-generator-577096:5471770"
@@ -196,8 +197,6 @@ dependencies {
 	//runtimeOnly "curse.maven:terrablender-neoforge-940057:5864140"
 
     runtimeOnly "curse.maven:travelers-backpack-321117:6200587"
-    //runtimeOnly "curse.maven:not-interested-980755:5453428" //1.0.0
-	runtimeOnly "curse.maven:not-interested-980755:6507767" //1.0.1
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
