@@ -1,6 +1,5 @@
 package moonfather.workshop_for_handsome_adventurer.initialization;
 
-import moonfather.workshop_for_handsome_adventurer.dynamic_resources.MissingMappingsHandler;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 

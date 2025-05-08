@@ -11,16 +11,14 @@ import moonfather.workshop_for_handsome_adventurer.initialization.CommonSetup;
 import moonfather.workshop_for_handsome_adventurer.initialization.DynamicContentRegistration;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.integration.CarryOnBlacklisting;
+import moonfather.workshop_for_handsome_adventurer.integration.TOPProxyRegistration;
 import moonfather.workshop_for_handsome_adventurer.integration.TOPRegistration;
 import moonfather.workshop_for_handsome_adventurer.other.CreativeTab;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
 
@@ -42,6 +40,7 @@ public class ModWorkshop
         Registration.init(modBus);
         modBus.addListener(CommonSetup::init);
         modBus.addListener(CarryOnBlacklisting::enqueueIMC);
+        modBus.addListener(TOPProxyRegistration::enqueueIMC);
         modBus.addListener(CreativeTab::onCreativeTabPopulation);
         modBus.addListener(FinderEvents::addServerPack);
         modBus.addListener(MessagingInitialization::register);
