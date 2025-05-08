@@ -9,6 +9,7 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.Pack
 import moonfather.workshop_for_handsome_adventurer.block_entities.screen_components.SimpleButton;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screen_components.SlightlyNicerEditBox;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.integration.PolymorphAccessorClient;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -20,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.fml.ModList;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -294,7 +296,10 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             this.tabChanged(this.tabButtons.get(0), true); // just to update visuals
         }
         this.hideIfScreenTooNarrow();
+        this.updatePolymorphButton();
     }
+
+
 
     public void tick()
     {
@@ -399,6 +404,17 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             tabButton.visible = true;
         }
     }
+
+    private void updatePolymorphButton()
+    {
+        // client-side handler for polymorph: we move the button, hopefully.
+        if (ModList.get().isLoaded("polymorph"))
+        {
+            PolymorphAccessorClient.updatePosition();
+        }
+    }
+
+
 
     public void slotClicked(@Nullable Slot slot)
     {

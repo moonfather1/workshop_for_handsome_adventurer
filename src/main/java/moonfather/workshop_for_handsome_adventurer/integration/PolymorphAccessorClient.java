@@ -26,6 +26,21 @@ public class PolymorphAccessorClient
         );
     }
 
+    public static void updatePosition()
+    {
+        RecipesWidget.get().ifPresent(
+                (widget) ->
+                {
+                    if (widget instanceof PolymorphAccessorClient.OurPlayerRecipesWidget ourWidget)
+                    {
+                        ourWidget.updatePosition();
+                    }
+                }
+        );
+    }
+
+
+
     public static void register()
     {
         PolymorphWidgets.getInstance().registerWidget(
@@ -61,6 +76,12 @@ public class PolymorphAccessorClient
         public Slot getOutputSlot()
         {
             return this.output;
+        }
+
+        public void updatePosition()
+        {
+            this.resetWidgetOffsets();
+            this.openButton.setPosition(this.getXPos(), this.getYPos());
         }
 
         ////////
