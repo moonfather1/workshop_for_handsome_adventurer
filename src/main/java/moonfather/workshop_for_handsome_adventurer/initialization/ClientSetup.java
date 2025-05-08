@@ -1,18 +1,21 @@
 package moonfather.workshop_for_handsome_adventurer.initialization;
 
+import moonfather.workshop_for_handsome_adventurer.ClientConfig;
+import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screens.DualTableCraftingScreen;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screens.SimpleTableCraftingScreen;
 import moonfather.workshop_for_handsome_adventurer.block_entities.renderers.*;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.FinderEvents;
 import moonfather.workshop_for_handsome_adventurer.integration.PolymorphAccessorClient;
-import net.minecraft.client.gui.screens.MenuScreens;
+import moonfather.workshop_for_handsome_adventurer.other.InWorldTooltip;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 
@@ -51,8 +54,22 @@ public class ClientSetup
 		event.registerBlockEntityRenderer(Registration.SIMPLE_TABLE_BE.get(), SimpleTableTESR::new);
 	}
 
+
 	// two slot textures are in minecraft's block atlas. i wanted to add my own, but it's way too much trouble.
 
+
+	@SubscribeEvent
+	public static void RegisterGuiLayers(RegisterGuiLayersEvent event)
+	{
+		if (! ClientConfig.OwmWorldTooltipForceDisabled.get())
+		{
+			if (ClientConfig.OwmWorldTooltipForceEnabled.get()
+				|| (! ModList.get().isLoaded("jade") && ! ModList.get().isLoaded("theoneprobe") && ! ModList.get().isLoaded("wthit")))
+			{
+				event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "world_tooltip"), InWorldTooltip.getInstance());
+			}
+		}
+	}
 
 
 	@SubscribeEvent

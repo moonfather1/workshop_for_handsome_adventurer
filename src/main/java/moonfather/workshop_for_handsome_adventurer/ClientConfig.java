@@ -12,6 +12,8 @@ public class ClientConfig
     public static final ModConfigSpec.BooleanValue RenderItemsOnTable;
     public static final ModConfigSpec.BooleanValue DetailedWailaInfoForEnchantedTools;
     public static final ModConfigSpec.BooleanValue DetailedWailaInfoForEnchantedBooks;
+    public static final ModConfigSpec.BooleanValue OwmWorldTooltipForceEnabled;
+    public static final ModConfigSpec.BooleanValue OwmWorldTooltipForceDisabled;
     static final ModConfigSpec SPEC;
 
 
@@ -33,6 +35,14 @@ public class ClientConfig
             DetailedWailaInfoForEnchantedTools = BUILDER
                     .comment("If this option is turned on, you'll see a list of enchantments for your tools.")
                     .define("Detailed info for enchanted tools in Jade/TOP/WTHIT", defaultDetailedWailaInfoForEnchantedTools);
+        BUILDER.pop();
+        BUILDER.push("Our in-world tooltips");
+            OwmWorldTooltipForceEnabled = BUILDER
+                    .comment("We have a system that tells you what's under crosshair in tool rack / potion shelf / book shelf. It's disabled by default if mod pack has Jade/TOP/WTHIT, and it's enabled if none of the three are there. If you enable this, the system will be enabled even if you have Jade/TOP/WTHIT. ")
+                    .define("Our world tooltip - force enabled", false);
+            OwmWorldTooltipForceDisabled = BUILDER
+                    .comment("We have a system that tells you what's under crosshair in tool rack / potion shelf / book shelf. It's disabled by default if mod pack has Jade/TOP/WTHIT, and it's enabled if none of the three are there. If you enable this, the system will be disabled even if you don't have Jade/TOP/WTHIT. ")
+                    .define("Our world tooltip - force disabled", false);
         BUILDER.pop();
         SPEC = BUILDER.build();
     }
