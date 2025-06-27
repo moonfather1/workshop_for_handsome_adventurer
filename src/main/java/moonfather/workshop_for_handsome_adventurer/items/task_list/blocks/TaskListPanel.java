@@ -11,7 +11,6 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -181,7 +180,7 @@ public class TaskListPanel extends Block implements EntityBlock
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult)
     {
-        if (! ClientConfig.itemsAreDrawnOnWall)
+        if (! ClientConfig.taskListItemsAreDrawnOnWall)
         {
             // create mode - just open the gui
             if (level.isClientSide)

@@ -9,7 +9,6 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockE
 import moonfather.workshop_for_handsome_adventurer.blocks.ToolRack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.common.ModConfigSpec;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
@@ -51,9 +50,9 @@ public class JadeToolTooltipProvider extends JadeBaseTooltipProvider implements 
     }
 
     @Override
-    protected ModConfigSpec.ConfigValue<Boolean> getOption()
+    protected boolean showDetails()
     {
-        return ClientConfig.DetailedWailaInfoForEnchantedTools;
+        return ClientConfig.detailedWailaInfoForEnchantedTools;
     }
 
 

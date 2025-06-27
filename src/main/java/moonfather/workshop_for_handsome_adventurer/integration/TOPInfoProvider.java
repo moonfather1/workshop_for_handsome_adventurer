@@ -34,12 +34,6 @@ public class TOPInfoProvider extends WailaBaseProvider implements IProbeInfoProv
     @Override
     public void addProbeInfo(ProbeMode probeMode, IProbeInfo probeInfo, Player player, Level level, BlockState blockState, IProbeHitData probeHitData)
     {
-        if (this.optionsCacheTime <= 0)
-        {
-            this.optionsTools = ClientConfig.DetailedWailaInfoForEnchantedTools.get();
-            this.optionBooks = ClientConfig.DetailedWailaInfoForEnchantedBooks.get();
-            this.optionsCacheTime = 55;
-        }
         if (blockState.getBlock() instanceof PotionShelf)
         {
             int slot = PotionShelf.getPotionShelfSlot(new BlockHitResult(probeHitData.getHitVec(), blockState.getValue(PotionShelf.FACING).getOpposite(), probeHitData.getPos(), true));
@@ -57,7 +51,7 @@ public class TOPInfoProvider extends WailaBaseProvider implements IProbeInfoProv
                 BookShelfBlockEntity shelf = (BookShelfBlockEntity) level.getBlockEntity(probeHitData.getPos());
                 ItemStack book = shelf.GetItem(slot);
                 probeInfo.horizontal().item(book).vertical().padding(2, 4).itemLabel(book);
-                if (this.optionBooks)
+                if (ClientConfig.detailedWailaInfoForEnchantedBooks)
                 {
                     List<Component> enchantments = this.getEnchantmentParts(book);
                     if (enchantments != null)
@@ -88,7 +82,7 @@ public class TOPInfoProvider extends WailaBaseProvider implements IProbeInfoProv
             if (slot >= 0 && ! tool.isEmpty())
             {
                 probeInfo.horizontal().item(tool).vertical().padding(2, 4).itemLabel(tool);
-                if (this.optionsTools)
+                if (ClientConfig.detailedWailaInfoForEnchantedTools)
                 {
                     List<Component> enchantments = this.getEnchantmentParts(tool);
                     if (enchantments != null)
@@ -102,7 +96,4 @@ public class TOPInfoProvider extends WailaBaseProvider implements IProbeInfoProv
             }
         }
     }
-
-    private int optionsCacheTime = 0;
-    private boolean optionBooks = false, optionsTools = false;
 }

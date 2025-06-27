@@ -33,7 +33,7 @@ public class DualTableTESR implements BlockEntityRenderer<DualTableBlockEntity>
     {
         if (blockEntity.hasLevel() && blockEntity.getLevel().getLevelData().getGameTime() % 40 == 7)
         {
-            this.shouldRender = ClientConfig.RenderItemsOnTable.get();
+            this.shouldRender = ClientConfig.renderItemsOnTable;
         }
         return this.shouldRender;
     }

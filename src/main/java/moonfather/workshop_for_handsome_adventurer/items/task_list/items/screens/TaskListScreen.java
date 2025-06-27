@@ -140,7 +140,7 @@ public class TaskListScreen extends Screen
     }
     private void greyOutDoneAndAbandoned(boolean oneItemOnly, int index)
     {
-        if (ClientConfig.coloringForFinishedItems)
+        if (ClientConfig.taskListColoringForFinishedItems)
         {
             int startIndex, loopEnd;
             if (! oneItemOnly)

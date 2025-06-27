@@ -5,7 +5,6 @@ import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.BookShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.blocks.BookShelf;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.common.ModConfigSpec;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
@@ -32,9 +31,9 @@ public class JadeBookTooltipProvider extends JadeBaseTooltipProvider implements 
     }
 
     @Override
-    protected ModConfigSpec.ConfigValue<Boolean> getOption()
+    protected boolean showDetails()
     {
-        return ClientConfig.DetailedWailaInfoForEnchantedBooks;
+        return ClientConfig.detailedWailaInfoForEnchantedBooks;
     }
 
 
