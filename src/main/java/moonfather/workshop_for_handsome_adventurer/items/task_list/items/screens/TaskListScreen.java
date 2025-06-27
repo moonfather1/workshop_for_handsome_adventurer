@@ -325,17 +325,23 @@ public class TaskListScreen extends Screen
             }
             if (offset != 0)
             {
-                TaskListMessaging.TaskPageDTO finishedPage = this.makeDTO();
-                TaskListMessaging.sendPageToServer(finishedPage, this.makeExtra());
-                this.pagesFromItem.set(this.page-1, finishedPage);
-                this.footer = null;
-                this.page += offset;
-                this.initialContent = this.pagesFromItem.get(this.page-1);
-                this.init();
-                this.tooltipTicks = -1;
+                this.changePage(offset);
             }
         }
         return true;
+    }
+
+    private void changePage(int offset)
+    {
+        assert offset * offset == 1;
+        TaskListMessaging.TaskPageDTO finishedPage = this.makeDTO();
+        TaskListMessaging.sendPageToServer(finishedPage, this.makeExtra());
+        this.pagesFromItem.set(this.page-1, finishedPage);
+        this.footer = null;
+        this.page += offset;
+        this.initialContent = this.pagesFromItem.get(this.page-1);
+        this.init();
+        this.tooltipTicks = -1;
     }
 
     private void checkByKeyboard(int keyCode)
@@ -465,6 +471,7 @@ public class TaskListScreen extends Screen
 
     private static final int K_ESC = 256, K_DN = 264, K_UP = 265, K_ENT = 257, K_ENT_NP = 335;
     private static final int K_PLU = 334, K_MIN = 333, K_STR = 332;
+    private static final int K_PG_DN = 267, K_PG_UP = 266;
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers)
     {
@@ -525,6 +532,18 @@ public class TaskListScreen extends Screen
         if ((keyCode == K_PLU || keyCode == K_MIN || keyCode == K_STR) && ((modifiers & 1) == 0))
         {
             this.checkByKeyboard(keyCode);
+            return true;
+        }
+        if (keyCode == K_PG_DN && this.page < this.pageCount)
+        {
+            // paging
+            this.changePage(1);
+            return true;
+        }
+        if (keyCode == K_PG_UP && this.page > 1)
+        {
+            // paging
+            this.changePage(-1);
             return true;
         }
         if (super.keyPressed(keyCode, scanCode, modifiers))
