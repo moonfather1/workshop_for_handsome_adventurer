@@ -5,6 +5,7 @@
     "#workshop_for_handsome_adventurer:allowed_on_potion_shelf",
 
     { "id": "quark:seed_pouch", "required": false },
+    { "id": "botania:flower_bag", "required": false },
     { "id": "minecraft:bundle", "required": false }
   ]
 }

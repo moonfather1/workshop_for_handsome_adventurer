@@ -31,6 +31,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 	private ItemRenderer itemRenderer = null;
 	private final BlockEntityRendererProvider.Context context;
 	private static final TagKey<Item> TAG_DONT_ROTATE_ON_TOOLRACK = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "dont_rotate_on_toolrack"));
+	private static final TagKey<Item> TAG_ROTATE_180_ON_TOOLRACK = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "rotate_180_on_toolrack"));
 	private static final TagKey<Item> TAG_LARGER_ON_TOOLRACK_150 = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "larger_on_toolrack_150_percent"));
 	private static final TagKey<Item> TAG_LARGER_ON_TOOLRACK_125 = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "larger_on_toolrack_125_percent"));
 
@@ -129,7 +130,11 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 				matrixStack.scale(1.25f, 1.10f, 1.25f);
 			} // separate from main thing below.
 
-			if (itemStack.getItem().canPerformAction(itemStack, ItemAbilities.SHIELD_BLOCK))
+			if (itemStack.is(TAG_DONT_ROTATE_ON_TOOLRACK))
+			{
+				matrixStack.translate(0, 0.1, 0);
+			}
+			else if (itemStack.getItem().canPerformAction(itemStack, ItemAbilities.SHIELD_BLOCK))
 			{
 				matrixStack.translate(-0.00, -0.10, 0.14);
 				matrixStack.scale(1.75f, 1.60f, 1.75f);
@@ -140,21 +145,30 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			{
 				matrixStack.translate(0, -0.2, 0);
 				matrixStack.mulPose(ZPlus135);  // 1.19.4      Vector3f.ZP.rotationDegrees(135.0F)
+				if (itemStack.is(TAG_ROTATE_180_ON_TOOLRACK))  // tinker's con swords
+				{
+					matrixStack.mulPose(ZPlus180);
+				}
 			}
 			else if (itemStack.getItem().getClass().getSimpleName().contains("rossbow") || itemStack.getItem() instanceof CrossbowItem)  //ModularCrossbowItem
 			{
 				matrixStack.translate(0, -0.2, 0);
 				matrixStack.mulPose(ZPlus225);  // 1.19.4      Vector3f.ZP.rotationDegrees(225.0F)
+				if (itemStack.is(TAG_ROTATE_180_ON_TOOLRACK))  // tinker's con swords
+				{
+					matrixStack.mulPose(ZPlus180);
+				}
+			}
+			else if (itemStack.is(TAG_ROTATE_180_ON_TOOLRACK))
+			{
+				matrixStack.translate(0, 0.1, 0);
+				matrixStack.mulPose(ZPlus180);
 			}
 			else if (model.isGui3d())
 			{
 				matrixStack.mulPose(ZMinus45);  // 1.19.4      Vector3f.ZP.rotationDegrees(-45.0F)
 			}
 			else if (itemStack.get(DataComponents.POTION_CONTENTS) != null || itemStack.is(Items.GLASS_BOTTLE))
-			{
-				matrixStack.translate(0, 0.1, 0);
-			}
-			else if (itemStack.is(TAG_DONT_ROTATE_ON_TOOLRACK))
 			{
 				matrixStack.translate(0, 0.1, 0);
 			}
@@ -169,6 +183,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 	private static final Quaternionf ZMinus45 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, -45);
 	private static final Quaternionf ZPlus225 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 225);
 	private static final Quaternionf ZPlus135 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 135);
+	private static final Quaternionf ZPlus180 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 180);
 	private static final Quaternionf XMinus90 = new Quaternionf().fromAxisAngleDeg(1, 0, 0, -90);
 	private static final Quaternionf YPlus180 = new Quaternionf().fromAxisAngleDeg(0, 1, 0, 180);
 

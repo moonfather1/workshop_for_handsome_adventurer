@@ -3,6 +3,8 @@
   "values": [
     "minecraft:elytra",
     "#c:music_discs",
-    "minecraft:saddle"
+    "minecraft:saddle",
+
+    { "id": "tconstruct:cleaver", "required": false }
   ]
 }
