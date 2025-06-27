@@ -157,4 +157,10 @@
 	"tag.item.forge.workbench": "Радне станице",
 	"tag.item.c.player_workstations.crafting_tables": "Радне станице",
 	"tag.item.workshop_for_handsome_adventurer.metal_nuggets": "Metal nuggets"
+	
+	"item.workshop_for_handsome_adventurer.task_list": "Листа задатака",
+	"block.workshop_for_handsome_adventurer.task_list_panel": "Листа задатака",
+	"message.workshop_for_handsome_adventurer.task_list_ex": "Додајте %s на радном столу да бисте додали још страница.",
+	"message.workshop_for_handsome_adventurer.task_list_cream": "Додајте %s на радном столу да бисте га учинили отпорним на ватру.",
+	"message.workshop_for_handsome_adventurer.keyboard": "Контроле на тастатури:<br>Esc за затварање.<br>Enter/shift+enter за померање уноса.<br>Такође тастери са стрелицама.<br>Shift+горе или доле за приступ посебним уносима.<br>+,-,* на нумеричкој тастатури за подешавање ознака за потврду."
 }

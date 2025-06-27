@@ -157,5 +157,11 @@
 	"alias.emi.workbench": "Workbench",
 	"tag.item.forge.workbench": "Workbenches",
 	"tag.item.c.player_workstations.crafting_tables": "Workbenches",
-	"tag.item.workshop_for_handsome_adventurer.metal_nuggets": "Metal nuggets"
+	"tag.item.workshop_for_handsome_adventurer.metal_nuggets": "Metal nuggets",
+	
+	"item.workshop_for_handsome_adventurer.task_list": "Task List",
+	"block.workshop_for_handsome_adventurer.task_list_panel": "Task List",
+	"message.workshop_for_handsome_adventurer.task_list_ex": "Craft with some %s to add more pages.",
+	"message.workshop_for_handsome_adventurer.task_list_cream": "Craft with some %s to make it fire resistant.",
+	"message.workshop_for_handsome_adventurer.keyboard": "Keyboard controls:<br>Esc to close.<br>Enter/shift+enter to move the input.<br>Also arrow keys.<br>Shift+up or down to reach special inputs.<br>+,-,* on numpad to set checkmarks."
 }

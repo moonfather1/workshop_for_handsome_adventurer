@@ -13,6 +13,9 @@ import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.integration.CarryOnBlacklisting;
 import moonfather.workshop_for_handsome_adventurer.integration.TOPProxyRegistration;
 import moonfather.workshop_for_handsome_adventurer.integration.TOPRegistration;
+import moonfather.workshop_for_handsome_adventurer.items.task_list.RegistrationForTaskList;
+import moonfather.workshop_for_handsome_adventurer.items.task_list.items.MissingMappingsHandler2;
+import moonfather.workshop_for_handsome_adventurer.items.task_list.items.moving_data.TaskListMessagingInitialization;
 import moonfather.workshop_for_handsome_adventurer.other.CreativeTab;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -47,5 +50,9 @@ public class ModWorkshop
         NeoForge.EVENT_BUS.addListener(PotionShelf::onRightClickBlock);
         modBus.addListener(EventPriority.LOWEST, DynamicContentRegistration::handleRegistryEvent);
         MissingMappingsHandler.read();
+		
+        RegistrationForTaskList.init(modBus);
+        modBus.addListener(TaskListMessagingInitialization::register);
+        modBus.addListener(EventPriority.LOWEST, MissingMappingsHandler2::handleRegistryEvent);
     }
 }

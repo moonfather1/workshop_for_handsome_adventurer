@@ -1,0 +1,13 @@
+{
+  "variants":
+  {
+    "empty=true,facing=north": { "model": "workshop_for_handsome_adventurer:block/task_list_panel" },
+    "empty=true,facing=east": { "model": "workshop_for_handsome_adventurer:block/task_list_panel", "y":  90 },
+    "empty=true,facing=south": { "model": "workshop_for_handsome_adventurer:block/task_list_panel", "y": 180 },
+    "empty=true,facing=west": { "model": "workshop_for_handsome_adventurer:block/task_list_panel", "y": 270 },
+    "empty=false,facing=north": { "model": "workshop_for_handsome_adventurer:block/task_list_panel_static" },
+    "empty=false,facing=east": { "model": "workshop_for_handsome_adventurer:block/task_list_panel_static", "y":  90 },
+    "empty=false,facing=south": { "model": "workshop_for_handsome_adventurer:block/task_list_panel_static", "y": 180 },
+    "empty=false,facing=west": { "model": "workshop_for_handsome_adventurer:block/task_list_panel_static", "y": 270 }
+  }
+}

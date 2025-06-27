@@ -23,7 +23,7 @@ public class PayloadHandler
         }
         catch (Exception e)
         {
-            context.disconnect(Component.literal("Networking error in NI mod, msg1:  \n" + e.getMessage()));
+            context.disconnect(Component.literal("Networking error in WFHA mod, msg1:  \n" + e.getMessage()));
         }
     }
 
@@ -44,7 +44,7 @@ public class PayloadHandler
         }
         catch (Exception e)
         {
-            context.disconnect(Component.literal("Networking error in NI mod, msg2:  \n" + e.getMessage()));
+            context.disconnect(Component.literal("Networking error in WFHA mod, msg2:  \n" + e.getMessage()));
         }
     }
 
@@ -60,7 +60,7 @@ public class PayloadHandler
         }
         catch (Exception e)
         {
-            context.disconnect(Component.literal("Networking error in NI mod, msg3:  \n" + e.getMessage()));
+            context.disconnect(Component.literal("Networking error in WFHA mod, msg3:  \n" + e.getMessage()));
         }
     }
 
@@ -76,7 +76,7 @@ public class PayloadHandler
         }
         catch (Exception e)
         {
-            context.disconnect(Component.literal("Networking error in NI mod, msg4:  \n" + e.getMessage()));
+            context.disconnect(Component.literal("Networking error in WFHA mod, msg4:  \n" + e.getMessage()));
         }
     }
 
@@ -92,7 +92,7 @@ public class PayloadHandler
         }
         catch (Exception e)
         {
-            context.disconnect(Component.literal("Networking error in NI mod, msg4:  \n" + e.getMessage()));
+            context.disconnect(Component.literal("Networking error in WFHA mod, msg5:  \n" + e.getMessage()));
         }
     }
 }
