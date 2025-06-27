@@ -18,7 +18,7 @@ import java.util.*;
 
 public class TaskListScreen extends Screen
 {
-    public TaskListScreen(List<TaskListMessaging.TaskPageDTO> pagesFromItem, int pageCount, TaskListMessaging.TaskListExtraDTO extraInfo)
+    public TaskListScreen(List<TaskListMessaging.TaskPageDTO> pagesFromItem, int pageCount, TaskListMessaging.TaskListExtraDTO extraInfo, boolean isFireImmune)
     {
         super(Component.literal("task list"));
         this.extraOriginal = extraInfo;
@@ -27,6 +27,7 @@ public class TaskListScreen extends Screen
         this.initialContent = pagesFromItem.get(extraInfo.lastPage()-1);
         this.pagesFromItem = pagesFromItem;
         this.itemName = extraInfo.itemName();
+        this.isFireImmune = isFireImmune;
     }
 
     private static final ResourceLocation BG_LOCATION = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/gui_task_list_bg.png");
@@ -38,6 +39,7 @@ public class TaskListScreen extends Screen
     private String footer = null;
     private int topMarginMain = 24;
     private TaskListMessaging.TaskPageDTO initialContent;
+    private final boolean isFireImmune;
     private final int pageCount;
     private final TaskListMessaging.TaskListExtraDTO extraOriginal;
     private final String itemName;
@@ -192,25 +194,32 @@ public class TaskListScreen extends Screen
         // if right button, say craft with paper
         boolean hover = mouseX >= this.arrowNext1.getX() && mouseX <= this.arrowNext1.getX() + this.arrowNext1.getWidth()
                 && mouseY >= this.arrowNext1.getY() && mouseY <= this.arrowNext1.getY() + this.arrowNext1.getHeight();
-        if (hover && this.page == this.pageCount && this.pageCount < TaskListComponent.MAX_PAGE_COUNT)
+        if (! hover)
         {
-            //guiGraphics.renderTooltip(Minecraft.getInstance().font, PAPER_TOOLTIP, mouseX, mouseY);
+            this.tooltipTicks = 5 * 20 * 4;
+            this.currentTooltip = null;
+            return;
+        }
+        if (this.tooltipTicks < 0)
+        {
+            return;
+        }
+        this.tooltipTicks -= 1;
+
+        if (this.currentTooltip == null)
+        {
             if (DUAL_TOOLTIP.size() == 0)
             {
                 DUAL_TOOLTIP.add(PAPER_TOOLTIP);
                 DUAL_TOOLTIP.add(Component.literal(" "));
                 DUAL_TOOLTIP.add(CREAM_TOOLTIP);
             }
-            guiGraphics.renderTooltip(Minecraft.getInstance().font, DUAL_TOOLTIP, Optional.empty(), mouseX, mouseY);
-        }
-        if (hover && this.page == this.pageCount && this.pageCount == TaskListComponent.MAX_PAGE_COUNT)
-        {
             if (KEYBOARD_TOOLTIP.size() == 0)
             {
                 boolean firstRow = true;
-                for (String s: KWYBOARD_TOOLTIP_RAW.getString().split("<br>"))
+                for (String s : KWYBOARD_TOOLTIP_RAW.getString().split("<br>"))
                 {
-                    if (! firstRow)
+                    if (!firstRow)
                     {
                         KEYBOARD_TOOLTIP.add(Component.literal(s));
                     }
@@ -221,8 +230,25 @@ public class TaskListScreen extends Screen
                     }
                 }
             }
-            guiGraphics.renderTooltip(Minecraft.getInstance().font, KEYBOARD_TOOLTIP, Optional.empty(), mouseX, mouseY);
+            int random = this.randomProvider.nextInt(5);
+            if (this.page == this.pageCount && this.pageCount < TaskListComponent.MAX_PAGE_COUNT)
+            {
+                // guiGraphics.renderTooltip(Minecraft.getInstance().font, PAPER_TOOLTIP, mouseX, mouseY);
+                if (random == 0 && ! this.isFireImmune) this.currentTooltip = DUAL_TOOLTIP;
+                else if (random == 1) this.currentTooltip = KEYBOARD_TOOLTIP;
+                else this.currentTooltip = List.of(PAPER_TOOLTIP);
+            }
+            if (this.page == this.pageCount && this.pageCount == TaskListComponent.MAX_PAGE_COUNT)
+            {
+                if (random < 2 && ! this.isFireImmune) this.currentTooltip = List.of(CREAM_TOOLTIP);
+                else this.currentTooltip = KEYBOARD_TOOLTIP;
+            }
         }
+        if (this.currentTooltip == null)
+        {
+            return;
+        }
+        guiGraphics.renderTooltip(Minecraft.getInstance().font, this.currentTooltip, Optional.empty(), mouseX, mouseY);
     }
     private static final Component PAPER = Component.translatable(Items.PAPER.getDescriptionId()).withColor(0xffddaa);
     private static final Component PAPER_TOOLTIP = Component.translatable("message.workshop_for_handsome_adventurer.task_list_ex", PAPER);
@@ -232,7 +258,9 @@ public class TaskListScreen extends Screen
     private static final Component KWYBOARD_TOOLTIP_RAW = Component.translatable("message.workshop_for_handsome_adventurer.keyboard");
     private static final List<Component> KEYBOARD_TOOLTIP = new ArrayList<>(6);
 
-
+    private int tooltipTicks = -1;
+    private List<Component> currentTooltip = null;
+    private Random randomProvider = new Random();
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
@@ -304,6 +332,7 @@ public class TaskListScreen extends Screen
                 this.page += offset;
                 this.initialContent = this.pagesFromItem.get(this.page-1);
                 this.init();
+                this.tooltipTicks = -1;
             }
         }
         return true;
@@ -447,6 +476,7 @@ public class TaskListScreen extends Screen
         if ((keyCode == K_DN || keyCode == K_UP)  && (modifiers & 1) == 1)
         {
             // special focus
+            if (this.header.equals(this.getFocused())) { return true; }
             this.setFocused(this.header);
             return true;
         }

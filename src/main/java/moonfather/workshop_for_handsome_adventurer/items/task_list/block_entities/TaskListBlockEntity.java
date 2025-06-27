@@ -187,7 +187,7 @@ public class TaskListBlockEntity extends BasicBlockEntity implements Nameable
     public void invokeGUI()
     {
         TaskListMessaging.TaskListExtraDTO extra = new TaskListMessaging.TaskListExtraDTO(this.getBlockPos(), this.data.getLastPageNumber(), this.getTitle());
-        TaskListClientInvoker.invokeScreen(this.data.getAllPages(), this.data.getPageCount(), extra);
+        TaskListClientInvoker.invokeScreen(this.data.getAllPages(), this.data.getPageCount(), extra, this.isFireResistant);
     }
 
 

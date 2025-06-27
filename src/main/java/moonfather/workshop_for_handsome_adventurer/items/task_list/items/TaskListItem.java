@@ -34,9 +34,8 @@ public class TaskListItem extends Item
     {
         super((new Properties()).stacksTo(1));
     }
-    //   abandoned, nice to have: tooltip line saying Completed: (orange) 0/6 (spacing) (greenish)5/6
-    //   abandoned, consideration: consider keyboard paging
-    //   todo:  carry on IMC
+    //  abandoned, nice to have: tooltip line saying Completed: (orange) 0/6 (spacing) (greenish)5/6
+    //  abandoned, consideration: consider keyboard paging
     //  less imp: make it a furnace fuel?
     //  https://www.curseforge.com/minecraft/mc-mods/modopedia
 
@@ -52,7 +51,7 @@ public class TaskListItem extends Item
             }
             String itemNameAsText = TaskListItem.Utility.getTitle(player.getItemInHand(hand));
             TaskListMessaging.TaskListExtraDTO extra = new TaskListMessaging.TaskListExtraDTO(hand.equals(InteractionHand.MAIN_HAND), data.getLastPageNumber(), itemNameAsText);
-            TaskListClientInvoker.invokeScreen(data.getAllPages(), data.getPageCount(), extra);
+            TaskListClientInvoker.invokeScreen(data.getAllPages(), data.getPageCount(), extra, TaskListItem.Utility.isFireImmune(player.getItemInHand(hand)));
         }
         player.awardStat(Stats.ITEM_USED.get(this));
         return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide());
