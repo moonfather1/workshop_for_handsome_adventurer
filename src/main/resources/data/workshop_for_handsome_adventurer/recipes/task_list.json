@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "",
+  "pattern": [
+    " n",
+    "pw"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:paper"
+    },
+	"n": {
+      "tag": "workshop_for_handsome_adventurer:metal_nuggets"
+    },
+	"w": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "result": {
+    "item": "workshop_for_handsome_adventurer:task_list",
+    "count": 1
+  }
+}

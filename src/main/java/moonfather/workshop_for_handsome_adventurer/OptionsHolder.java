@@ -71,6 +71,7 @@ public class OptionsHolder
 		public final ConfigValue<Boolean> RenderItemsOnTable;
 		public final ConfigValue<Boolean> DetailedWailaInfoForEnchantedTools;
 		public final ConfigValue<Boolean> DetailedWailaInfoForEnchantedBooks;
+		public final ConfigValue<Boolean> TaskListColoringForFinishedItems, TaskListPausesSingleplayer, TaskListItemsAreDrawnOnWall;
 
 		public Client(ForgeConfigSpec.Builder builder)
 		{
@@ -85,6 +86,17 @@ public class OptionsHolder
 			builder.push("Toolracks");
 			this.DetailedWailaInfoForEnchantedTools = builder.comment("If this option is turned on, you'll see a list of enchantments for your tools.")
 															 .define("Detailed info for enchanted tools in Jade/TOP/WTHIT", defaultDetailedWailaInfoForEnchantedTools);
+			builder.pop();
+			builder.push("Task_lists");
+            this.TaskListColoringForFinishedItems = builder
+                .comment("Should we gray-out done and abandoned items?")
+                .define("Coloring for finished items", true);
+            this.TaskListPausesSingleplayer = builder
+                .comment("Is the game paused while the list is open?")
+                .define("Task list pauses singleplayer", false); 
+            this.TaskListItemsAreDrawnOnWall = builder
+                .comment("Are item texts are checkmarks drawn on the task list block (when it's hanging on a wall)? Default is true (Bibliocraft style) - text is visible and checkmarks and paging work. Alternatively (simple mode) - right-clicking just opens the gui.  Even though this is true by default, the Author plays with it turned off and recommends that you try with it turned off and then make a decision.")
+                .define("Items are drawn on wall", true); 
 			builder.pop();
 		}
 	}

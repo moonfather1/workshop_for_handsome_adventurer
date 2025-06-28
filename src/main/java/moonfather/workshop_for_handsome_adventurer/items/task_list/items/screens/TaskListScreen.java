@@ -1,0 +1,563 @@
+package moonfather.workshop_for_handsome_adventurer.items.task_list.items.screens;
+
+import moonfather.workshop_for_handsome_adventurer.Constants;
+import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
+import moonfather.workshop_for_handsome_adventurer.items.task_list.items.moving_data.TaskListComponent;
+import moonfather.workshop_for_handsome_adventurer.items.task_list.items.moving_data.TaskListMessageSender;
+import moonfather.workshop_for_handsome_adventurer.items.task_list.items.moving_data.TaskListMessaging;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
+
+import java.util.*;
+
+public class TaskListScreen extends Screen
+{
+    public TaskListScreen(List<TaskListMessaging.TaskPageDTO> pagesFromItem, int pageCount, TaskListMessaging.TaskListExtraDTO extraInfo, boolean isFireImmune)
+    {
+        super(Component.literal("task list"));
+        this.extraOriginal = extraInfo;
+        this.page = extraInfo.lastPage();
+        this.pageCount = pageCount;
+        this.initialContent = pagesFromItem.get(extraInfo.lastPage()-1);
+        this.pagesFromItem = pagesFromItem;
+        this.itemName = extraInfo.itemName();
+        this.isFireImmune = isFireImmune;
+    }
+
+    private static final ResourceLocation BG_LOCATION = new ResourceLocation(Constants.MODID, "textures/gui/gui_task_list_bg.png");
+    private final int imageWidth = 179;
+    private final int imageHeight = 209;
+    protected int leftPos;
+    protected int topPos;
+    private int page;
+    private String footer = null;
+    private int topMarginMain = 24;
+    private TaskListMessaging.TaskPageDTO initialContent;
+    private final boolean isFireImmune;
+    private final int pageCount;
+    private final TaskListMessaging.TaskListExtraDTO extraOriginal;
+    private final String itemName;
+    private final List<TaskListMessaging.TaskPageDTO> pagesFromItem;
+    private final List<EditBox> editBoxes = new ArrayList<>();
+    private EditBox header;
+    private final List<String> checkBoxValues = new ArrayList<>(6);
+    private final HashMap<String, ResourceLocation> checkBoxImages = new HashMap<>(4);
+    private AbstractWidget arrowPrev1, arrowPrev2, arrowNext1, arrowNext2;
+    private static final ResourceLocation VAN_BOOK = new ResourceLocation("textures/gui/book.png");
+    private static final ResourceLocation CHECKBOX_EMPTY = new ResourceLocation(Constants.MODID,"textures/gui/task_list_check1.png");
+    private static final ResourceLocation CHECKBOX_DONE = new ResourceLocation(Constants.MODID,"textures/gui/task_list_check2.png");
+    private static final ResourceLocation CHECKBOX_MOPE = new ResourceLocation(Constants.MODID,"textures/gui/task_list_check3.png");
+    private static final ResourceLocation CHECKBOX_QMARK = new ResourceLocation(Constants.MODID,"textures/gui/task_list_check4.png");
+    private static final int NORMAL_TEXT_COLOR = 0x886666;
+    private static final int DIM_TEXT_COLOR = 0xbbaaaa;
+
+    @Override
+    protected void init()
+    {
+        this.leftPos = (this.width - this.imageWidth) / 2;
+        this.topPos = 0;  // normally middle but i'm thinking top here  (this.height - this.imageHeight) / 2;
+        if (this.editBoxes.size() == 0)
+        {
+            this.topMarginMain = 42; // can do 44 if we need more room above
+            int y = topMarginMain;
+            int height = 12;
+            for (int i = 0; i < 12; i++)
+            {
+                EditBox eb1 = new TaskListEditBox(Minecraft.getInstance().font, 140, height, Component.empty());
+                eb1.setMaxLength(22);
+                eb1.setBordered(false);
+                eb1.setVisible(true);
+                eb1.setTextColor(NORMAL_TEXT_COLOR);
+                //eb1.setTextShadow(false);
+
+                eb1.setX(this.leftPos + 26);
+                eb1.setY(this.topPos + y);
+                y += (height - 1);
+
+                this.editBoxes.add(eb1);
+                this.renderables.add(eb1);
+
+                if (i % 2 ==1) { y += 2; } // for hor line
+            }
+            // name edit box; maybe a help button on top
+            this.header = new TaskListEditBox(Minecraft.getInstance().font, 150, height, Component.literal("Item name"));
+            this.header.setMaxLength(32);
+            this.header.setBordered(false);
+            this.header.setVisible(true);
+            this.header.setTextColor(0x555088);
+            this.header.setX(this.leftPos + 16);
+            this.header.setY(this.topPos + 16);
+            this.renderables.add(this.header);
+            this.header.setValue(this.itemName);
+
+            // edit boxes done, now paging arrows
+            int arrowHeight = 13, arrowWidth = 23;
+            int hmargin = 10, vmargin = 10;
+            Component buttonHint = Component.literal("paging");
+            this.arrowPrev1 = new TaskListPageButton(0, 0, arrowWidth, arrowHeight, buttonHint, VAN_BOOK, 0, 206, 256, 256);
+            this.arrowPrev1.setPosition(this.leftPos + hmargin, this.topPos + this.imageHeight - arrowHeight - vmargin);
+            this.arrowPrev2 = new TaskListPageButton(0, 0, arrowWidth, arrowHeight, buttonHint, VAN_BOOK, 23, 206, 256, 256);
+            this.arrowPrev2.setPosition(this.arrowPrev1.getX(), this.arrowPrev1.getY());
+            this.arrowNext1 = new TaskListPageButton(0, 0, arrowWidth, arrowHeight, buttonHint, VAN_BOOK, 0, 193, 256, 256);
+            this.arrowNext1.setPosition(this.leftPos + this.imageWidth - arrowWidth - hmargin, this.topPos + this.imageHeight - arrowHeight - vmargin);
+            this.arrowNext2 = new TaskListPageButton(0, 0, arrowWidth, arrowHeight, buttonHint, VAN_BOOK, 23, 193, 256, 256);
+            this.arrowNext2.setPosition(this.arrowNext1.getX(), this.arrowNext1.getY());
+            this.addRenderableOnly(this.arrowPrev1);
+            this.addRenderableOnly(this.arrowPrev2);
+            this.addRenderableOnly(this.arrowNext1);
+            this.addRenderableOnly(this.arrowNext2);
+            this.setArrowVisibilityInitial();
+            // paging arrows done, now checkboxes
+            this.checkBoxImages.put("e", CHECKBOX_EMPTY);
+            this.checkBoxImages.put("y", CHECKBOX_DONE);
+            this.checkBoxImages.put("n", CHECKBOX_MOPE);
+            this.checkBoxImages.put("q", CHECKBOX_QMARK);
+        }
+        // this repeats for every page shown (after paging)
+        for (int i = 0; i < this.editBoxes.size(); i++)
+        {
+            this.editBoxes.get(i).setValue(i % 2 == 0 ? this.initialContent.items().get(i/2).line1() : this.initialContent.items().get(i/2).line2());
+        }
+        this.checkBoxValues.clear();
+        for (int i = 0; i < this.editBoxes.size() / 2; i++)
+        {
+            this.checkBoxValues.add(this.initialContent.items().get(i).status());
+        }
+        this.greyOutDoneAndAbandoned();
+    }
+
+    private void greyOutDoneAndAbandoned()
+    {
+        this.greyOutDoneAndAbandoned(false, 15);
+    }
+    private void greyOutDoneAndAbandoned(boolean oneItemOnly, int index)
+    {
+        if (OptionsHolder.CLIENT.TaskListColoringForFinishedItems.get())
+        {
+            int startIndex, loopEnd;
+            if (! oneItemOnly)
+            {
+                startIndex = 0; loopEnd = this.editBoxes.size();
+            }
+            else
+            {
+                startIndex = index * 2; loopEnd = startIndex + 2;
+            }
+            String status;
+            for (int i = startIndex; i < loopEnd; i++)
+            {
+                status = this.checkBoxValues.get(i/2);
+                if (status.equals("y") || status.equals("n"))
+                {
+                    this.editBoxes.get(i).setTextColor(DIM_TEXT_COLOR);
+                }
+                else
+                {
+                    this.editBoxes.get(i).setTextColor(NORMAL_TEXT_COLOR);
+                }
+            }
+        }
+    }
+
+    private void setArrowVisibilityInitial()
+    {
+        this.arrowPrev1.visible = true;
+        this.arrowNext1.visible = true;
+        this.arrowPrev2.visible = false;
+        this.arrowNext2.visible = false;
+    }
+
+    private void setArrowVisibilityOnHover(int mouseX, int mouseY)
+    {
+        boolean hover = mouseX >= this.arrowPrev1.getX() && mouseX <= this.arrowPrev1.getX() + this.arrowPrev1.getWidth()
+                && mouseY >= this.arrowPrev1.getY() && mouseY <= this.arrowPrev1.getY() + this.arrowPrev1.getHeight();
+        this.arrowPrev2.visible = this.page > 1 && hover;
+        this.arrowPrev1.visible = ! this.arrowPrev2.visible;
+        hover = mouseX >= this.arrowNext1.getX() && mouseX <= this.arrowNext1.getX() + this.arrowNext1.getWidth()
+                && mouseY >= this.arrowNext1.getY() && mouseY <= this.arrowNext1.getY() + this.arrowNext1.getHeight();
+        this.arrowNext2.visible = this.page < this.pageCount && hover;
+        this.arrowNext1.visible = ! this.arrowNext2.visible;
+    }
+
+    protected void renderTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY)
+    {
+        // if right button, say craft with paper
+        boolean hover = mouseX >= this.arrowNext1.getX() && mouseX <= this.arrowNext1.getX() + this.arrowNext1.getWidth()
+                && mouseY >= this.arrowNext1.getY() && mouseY <= this.arrowNext1.getY() + this.arrowNext1.getHeight();
+        if (! hover)
+        {
+            this.tooltipTicks = 5 * 20 * 4;
+            this.currentTooltip = null;
+            return;
+        }
+        if (this.tooltipTicks < 0)
+        {
+            return;
+        }
+        this.tooltipTicks -= 1;
+
+        if (this.currentTooltip == null)
+        {
+            if (DUAL_TOOLTIP.size() == 0)
+            {
+                DUAL_TOOLTIP.add(PAPER_TOOLTIP);
+                DUAL_TOOLTIP.add(Component.literal(" "));
+                DUAL_TOOLTIP.add(CREAM_TOOLTIP);
+            }
+            if (KEYBOARD_TOOLTIP.size() == 0)
+            {
+                boolean firstRow = true;
+                for (String s : KWYBOARD_TOOLTIP_RAW.getString().split("<br>"))
+                {
+                    if (!firstRow)
+                    {
+                        KEYBOARD_TOOLTIP.add(Component.literal(s));
+                    }
+                    else
+                    {
+                        KEYBOARD_TOOLTIP.add(Component.literal(s).withStyle(Style.EMPTY.withColor(0x95b5ff)));
+                        firstRow = false;
+                    }
+                }
+            }
+            int random = this.randomProvider.nextInt(5);
+            if (this.page == this.pageCount && this.pageCount < TaskListComponent.MAX_PAGE_COUNT)
+            {
+                // guiGraphics.renderTooltip(Minecraft.getInstance().font, PAPER_TOOLTIP, mouseX, mouseY);
+                if (random == 0 && ! this.isFireImmune) this.currentTooltip = DUAL_TOOLTIP;
+                else if (random == 1) this.currentTooltip = KEYBOARD_TOOLTIP;
+                else this.currentTooltip = List.of(PAPER_TOOLTIP);
+            }
+            if (this.page == this.pageCount && this.pageCount == TaskListComponent.MAX_PAGE_COUNT)
+            {
+                if (random < 2 && ! this.isFireImmune) this.currentTooltip = List.of(CREAM_TOOLTIP);
+                else this.currentTooltip = KEYBOARD_TOOLTIP;
+            }
+        }
+        if (this.currentTooltip == null)
+        {
+            return;
+        }
+        guiGraphics.renderTooltip(Minecraft.getInstance().font, this.currentTooltip, Optional.empty(), mouseX, mouseY);
+    }
+    private static final Component PAPER = Component.translatable(Items.PAPER.getDescriptionId()).withStyle(Style.EMPTY.withColor(0xffddaa));
+    private static final Component PAPER_TOOLTIP = Component.translatable("message.workshop_for_handsome_adventurer.task_list_ex", PAPER);
+    private static final Component CREAM = Component.translatable(Items.MAGMA_CREAM.getDescriptionId()).withStyle(Style.EMPTY.withColor(0xddbb77));
+    private static final Component CREAM_TOOLTIP = Component.translatable("message.workshop_for_handsome_adventurer.task_list_cream", CREAM);
+    private static final List<Component> DUAL_TOOLTIP = new ArrayList<>(3);
+    private static final Component KWYBOARD_TOOLTIP_RAW = Component.translatable("message.workshop_for_handsome_adventurer.keyboard");
+    private static final List<Component> KEYBOARD_TOOLTIP = new ArrayList<>(6);
+
+    private int tooltipTicks = -1;
+    private List<Component> currentTooltip = null;
+    private final Random randomProvider = new Random();
+
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button)
+    {
+        // focusing
+        boolean foundEditBox = false;
+        for (int i = 0; i < this.editBoxes.size(); i++)
+        {
+            if (this.editBoxes.get(i).mouseClicked(mouseX, mouseY, button))
+            {
+                this.setFocused(this.editBoxes.get(i));
+                foundEditBox = true;
+                break;
+            }
+        }
+        if (! foundEditBox && this.header.mouseClicked(mouseX, mouseY, button))
+        {
+            this.setFocused(this.header);
+            foundEditBox = true;
+        }
+//        if (button == 0) {
+//            this.setDragging(true);
+//        }
+        if (foundEditBox) { return true; }
+
+        // checking checkboxes
+        int y = this.topPos + this.topMarginMain + 3;
+        int x = this.leftPos + 10;
+        int size = 13;
+        if (mouseX >= x - 1 && mouseX <= x + size + 1)
+        {
+            for (int i = 0; i < this.checkBoxValues.size(); i++)
+            {
+                if (mouseY >= y - 1 && mouseY <= y + size + 1)
+                {
+                    String current = this.checkBoxValues.get(i);
+                    if (current.equals("e"))
+                    { this.checkBoxValues.set(i, "y"); }
+                    else if (current.equals("y"))
+                    { this.checkBoxValues.set(i, "n"); }
+                    else if (current.equals("n"))
+                    { this.checkBoxValues.set(i, "q"); }
+                    else if (current.equals("q"))
+                    { this.checkBoxValues.set(i, "e"); }
+                    this.greyOutDoneAndAbandoned(true, i);
+                    break;
+                }
+                y = y + 12 + 12;
+            }
+        }
+        // paging
+        if (mouseY >= this.arrowNext1.getY() && mouseY <= this.arrowNext1.getY() + this.arrowNext1.getHeight())
+        {
+            int offset = 0;
+            if (mouseX >= this.arrowNext1.getX() && mouseX <= this.arrowNext1.getX() + this.arrowNext1.getWidth() && this.page < this.pageCount)
+            {
+                offset = +1;
+            }
+            if (mouseX >= this.arrowPrev1.getX() && mouseX <= this.arrowPrev1.getX() + this.arrowPrev1.getWidth() && this.page > 1)
+            {
+                offset = -1;
+            }
+            if (offset != 0)
+            {
+                this.changePage(offset);
+            }
+        }
+        return true;
+    }
+
+    private void changePage(int offset)
+    {
+        assert offset * offset == 1;
+        TaskListMessaging.TaskPageDTO finishedPage = this.makeDTO();
+        TaskListMessageSender.sendTaskPageToServer(finishedPage, this.makeExtra());
+        this.pagesFromItem.set(this.page-1, finishedPage);
+        this.footer = null;
+        this.page += offset;
+        this.initialContent = this.pagesFromItem.get(this.page-1);
+        this.init();
+        this.tooltipTicks = -1;
+    }
+
+
+
+    private void checkByKeyboard(int keyCode)
+    {
+        for (int i = 0; i < this.editBoxes.size(); i++)
+        {
+            if (this.editBoxes.get(i).isFocused())
+            {
+                int index = i / 2;
+                String current = this.checkBoxValues.get(index);
+                String newValue = "e";
+                if (keyCode == K_PLU)
+                {
+                    newValue = current.equals("y") ? "e" : "y";
+                }
+                else if (keyCode == K_MIN)
+                {
+                    newValue = current.equals("n") ? "e" : "n";
+                }
+                else if (keyCode == K_STR)
+                {
+                    newValue = current.equals("q") ? "e" : "q";
+                }
+                if (! newValue.equals(current))
+                {
+                    this.checkBoxValues.set(index, newValue);
+                    this.greyOutDoneAndAbandoned(true, index);
+                }
+            }
+        }
+    }
+
+    protected boolean hasClickedOutside(double mouseX, double mouseY, int guiLeft, int guiTop, int mouseButton) {
+        return mouseX < (double)guiLeft || mouseY < (double)guiTop || mouseX >= (double)(guiLeft + this.imageWidth) || mouseY >= (double)(guiTop + this.imageHeight);
+    }
+
+    @Override
+    public final void tick()
+    {
+        super.tick();
+        if (! this.minecraft.player.isAlive() || this.minecraft.player.isRemoved()) {
+            this.onClose();
+        }
+    }
+    @Override
+    public void onClose()
+    {
+        TaskListMessageSender.sendTaskPageToServer(this.makeDTO(), this.makeExtra());
+        this.minecraft.player.closeContainer();
+        super.onClose();
+    }
+
+    private TaskListMessaging.TaskPageDTO makeDTO()
+    {
+        TaskListMessaging.TaskPageDTO storedPage = new TaskListMessaging.TaskPageDTO(this.page, null);
+        for (int i = 0; i < TaskListMessaging.ITEMS_PER_PAGE; i++)
+        {
+            if (2*i < this.editBoxes.size())
+            {
+                storedPage.items().set(i, new TaskListMessaging.TaskItemDTO(this.checkBoxValues.get(i), this.editBoxes.get(2 * i).getValue(), this.editBoxes.get(2 * i + 1).getValue()));
+            }
+            else
+            {
+                // we don't have 12 text boxes yet
+                storedPage.items().set(i, TaskListMessaging.TaskItemDTO.empty());
+            }
+        }
+        return storedPage;
+    }
+
+    private TaskListMessaging.TaskListExtraDTO makeExtra()
+    {
+        // main hand and block position in extra record are there to find item on server
+        return new TaskListMessaging.TaskListExtraDTO(this.extraOriginal, this.page, this.header.getValue());
+    }
+
+    ////////////////////
+
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+    {
+        if (this.untapsToSkip == 0)
+        {
+            this.setArrowVisibilityOnHover(mouseX, mouseY);
+            this.untapsToSkip = 5;
+        }
+        this.untapsToSkip--;
+        this.renderBackground(guiGraphics);
+        for (Renderable renderable : this.renderables)
+        {
+            renderable.render(guiGraphics, mouseX, mouseY, partialTick);
+        }
+        // hor lines
+        int height = 12; // 14 if borders
+        for (int i = 0; i < 5; i++)
+        {
+            guiGraphics.hLine(this.leftPos + 14, this.leftPos + this.imageWidth - 16, this.topPos + this.topMarginMain - 4 + (i+1)*(height+height-1+1), 0xff776666);
+        }
+        // page num
+        if (this.footer == null)
+        {
+            this.footer = String.format("%d/%d", this.page, this.pageCount);
+        }
+        guiGraphics.drawString(Minecraft.getInstance().font, this.footer, this.leftPos + this.imageWidth / 2 - 12, this.topPos + this.imageHeight - 18, 0xff776666, false);
+        // checkboxes
+        int y = this.topPos + this.topMarginMain + 3;
+        int x = this.leftPos + 10;
+        int size = 13;
+        for (int i = 0; i < this.checkBoxValues.size(); i++)
+        {
+            guiGraphics.blit(this.checkBoxImages.get(this.checkBoxValues.get(i)), x, y, size, size, 0.0F, 0.0F, size, size, 16, 16);
+            y = y + 12 + 12;
+        }
+        // tooltip
+        this.renderTooltip(guiGraphics, mouseX, mouseY);
+    }
+    private int untapsToSkip = 5;
+
+
+    @Override
+    public void renderBackground(GuiGraphics guiGraphics)
+    {
+        super.renderBackground(guiGraphics);
+        guiGraphics.blit(BG_LOCATION, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+    }
+
+    ///////////////////////////////
+
+
+    private static final int K_ESC = 256, K_DN = 264, K_UP = 265, K_ENT = 257, K_ENT_NP = 335;
+    private static final int K_PLU = 334, K_MIN = 333, K_STR = 332;
+    private static final int K_PG_DN = 267, K_PG_UP = 266;
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+    {
+        if (keyCode == K_ESC && this.shouldCloseOnEsc())
+        {
+            this.onClose();
+            return true;
+        }
+        if ((keyCode == K_DN || keyCode == K_UP)  && (modifiers & 1) == 1)
+        {
+            // special focus
+            this.setFocused(this.header);
+            return true;
+        }
+        if (keyCode == K_DN || (keyCode == K_ENT && (modifiers & 1) == 0) || (keyCode == K_ENT_NP && (modifiers & 1) == 0))
+        {
+            // focus down
+            for (int i = 0; i < this.editBoxes.size(); i++)
+            {
+                if (this.editBoxes.get(i).equals(this.getFocused()))
+                {
+                    if (i < this.editBoxes.size() - 1)
+                    {
+                        this.setFocused(this.editBoxes.get(i+1));
+                    }
+                    else
+                    {
+                        this.setFocused(this.editBoxes.get(0));
+                    }
+                    return true;
+                }
+            }
+            this.setFocused(this.editBoxes.get(0));
+            return true;
+        }
+        if (keyCode == K_UP || (keyCode == K_ENT && (modifiers & 1) == 1) || (keyCode == K_ENT_NP && (modifiers & 1) == 1))
+        {
+            // focus up
+            for (int i = 0; i < this.editBoxes.size(); i++)
+            {
+                if (this.editBoxes.get(i).equals(this.getFocused()))
+                {
+                    if (i > 0)
+                    {
+                        this.setFocused(this.editBoxes.get(i-1));
+                    }
+                    else
+                    {
+                        this.setFocused(this.editBoxes.get(this.editBoxes.size()-1));
+                    }
+                    return true;
+                }
+            }
+            this.setFocused(this.editBoxes.get(0)); // first focus
+            return true;
+        }
+        if ((keyCode == K_PLU || keyCode == K_MIN || keyCode == K_STR) && ((modifiers & 1) == 0))
+        {
+            this.checkByKeyboard(keyCode);
+            return true;
+        }
+        if (keyCode == K_PG_DN && this.page < this.pageCount)
+        {
+            // paging
+            this.changePage(1);
+            return true;
+        }
+        if (keyCode == K_PG_UP && this.page > 1)
+        {
+            // paging
+            this.changePage(-1);
+            return true;
+        }
+        if (super.keyPressed(keyCode, scanCode, modifiers))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isPauseScreen()
+    {
+        return OptionsHolder.CLIENT.TaskListPausesSingleplayer.get();
+    }
+}

@@ -9,6 +9,7 @@ import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLis
 import moonfather.workshop_for_handsome_adventurer.initialization.CommonSetup;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.integration.TOPRegistration;
+import moonfather.workshop_for_handsome_adventurer.items.task_list.RegistrationForTaskList;
 import moonfather.workshop_for_handsome_adventurer.other.CreativeTab;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -42,6 +43,8 @@ public class ModWorkshop
         FMLJavaModLoadingContext.get().getModEventBus().addListener(FinderEvents::addServerPack);
         MinecraftForge.EVENT_BUS.addListener(PotionShelf::onRightClickBlock);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(EventPriority.LOWEST, this::registerDynamicItems);
+		
+		RegistrationForTaskList.init(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
     //// support for CarryOn, etc.
@@ -58,7 +61,7 @@ public class ModWorkshop
                 blacklistForCarryOn(woodType);
             }
         }
-        //System.out.println("test imc " + Constants.MODID + ":dual_table_bottom_left_" + "oak   " + ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Constants.MODID + ":dual_table_bottom_left_" + "oak")).getCloneItemStack(null, null, null, null, null));
+		InterModComms.sendTo("carryon", "blacklistBlock", () -> Constants.MODID + ":task_list_panel");
         if (ModList.get().isLoaded("theoneprobe"))
         {
             InterModComms.sendTo("theoneprobe", "getTheOneProbe", TOPRegistration::instance);

@@ -3,6 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.other;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.DynamicAssetConfig;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.SecondCreativeTab;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.items.task_list.RegistrationForTaskList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -14,6 +15,8 @@ public class CreativeTab
 {
     public static void OnCreativeTabPopulation(BuildCreativeModeTabContentsEvent event)
     {
+        event.accept(RegistrationForTaskList.TASK_LIST);
+        /////////////////////////////////////////
         if (event.getTab() == Registration.CREATIVE_TAB.get())
         {
             int i = 0;

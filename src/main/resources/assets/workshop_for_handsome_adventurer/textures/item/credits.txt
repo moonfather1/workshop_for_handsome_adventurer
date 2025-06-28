@@ -1,0 +1,3 @@
+task list image is mostly    tool_clipboard_papers   by malcolm riley
+   and is under the same license (CCA4). see  https://github.com/malcolmriley/unused-textures/
+   if you need a clipboard, please use the orifinal and change it somewhat - we don't want to look the same.
