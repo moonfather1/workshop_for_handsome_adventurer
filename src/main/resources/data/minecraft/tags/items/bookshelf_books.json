@@ -7,6 +7,9 @@
     { "id": "patchouli:guide_book", "required": false },
     { "id": "silentgear:guide_book", "required": false },
     { "id": "byg:biomepedia", "required": false },
-    { "id": "solcarrot:food_book", "required": false }
+    { "id": "modopedia:book", "required": false },
+    { "id": "solcarrot:food_book", "required": false },
+    { "id": "gbook:guidebook", "required": false },
+    { "id": "integrateddynamics:on_the_dynamics_of_integration", "required": false }
   ]
 }

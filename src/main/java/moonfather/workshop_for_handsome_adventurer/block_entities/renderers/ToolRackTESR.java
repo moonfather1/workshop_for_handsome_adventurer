@@ -12,11 +12,13 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolActions;
 import org.joml.Quaternionf;
 
@@ -29,6 +31,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 	private ItemRenderer itemRenderer = null;
 	private final BlockEntityRendererProvider.Context context;
 	private static final TagKey<Item> TAG_DONT_ROTATE_ON_TOOLRACK = TagKey.create(Registries.ITEM, new ResourceLocation(Constants.MODID, "dont_rotate_on_toolrack"));
+	private static final TagKey<Item> TAG_ROTATE_180_ON_TOOLRACK = TagKey.create(Registries.ITEM, new ResourceLocation(Constants.MODID, "rotate_180_on_toolrack"));
 	private static final TagKey<Item> TAG_LARGER_ON_TOOLRACK_150 = TagKey.create(Registries.ITEM, new ResourceLocation(Constants.MODID, "larger_on_toolrack_150_percent"));
 	private static final TagKey<Item> TAG_LARGER_ON_TOOLRACK_125 = TagKey.create(Registries.ITEM, new ResourceLocation(Constants.MODID, "larger_on_toolrack_125_percent"));
 
@@ -123,17 +126,29 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			{
 				// seems to be noo need for matrixStack.translate
 				matrixStack.scale(1.25f, 1.10f, 1.25f);
-			} // separate from main thing below.
+			} // scaling is separate from main thing below.
 
-			if (itemStack.getItem().canPerformAction(itemStack, ToolActions.SHIELD_BLOCK))
+			if (itemStack.is(TAG_ROTATE_180_ON_TOOLRACK))
+			{
+				matrixStack.mulPose(ZPlus180);
+			} // this rotation is separate as it's added onto any rotation below
+
+			if (itemStack.is(TAG_DONT_ROTATE_ON_TOOLRACK))
+			{
+				matrixStack.translate(0, 0.1, 0);
+			}
+			else if (itemStack.getItem().canPerformAction(itemStack, ToolActions.SHIELD_BLOCK))
 			{
 				matrixStack.translate(-0.00, -0.10, 0.14);
 				matrixStack.scale(1.75f, 1.60f, 1.75f);
 				//matrixStack.translate(-0.25, 0, 0.16);
 				//matrixStack.scale(2, 2, 2);
 			}
-			else if (itemStack.getItem().canPerformAction(itemStack, ToolActions.SWORD_SWEEP) || itemStack.getItem() instanceof SwordItem) //ModularBladedItem
+			else if (itemStack.getItem().canPerformAction(itemStack, ToolActions.SWORD_SWEEP)
+					|| itemStack.is(ItemTags.SWORDS) || itemStack.getItem() instanceof SwordItem)
 			{
+				// check ModularBladedItem ? stupid tetra doesn't tag swords and doesn't return true for any canPerformAction call
+				// currently using separate tag for tetra swords.
 				matrixStack.translate(0, -0.2, 0);
 				matrixStack.mulPose(ZPlus135);  // 1.19.4      Vector3f.ZP.rotationDegrees(135.0F)
 			}
@@ -150,10 +165,6 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			{
 				matrixStack.translate(0, 0.1, 0);
 			}
-			else if (itemStack.is(TAG_DONT_ROTATE_ON_TOOLRACK))
-			{
-				matrixStack.translate(0, 0.1, 0);
-			}
 			else
 			{
 				matrixStack.mulPose(ZMinus45);  // 1.19.4    Vector3f.ZP.rotationDegrees(-45.0F)
@@ -165,6 +176,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 	private static final Quaternionf ZMinus45 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, -45);
 	private static final Quaternionf ZPlus225 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 225);
 	private static final Quaternionf ZPlus135 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 135);
+	private static final Quaternionf ZPlus180 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 180);
 	private static final Quaternionf XMinus90 = new Quaternionf().fromAxisAngleDeg(1, 0, 0, -90);
 	private static final Quaternionf YPlus180 = new Quaternionf().fromAxisAngleDeg(0, 1, 0, 180);
 
