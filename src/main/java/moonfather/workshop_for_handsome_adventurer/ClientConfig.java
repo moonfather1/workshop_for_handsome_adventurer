@@ -52,13 +52,13 @@ public class ClientConfig
         BUILDER.push("Task list");
             taskListColoringForFinishedItems_internal = BUILDER
                 .comment("Should we gray-out done and abandoned items?")
-                .define("coloring for finished items", true); 
+                .define("Coloring for finished items", true);
 			taskListPausesSingleplayer_internal = BUILDER
                 .comment("Is the game paused while the list is open?")
-                .define("task list pauses singleplayer", false);
+                .define("Task list pauses singleplayer", false);
 			taskListItemsAreDrawnOnWall_internal = BUILDER
                 .comment("Are item texts are checkmarks drawn on the task list block (when it's hanging on a wall)? Default is true (Bibliocraft style) - text is visible and checkmarks and paging work. Alternatively (simple mode) - right-clicking just opens the gui.  Even though this is true by default, the Author plays with it turned off and recommends that you try with it turned off and then make a decision.")
-                .define("items are drawn on wall", true); 		
+                .define("Items are drawn on wall", true);
         BUILDER.pop();
         SPEC = BUILDER.build();
     }

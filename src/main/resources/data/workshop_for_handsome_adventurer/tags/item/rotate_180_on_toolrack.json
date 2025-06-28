@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    { "id": "tconstruct:sword", "required": false }
+    { "id": "tetra:modular_sword", "required": false }
   ]
 }

@@ -13,6 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -128,7 +129,12 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			{
 				// seems to be noo need for matrixStack.translate
 				matrixStack.scale(1.25f, 1.10f, 1.25f);
-			} // separate from main thing below.
+			} // scaling is separate from main thing below.
+
+            if (itemStack.is(TAG_ROTATE_180_ON_TOOLRACK))
+            {
+                matrixStack.mulPose(ZPlus180);
+            } // this rotation is separate as it's added onto any rotation below
 
 			if (itemStack.is(TAG_DONT_ROTATE_ON_TOOLRACK))
 			{
@@ -141,28 +147,18 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 				//matrixStack.translate(-0.25, 0, 0.16);
 				//matrixStack.scale(2, 2, 2);
 			}
-			else if (itemStack.getItem().canPerformAction(itemStack, ItemAbilities.SWORD_SWEEP) || itemStack.getItem() instanceof SwordItem) //ModularBladedItem
-			{
+            else if (itemStack.getItem().canPerformAction(itemStack, ItemAbilities.SWORD_SWEEP)
+                || itemStack.is(ItemTags.SWORDS) || itemStack.getItem() instanceof SwordItem)
+            {
+                // check ModularBladedItem ? stupid tetra doesn't tag swords and doesn't return true for any canPerformAction call
+                // currently using separate tag for tetra swords.
 				matrixStack.translate(0, -0.2, 0);
 				matrixStack.mulPose(ZPlus135);  // 1.19.4      Vector3f.ZP.rotationDegrees(135.0F)
-				if (itemStack.is(TAG_ROTATE_180_ON_TOOLRACK))  // tinker's con swords
-				{
-					matrixStack.mulPose(ZPlus180);
-				}
 			}
 			else if (itemStack.getItem().getClass().getSimpleName().contains("rossbow") || itemStack.getItem() instanceof CrossbowItem)  //ModularCrossbowItem
 			{
 				matrixStack.translate(0, -0.2, 0);
 				matrixStack.mulPose(ZPlus225);  // 1.19.4      Vector3f.ZP.rotationDegrees(225.0F)
-				if (itemStack.is(TAG_ROTATE_180_ON_TOOLRACK))  // tinker's con swords
-				{
-					matrixStack.mulPose(ZPlus180);
-				}
-			}
-			else if (itemStack.is(TAG_ROTATE_180_ON_TOOLRACK))
-			{
-				matrixStack.translate(0, 0.1, 0);
-				matrixStack.mulPose(ZPlus180);
 			}
 			else if (model.isGui3d())
 			{
