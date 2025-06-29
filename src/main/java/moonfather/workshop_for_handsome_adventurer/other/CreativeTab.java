@@ -15,10 +15,10 @@ public class CreativeTab
 {
     public static void OnCreativeTabPopulation(BuildCreativeModeTabContentsEvent event)
     {
-        event.accept(RegistrationForTaskList.TASK_LIST);
-        /////////////////////////////////////////
         if (event.getTab() == Registration.CREATIVE_TAB.get())
         {
+            event.accept(RegistrationForTaskList.TASK_LIST);
+            /////////////////////////////////////////
             int i = 0;
             for (String woodType: Registration.woodTypes) {
                 event.accept(Registration.items_table1.get(i));
