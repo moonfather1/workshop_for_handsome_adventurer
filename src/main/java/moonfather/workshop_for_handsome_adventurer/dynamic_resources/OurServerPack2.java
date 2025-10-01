@@ -23,10 +23,10 @@ public class OurServerPack2  extends BaseResourcePack
     @Override
     protected void buildResources(Map<ResourceLocation, String> cache)
     {
-        CompletableFuture<HolderLookup.Provider> holderProvider = CompletableFuture.supplyAsync(
-                VanillaRegistries::createLookup,
-                Util.backgroundExecutor()
-        );
+        //CompletableFuture<HolderLookup.Provider> holderProvider = CompletableFuture.supplyAsync(
+        //        VanillaRegistries::createLookup,
+        //        Util.backgroundExecutor()
+        //);
 
         BlockTagWriter1.writeFiles(cache);
         BlockTagWriter2.writeFiles(cache);

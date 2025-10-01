@@ -21,10 +21,12 @@ public class OurServerPack extends BaseResourcePack
     @Override
     protected void buildResources(Map<ResourceLocation, String> cache)
     {
-        CompletableFuture<HolderLookup.Provider> holderProvider = CompletableFuture.supplyAsync(
-                VanillaRegistries::createLookup,
-                Util.backgroundExecutor()
-        );
+        //CompletableFuture<HolderLookup.Provider> holderProvider = CompletableFuture.supplyAsync(
+        //        VanillaRegistries::createLookup,
+        //        Util.backgroundExecutor()
+        //);
+        // these 4 kines crash the game if i have traverse mod present (when going to the end).
+        // no idea why. let's hope we don't need them.
 
         RecipeWriter.writeFiles(cache);
         LootTableWriter.writeFiles(cache);
