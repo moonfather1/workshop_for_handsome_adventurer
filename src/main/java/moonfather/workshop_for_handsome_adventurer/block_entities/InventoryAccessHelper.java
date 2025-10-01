@@ -51,7 +51,7 @@ public class InventoryAccessHelper
             this.currentType = RecordTypes.BLOCK;
             DoubleBlockCombiner.BlockType type = ChestBlock.getBlockType(be.getBlockState());
             if (type == DoubleBlockCombiner.BlockType.SINGLE) {
-                this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper((Container) be);
+                this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper((Container) be, true);
                 this.chosenContainerForRename = be;
             }
             if (type == DoubleBlockCombiner.BlockType.FIRST) {
@@ -63,7 +63,7 @@ public class InventoryAccessHelper
                         return;
                     }
                     Container result = new CompoundContainer((Container) be, (Container) be2);
-                    this.chosenContainer = result.getContainerSize() == 54 ? result : new SimpleTableMenu.VariableSizeContainerWrapper(result);
+                    this.chosenContainer = result.getContainerSize() == 54 ? result : new SimpleTableMenu.VariableSizeContainerWrapper(result, true);
                     this.chosenContainerTrueSize = result.getContainerSize();
                     this.chosenContainerVisibleSize = result.getContainerSize() <= 27 ? 27 : 54;
                     this.chosenContainerForRename = be;
@@ -80,7 +80,7 @@ public class InventoryAccessHelper
                         return;
                     }
                     Container result = new CompoundContainer((Container) be2, (Container) be);
-                    this.chosenContainer = result.getContainerSize() == 54 ? result : new SimpleTableMenu.VariableSizeContainerWrapper(result);
+                    this.chosenContainer = result.getContainerSize() == 54 ? result : new SimpleTableMenu.VariableSizeContainerWrapper(result, true);
                     this.chosenContainerTrueSize = result.getContainerSize();
                     this.chosenContainerVisibleSize = result.getContainerSize() <= 27 ? 27 : 54;
                     this.chosenContainerForRename = be2;
@@ -96,7 +96,7 @@ public class InventoryAccessHelper
             if (! be.getBlockState().getBlock().getDescriptionId().contains("barrel")) { return; }
             LazyOptional<IItemHandler> oih = be.getCapability(ForgeCapabilities.ITEM_HANDLER);
             oih.ifPresent( ih -> {
-                this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new MultipartBarrelsSimpleTranslator(ih));
+                this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new MultipartBarrelsSimpleTranslator(ih), false);
                 this.chosenContainerTrueSize = ih.getSlots() - 1;
                 this.chosenContainerVisibleSize = 27;
                 this.currentType = RecordTypes.BLOCK;
@@ -107,10 +107,14 @@ public class InventoryAccessHelper
             }
         }
         if (be instanceof Container container && container.getContainerSize() <= 54) {
-            if (be instanceof ShulkerBoxBlockEntity && ! canOpenShulkerBox(level, be.getBlockState(), pos)) {
-                return;
+            boolean isShulkerBox = false;
+            if (be instanceof ShulkerBoxBlockEntity) {
+                isShulkerBox = true;
+                if (! canOpenShulkerBox(level, be.getBlockState(), pos)) {
+                    return;
+                }
             }
-            this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(container);
+            this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(container, ! isShulkerBox);
             this.chosenContainerTrueSize = container.getContainerSize();
             this.chosenContainerVisibleSize = container.getContainerSize() <= 27 ? 27 : 54;
             this.chosenContainerForRename = be;
@@ -121,7 +125,7 @@ public class InventoryAccessHelper
             if (ChestBlock.isChestBlockedAt(level, pos)) {
                 return;
             }
-            this.chosenContainer =  new SimpleTableMenu.VariableSizeContainerWrapper(player.getEnderChestInventory());
+            this.chosenContainer =  new SimpleTableMenu.VariableSizeContainerWrapper(player.getEnderChestInventory(), true);
             this.chosenContainerTrueSize = 27;
             this.chosenContainerVisibleSize = 27;
             this.currentType = RecordTypes.BLOCK;
@@ -131,7 +135,7 @@ public class InventoryAccessHelper
         {
             LazyOptional<IItemHandler> oih = be.getCapability(ForgeCapabilities.ITEM_HANDLER);
             oih.ifPresent( ih -> {
-                this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new StorageDrawersSimpleTranslator(ih));
+                this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new StorageDrawersSimpleTranslator(ih), false);
                 this.chosenContainerTrueSize = ih.getSlots() - 1;
                 this.chosenContainerVisibleSize = this.chosenContainerTrueSize <= 27 ? 27 : 54;
                 this.currentType = RecordTypes.BLOCK;
@@ -148,7 +152,7 @@ public class InventoryAccessHelper
         }
         oih.ifPresent( ih -> {
             if (ih.getSlots() <= 54) {
-                this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(ih);
+                this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(ih, true);
                 this.chosenContainerTrueSize = ih.getSlots();
                 this.chosenContainerVisibleSize = this.chosenContainerTrueSize <= 27 ? 27 : 54;
                 this.chosenContainerForRename = be;
@@ -386,7 +390,7 @@ public class InventoryAccessHelper
         else if (record.Type.equals(RecordTypes.TOOLBELT)) {
             Container belt = TetraBeltSupport.getToolbeltStorage(player);
             if (belt == null) { return false; }
-            this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new TetraBeltTranslator(belt));
+            this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new TetraBeltTranslator(belt), false);
             this.chosenContainerTrueSize = belt.getContainerSize() / TetraBeltTranslator.GetRowWidth(belt) * 9;
             this.chosenContainerItem = (ItemStack) TetraBeltSupport.findToolbelt(player);
             this.currentType = RecordTypes.TOOLBELT;
@@ -398,7 +402,7 @@ public class InventoryAccessHelper
             // item handler capability
             LazyOptional<IItemHandler> pockets = item.getCapability(ForgeCapabilities.ITEM_HANDLER);
             pockets.ifPresent(inventory -> {
-                this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(inventory);
+                this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(inventory, false);
                 this.chosenContainerTrueSize = inventory.getSlots();
                 this.chosenContainerItem = item;
                 this.currentType = record.Type;
@@ -413,7 +417,7 @@ public class InventoryAccessHelper
                 TravelersBackpack backpack = TravelersBackpack.getInstance(player);
                 if (backpack.isPresent() && backpack.slotCount() <= 54 && ! backpack.getTabIcon().isEmpty())
                 {
-                    this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(backpack.getItems());
+                    this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(backpack.getItems(), false);
                     this.chosenContainerTrueSize = backpack.slotCount();
                     this.chosenContainerItem = backpack.getContainerItem();
                     this.currentType = RecordTypes.FLOATING;
@@ -425,7 +429,7 @@ public class InventoryAccessHelper
             {
                 if (BackpackedBackpack.isPresent(player))
                 {
-                    this.chosenContainer = BackpackedBackpack.getContainer(player);
+                    this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(BackpackedBackpack.getContainer(player), false);
                     this.chosenContainerTrueSize = BackpackedBackpack.slotCount(player);
                     this.chosenContainerItem = BackpackedBackpack.getContainerItem(player);
                     this.currentType = record.Type;

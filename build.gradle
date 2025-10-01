@@ -247,10 +247,10 @@ dependencies {
     //runtimeOnly fg.deobf("curse.maven:treasure2-289760:5676090")
     //runtimeOnly fg.deobf("curse.maven:gottschcore-272450:5650843")
 	
-	runtimeOnly fg.deobf("curse.maven:tinkers-construct-74072:6635554")
-	runtimeOnly fg.deobf("curse.maven:mantle-74924:6642332")
+	//runtimeOnly fg.deobf("curse.maven:tinkers-construct-74072:6635554")
+	//runtimeOnly fg.deobf("curse.maven:mantle-74924:6642332")
 
-    runtimeOnly fg.deobf("curse.maven:multipart-machines-storage-916819:5691568")
+    //runtimeOnly fg.deobf("curse.maven:multipart-machines-storage-916819:5691568")
 }
 
 mixin {
