@@ -939,8 +939,9 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			else if (ItemStack.isSameItemSameTags(itemstack, stack))
 			{
 				stack.shrink(i);
-				itemstack.grow(i);
-				this.setByPlayer(itemstack);
+				ItemStack copy = itemstack.copy();
+				copy.grow(i);  // these 2 lines, instead of itemstack.grow(i); fix the functional storage issue.
+				this.setByPlayer(copy);
 			}
 			return stack;
 		}

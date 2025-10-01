@@ -18,7 +18,7 @@ public class InventoryTweaks
     {
         if (! isPlayerSort && player != null && player.containerMenu instanceof SimpleTableMenu)
         {
-            System.out.println("`~~~`");
+            //System.out.println("`~~~`");
             ci.cancel();
         }
     }

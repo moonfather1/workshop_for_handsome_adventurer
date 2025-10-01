@@ -241,14 +241,16 @@ dependencies {
 	//runtimeOnly fg.deobf("curse.maven:zeta-968868:5254672")
 	//implementation fg.deobf("curse.maven:quark-243121:5379945")
 
-    //runtimeOnly fg.deobf("curse.maven:functional-storage-556861:5650296")
-    //runtimeOnly fg.deobf("curse.maven:titanium-287342:5468426")
+    runtimeOnly fg.deobf("curse.maven:functional-storage-556861:5650296")
+    runtimeOnly fg.deobf("curse.maven:titanium-287342:5468426")
 
     //runtimeOnly fg.deobf("curse.maven:treasure2-289760:5676090")
     //runtimeOnly fg.deobf("curse.maven:gottschcore-272450:5650843")
 	
 	runtimeOnly fg.deobf("curse.maven:tinkers-construct-74072:6635554")
 	runtimeOnly fg.deobf("curse.maven:mantle-74924:6642332")
+
+    runtimeOnly fg.deobf("curse.maven:multipart-machines-storage-916819:5691568")
 }
 
 mixin {

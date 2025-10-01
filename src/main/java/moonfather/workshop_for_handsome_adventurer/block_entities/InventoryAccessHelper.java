@@ -1,6 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import moonfather.workshop_for_handsome_adventurer.OptionsHolder;
+import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.MultipartBarrelsSimpleTranslator;
 import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.StorageDrawersSimpleTranslator;
 import moonfather.workshop_for_handsome_adventurer.block_entities.container_translators.TetraBeltTranslator;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
@@ -90,6 +91,21 @@ public class InventoryAccessHelper
             }
             return;
         }
+        if (be.getBlockState().getBlock().getDescriptionId().contains("mm_storage"))
+        {
+            if (! be.getBlockState().getBlock().getDescriptionId().contains("barrel")) { return; }
+            LazyOptional<IItemHandler> oih = be.getCapability(ForgeCapabilities.ITEM_HANDLER);
+            oih.ifPresent( ih -> {
+                this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new MultipartBarrelsSimpleTranslator(ih));
+                this.chosenContainerTrueSize = ih.getSlots() - 1;
+                this.chosenContainerVisibleSize = 27;
+                this.currentType = RecordTypes.BLOCK;
+            } );
+            if (this.currentType.equals(RecordTypes.BLOCK))
+            {
+                return; // set in lambda above. leave and don't get overwritten.
+            }
+        }
         if (be instanceof Container container && container.getContainerSize() <= 54) {
             if (be instanceof ShulkerBoxBlockEntity && ! canOpenShulkerBox(level, be.getBlockState(), pos)) {
                 return;
@@ -110,10 +126,6 @@ public class InventoryAccessHelper
             this.chosenContainerVisibleSize = 27;
             this.currentType = RecordTypes.BLOCK;
             return;
-        }
-        if (be.getBlockState().getBlock().getDescriptionId().contains("functionalstorage"))
-        {
-            if (! OptionsHolder.COMMON.DebugFS.get()) return;
         }
         if (be.getBlockState().getBlock().getDescriptionId().contains("storagedrawers"))
         {
