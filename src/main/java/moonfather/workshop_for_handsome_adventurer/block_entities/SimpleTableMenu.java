@@ -939,8 +939,9 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			else if (ItemStack.isSameItemSameTags(itemstack, stack))
 			{
 				stack.shrink(i);
-				itemstack.grow(i);
-				this.setByPlayer(itemstack);
+				ItemStack copy = itemstack.copy();
+				copy.grow(i);  // these 2 lines, instead of itemstack.grow(i); fix the functional storage issue.
+				this.setByPlayer(copy);
 			}
 			return stack;
 		}
@@ -1008,11 +1009,13 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	{
 		private IExcessSlotManager excessManager = null;
 		private final Container internal;
+		private final boolean allowPlaceContainers;
 
-		public VariableSizeContainerWrapper(Container wrapped)
+		public VariableSizeContainerWrapper(Container wrapped, boolean allowPlaceContainers)
 		{
 			super(54);
 			this.internal = wrapped;
+			this.allowPlaceContainers = allowPlaceContainers;
 			if (this.internal instanceof IExcessSlotManager esm)
 			{
 				this.excessManager = esm;
@@ -1020,7 +1023,11 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 
 		@Override
-		public boolean canPlaceItem(int slot, ItemStack itemStack) { return slot < internal.getContainerSize() && internal.canPlaceItem(slot, itemStack); }
+		public boolean canPlaceItem(int slot, ItemStack itemStack)
+		{
+			if (! this.allowPlaceContainers && ! itemStack.getItem().canFitInsideContainerItems()) { return false; }
+			return slot < internal.getContainerSize() && internal.canPlaceItem(slot, itemStack);
+		}
 
 		@Override
 		public ItemStack getItem(int slot) { return slot < internal.getContainerSize() ? internal.getItem(slot) : ItemStack.EMPTY; }
@@ -1056,14 +1063,20 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	public static class VariableSizeItemStackHandlerWrapper extends BaseItemHandlerWrapper
 	{
 		private final int slotCount;
-		public VariableSizeItemStackHandlerWrapper(IItemHandler wrapped)
+		private final boolean allowPlaceContainers;
+		public VariableSizeItemStackHandlerWrapper(IItemHandler wrapped, boolean allowPlaceContainers)
 		{
 			super(wrapped);
 			this.slotCount = wrapped.getSlots();
+			this.allowPlaceContainers = allowPlaceContainers;
 		}
 
 		@Override
-		public boolean canPlaceItem(int slot, ItemStack itemStack) { return slot < slotCount && super.canPlaceItem(slot, itemStack); }
+		public boolean canPlaceItem(int slot, ItemStack itemStack)
+		{
+			if (! this.allowPlaceContainers && ! itemStack.getItem().canFitInsideContainerItems()) { return false; }
+			return slot < slotCount && super.canPlaceItem(slot, itemStack);
+		}
 
 		@Override
 		public ItemStack getItem(int slot) { return slot < slotCount ? super.getItem(slot) : ItemStack.EMPTY; }

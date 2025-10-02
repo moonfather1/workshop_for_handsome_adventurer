@@ -28,8 +28,6 @@ public class OptionsHolder
 
 		public final ConfigValue<Boolean> OffhandInteractsWithToolRack;
 
-		public final ConfigValue<Boolean> DebugFS;
-
 
 		public Common(ForgeConfigSpec.Builder builder)
 		{
@@ -52,10 +50,6 @@ public class OptionsHolder
 			builder.push("ToolRack");
 			this.OffhandInteractsWithToolRack = builder.comment("If set to false, you need to move a tool from off-hand to main hand (F) before putting it onto a toolrack, it's simpler but needs extra actions. If you set this to true you can put tools from off-hand to toolrack directly and you can take items directly; quicker but there might be possible unintended interactions with the toolrack.")
 					.define("Offhand interacts with tool rack directly", defaultOffhandInteractsWithToolRack);
-			builder.pop();
-			builder.push("Debug");
-			this.DebugFS = builder.comment("FS is disabled due to issues. Only enable this if you are trying to fix them.")
-					.define("Allow functional storage containers to show in tables", false);
 			builder.pop();
 		}
 	}
