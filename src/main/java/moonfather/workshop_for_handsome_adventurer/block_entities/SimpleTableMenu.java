@@ -406,15 +406,17 @@ public class SimpleTableMenu extends AbstractContainerMenu
 					if (j <= maxSize)
 					{
 						itemStackBeingMoved.setCount(0);
-						itemStackInDestination.setCount(j);
-						slot.set(itemStackInDestination); //slot.setChanged();
+						ItemStack copy = itemStackInDestination.copy();
+						copy.setCount(j);
+						slot.set(copy); //slot.setChanged();
 						result = true;
 					}
 					else if (itemStackInDestination.getCount() < maxSize)
 					{
 						itemStackBeingMoved.shrink(maxSize - itemStackInDestination.getCount());
-						itemStackInDestination.setCount(maxSize);
-						slot.set(itemStackInDestination); //slot.setChanged();
+						ItemStack copy = itemStackInDestination.copy();
+						copy.setCount(maxSize);
+						slot.set(copy); //slot.setChanged();
 						result = true;
 					}
 				}
@@ -981,8 +983,9 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			else if (ItemStack.isSameItemSameComponents(itemstack, stack))
 			{
 				stack.shrink(i);
-				itemstack.grow(i);
-				this.setByPlayer(itemstack);
+				ItemStack copy = itemstack.copy();
+				copy.grow(i);  // these 2 lines, instead of itemstack.grow(i); fix the functional storage issue.
+				this.setByPlayer(copy);
 			}
 			return stack;
 		}

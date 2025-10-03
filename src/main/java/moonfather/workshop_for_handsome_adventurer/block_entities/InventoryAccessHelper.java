@@ -1,7 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
-import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.ItemContainerContentsWrapper;
+import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.MultipartBarrelsSimpleTranslator;
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.StorageDrawersSimpleTranslator;
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.TetraBeltTranslator;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
@@ -109,6 +109,19 @@ public class InventoryAccessHelper
             }
             return;
         }
+        if (be.getBlockState().getBlock().getDescriptionId().contains("mm_storage"))
+        {
+            if (!be.getBlockState().getBlock().getDescriptionId().contains("barrel")) { return; }
+            IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);
+            if (handler != null)  //&& handler.getSlots() <= 54  ?
+            {
+                this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new MultipartBarrelsSimpleTranslator(handler));
+                this.chosenContainerTrueSize = handler.getSlots() - 1;
+                this.chosenContainerVisibleSize = 27;
+                this.currentType = RecordTypes.BLOCK;
+                return;
+            }
+        }
         if (be instanceof Container container && container.getContainerSize() <= 54)
         {
             if (be instanceof ShulkerBoxBlockEntity && ! canOpenShulkerBox(level, be.getBlockState(), pos))
@@ -145,10 +158,6 @@ public class InventoryAccessHelper
                 this.currentType = RecordTypes.BLOCK;
                 return;
             }
-        }
-        if (be.getBlockState().getBlock().getDescriptionId().contains("functionalstorage"))
-        {
-            if (CommonConfig.DebugFS.isFalse()) return;
         }
         // IItemHandler capability
         IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);

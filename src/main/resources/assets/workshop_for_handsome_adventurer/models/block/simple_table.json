@@ -41,8 +41,8 @@
     "elements": [
         {
             "name": "TopCenter",
-            "from": [ 3, 15.99, 3 ],
-            "to": [ 13, 16.00, 13 ],
+            "from": [ 3, 15, 3 ],
+            "to": [ 13, 16, 13 ],
             "faces": {
                 "up": { "texture": "#crafting_table_top", "uv": [ 3, 3, 13, 13 ] },
                 "down": { "texture": "#oak_planks", "uv": [ 2, 2, 12, 12 ] }

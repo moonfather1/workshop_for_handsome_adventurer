@@ -63,7 +63,7 @@
 		},
 		{
 			"name": "TopGridRight",
-			"from": [3, 15.99, 3],
+			"from": [3, 15, 3],
 			"to": [13, 16, 13],
 			"faces": {
 				"up": {"uv": [3, 3, 13, 13], "texture": "#crafting_table_top"},
