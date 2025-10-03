@@ -28,10 +28,8 @@ public class OurServerPack2  extends BaseResourcePack
     @Override
     protected void buildResources(Map<ResourceLocation, String> cache)
     {
-        CompletableFuture<HolderLookup.Provider> holderProvider = CompletableFuture.supplyAsync(
-                VanillaRegistries::createLookup,
-                Util.backgroundExecutor()
-        );
+        // CompletableFuture<HolderLookup.Provider> holderProvider = CompletableFuture.supplyAsync(VanillaRegistries::createLookup, Util.backgroundExecutor());
+        // removed because of traverse/terrestria issue.
 
         BlockTagWriter1.writeFiles(cache);
         BlockTagWriter2.writeFiles(cache);
