@@ -1,11 +1,12 @@
 package moonfather.workshop_for_handsome_adventurer;
 
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-@EventBusSubscriber(modid = Constants.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Constants.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientConfig
 {
     private static final boolean defaultRenderItemsOnTable = true;
@@ -43,9 +44,11 @@ public class ClientConfig
         BUILDER.pop();
         BUILDER.push("Our in-world tooltips");
             ownWorldTooltipForceEnabled_internal = BUILDER
+                    .gameRestart()
                     .comment("We have a system that tells you what's under crosshair in tool rack / potion shelf / book shelf. It's disabled by default if mod pack has Jade/TOP/WTHIT, and it's enabled if none of the three are there. If you enable this, the system will be enabled even if you have Jade/TOP/WTHIT. ")
                     .define("Our world tooltip - force enabled", false);
             ownWorldTooltipForceDisabled_internal = BUILDER
+                    .gameRestart()
                     .comment("We have a system that tells you what's under crosshair in tool rack / potion shelf / book shelf. It's disabled by default if mod pack has Jade/TOP/WTHIT, and it's enabled if none of the three are there. If you enable this, the system will be disabled even if you don't have Jade/TOP/WTHIT. ")
                     .define("Our world tooltip - force disabled", false);
         BUILDER.pop();
@@ -57,6 +60,7 @@ public class ClientConfig
                 .comment("Is the game paused while the list is open?")
                 .define("Task list pauses singleplayer", false);
 			taskListItemsAreDrawnOnWall_internal = BUILDER
+                .gameRestart()
                 .comment("Are item texts are checkmarks drawn on the task list block (when it's hanging on a wall)? Default is true (Bibliocraft style) - text is visible and checkmarks and paging work. Alternatively (simple mode) - right-clicking just opens the gui.  Even though this is true by default, the Author plays with it turned off and recommends that you try with it turned off and then make a decision.")
                 .define("Items are drawn on wall", true);
         BUILDER.pop();
@@ -67,6 +71,7 @@ public class ClientConfig
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
+        System.out.println("~~~e " + event.getClass().getName());
         taskListColoringForFinishedItems = taskListColoringForFinishedItems_internal.get();
         taskListPausesSingleplayer = taskListPausesSingleplayer_internal.get();
         taskListItemsAreDrawnOnWall = taskListItemsAreDrawnOnWall_internal.get();
