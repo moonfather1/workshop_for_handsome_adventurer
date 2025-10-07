@@ -8,14 +8,18 @@ import moonfather.workshop_for_handsome_adventurer.blocks.ToolRack;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.LayeredDraw;
+//import net.minecraft.client.gui.LayeredDraw;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.neoforged.neoforge.client.gui.GuiLayer;
 import org.jetbrains.annotations.NotNull;
 
-public class InWorldTooltip implements LayeredDraw.Layer
+//public class InWorldTooltip implements LayeredDraw.Layer
+public class InWorldTooltip implements GuiLayer
 {
     private static final InWorldTooltip instance = new InWorldTooltip();
     public static InWorldTooltip getInstance() { return instance; }
@@ -67,7 +71,7 @@ public class InWorldTooltip implements LayeredDraw.Layer
                     {
                         if (! blockEntity.GetItem(slot).isEmpty())
                         {
-                            guiGraphics.renderTooltip(Minecraft.getInstance().font, blockEntity.GetItem(slot), Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2 - 30, Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 + 20);
+                            guiGraphics.renderTooltip(Minecraft.getInstance().font, blockEntity.GetItem(slot), Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2 - 30, Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 + 20, DefaultTooltipPositioner.INSTANCE, null);
                         }
                     }
                 }

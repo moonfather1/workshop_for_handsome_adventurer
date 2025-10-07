@@ -32,8 +32,13 @@ public class ModWorkshop
     private static final Logger LOGGER = LogUtils.getLogger();
 
 
-    // todo: test carryon
-    // instant config, do net sync
+    // todo: 1.21.8 test in-world tooltip, things changed there, with positioning. passed DefaultTooltip thingy
+    // todo: 1.21.8 as above in simplebutton we used DefaultTooltipPositioner.INSTANCE
+    // todo: 1.21.8 JEITransferInfo ima sumnjiv novi tip. x2
+    // todo: 1.21.8  getMetadataSection in base res pack is different
+    // todo: 1.21.8  TL model switching changed    if works, remove old code
+    // todo: 1.21.8  toolrack save/load
+
     public ModWorkshop(IEventBus modBus, ModContainer modContainer)
     {
         modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);

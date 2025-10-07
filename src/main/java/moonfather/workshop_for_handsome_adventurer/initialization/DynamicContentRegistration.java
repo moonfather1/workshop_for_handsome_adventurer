@@ -70,7 +70,7 @@ public class DynamicContentRegistration
     {
         try  // because of unfreeze fuckery
         {
-            ((MappedRegistry<Block>) BuiltInRegistries.BLOCK).unfreeze();
+            ((MappedRegistry<Block>) BuiltInRegistries.BLOCK).unfreeze(false);
             for (String wood : WoodTypeLister.getWoodIds())
             {
                 // can't just add wood types to Registration.woodTypes; def registry is filled at mod constructor. wood list is available much later, after RegisterEvent for blocks. that's why we do things here.

@@ -9,6 +9,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
+import net.minecraft.server.packs.metadata.MetadataSectionType;
+import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.io.BufferedReader;
@@ -24,7 +27,7 @@ public class OurClientPack extends BaseResourcePack
 
     public OurClientPack(PackLocationInfo locationInfo)
     {
-        super(PackType.CLIENT_RESOURCES, SharedConstants.getCurrentVersion().getPackVersion(PackType.CLIENT_RESOURCES));
+        super(PackType.CLIENT_RESOURCES, SharedConstants.getCurrentVersion().packVersion(PackType.CLIENT_RESOURCES));
         this.locationInfo = locationInfo;
     }
 
@@ -331,13 +334,13 @@ public class OurClientPack extends BaseResourcePack
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getMetadataSection(MetadataSectionSerializer<T> deserializer) throws IOException
+    public <T> T getMetadataSection(MetadataSectionType<T> metadataSectionType) throws IOException
     {
-        if (deserializer == LanguageMetadataSection.TYPE)
+        if (metadataSectionType == LanguageMetadataSection.TYPE)
         {
             return (T) new LanguageMetadataSection(Map.of( "en_us", new LanguageInfo("US", "English", false)));
         }
-        return super.getMetadataSection(deserializer);
+        return super.getMetadataSection(metadataSectionType);
     }
 
     @Override

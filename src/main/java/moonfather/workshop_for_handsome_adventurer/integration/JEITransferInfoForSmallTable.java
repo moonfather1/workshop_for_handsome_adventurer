@@ -24,7 +24,7 @@ public class JEITransferInfoForSmallTable implements IRecipeTransferInfo {
 
     @Override
     public RecipeType getRecipeType() {
-        return RecipeTypes.CRAFTING;
+        return  RecipeType.createFromVanilla(net.minecraft.world.item.crafting.RecipeType.CRAFTING); //?RecipeTypes.CRAFTING;
     }
 
     @Override

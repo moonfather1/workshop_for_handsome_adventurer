@@ -4,6 +4,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -21,7 +23,7 @@ public class SimpleButton extends Button
 
     private String tooltipKey = null;
     private Component tooltipInset = null;
-    List<Component> tooltipLines = null;
+    List<ClientTooltipComponent> tooltipLines = null;
 
     public SimpleButton(int x, int y, int width, int height, String texture, String suffixNormal, String suffixHovered, String suffixDisabled, int textureWidth, int textureHeight, OnPress onPress, Component message)
     {
@@ -60,20 +62,21 @@ public class SimpleButton extends Button
                                       .split("\n"))
                       .forEach(text -> {
                           int pos = text.indexOf("%s");
+                          Component line;
                           if (pos == -1)
                           {
-                              this.tooltipLines.add(Component.literal(text).withStyle(ChatFormatting.GRAY));
+                              line = Component.literal(text).withStyle(ChatFormatting.GRAY);
                           }
                           else
                           {
-                              this.tooltipLines.add(Component.literal(text.substring(0, pos)).withStyle(ChatFormatting.GRAY)
+                              line = Component.literal(text.substring(0, pos)).withStyle(ChatFormatting.GRAY)
                                                              .append(this.tooltipInset.copy().withStyle(Style.EMPTY.withColor(0xeeaa77)))
-                                                             .append(Component.literal(text.substring(pos + 2)).withStyle(ChatFormatting.GRAY))
-                              );
+                                                             .append(Component.literal(text.substring(pos + 2)).withStyle(ChatFormatting.GRAY));
                           }
+                          this.tooltipLines.add(ClientTooltipComponent.create(line.getVisualOrderText()));
                       });
             }
-            graphics.renderComponentTooltip(font, this.tooltipLines, mouseX, mouseY - 8);
+            graphics.renderTooltip(font, this.tooltipLines, mouseX, mouseY - 8, DefaultTooltipPositioner.INSTANCE, null);
         }
     }
 

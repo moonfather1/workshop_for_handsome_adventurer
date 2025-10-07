@@ -1,19 +1,26 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class BaseContainerBlockEntity extends BlockEntity
 {
@@ -48,16 +55,16 @@ public class BaseContainerBlockEntity extends BlockEntity
 
 
     @Override
-    protected void loadAdditional(CompoundTag pTag, HolderLookup.Provider lookupProvider)
+    protected void loadAdditional(ValueInput input)
     {
-        super.loadAdditional(pTag, lookupProvider);
+        super.loadAdditional(input);
         this.VerifyCapacity();
         for (int i = 0; i < this.capacity; i++)
         {
-            CompoundTag tag = pTag.getCompound("item" + i);
-            if (tag.contains("id"))
+            Optional<ItemStack> readValue = input.read("item" + i, ItemStack.CODEC);
+            if (readValue.isPresent())
             {
-                this.items.set(i, ItemStack.parseOptional(lookupProvider, tag));
+                this.items.set(i, readValue.get());
             }
             else
             {
@@ -67,44 +74,48 @@ public class BaseContainerBlockEntity extends BlockEntity
     }
 
     @Override
-    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider lookupProvider)
+    protected void saveAdditional(ValueOutput output)
     {
-        super.saveAdditional(pTag, lookupProvider);
-        this.saveInternal(pTag, lookupProvider);
+        super.saveAdditional(output);
+        this.saveInternal(output);
     }
 
-    protected CompoundTag saveInternal(CompoundTag compoundTag, HolderLookup.Provider lookupProvider)
+    protected void saveInternal(ValueOutput output)
     {
         this.VerifyCapacity();
         for (int i = 0; i < this.capacity; i++)
         {
             if (! this.items.get(i).isEmpty())
             {
-                compoundTag.put("item" + i, this.items.get(i).save(lookupProvider, new CompoundTag()));
+                output.store("item" + i, ItemStack.CODEC, this.items.get(i));
             }
             else
             {
-                compoundTag.put("item" + i, new CompoundTag());
+                output.discard("item" + i);
             }
         }
-        return compoundTag;
     }
 
     ////////////////////////////////////////////////////////////
 
 
-
     @Override
-    public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider lookupProvider)
+    public void handleUpdateTag(ValueInput input)
     {
-        this.loadWithComponents(tag, lookupProvider); // update client
+        this.loadWithComponents(input);  // update client
     }
 
     @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider lookupProvider)
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries)
     {
-        return this.saveInternal(new CompoundTag(), lookupProvider); //send to client
+        try (ProblemReporter.ScopedCollector pr = new ProblemReporter.ScopedCollector(LOGGER))
+        {
+            TagValueOutput output = TagValueOutput.createWithContext(pr.forChild(this.problemPath()), registries);
+            this.saveInternal(output);
+            return output.buildResult();   //send to client
+        }
     }
+    protected static final Logger LOGGER = LogUtils.getLogger();
 
     @Override
     public Packet<ClientGamePacketListener> getUpdatePacket()

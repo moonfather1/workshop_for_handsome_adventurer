@@ -3,15 +3,16 @@ package moonfather.workshop_for_handsome_adventurer.block_entities;
 import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class PotionShelfBlockEntity extends ToolRackBlockEntity
 {
@@ -27,34 +28,30 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
     public static final int CAPACITY = 6;
     private final List<Integer> itemCounts = new ArrayList<Integer>(CAPACITY);
 
-//    @Override
-//    protected void saveAdditional(CompoundTag compoundTag)
-//    {
-//        super.saveAdditional(compoundTag);
-//        compoundTag.putIntArray("Counts", this.itemCounts);
-//    }
 
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider lookupProvider)
+    protected void loadAdditional(ValueInput input)
     {
-        super.loadAdditional(tag, lookupProvider);
-        int[] array = tag.getIntArray("Counts");
-        for (int i = 0; i < array.length; i++) {
-            this.itemCounts.set(i, array[i]);
-            if (array[i] == 0 && ! this.GetItem(i).isEmpty())
+        super.loadAdditional(input);
+        Optional<int[]> array = input.getIntArray("Counts");
+        if (array.isPresent()) {
+            for (int i = 0; i < array.get().length; i++)
             {
-                this.ClearItem(i);
+                this.itemCounts.set(i, array.get()[i]);
+                if (array.get()[i] == 0 && ! this.GetItem(i).isEmpty())
+                {
+                    this.ClearItem(i);
+                }
             }
         }
     }
 
     @Override
-    protected CompoundTag saveInternal(CompoundTag compoundTag, HolderLookup.Provider lookupProvider)
+    protected void saveInternal(ValueOutput output)
     {
-        super.saveInternal(compoundTag, lookupProvider);
-        compoundTag.putIntArray("Counts", this.itemCounts);
-        return compoundTag;
+        super.saveInternal(output);
+        output.putIntArray("Counts", this.itemCounts.stream().mapToInt(Integer::valueOf).toArray());
     }
 
     @Override

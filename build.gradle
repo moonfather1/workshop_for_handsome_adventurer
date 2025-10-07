@@ -1,9 +1,8 @@
 plugins {
     id 'java-library'
-    id 'eclipse'
-    id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '1.0.17'
+    id 'net.neoforged.moddev' version '2.0.110'
+    id 'idea'
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -19,19 +18,11 @@ version = mod_version
 group = mod_group_id
 
 repositories {
-    mavenLocal()
-	
-    maven {
+    // Add here additional repositories if required by some of the dependencies below.
+        maven {
         url "https://cursemaven.com"
         content {
             includeGroup "curse.maven"
-        }
-    }
-	
-    maven {
-        url "https://api.modrinth.com/maven"
-        content {
-            includeGroup "maven.modrinth"
         }
     }
 }
@@ -40,7 +31,7 @@ base {
     archivesName = mod_id
 }
 
-// Mojang ships Java 21 to end users starting in 1.20.5, so mods should target Java 21.
+// Mojang ships Java 21 to end users in 1.21.8, so mods should target Java 21.
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 neoForge {
@@ -53,7 +44,7 @@ neoForge {
     }
 
     // This line is optional. Access Transformers are automatically detected
-    // accessTransformers.add('src/main/resources/META-INF/accesstransformer.cfg')
+    // accessTransformers = project.files('src/main/resources/META-INF/accesstransformer.cfg')
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
@@ -88,7 +79,7 @@ neoForge {
         }
 
         data {
-            data()
+            clientData()
 
             // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
             // gameDirectory = project.file('run-data')
@@ -116,8 +107,7 @@ neoForge {
     mods {
         // define mod <-> source bindings
         // these are used to tell the game which sources are for which mod
-        // mostly optional in a single mod project
-        // but multi mod projects should define one per mod
+        // multi mod projects should define one per mod
         "${mod_id}" {
             sourceSet(sourceSets.main)
         }
@@ -136,83 +126,63 @@ configurations {
 }
 
 dependencies {
-    //annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'  //!! trrba li mi?
+    compileOnly "curse.maven:wthit-forge-455982:7052503"
+    //runtimeOnly "curse.maven:badpackets-615134:6671481"
+    implementation "curse.maven:jade-324717:6902747"
+    compileOnly "curse.maven:the-one-probe-245211:6106998"
+    //!! top is at 1.21.1
 
+    runtimeOnly "curse.maven:jei-238222:7025033"
+    compileOnly "curse.maven:jei-238222:7025033"
+    compileOnly "curse.maven:roughly-enough-items-310111:6833149"
+    compileOnly "curse.maven:emi-580555:5436759"
+    //!! EMI is on 1.21.1
+    //runtimeOnly "curse.maven:architectury-api-419699:6803291"
+    compileOnly "curse.maven:cloth-config-348521:6669837"
 
-	//runtimeOnly "curse.maven:superflat-world-no-slimes-344185:5425631"
-	//runtimeOnly "curse.maven:collective-342584:5482423"
-
-    compileOnly "curse.maven:wthit-forge-455982:5721811"
-    //runtimeOnly "curse.maven:badpackets-615134:5430629"
-    compileOnly "curse.maven:jade-324717:5846105"
-    //implementation "curse.maven:the-one-probe-245211:5431197"
-    implementation "curse.maven:the-one-probe-245211:6106998"
-
-    compileOnly "curse.maven:jei-238222:5466551"
-    implementation "curse.maven:emi-580555:5436759"
-    compileOnly "curse.maven:roughly-enough-items-310111:5846953"
-	//runtimeOnly "curse.maven:architectury-api-419699:5786327"
-    compileOnly "curse.maven:cloth-config-348521:5729127"
-
-    compileOnly "curse.maven:crafting-tweaks-233071:6023041"
-	//runtimeOnly "curse.maven:balm-531761:6508667"
+    compileOnly "curse.maven:crafting-tweaks-233071:6784521"
+    //runtimeOnly "curse.maven:balm-531761:7047863"
 
     compileOnly "curse.maven:polymorph-388800:6451024"
-	
+    // PM is on 1.21.1 at the moment
+
     compileOnly "curse.maven:dynamic-asset-generator-577096:5471770"
-    //implementation "curse.maven:dynamic-asset-generator-577096:5471770"
-	
-    //runtimeOnly "curse.maven:biomes-o-plenty-220318:5476207"
-    //runtimeOnly "curse.maven:terrablender-neoforge-940057:5429865"
-    //runtimeOnly "curse.maven:glitchcore-955399:5429863"
+    //!! DAG is on 1.21.1 at the moment
+
+    runtimeOnly "curse.maven:biomes-o-plenty-220318:7043631"
+    runtimeOnly "curse.maven:glitchcore-955399:6812823"
+    runtimeOnly "curse.maven:terrablender-neoforge-940057:6786184"
+
+    //runtimeOnly "curse.maven:owo-lib-532610:6994751"
+    compileOnly "curse.maven:curios-309927:6538253"
+    //!! curios is for 1.21.5
+    compileOnly "curse.maven:accessories-938917:7059226"
+
 
     compileOnly "curse.maven:inventory-tweaks-refoxed-976858:5610776"
+    //!! IT is still on 1.21.1
 
-    //compileOnly "curse.maven:adorned-1036809:5684431"
-    //implementation "curse.maven:travelers-backpack-321117:5812815"
-    compileOnly "curse.maven:travelers-backpack-321117:6200587"
+    runtimeOnly "curse.maven:storage-drawers-223852:6967716"
+    //!! runtimeOnly "curse.maven:functional-storage-556861:5861256"
+    //!! runtimeOnly "curse.maven:titanium-287342:5889342"
+    //!! FS is still on 1.21.1
 
-    //implementation "curse.maven:accessories-938917:5848473"
-    //runtimeOnly "curse.maven:owo-lib-532610:5945693"
-    compileOnly "curse.maven:accessories-938917:5848473"
-    implementation "curse.maven:curios-continuation-1037991:5888964"
+    //runtimeOnly "curse.maven:sophisticated-core-618298:7060901"
+    //runtimeOnly "curse.maven:sophisticated-backpacks-422301:7057705"
 
-	implementation "curse.maven:storage-drawers-223852:5873879"
-    runtimeOnly "curse.maven:functional-storage-556861:5861256"
-    runtimeOnly "curse.maven:titanium-287342:5889342"
-
-    //runtimeOnly "curse.maven:sophisticated-core-618298:5935141"
-    //runtimeOnly "curse.maven:sophisticated-backpacks-422301:5927499"
-    //runtimeOnly "curse.maven:sophisticated-storage-619320:5909296"
-
-    implementation "curse.maven:backpacked-352835:5852973"
-    //compileOnly "curse.maven:backpacked-352835:5852973"
-    runtimeOnly "curse.maven:framework-549225:5911998"
-    runtimeOnly "curse.maven:accessories-938917:5848473"
-    runtimeOnly "curse.maven:owo-lib-532610:5945693"
-	
-	//runtimeOnly "curse.maven:the-twilight-forest-227639:5906799"
-	//runtimeOnly "curse.maven:oh-the-biomes-weve-gone-1070751:5932848"
-	//runtimeOnly "curse.maven:oh-the-trees-youll-grow-962544:5691181"
-	//runtimeOnly "curse.maven:geckolib-388172:5874016"
-	//runtimeOnly "curse.maven:corgilib-693313:5691275"
-	//runtimeOnly "curse.maven:terrablender-neoforge-940057:5864140"
-
-    runtimeOnly "curse.maven:travelers-backpack-321117:6200587"
-    //runtimeOnly "curse.maven:modopedia-1132038:6676378"
+    compileOnly "curse.maven:backpacked-352835:5852973"
+    //!!! backpacked is still on 1.21.1
+    runtimeOnly "curse.maven:travelers-backpack-321117:7005688"
+    compileOnly "curse.maven:travelers-backpack-321117:7005688"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.
-// When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
-// See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
-tasks.withType(ProcessResources).configureEach {
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
     var replaceProperties = [
             minecraft_version      : minecraft_version,
             minecraft_version_range: minecraft_version_range,
             neo_version            : neo_version,
-            neo_version_range      : neo_version_range,
-            loader_version_range   : loader_version_range,
             mod_id                 : mod_id,
             mod_name               : mod_name,
             mod_license            : mod_license,
@@ -221,11 +191,15 @@ tasks.withType(ProcessResources).configureEach {
             mod_description        : mod_description
     ]
     inputs.properties replaceProperties
-
-    filesMatching(['META-INF/neoforge.mods.toml']) {
-        expand replaceProperties
-    }
+    expand replaceProperties
+    from "src/main/templates"
+    into "build/generated/sources/modMetadata"
 }
+// Include the output of "generateModMetadata" as an input directory for the build
+// this works with both building through Gradle and the IDE.
+sourceSets.main.resources.srcDir generateModMetadata
+// To avoid having to run "generateModMetadata" manually, make it run on every project reload
+neoForge.ideSyncTask generateModMetadata
 
 // Example configuration to allow publishing using the maven-publish plugin
 publishing {

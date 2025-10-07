@@ -6,7 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
+import net.minecraft.server.packs.metadata.MetadataSectionType;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
 import net.minecraft.server.packs.resources.IoSupplier;
 import org.jetbrains.annotations.Nullable;
@@ -117,13 +117,11 @@ public abstract class BaseResourcePack implements PackResources
     }
     private final Set<String> fixedNamespaces = Set.of(Constants.MODID, "tetra_tables");
 
-
-
     @Nullable
     @Override
-    public <T> T getMetadataSection(MetadataSectionSerializer<T> deserializer) throws IOException
+    public <T> T getMetadataSection(MetadataSectionType<T> metadataSectionType) throws IOException
     {
-        if (deserializer == PackMetadataSection.TYPE)
+        if (metadataSectionType.equals(PackMetadataSection.TYPE))
         {
             return (T) this.packMetadata;
         }

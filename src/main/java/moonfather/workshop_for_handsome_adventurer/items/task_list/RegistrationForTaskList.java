@@ -11,6 +11,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.block.Block;
@@ -42,8 +43,8 @@ public class RegistrationForTaskList
     public  static final Supplier<Block> TASK_LIST_PANEL = BLOCKS.register("task_list_panel", () -> new TaskListPanel());
 
     public static final Supplier<DataComponentType<TaskListComponent>> TASK_LIST_CONTENT = DATA_COMPONENT_TYPES.registerComponentType("task_list_data", builder -> builder.persistent(TaskListComponent.CODEC_FOR_COMPONENT).networkSynchronized(TaskListComponent.STREAM_CODEC_FOR_COMPONENT));
-    public static final Supplier<RecipeSerializer<TaskListPlusPaperRecipe>> TASK_LIST_EXPANSION_RECIPE = RECIPES.register("task_list_ex", () -> new SimpleCraftingRecipeSerializer<TaskListPlusPaperRecipe>(TaskListPlusPaperRecipe::new));
-    public static final Supplier<RecipeSerializer<TaskListPlusCreamRecipe>> TASK_LIST_CREAMING_RECIPE = RECIPES.register("task_list_creaming", () -> new SimpleCraftingRecipeSerializer<TaskListPlusCreamRecipe>(TaskListPlusCreamRecipe::new));
+    public static final Supplier<RecipeSerializer<TaskListPlusPaperRecipe>> TASK_LIST_EXPANSION_RECIPE = RECIPES.register("task_list_ex", () -> new CustomRecipe.Serializer<TaskListPlusPaperRecipe>(TaskListPlusPaperRecipe::new));
+    public static final Supplier<RecipeSerializer<TaskListPlusCreamRecipe>> TASK_LIST_CREAMING_RECIPE = RECIPES.register("task_list_creaming", () -> new CustomRecipe.Serializer<TaskListPlusCreamRecipe>(TaskListPlusCreamRecipe::new));
 
     public static final Supplier<BlockEntityType<TaskListBlockEntity>> TASK_LIST_PANEL_BE = BLOCK_ENTITIES.register("task_list_panel_be", () -> BlockEntityType.Builder.of(TaskListBlockEntity::new, TASK_LIST_PANEL.get()).build(null));
 

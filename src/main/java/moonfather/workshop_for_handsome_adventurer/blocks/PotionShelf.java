@@ -12,7 +12,6 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -114,7 +113,7 @@ public class PotionShelf extends ToolRack
                 ! (CommonConfig.OffhandInteractsWithPotionShelf.isTrue() && this.canDepositItem(player.getOffhandItem())))
         {
             player.displayClientMessage(ShelfMessage, true);
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return level.isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
 
         if (level.isClientSide)
@@ -209,7 +208,7 @@ public class PotionShelf extends ToolRack
                 if (BE.IsSlotMaxed(slot))
                 {
                     player.displayClientMessage(MaxedMessage, true);
-                    return InteractionResult.sidedSuccess(level.isClientSide);
+                    return InteractionResult.SUCCESS_SERVER;
                 }
                 if (player.getMainHandItem().getMaxStackSize() > 1 && player.isCrouching())
                 {
@@ -247,7 +246,7 @@ public class PotionShelf extends ToolRack
                 if (BE.IsSlotMaxed(slot))
                 {
                     player.displayClientMessage(MaxedMessage, true);
-                    return InteractionResult.sidedSuccess(level.isClientSide);
+                    return InteractionResult.SUCCESS_SERVER;
                 }
                 if (player.getOffhandItem().getMaxStackSize() > 1 && player.isCrouching())
                 {
@@ -267,7 +266,7 @@ public class PotionShelf extends ToolRack
             }
         }
         level.sendBlockUpdated(pos, blockState, blockState, 2);
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS_SERVER;
     }
 
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event)
