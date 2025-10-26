@@ -70,6 +70,7 @@ public class DynamicContentRegistration
     {
         try  // because of unfreeze fuckery
         {
+            boolean wasFrozen = ((MappedRegistry<Block>) BuiltInRegistries.BLOCK).frozen;
             ((MappedRegistry<Block>) BuiltInRegistries.BLOCK).unfreeze();
             for (String wood : WoodTypeLister.getWoodIds())
             {
@@ -101,7 +102,10 @@ public class DynamicContentRegistration
                 registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.TopSimple("open_minimal"), "book_shelf_open_minimal_", wood, Registration.blocks_bshelf, SecondCreativeTab.items_bshelf4);
                 registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.TopWithLanterns("with_lanterns"), "book_shelf_with_lanterns_", wood, Registration.blocks_bshelf, SecondCreativeTab.items_bshelf5);
             }
-            BuiltInRegistries.BLOCK.freeze();
+            if (wasFrozen)
+            {
+                BuiltInRegistries.BLOCK.freeze();
+            }
         }
         catch (Exception ignored)	{ }
     }

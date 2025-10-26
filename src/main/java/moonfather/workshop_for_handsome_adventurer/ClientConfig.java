@@ -71,7 +71,7 @@ public class ClientConfig
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
-        System.out.println("~~~e " + event.getClass().getName());
+        //System.out.println("~~~e " + event.getClass().getName());
         taskListColoringForFinishedItems = taskListColoringForFinishedItems_internal.get();
         taskListPausesSingleplayer = taskListPausesSingleplayer_internal.get();
         taskListItemsAreDrawnOnWall = taskListItemsAreDrawnOnWall_internal.get();
