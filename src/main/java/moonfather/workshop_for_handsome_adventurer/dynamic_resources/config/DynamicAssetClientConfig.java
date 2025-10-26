@@ -34,7 +34,7 @@ public class DynamicAssetClientConfig
         BUILDER.push("Texture paths - manual, if autosearching is disabled");
             StrippedLogSubstitutionListForTextures = BUILDER
                     .comment("For wood types that do not have stripped logs, you can specify table top block here. If you do not, we are skipping that wood type.")
-                    .define("Stripped log substitution list for textures", "embur=embur, sythian=sythian, bamboo=stripped_bamboo_block, bulbis=bulbis");
+                    .define("Stripped log substitution list for textures", "embur=embur, sythian=sythian, bamboo=stripped_bamboo_block, bulbis=bulbis,  edelwood=edelwood");
             TextureTemplate1List = BUILDER
                     .comment("Tells us where to find plank textures, in case mod uses subdirectories (like byg) or different file names. Second %s below is the wood type. Separate using commas.")
                     .define("Texture template1 list", "biomeswevegone=%s:block/%s/planks, aether=%s:block/construction/%s_planks");

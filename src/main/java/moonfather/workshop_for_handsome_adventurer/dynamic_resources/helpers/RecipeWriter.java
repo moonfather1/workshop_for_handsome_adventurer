@@ -9,6 +9,7 @@ import net.minecraft.server.packs.PackType;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class RecipeWriter
 {
@@ -19,13 +20,14 @@ public class RecipeWriter
         {
             String original = AssetReader.getInstance(PackType.SERVER_DATA, Constants.MODID).getText(ResourceLocation.fromNamespaceAndPath(Constants.MODID, file));
             // it never will be null, won't even check
+            String filePrefix = file.substring("recipe/".length(), file.length() - "spruce.json".length()); // strip  recipe/    and     spruce.json
             for (String wood: WoodTypeLister.getWoodIds())
             {
                 String newRecipe = original
                         .replace("minecraft:stripped_spruce_log", getStrippedLog(wood))
                         .replace("minecraft:spruce_slab", getSlab(wood))
                         .replace("minecraft:spruce_planks", getPlanks(wood))
-                        .replace(SPRUCE, wood);
+                        .replace(filePrefix+SPRUCE, filePrefix+wood);  // now we need another  .replace(SPRUCE, wood);  to take care of recipe result but vampirism's cursed spruce throws a wrench into that
                 cache.put(ResourceLocation.fromNamespaceAndPath(Constants.MODID, file.replace(SPRUCE, wood)), newRecipe);
             }
             if (! conversionRecipes.contains(file))
@@ -35,7 +37,7 @@ public class RecipeWriter
                     String newRecipe = original
                             .replace("minecraft:stripped_spruce", duplicate.getNamespace() + ":stripped_" + duplicate.getPath()) // these will have logs
                             .replace("minecraft:spruce", duplicate.toString())
-                            .replace(SPRUCE, duplicate.getPath());
+                            .replace(filePrefix+SPRUCE, filePrefix+duplicate.getPath());
                     cache.put(ResourceLocation.fromNamespaceAndPath(Constants.MODID, file.replace(SPRUCE, duplicate.getPath() + "_" + duplicate.getNamespace())), newRecipe);
                 }
             }

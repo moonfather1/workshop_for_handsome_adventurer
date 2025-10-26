@@ -44,6 +44,7 @@ public class OurClientPack extends BaseResourcePack
             json = AssetReader.getInstance(PackType.CLIENT_RESOURCES, Constants.MODID).getText(ResourceLocation.fromNamespaceAndPath(Constants.MODID, spruceFile));
             if (json != null)
             {
+                String filePrefix = spruceFile.substring(spruceFile.lastIndexOf('/')+1, spruceFile.length() - "spruce.json".length()); // strip  something/    and     spruce.json
                 for (String wood: WoodTypeLister.getWoodIds())
                 {
                     String plankStringToInsert = getPlanks(wood); // because it might be null
@@ -53,7 +54,8 @@ public class OurClientPack extends BaseResourcePack
                     String replaced = json
                         .replace(SPRUCE_PLANKS, plankStringToInsert)
                         .replace(SPRUCE_LOG, logStringToInsert)
-                        .replace(SPRUCE, wood);
+                        .replace(filePrefix+SPRUCE, filePrefix+wood)
+                        .replace("lanterns_"+SPRUCE, "lanterns_"+wood);
                     if (WoodTypeClientManager.isUsingDarkerWorkstation(wood))
                     {
                         replaced = replaced.replace("/stripped_dark_oak_log", "/stripped_spruce_log");
