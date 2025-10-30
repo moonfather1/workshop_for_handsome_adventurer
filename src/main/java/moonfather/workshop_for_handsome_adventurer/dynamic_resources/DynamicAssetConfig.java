@@ -54,7 +54,7 @@ public class DynamicAssetConfig
             {
                 try
                 {
-                    Gson gson = (new GsonBuilder()).setPrettyPrinting().create();
+                    Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
                     String text = gson.toJson(common, InstantConfigServer.class);
                     Files.writeString(configPath, text, StandardCharsets.US_ASCII, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
                 }
@@ -94,7 +94,7 @@ public class DynamicAssetConfig
             {
                 try
                 {
-                    Gson gson = (new GsonBuilder()).setPrettyPrinting().create();
+                    Gson gson = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
                     String text = gson.toJson(client, InstantConfigClient.class);
                     Files.writeString(configPath, text, StandardCharsets.US_ASCII, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
                 }
@@ -220,7 +220,7 @@ public class DynamicAssetConfig
         public String blacklist = "vinery:cherry";
 
         public String stripped_log_substitution_comment = "For wood types that do not have stripped logs, you can specify table top block here. If you do not, we are skipping that wood type.";
-        public String stripped_log_substitution_list_for_recipes = "bamboo=minecraft:smooth_stone, treated_wood_horizontal=minecraft:polished_blackstone,  embur=byg:stripped_embur_pedu,  sythian=byg:stripped_sythian_stem, bulbis=minecraft:smooth_stone, crimson=minecraft:stripped_crimson_stem, warped=minecraft:stripped_warped_stem";
+        public String stripped_log_substitution_list_for_recipes = "bamboo=minecraft:smooth_stone, treated_wood_horizontal=minecraft:polished_blackstone,  embur=byg:stripped_embur_pedu,  sythian=byg:stripped_sythian_stem, bulbis=minecraft:smooth_stone, crimson=minecraft:stripped_crimson_stem, warped=minecraft:stripped_warped_stem,  edelwood=forbidden_arcanus:edelwood_planks";
 
         public String blocks_with_dumbass_names_comment = "This is a list of blocks that do not follow usual naming scheme. Set consists of planks, slab and log, separated by slashes. Separate all sets with comma. You can use stripped_log_substitution for these. Example is IE's treated wood as it has no logs.";
         public String blocks_with_dumbass_names = "immersiveengineering:treated_wood_horizontal/slab_treated_wood_horizontal/no_log_for_this_one, growthcraft_apples:apple_plank/apple_plank_slab/apple_wood_log_stripped,   growthcraft_cellar:cork_plank/cork_plank_slab/cork_wood_log_stripped,   vinery:cherry_planks/cherry_slab/stripped_cherry_log,   quark:azalea_planks/azalea_planks_slab/stripped_azalea_log";
@@ -235,7 +235,7 @@ public class DynamicAssetConfig
         public String disable_autosearching_for_textures = "false";
 
         public String stripped_log_substitution_comment = "For wood types that do not have stripped logs, you can specify table top block here. If you do not, we are skipping that wood type.";
-        public String stripped_log_substitution_list_for_textures = "embur=embur, sythian=sythian, bamboo=stripped_bamboo_block, bulbis=bulbis";
+        public String stripped_log_substitution_list_for_textures = "embur=embur, sythian=sythian, bamboo=stripped_bamboo_block, bulbis=bulbis,  edelwood=edelwood";
 
         public String texture_template1_comment = "Tells us where to find plank textures, in case mod uses subdirectories (like byg) or different file names. Second %s below is the wood type. Separate using commas.";
         public String texture_template1_list = "byg=%s:block/%s/planks, aether=%s:block/construction/%s_planks";

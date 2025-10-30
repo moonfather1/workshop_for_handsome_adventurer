@@ -5,6 +5,8 @@
     { "id": "silentgear:blueprint_book", "required": false },
     { "id": "map_atlases:atlas", "required": false },
     { "id": "ae2:guide", "required": false },
-    { "id": "immersiveengineering:manual", "required": false }
+    { "id": "immersiveengineering:manual", "required": false },
+    { "id": "guideapi_vp:vampirism-guidebook", "required": false },
+    { "id": "antiqueatlas:antique_atlas", "required": false }
   ]
 }
