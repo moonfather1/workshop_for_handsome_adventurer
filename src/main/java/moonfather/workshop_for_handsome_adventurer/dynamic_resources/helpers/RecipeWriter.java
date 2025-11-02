@@ -23,27 +23,37 @@ public class RecipeWriter
             String filePrefix = file.substring("recipe/".length(), file.length() - "spruce.json".length()); // strip  recipe/    and     spruce.json
             for (String wood: WoodTypeLister.getWoodIds())
             {
-                String newRecipe = original
-                        .replace("minecraft:stripped_spruce_log", getStrippedLog(wood))
-                        .replace("minecraft:spruce_slab", getSlab(wood))
-                        .replace("minecraft:spruce_planks", getPlanks(wood))
-                        .replace(filePrefix+SPRUCE, filePrefix+wood);  // now we need another  .replace(SPRUCE, wood);  to take care of recipe result but vampirism's cursed spruce throws a wrench into that
-                cache.put(ResourceLocation.fromNamespaceAndPath(Constants.MODID, file.replace(SPRUCE, wood)), newRecipe);
+                StringBuilder newRecipe = new StringBuilder(original);
+                replace(newRecipe, "minecraft:stripped_spruce_log", getStrippedLog(wood));
+                replace(newRecipe, "minecraft:spruce_slab", getSlab(wood));
+                replace(newRecipe, "minecraft:spruce_planks", getPlanks(wood));
+                replace(newRecipe, filePrefix+SPRUCE, filePrefix+wood);  // now we need another  .replace(SPRUCE, wood);  to take care of recipe result but vampirism's cursed spruce throws a wrench into that
+                conversionNames.forEach(n -> replace(newRecipe, n, n.replace("spruce", wood)) );
+                cache.put(ResourceLocation.fromNamespaceAndPath(Constants.MODID, file.replace(SPRUCE, wood)), newRecipe.toString());
             }
             if (! conversionRecipes.contains(file))
             {
                 for (ResourceLocation duplicate : WoodTypeLister.getDuplicateWoods()) // once again, with feeling
                 {
-                    String newRecipe = original
-                            .replace("minecraft:stripped_spruce", duplicate.getNamespace() + ":stripped_" + duplicate.getPath()) // these will have logs
-                            .replace("minecraft:spruce", duplicate.toString())
-                            .replace(filePrefix+SPRUCE, filePrefix+duplicate.getPath());
-                    cache.put(ResourceLocation.fromNamespaceAndPath(Constants.MODID, file.replace(SPRUCE, duplicate.getPath() + "_" + duplicate.getNamespace())), newRecipe);
+                    StringBuilder newRecipe = new StringBuilder(original);
+                    replace(newRecipe, "minecraft:stripped_spruce", duplicate.getNamespace() + ":stripped_" + duplicate.getPath()); // these will have logs
+                    replace(newRecipe, "minecraft:spruce", duplicate.toString());
+                    replace(newRecipe, filePrefix+SPRUCE, filePrefix+duplicate.getPath());
+                    conversionNames.forEach(n -> replace(newRecipe, n, n.replace("spruce", duplicate.getPath())) );
+                    cache.put(ResourceLocation.fromNamespaceAndPath(Constants.MODID, file.replace(SPRUCE, duplicate.getPath() + "_" + duplicate.getNamespace())), newRecipe.toString());
                 }
             }
         }
     }
-
+    private static void replace(StringBuilder sb, String toFind, String replacement)
+    {
+        int pos = sb.indexOf(toFind);
+        while (pos != -1)
+        {
+            sb.replace(pos, pos + toFind.length(), replacement);
+            pos = sb.indexOf(toFind, pos + 1);
+        }
+    }
 
 
     private static String getStrippedLog(String wood)
@@ -116,5 +126,16 @@ public class RecipeWriter
             "recipe/tool_rack_double_spruce.json",
             "recipe/tool_rack_pframed_spruce.json",
             "recipe/tool_rack_single_from_multi_spruce.json"
+    );
+    private static final List<String> conversionNames = List.of(   // for replacement
+            "book_shelf_double_spruce",      // there were better ways to do this
+            "book_shelf_minimal_spruce",
+            "book_shelf_open_double_spruce",
+            "book_shelf_open_minimal_spruce",
+            "tool_rack_double_spruce",
+            "tool_rack_pframed_spruce",
+            "tool_rack_framed_spruce",
+            "tool_rack_single_spruce",
+            "simple_table_spruce"
     );
 }

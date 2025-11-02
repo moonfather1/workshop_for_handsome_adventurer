@@ -6,6 +6,7 @@
     { "id": "map_atlases:atlas", "required": false },
     { "id": "ae2:guide", "required": false },
     { "id": "guideapi_vp:vampirism-guidebook", "required": false },
-    { "id": "antiqueatlas:antique_atlas", "required": false }
+    { "id": "antiqueatlas:antique_atlas", "required": false },
+    { "id": "vampirism:vampire_book", "required": false }
   ]
 }
