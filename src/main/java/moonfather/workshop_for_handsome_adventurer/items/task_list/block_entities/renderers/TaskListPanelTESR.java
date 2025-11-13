@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Quaternionf;
@@ -27,7 +28,7 @@ public class TaskListPanelTESR implements BlockEntityRenderer<TaskListBlockEntit
     }
 
     @Override
-    public void render(TaskListBlockEntity tile, float partialTicks, PoseStack poseStack, MultiBufferSource multiBufferSource, int combinedLight, int combinedOverlay)
+    public void render(TaskListBlockEntity tile, float partialTicks, PoseStack poseStack, MultiBufferSource multiBufferSource, int combinedLight, int combinedOverlay, Vec3 camera)
     {
         if (! ClientConfig.taskListItemsAreDrawnOnWall)
         {

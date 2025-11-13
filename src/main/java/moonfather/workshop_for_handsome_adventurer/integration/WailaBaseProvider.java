@@ -34,14 +34,14 @@ public class WailaBaseProvider
         ItemEnchantments enchantments = item.get(DataComponents.STORED_ENCHANTMENTS);
         if (enchantments != null)
         {
-            enchantments.addToTooltip(Item.TooltipContext.of((HolderLookup.Provider) null), result::add, TooltipFlag.NORMAL);
+            enchantments.addToTooltip(Item.TooltipContext.of((HolderLookup.Provider) null), result::add, TooltipFlag.NORMAL, null);
         }
         else
         {
             enchantments = item.get(DataComponents.ENCHANTMENTS);
             if (enchantments != null)
             {
-                enchantments.addToTooltip(Item.TooltipContext.of((HolderLookup.Provider) null), result::add, TooltipFlag.NORMAL);
+                enchantments.addToTooltip(Item.TooltipContext.of((HolderLookup.Provider) null), result::add, TooltipFlag.NORMAL, null);
             }
         }
         enchantmentCache.put(item.hashCode(), result);

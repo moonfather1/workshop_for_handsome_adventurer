@@ -9,14 +9,21 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 //import net.minecraft.client.gui.LayeredDraw;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.client.gui.GuiLayer;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //public class InWorldTooltip implements LayeredDraw.Layer
 public class InWorldTooltip implements GuiLayer
@@ -71,11 +78,24 @@ public class InWorldTooltip implements GuiLayer
                     {
                         if (! blockEntity.GetItem(slot).isEmpty())
                         {
-                            guiGraphics.renderTooltip(Minecraft.getInstance().font, blockEntity.GetItem(slot), Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2 - 30, Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 + 20, DefaultTooltipPositioner.INSTANCE, null);
+                            int itemHash = blockEntity.GetItem(slot).hashCode();
+                            if (lastHash != itemHash)
+                            {
+                                lastHash = itemHash;
+                                lastList = new ArrayList<>(8);
+                                List<Component> tooltip = blockEntity.GetItem(slot).getTooltipLines(Item.TooltipContext.of(Minecraft.getInstance().level), Minecraft.getInstance().player, TooltipFlag.Default.NORMAL); //ClientTooltipFlag.of
+                                for (Component c : tooltip)
+                                {
+                                    lastList.add(ClientTooltipComponent.create(c.getVisualOrderText()));
+                                }
+                            }
+                            guiGraphics.renderTooltip(Minecraft.getInstance().font, lastList, Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2 - 30, Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 + 20, DefaultTooltipPositioner.INSTANCE, null);
                         }
                     }
                 }
             }
         }
     }
+    private int lastHash = -1;
+    private List<ClientTooltipComponent> lastList = null;
 }

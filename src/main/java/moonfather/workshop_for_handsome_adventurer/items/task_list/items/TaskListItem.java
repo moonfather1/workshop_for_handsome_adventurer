@@ -1,5 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.items.task_list.items;
 
+import com.mojang.datafixers.util.Either;
+import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.RegistrationForTaskList;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.block_entities.TaskListBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.moving_data.TaskListComponent;
@@ -15,12 +17,12 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Unit;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.DamageResistant;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -39,8 +41,9 @@ public class TaskListItem extends Item
     //  less imp: make it a furnace fuel?
     //  https://www.curseforge.com/minecraft/mc-mods/modopedia
 
+
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
+    public InteractionResult use(Level level, Player player, InteractionHand hand)
     {
         if (level.isClientSide())
         {
@@ -52,9 +55,10 @@ public class TaskListItem extends Item
             String itemNameAsText = TaskListItem.Utility.getTitle(player.getItemInHand(hand));
             TaskListMessaging.TaskListExtraDTO extra = new TaskListMessaging.TaskListExtraDTO(hand.equals(InteractionHand.MAIN_HAND), data.getLastPageNumber(), itemNameAsText);
             TaskListClientInvoker.invokeScreen(data.getAllPages(), data.getPageCount(), extra, TaskListItem.Utility.isFireImmune(player.getItemInHand(hand)));
+            return InteractionResult.SUCCESS;
         }
         player.awardStat(Stats.ITEM_USED.get(this));
-        return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide());
+        return InteractionResult.CONSUME;
     }
 
     @Override
@@ -127,12 +131,13 @@ public class TaskListItem extends Item
 
         public static boolean isFireImmune(ItemStack taskList)
         {
-            return taskList.has(DataComponents.FIRE_RESISTANT);
+            return taskList.has(Registration.FIRE_RESISTANT);
         }
 
         public static void setFireImmune(ItemStack taskList)
         {
-            taskList.set(DataComponents.FIRE_RESISTANT, Unit.INSTANCE);
+            taskList.set(Registration.FIRE_RESISTANT, Unit.INSTANCE);  // don't ask.  this wasn't retarded in 1.21.1, but now it is.
+            taskList.set(DataComponents.DAMAGE_RESISTANT, new DamageResistant(DamageTypeTags.IS_FIRE));
         }
 
         public static ItemStack createInstance()

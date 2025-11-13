@@ -155,4 +155,14 @@ public class BaseContainerBlockEntity extends BlockEntity
         this.items.set(slot, ItemStack.EMPTY);
         this.setChanged();
     }
+
+    ////////////////////////////////////////////
+
+
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state)
+    {
+        super.preRemoveSideEffects(pos, state);
+        this.DropAll();
+    }
 }

@@ -10,6 +10,9 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ImageWidget;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
@@ -208,59 +211,70 @@ public class TaskListScreen extends Screen
 
         if (this.currentTooltip == null)
         {
-            if (DUAL_TOOLTIP.size() == 0)
+            if (C_DUAL_TOOLTIP.size() == 0)
             {
-                DUAL_TOOLTIP.add(PAPER_TOOLTIP);
-                DUAL_TOOLTIP.add(Component.literal(" "));
-                DUAL_TOOLTIP.add(CREAM_TOOLTIP);
+                C_DUAL_TOOLTIP.add(ClientTooltipComponent.create(PAPER_TOOLTIP.getVisualOrderText()));
+                C_DUAL_TOOLTIP.add(ClientTooltipComponent.create(Component.literal(" ").getVisualOrderText()));
+                C_DUAL_TOOLTIP.add(ClientTooltipComponent.create(CREAM_TOOLTIP.getVisualOrderText()));
             }
-            if (KEYBOARD_TOOLTIP.size() == 0)
+            if (C_KEYBOARD_TOOLTIP.size() == 0)
             {
                 boolean firstRow = true;
-                for (String s : KWYBOARD_TOOLTIP_RAW.getString().split("<br>"))
+                for (String s : KEYBOARD_TOOLTIP_RAW.getString().split("<br>"))
                 {
-                    if (!firstRow)
+                    if (! firstRow)
                     {
-                        KEYBOARD_TOOLTIP.add(Component.literal(s));
+                        C_DUAL_TOOLTIP.add(ClientTooltipComponent.create(Component.literal(s).getVisualOrderText()));
                     }
                     else
                     {
-                        KEYBOARD_TOOLTIP.add(Component.literal(s).withColor(0x95b5ff));
+                        C_DUAL_TOOLTIP.add(ClientTooltipComponent.create(Component.literal(s).withColor(0x95b5ff).getVisualOrderText()));
                         firstRow = false;
                     }
                 }
+            }
+            if (C_PAPER_ONLY_TOOLTIP.size() == 0)
+            {
+                C_PAPER_ONLY_TOOLTIP.add(ClientTooltipComponent.create(PAPER_TOOLTIP.getVisualOrderText()));
+            }
+            if (C_CREAM_ONLY_TOOLTIP.size() == 0)
+            {
+                C_CREAM_ONLY_TOOLTIP.add(ClientTooltipComponent.create(CREAM_TOOLTIP.getVisualOrderText()));
             }
             int random = this.randomProvider.nextInt(5);
             if (this.page == this.pageCount && this.pageCount < TaskListComponent.MAX_PAGE_COUNT)
             {
                 // guiGraphics.renderTooltip(Minecraft.getInstance().font, PAPER_TOOLTIP, mouseX, mouseY);
-                if (random == 0 && ! this.isFireImmune) this.currentTooltip = DUAL_TOOLTIP;
-                else if (random == 1) this.currentTooltip = KEYBOARD_TOOLTIP;
-                else this.currentTooltip = List.of(PAPER_TOOLTIP);
+                if (random == 0 && ! this.isFireImmune) this.currentTooltip = C_DUAL_TOOLTIP;
+                else if (random == 1) this.currentTooltip = C_KEYBOARD_TOOLTIP;
+                else this.currentTooltip = C_PAPER_ONLY_TOOLTIP;
             }
             if (this.page == this.pageCount && this.pageCount == TaskListComponent.MAX_PAGE_COUNT)
             {
-                if (random < 2 && ! this.isFireImmune) this.currentTooltip = List.of(CREAM_TOOLTIP);
-                else this.currentTooltip = KEYBOARD_TOOLTIP;
+                if (random < 2 && ! this.isFireImmune) this.currentTooltip = C_CREAM_ONLY_TOOLTIP;
+                else this.currentTooltip = C_KEYBOARD_TOOLTIP;
             }
         }
         if (this.currentTooltip == null)
         {
             return;
         }
-        guiGraphics.renderTooltip(Minecraft.getInstance().font, this.currentTooltip, Optional.empty(), mouseX, mouseY);
+        guiGraphics.renderTooltip(Minecraft.getInstance().font, this.currentTooltip, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
     }
     private static final Component PAPER = Component.translatable(Items.PAPER.getDescriptionId()).withColor(0xffddaa);
     private static final Component PAPER_TOOLTIP = Component.translatable("message.workshop_for_handsome_adventurer.task_list_ex", PAPER);
     private static final Component CREAM = Component.translatable(Items.MAGMA_CREAM.getDescriptionId()).withColor(0xddbb77);
     private static final Component CREAM_TOOLTIP = Component.translatable("message.workshop_for_handsome_adventurer.task_list_cream", CREAM);
-    private static final List<Component> DUAL_TOOLTIP = new ArrayList<>(3);
-    private static final Component KWYBOARD_TOOLTIP_RAW = Component.translatable("message.workshop_for_handsome_adventurer.keyboard");
-    private static final List<Component> KEYBOARD_TOOLTIP = new ArrayList<>(6);
+    private static final Component KEYBOARD_TOOLTIP_RAW = Component.translatable("message.workshop_for_handsome_adventurer.keyboard");
+
+    private static final List<ClientTooltipComponent> C_DUAL_TOOLTIP = new ArrayList<>(3);
+    private static final List<ClientTooltipComponent> C_KEYBOARD_TOOLTIP = new ArrayList<>(6);
+    private static final List<ClientTooltipComponent> C_PAPER_ONLY_TOOLTIP = new ArrayList<>(1);
+    private static final List<ClientTooltipComponent> C_CREAM_ONLY_TOOLTIP = new ArrayList<>(1);
+    private List<ClientTooltipComponent> currentTooltip = null;
 
     private int tooltipTicks = -1;
-    private List<Component> currentTooltip = null;
-    private Random randomProvider = new Random();
+    private final Random randomProvider = new Random();
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
@@ -452,7 +466,7 @@ public class TaskListScreen extends Screen
         int size = 13;
         for (int i = 0; i < this.checkBoxValues.size(); i++)
         {
-            guiGraphics.blit(this.checkBoxImages.get(this.checkBoxValues.get(i)), x, y, size, size, 0.0F, 0.0F, size, size, 16, 16);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, this.checkBoxImages.get(this.checkBoxValues.get(i)), x, y, 0.0F, 0.0F, size, size, 16, 16, 16, 16);
             y = y + 12 + 12;
         }
         // tooltip
@@ -463,7 +477,7 @@ public class TaskListScreen extends Screen
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
     {
-        guiGraphics.blit(BG_LOCATION, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, BG_LOCATION, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth, this.imageHeight);
     }
 
     ///////////////////////////////

@@ -13,11 +13,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -46,6 +44,5 @@ public class RegistrationForTaskList
     public static final Supplier<RecipeSerializer<TaskListPlusPaperRecipe>> TASK_LIST_EXPANSION_RECIPE = RECIPES.register("task_list_ex", () -> new CustomRecipe.Serializer<TaskListPlusPaperRecipe>(TaskListPlusPaperRecipe::new));
     public static final Supplier<RecipeSerializer<TaskListPlusCreamRecipe>> TASK_LIST_CREAMING_RECIPE = RECIPES.register("task_list_creaming", () -> new CustomRecipe.Serializer<TaskListPlusCreamRecipe>(TaskListPlusCreamRecipe::new));
 
-    public static final Supplier<BlockEntityType<TaskListBlockEntity>> TASK_LIST_PANEL_BE = BLOCK_ENTITIES.register("task_list_panel_be", () -> BlockEntityType.Builder.of(TaskListBlockEntity::new, TASK_LIST_PANEL.get()).build(null));
-
+    public static final Supplier<BlockEntityType<TaskListBlockEntity>> TASK_LIST_PANEL_BE = BLOCK_ENTITIES.register("task_list_panel_be", () -> new BlockEntityType<>(TaskListBlockEntity::new, TASK_LIST_PANEL.get()));
 }

@@ -3,13 +3,13 @@ package moonfather.workshop_for_handsome_adventurer.blocks;
 import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -305,26 +304,6 @@ public class PotionShelf extends ToolRack
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState blockState)
     {
-        return Registration.POTION_SHELF_BE.get().create(pos, blockState);
-    }
-
-    ///////////////////////////////////////////////////////////////
-
-    @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player)
-    {
-        PotionShelfBlockEntity BE = ((PotionShelfBlockEntity) level.getBlockEntity(pos));
-        if (BE == null || ! state.hasProperty(FACING))
-        {
-            return Items.STICK.getDefaultInstance();
-        }
-        BlockHitResult bhr = new BlockHitResult(target.getLocation(), state.getValue(FACING).getOpposite(), pos, true);
-        int slot = PotionShelf.getPotionShelfSlot(bhr);
-        ItemStack existing = BE.GetItem(slot);
-        if (! existing.isEmpty())
-        {
-            return existing.copy();
-        }
-        return super.getCloneItemStack(state, target, level, pos, player);
+        return new PotionShelfBlockEntity(pos, blockState);
     }
 }

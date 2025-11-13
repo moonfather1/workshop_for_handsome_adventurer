@@ -12,6 +12,7 @@ import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.integration.PolymorphAccessorServer;
 import moonfather.workshop_for_handsome_adventurer.other.TableLockManager;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -184,7 +185,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			ItemStack itemstack = ItemStack.EMPTY;
 			if (recipeHolder.isPresent())
 			{
-				if (resultContainer.setRecipeUsed(level, serverplayer, recipeHolder.get()))
+				if (resultContainer.setRecipeUsed(serverplayer, recipeHolder.get()))
 				{
 					itemstack = recipeHolder.get().value().assemble(craftinginput, level.registryAccess());
 				}
@@ -278,7 +279,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			itemstack = itemstack1.copy();
 			if (this.isSlotACraftingResultSlot(slotIndex)) { //shift on result
 				this.access.execute((level, p_39379_) -> {
-					itemstack1.getItem().onCraftedBy(itemstack1, level, player);
+					itemstack1.getItem().onCraftedBy(itemstack1, player);
 				});
 				//reverse: hotbar first, then inv
 				if (! this.moveItemStackTo(itemstack1, INV_SLOT_START, HOTBAR_ROW_SLOT_END+1, true))
@@ -836,10 +837,14 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		public CustomizationSlot(Container p_39521_, int p_39522_, int p_39523_, int p_39524_)
 		{
 			super(p_39521_, p_39522_, p_39523_, p_39524_);
-			this.setBackground(InventoryMenu.BLOCK_ATLAS, EMPTY_SLOT_BG);
+//			this.setBackground(InventoryMenu.BLOCK_ATLAS, EMPTY_SLOT_BG);
 			// to make own atlas, start with PaintingTextureManager. gave up during 1.19.4 porting. too much effort.
 		}
 
+		@Override
+		public ResourceLocation getNoItemIcon() { return EMPTY_SLOT_BG; }
+
+		@Override
 		public boolean mayPlace(ItemStack itemStack)
 		{
 			return itemStack.is(ChestTag)
@@ -857,8 +862,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		{
 			if (accessItem == null)
 			{
-				accessItem = BuiltInRegistries.ITEM.get(ResourceLocation.parse(CommonConfig.AccessCustomizationItem.get()));
-				if (accessItem.equals(Items.AIR)) { accessItem = Items.NAME_TAG; }
+                Optional<Holder.Reference<Item>> stupidWrapping = BuiltInRegistries.ITEM.get(ResourceLocation.parse(CommonConfig.AccessCustomizationItem.get()));
+                accessItem = stupidWrapping.map(Holder.Reference::value).orElse(Items.NAME_TAG);
 			}
 			return accessItem;
 		}

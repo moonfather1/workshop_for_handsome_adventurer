@@ -25,7 +25,7 @@ public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEnti
 
 
     @Override
-    public void render(SimpleTableBlockEntity table, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay)
+    public void render(SimpleTableBlockEntity table, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay, Vec3 camera)
     {
         Direction direction = null;
         double playerDX = table.getBlockPos().getX() + 0.5d - Minecraft.getInstance().player.position().x;
@@ -39,7 +39,7 @@ public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEnti
         else
         {
             // normal option: direction is dependent only on player position
-            direction = Direction.getNearest(-1 * playerDX, 0, -1 * playerDZ);
+            direction = Direction.getNearest(-1 * (int)playerDX, 0, -1 * (int)playerDZ, null);
         } // ok we have direction. now to draw...
         render3x3(poseStack, direction, bufferSource, combinedLight, combinedOverlay, table, 0, false, false);
     }

@@ -27,17 +27,32 @@ import org.slf4j.Logger;
 
 
 @Mod(Constants.MODID)
-public class ModWorkshop
+public class ModWorkshopInventoryAccessComponent
 {
     private static final Logger LOGGER = LogUtils.getLogger();
 
 
-    // todo: 1.21.8 test in-world tooltip, things changed there, with positioning. passed DefaultTooltip thingy
+    // todo: 1.21.8 test in-world tooltip, things changed there, with positioning. passed DefaultTooltip thingy,   also don't know if guiGraphics.renderTooltip is the right call.
     // todo: 1.21.8 as above in simplebutton we used DefaultTooltipPositioner.INSTANCE
     // todo: 1.21.8 JEITransferInfo ima sumnjiv novi tip. x2
     // todo: 1.21.8  getMetadataSection in base res pack is different
     // todo: 1.21.8  TL model switching changed    if works, remove old code
     // todo: 1.21.8  toolrack save/load
+    // todo: 1.21.8  added camera to DualTableTESR;  not using it.
+    // todo: 1.21.8  InventoryAccessHelper.getItemFromNamedSlot  now gets chest slot and leggings differently
+    //               assi  record.ItemChest = be.getBlockState().getCloneItemStack  is different  for tab icons
+    //               direction = Direction.getNearest is different in simpleTableTESR when we decide direction to turn items
+    //               model.isGui3d() in TR TESR is changed and i don't know what to replace it with
+    //               test TL saving thoroughly.  also toolrack saving/loading.
+    //               TR canDepositItem might be too strict now
+    //               verify bookshelf drops
+    //               test dual toolrack at world bottom
+    //               test dual table at world top
+    //               checkboxes - blit in TaskListScreen, maybe remove last two args
+    //               review constructor of CustomizationSlot
+    //               using TextureAtlas.LOCATION_BLOCKS in SpecialFirstEverRenderer is sus
+    //               interaction with tetra hammer is fixed - it was stupid in all  old versions
+    //               remove commented out stuff from InventoryAccessComponent.render()
 
     public ModWorkshop(IEventBus modBus, ModContainer modContainer)
     {

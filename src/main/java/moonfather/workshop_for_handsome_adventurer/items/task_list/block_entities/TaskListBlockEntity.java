@@ -1,21 +1,22 @@
 package moonfather.workshop_for_handsome_adventurer.items.task_list.block_entities;
 
 import moonfather.workshop_for_handsome_adventurer.items.task_list.RegistrationForTaskList;
+import moonfather.workshop_for_handsome_adventurer.items.task_list.blocks.TaskListPanel;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.TaskListItem;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.moving_data.TaskListComponent;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.moving_data.TaskListMessaging;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.screens.TaskListClientInvoker;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Nameable;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 public class TaskListBlockEntity extends BasicBlockEntity implements Nameable
@@ -58,32 +59,30 @@ public class TaskListBlockEntity extends BasicBlockEntity implements Nameable
 
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries)
+    protected void loadAdditional(ValueInput input)
     {
-        super.loadAdditional(tag, registries);
-        this.isModified = tag.getBoolean("isModified");
-        if (tag.contains("original"))
+        super.loadAdditional(input);
+        this.isModified = input.getBooleanOr("isModified", false);
+        Optional<ItemStack> storedItem = input.read("original", ItemStack.CODEC);
+        if (storedItem.isPresent())
         {
-            Optional<ItemStack> op = ItemStack.parse(registries, tag.get("original"));
-            if (op.isPresent())
-            {
-                this.setItem(op.get());
-                this.setCurrentPage(tag.getInt("currentPage"));
-                return;
-            }
+            this.setItem(storedItem.get());
+            this.setCurrentPage(input.getIntOr("currentPage", 1));
+            return;
         }
         this.setItem(TaskListItem.Utility.createInstance());
         this.setCurrentPage(1);
-        if (tag.contains("checkmarks"))
+
+        Optional<int[]> checkmarks = input.getIntArray("checkmarks");
+        if (checkmarks.isPresent())
         {
-            int[] checkmarks = tag.getIntArray("checkmarks");
             for (int i = 0; i < TaskListComponent.MAX_PAGE_COUNT; i++)
             {
                 for (int j = 0; j < TaskListMessaging.ITEMS_PER_PAGE; j++)
                 {
-                    if (this.data.getAllPages().get(i).items().get(j).status().codePointAt(0) != checkmarks[i*TaskListMessaging.ITEMS_PER_PAGE+j])
+                    if (this.data.getAllPages().get(i).items().get(j).status().codePointAt(0) != checkmarks.get()[i*TaskListMessaging.ITEMS_PER_PAGE+j])
                     {
-                        this.data.getAllPages().get(i).items().set(j, new TaskListMessaging.TaskItemDTO(Character.toString(checkmarks[i*TaskListMessaging.ITEMS_PER_PAGE+j]), this.data.getAllPages().get(i).items().get(j).line1(), this.data.getAllPages().get(i).items().get(j).line2()));
+                        this.data.getAllPages().get(i).items().set(j, new TaskListMessaging.TaskItemDTO(Character.toString(checkmarks.get()[i*TaskListMessaging.ITEMS_PER_PAGE+j]), this.data.getAllPages().get(i).items().get(j).line1(), this.data.getAllPages().get(i).items().get(j).line2()));
                     }
                 }
             }
@@ -91,21 +90,22 @@ public class TaskListBlockEntity extends BasicBlockEntity implements Nameable
     }
 
     @Override
-    protected CompoundTag saveInternal(CompoundTag compoundTag, HolderLookup.Provider lookupProvider)
+    protected ValueOutput saveInternal(ValueOutput output)
     {
-        compoundTag.putBoolean("isModified", this.isModified);
-        compoundTag.putInt("currentPage", this.getCurrentPage()); // first one;  need to return changed page back.
-        compoundTag.put("original", this.item.save(lookupProvider));
-        ArrayList<Integer> checkmarks = new ArrayList<>(TaskListMessaging.ITEMS_PER_PAGE * TaskListComponent.MAX_PAGE_COUNT);
+        output.putBoolean("isModified", this.isModified);
+        output.putInt("currentPage", this.getCurrentPage()); // first one;  need to return changed page back.
+        output.store("original", ItemStack.CODEC, this.item);
+        int[] checkmarks = new int[TaskListMessaging.ITEMS_PER_PAGE * TaskListComponent.MAX_PAGE_COUNT];
+        int k = 0;
         for (int i = 0; i < TaskListComponent.MAX_PAGE_COUNT; i++)
         {
             for (int j = 0; j < TaskListMessaging.ITEMS_PER_PAGE; j++)
             {
-                checkmarks.add(this.data.getAllPages().get(i).items().get(j).status().codePointAt(0));
+                checkmarks[k++] = this.data.getAllPages().get(i).items().get(j).status().codePointAt(0);
             }
         }
-        compoundTag.putIntArray("checkmarks", checkmarks);
-        return compoundTag;
+        output.putIntArray("checkmarks", checkmarks);
+        return output;
     }
 
     public String getFooter()
@@ -214,7 +214,7 @@ public class TaskListBlockEntity extends BasicBlockEntity implements Nameable
 
     public ItemStack getItem() { return this.item; }
 
-    public ItemStack getItemForDrop()
+    private ItemStack getItemForDrop()
     {
         ItemStack result = this.item.copy();
         // should check isModified here. unused.
@@ -222,5 +222,12 @@ public class TaskListBlockEntity extends BasicBlockEntity implements Nameable
         result.set(TaskListItem.Utility.ourComponent(), this.data);
         TaskListItem.Utility.setTitle(result, this.title);
         return result;
+    }
+
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state)
+    {
+        super.preRemoveSideEffects(pos, state);
+        Block.popResourceFromFace(this.level, pos, state.getValue(TaskListPanel.FACING), this.getItemForDrop());
     }
 }

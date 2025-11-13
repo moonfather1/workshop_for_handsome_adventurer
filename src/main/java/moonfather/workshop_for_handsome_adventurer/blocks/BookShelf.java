@@ -2,7 +2,6 @@ package moonfather.workshop_for_handsome_adventurer.blocks;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.BookShelfBlockEntity;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -194,7 +193,7 @@ public abstract class BookShelf extends ToolRack
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState blockState)
     {
-        BookShelfBlockEntity BE = Registration.BOOK_SHELF_BE.get().create(pos, blockState);
+        BookShelfBlockEntity BE = new BookShelfBlockEntity(pos, blockState);
         BE.setCapacity(this.getBookCapacity());
         return BE;
     }

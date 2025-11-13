@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.fml.ModList;
@@ -61,7 +62,7 @@ public class DualToolRack extends ToolRack
         BlockPos target = context.getClickedPos();
         Level level = context.getLevel();
         BlockPos below = target.below();
-        if (target.getY() <= level.getMinBuildHeight() || ! level.getBlockState(below).canBeReplaced(context))
+        if (target.getY() <= level.getMinY() || ! level.getBlockState(below).canBeReplaced(context))
         {
             return null;
         }
@@ -90,10 +91,10 @@ public class DualToolRack extends ToolRack
 
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos pos2, boolean something)
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, @org.jetbrains.annotations.Nullable Orientation orientation, boolean movedByPiston)
     {
-        super.neighborChanged(state, level, pos, block, pos2, something);
-        if (!this.canSurvive(state, level, pos))
+        super.neighborChanged(state, level, pos, neighborBlock, orientation, movedByPiston);
+        if (! this.canSurvive(state, level, pos))
         {
             level.destroyBlock(pos, true);
         }
@@ -145,7 +146,7 @@ public class DualToolRack extends ToolRack
 
 
     @Override
-    public VoxelShape getOcclusionShape(BlockState state, BlockGetter p_60579_, BlockPos p_60580_)
+    public VoxelShape getOcclusionShape(BlockState state)
     {
         return resolveShape(state.getValue(ToolRack.FACING), state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF));
     }

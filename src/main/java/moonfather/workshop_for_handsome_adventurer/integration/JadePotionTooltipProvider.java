@@ -3,6 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.integration;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
+import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -11,8 +12,7 @@ import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
-import snownee.jade.api.ui.IElement;
-import snownee.jade.api.ui.IElementHelper;
+import snownee.jade.api.ui.JadeUI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,15 +34,15 @@ public class JadePotionTooltipProvider implements IBlockComponentProvider, IServ
                 int count;
                 if (accessor.getServerData().contains("Bottles" + slot))
                 {
-                    count = accessor.getServerData().getInt("Bottles" + slot);
+                    count = accessor.getServerData().getIntOr("Bottles" + slot, 0);
                 }
                 else
                 {
                     count = shelf.GetRemainingItems(slot);
                 }
-                List<IElement> list = new ArrayList<>(2);
-                list.add(IElementHelper.get().text(Component.literal(" " + count + "x  ")));
-                list.add(IElementHelper.get().text(shelf.GetItem(slot).getDisplayName()));
+                List<LayoutElement> list = new ArrayList<>(2);
+                list.add(JadeUI.text(Component.literal(" " + count + "x  ")));
+                list.add(JadeUI.text(shelf.GetItem(slot).getDisplayName()));
                 tooltip.add(list);
             }
         }

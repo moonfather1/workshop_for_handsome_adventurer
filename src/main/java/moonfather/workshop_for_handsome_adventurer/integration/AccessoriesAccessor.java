@@ -22,7 +22,7 @@ public class AccessoriesAccessor
             {
                 return ItemStack.EMPTY;
             }
-            List<SlotEntryReference> slots = capability.getAllEquipped(false);
+            List<SlotEntryReference> slots = capability.getAllEquipped();
             for (SlotEntryReference entry: slots)
             {
                 if (entry.reference().isValid() && slot.equals(entry.reference().slotName()))

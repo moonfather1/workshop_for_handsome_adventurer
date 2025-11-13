@@ -197,7 +197,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     {
         if (this.isVisibleTotal())
         {
-            RenderSystem.disableDepthTest();
+////            RenderSystem.disableDepthTest();
         //    graphics.pose().pushPose();
         //    graphics.pose().translate(0.0D, 0.0D, 0.0D);
         //    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -213,7 +213,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
                 tabButton.render(graphics, p_100320_, p_100321_, p_100322_);
             }
         //    graphics.pose().popPose();
-            RenderSystem.enableDepthTest();
+////            RenderSystem.enableDepthTest();
         }
     }
 
@@ -542,7 +542,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             graphics.pose().scale(2/3f, 2/3f, 2/3f);
             graphics.pose().translate(0, 0, +100.0D);
             graphics.renderFakeItem(itemSub, (int)((x + tabIndexInRow * (WIDTH-1) + 13) * 1.5d), (int)((y+12)*1.5d));
-            graphics.pose().popPose();
+            graphics.pose().popMatrix();
         }
 
         private Function<TabButton, Boolean> handler = null;

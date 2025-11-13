@@ -7,6 +7,7 @@ import moonfather.workshop_for_handsome_adventurer.integration.TetraHammerSuppor
 import moonfather.workshop_for_handsome_adventurer.other.TableLockManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -18,9 +19,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -42,9 +40,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.fml.ModList;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class SimpleTable extends Block implements EntityBlock
+public class SimpleTable extends Block implements EntityBlock, IBlockWithCleverHoverText
 {
     private final Component MessageInaccessible = Component.translatable("message.workshop_for_handsome_adventurer.workshop_table_obscured");
 
@@ -70,7 +70,7 @@ public class SimpleTable extends Block implements EntityBlock
     private static final VoxelShape SHAPE_TABLE = Shapes.or(SHAPE_TOP, SHAPE_LEG1, SHAPE_LEG2, SHAPE_LEG3, SHAPE_LEG4);
 
     @Override
-    public VoxelShape getOcclusionShape(BlockState p_60578_, BlockGetter p_60579_, BlockPos p_60580_)
+    public VoxelShape getOcclusionShape(BlockState p_60578_)
     {
         return SHAPE_TABLE;
     }
@@ -100,11 +100,12 @@ public class SimpleTable extends Block implements EntityBlock
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, Item.TooltipContext context, List<Component> list, TooltipFlag tooltipFlag)
+    public List<Component> getTooltipLines()
     {
-        super.appendHoverText(itemStack, context, list, tooltipFlag);
-        list.add(this.Tooltip1);
-        list.add(this.Tooltip2);
+        List<Component> result = new ArrayList<>(2);
+        result.add(this.Tooltip1);
+        result.add(this.Tooltip2);
+        return result;
     }
 
     @Override
@@ -116,7 +117,7 @@ public class SimpleTable extends Block implements EntityBlock
             {
                 player.displayClientMessage(MessageInaccessible, true);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;;
         }
         else if (level.isClientSide)
         {
@@ -127,22 +128,21 @@ public class SimpleTable extends Block implements EntityBlock
             player.displayClientMessage(Component.translatable("message.workshop_for_handsome_adventurer.workshop_table_in_use", TableLockManager.getPlayerName(level, pos).copy().withStyle(Style.EMPTY.withColor(0xffeeee11))), true);
             return InteractionResult.CONSUME;
         }
-        else if (ModList.get().isLoaded("tetra_tables") && !player.isCrouching() && TetraHammerSupport.isHammer(player.getMainHandItem()))
+        else if (ModList.get().isLoaded("tetra_tables") && ! player.isCrouching() && TetraHammerSupport.isHammer(player.getMainHandItem()))
         {
             String id = BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString();
             String wood = id.substring(id.indexOf("simple_table") + 13);
             String newName = "tetra_table_" + wood;
-            for (ResourceLocation key : BuiltInRegistries.BLOCK.keySet())
+            ResourceLocation key = ResourceLocation.fromNamespaceAndPath("tetra_tables", newName);
+            Optional<Holder.Reference<Block>> wrapper = BuiltInRegistries.BLOCK.get(key);
+            if (wrapper.isPresent())
             {
-                if (key.toString().endsWith(newName))
-                {
-                    level.setBlockAndUpdate(pos, BuiltInRegistries.BLOCK.get(key).defaultBlockState());
-                    return InteractionResult.CONSUME;
-                }
+                level.setBlockAndUpdate(pos, wrapper.get().value().defaultBlockState());
+                return InteractionResult.CONSUME;
             }
             return InteractionResult.FAIL;
         }
-        else if (ModList.get().isLoaded("tetra") && !player.isCrouching() && TetraHammerSupport.isHammer(player.getMainHandItem()))
+        else if (ModList.get().isLoaded("tetra") && ! player.isCrouching() && TetraHammerSupport.isHammer(player.getMainHandItem()))
         {
             level.setBlockAndUpdate(pos, TetraHammerSupport.getWorkBench());
             return InteractionResult.CONSUME;
@@ -162,7 +162,7 @@ public class SimpleTable extends Block implements EntityBlock
         {
             return true;
         }
-        VoxelShape s = level.getBlockState(pos.above()).getFaceOcclusionShape(level, pos.above(), Direction.DOWN);
+        VoxelShape s = level.getBlockState(pos.above()).getFaceOcclusionShape(Direction.DOWN);
         if (s.isEmpty())
         {
             return false;
@@ -175,26 +175,11 @@ public class SimpleTable extends Block implements EntityBlock
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    @Override
-    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving)
-    {
-        //System.out.println("onRemove");
-        if (state.getBlock() != newState.getBlock())
-        {
-            BlockEntity te = worldIn.getBlockEntity(pos);
-            if (te instanceof SimpleTableBlockEntity entity)
-            {
-                entity.DropAll();
-            }
-            super.onRemove(state, worldIn, pos, newState, isMoving);
-        }
-    }
-
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState blockState)
     {
-        return Registration.SIMPLE_TABLE_BE.get().create(pos, blockState);
+        return new SimpleTableBlockEntity(pos, blockState);
     }
 
     @Nullable

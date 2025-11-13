@@ -10,6 +10,7 @@ import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 
 public class TaskListPlusCreamRecipe extends CustomRecipe
@@ -20,7 +21,7 @@ public class TaskListPlusCreamRecipe extends CustomRecipe
 
     public TaskListPlusCreamRecipe(CraftingBookCategory craftingBookCategory) { super(craftingBookCategory); }
 
-    public boolean matches(CraftingInput input, Level level)
+    public boolean matches(CraftingInput input, @NotNull Level level)
     {
         boolean haveCream = false;
         boolean haveClipboard = false;
@@ -78,15 +79,10 @@ public class TaskListPlusCreamRecipe extends CustomRecipe
         return result;
     }
 
-    public boolean canCraftInDimensions(int width, int height)
-    {
-        return width * height >= 2;
-    }
-
     ///////////////////////////////
 
     @Override
-    public RecipeSerializer<?> getSerializer()
+    public RecipeSerializer<? extends CustomRecipe> getSerializer()
     {
         return RegistrationForTaskList.TASK_LIST_CREAMING_RECIPE.get();
     }

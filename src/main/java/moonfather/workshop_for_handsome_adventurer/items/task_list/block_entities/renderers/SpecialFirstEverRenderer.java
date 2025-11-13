@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -22,10 +23,10 @@ public class SpecialFirstEverRenderer
     {
         if (sprites.size() == 0)
         {
-            sprites.put("e", Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check1")));
-            sprites.put("y", Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check2")));
-            sprites.put("n", Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check3")));
-            sprites.put("q", Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check4")));
+            sprites.put("e", Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check1")));
+            sprites.put("y", Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check2")));
+            sprites.put("n", Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check3")));
+            sprites.put("q", Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check4")));
         }
         TextureAtlasSprite sprite = sprites.get(image);
         poseStack.pushPose();

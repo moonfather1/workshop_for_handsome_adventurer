@@ -36,6 +36,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -45,24 +46,25 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @ParametersAreNonnullByDefault
-public class ToolRack extends Block implements EntityBlock
+public class ToolRack extends Block implements EntityBlock, IBlockWithCleverHoverText
 {
     public ToolRack(int itemCount, String type)
     {
         this(itemCount, "tool_rack", type);
     }
 
-    public ToolRack(int itemCount, String mainType, String subType)
+    public ToolRack(int itemCount, String mainType, @Nullable String subType)
     {
         this(itemCount, mainType, subType, Properties.of().strength(2f, 3f).sound(SoundType.WOOD).ignitedByLava().mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY));
     }
 
-    public ToolRack(int itemCount, String mainType, String subType, Properties properties)
+    public ToolRack(int itemCount, String mainType, @Nullable String subType, Properties properties)
     {
         super(properties);
         this.itemCount = itemCount;
@@ -109,11 +111,10 @@ public class ToolRack extends Block implements EntityBlock
 
 
     @Override
-    public VoxelShape getOcclusionShape(BlockState state, BlockGetter p_60579_, BlockPos p_60580_)
+    public VoxelShape getOcclusionShape(BlockState state)
     {
         return this.shapes.get(state.getValue(FACING));
     }
-
 
     @Override
     public VoxelShape getBlockSupportShape(BlockState state, BlockGetter p_60582_, BlockPos p_60583_)
@@ -134,11 +135,12 @@ public class ToolRack extends Block implements EntityBlock
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, Item.TooltipContext context, List<Component> list, TooltipFlag tooltipFlag)
+    public List<Component> getTooltipLines()
     {
-        super.appendHoverText(itemStack, context, list, tooltipFlag);
-        list.add(this.Tooltip1);
-        list.add(this.Tooltip2);
+        List<Component> result = new ArrayList<>(2);
+        result.add(this.Tooltip1);
+        result.add(this.Tooltip2);
+        return result;
     }
 
 
@@ -199,7 +201,7 @@ public class ToolRack extends Block implements EntityBlock
     {
         if (! blockState.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF) || blockState.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER)
         {
-            return Registration.TOOL_RACK_BE.get().create(pos, blockState);
+            return new ToolRackBlockEntity(pos, blockState);
         }
         else
         {
@@ -216,27 +218,12 @@ public class ToolRack extends Block implements EntityBlock
 
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos rackPos, Block block, BlockPos wallPos, boolean something)
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, @Nullable Orientation orientation, boolean movedByPiston)
     {
-        super.neighborChanged(state, level, rackPos, block, wallPos, something);
-        if (! this.canSurvive(state, level, rackPos))
+        super.neighborChanged(state, level, pos, neighborBlock, orientation, movedByPiston);
+        if (! this.canSurvive(state, level, pos))
         {
-            level.destroyBlock(rackPos, true);
-        }
-    }
-
-
-    @Override
-    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving)
-    {
-        if (state.getBlock() != newState.getBlock())
-        {
-            BlockEntity be = worldIn.getBlockEntity(pos);
-            if (be instanceof BaseContainerBlockEntity rack)
-            {
-                rack.DropAll();
-            }
-            super.onRemove(state, worldIn, pos, newState, isMoving);
+            level.destroyBlock(pos, true);
         }
     }
 
@@ -275,7 +262,7 @@ public class ToolRack extends Block implements EntityBlock
             if (! this.canDepositItem(itemInMainHand))
             {
                 player.displayClientMessage(RackMessage, true);
-                return InteractionResult.sidedSuccess(level.isClientSide);
+                return InteractionResult.CONSUME; // we're not on client.
             }
             //System.out.println("~~~~~ADDED FROM MAIN");
             ItemStack toStore = itemInMainHand.copy();
@@ -293,7 +280,7 @@ public class ToolRack extends Block implements EntityBlock
             if (! this.canDepositItem(itemInOffHand))
             {
                 player.displayClientMessage(RackMessage, true);
-                return InteractionResult.sidedSuccess(level.isClientSide);
+                return InteractionResult.CONSUME; // we're not on client.
             }
             //System.out.println("~~~~~ADDED FROM OFFHAND");
             ItemStack toStore = itemInOffHand.copy();
@@ -302,7 +289,7 @@ public class ToolRack extends Block implements EntityBlock
             itemInOffHand.shrink(1);
             player.playSound(SoundEvents.WOOD_PLACE, 0.5f, 0.7f);
         }
-        else if (! existing.isEmpty() && itemInMainHand.isEmpty() && itemInOffHand.isEmpty() && existing.canPerformAction(ItemAbilities.SHIELD_BLOCK))
+        else if (! existing.isEmpty() && itemInMainHand.isEmpty() && itemInOffHand.isEmpty() && existing.has(DataComponents.BLOCKS_ATTACKS))  // no more canPerformAction(ItemAbilities.SHIELD_BLOCK)
         {
             //System.out.println("~~~~~TAKEN SHIELD");
             //player.addItem(existing);
@@ -320,7 +307,7 @@ public class ToolRack extends Block implements EntityBlock
         else if (! existing.isEmpty() && ! itemInMainHand.isEmpty() && doOffhand && itemInOffHand.isEmpty())
         {
             //System.out.println("~~~~~TAKEN WITH OFFHAND");
-            if (! itemInMainHand.canPerformAction(ItemAbilities.SHIELD_BLOCK))
+            if (! itemInMainHand.has(DataComponents.BLOCKS_ATTACKS))
             {
                 player.setItemInHand(InteractionHand.OFF_HAND, existing); // normal
             }
@@ -337,7 +324,7 @@ public class ToolRack extends Block implements EntityBlock
             //System.out.println("~~~~~BOTH FULL");
         }
         level.sendBlockUpdated(pos, blockState, blockState, 2);
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.CONSUME; // we're not on client.
         //return super.use(blockState, level, pos, player, hand, blockHitResult);
     }
 
@@ -381,12 +368,13 @@ public class ToolRack extends Block implements EntityBlock
         {
             return true;
         }
-        if (mainHandItem.getMaxStackSize() > 1 && !(mainHandItem.getItem().equals(Items.LEAD) || PackingTape.isTape(mainHandItem)))
+        if (mainHandItem.getMaxStackSize() > 1 && ! (mainHandItem.getItem().equals(Items.LEAD) || PackingTape.isTape(mainHandItem)))
         {
             return false;
         }
-        if (mainHandItem.getItem() instanceof BlockItem || mainHandItem.getItem() instanceof ArmorItem || mainHandItem.getItem() instanceof AnimalArmorItem)
+        if (mainHandItem.getItem() instanceof BlockItem || mainHandItem.has(DataComponents.EQUIPPABLE) )
         {
+            // can not do  instanceof ArmorItem  and  instanceof AnimalArmorItem anymore.  might rule out some things i want on the rack.
             return false;
         }
         if (mainHandItem.get(DataComponents.FOOD) != null || mainHandItem.getItem() instanceof BucketItem || mainHandItem.getItem() instanceof MinecartItem || mainHandItem.getItem() instanceof BoatItem)

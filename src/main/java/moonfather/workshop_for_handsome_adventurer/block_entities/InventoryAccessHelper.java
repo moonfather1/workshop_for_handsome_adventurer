@@ -16,6 +16,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.CompoundContainer;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -186,7 +187,7 @@ public class InventoryAccessHelper
 
     private static boolean canOpenShulkerBox(Level level, BlockState blockState, BlockPos pos)
     {
-        AABB aabb = Shulker.getProgressDeltaAabb(1.0F, blockState.getValue(DirectionalBlock.FACING), 0.0F, 0.5F).move(pos).deflate(1.0E-6D);
+        AABB aabb = Shulker.getProgressDeltaAabb(1.0F, blockState.getValue(DirectionalBlock.FACING), 0.0F, 0.5F, pos.getBottomCenter()).deflate(1.0E-6);
         return level.noCollision(aabb);
     }
 
@@ -261,7 +262,7 @@ public class InventoryAccessHelper
             }
             // now for DataComponents.CONTAINER... blindly typing this. no idea what to test on.
             ItemContainerContents container = maybeStorageItem.get(DataComponents.CONTAINER);
-            if (container != null && ! maybeStorageItem.getDescriptionId().contains("backpacked"))
+            if (container != null && ! maybeStorageItem.getItemHolder().getRegisteredName().contains("backpacked"))
             {
                 InventoryAccessRecord record = new InventoryAccessRecord();
                 record.ItemChest = maybeStorageItem.copy();
@@ -324,7 +325,7 @@ public class InventoryAccessHelper
         BlockPos.MutableBlockPos pos2 = new BlockPos.MutableBlockPos();
         for (int dy = 1; dy >= 0; dy--)
         {
-            if (pos.getY() + dy > level.getMaxBuildHeight())
+            if (pos.getY() + dy > level.getMaxY())
             {
                 continue;
             }
@@ -350,7 +351,7 @@ public class InventoryAccessHelper
                         record.ItemChest = be.getBlockState().getBlock().asItem().getDefaultInstance();
                         if (record.ItemChest.isEmpty())
                         {
-                            record.ItemChest = be.getBlockState().getCloneItemStack(new BlockHitResult(pos2.getCenter(), Direction.UP, pos2, false), level, pos2, player);
+                            record.ItemChest = be.getBlockState().getCloneItemStack(level, pos2, false);
                             record.Name = record.ItemChest.getHoverName();
                             if (record.ItemChest.isEmpty())
                             {
@@ -538,11 +539,11 @@ public class InventoryAccessHelper
     {
         if (slot.equals(RecordTypes.LEGGINGS))
         {
-            return player.getInventory().getArmor(1);
+            return player.getInventory().getItem(EquipmentSlot.LEGS.getIndex(36));
         }
         else if (slot.equals(RecordTypes.CHESTSLOT))
         {
-            return player.getInventory().getArmor(2);
+            return player.getInventory().getItem(EquipmentSlot.CHEST.getIndex(36));
         }
         else if (slot.equals(RecordTypes.BACKSLOT))
         {

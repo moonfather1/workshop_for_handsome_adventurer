@@ -14,11 +14,12 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.util.Unit;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
@@ -42,7 +43,7 @@ public class Registration
 	private static final DeferredRegister<RecipeSerializer<?>> RECIPES = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, Constants.MODID);
 	private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Constants.MODID);
 	private static final DeferredRegister<MapCodec<? extends ICondition>> CONDITIONS = DeferredRegister.create(NeoForgeRegistries.Keys.CONDITION_CODECS, Constants.MODID);
-	private static final DeferredRegister.DataComponents DATA_COMPONENT_TYPES = DeferredRegister.createDataComponents(Constants.MODID);
+	private static final DeferredRegister.DataComponents DATA_COMPONENT_TYPES = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, Constants.MODID);
 
 	public static void init(IEventBus modBus)
 	{
@@ -158,7 +159,7 @@ public class Registration
 
 	private static Supplier<Item> FromBlock(Supplier<Block> block, String id)
 	{
-		// could have passed deffered holder instead of separate string, but it doesn't matter
+		// could have passed deferred holder instead of separate string, but it doesn't matter
 		Item.Properties properties = new Item.Properties();
 		return ITEMS.register(id, () -> new BlockItemEx(block.get(), properties));
 	}
@@ -174,17 +175,17 @@ public class Registration
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public static final Supplier<BlockEntityType<ToolRackBlockEntity>> TOOL_RACK_BE = BLOCK_ENTITIES.register("tool_rack_be", () -> BlockEntityType.Builder.of(ToolRackBlockEntity::new, ListToArray(blocks_rack)).build(null));
-	public static final Supplier<BlockEntityType<SimpleTableBlockEntity>> SIMPLE_TABLE_BE = BLOCK_ENTITIES.register("simple_table_be", () -> BlockEntityType.Builder.of(SimpleTableBlockEntity::new, ListToArray(blocks_table1)).build(null));
-	public static final Supplier<BlockEntityType<DualTableBlockEntity>> DUAL_TABLE_BE = BLOCK_ENTITIES.register("dual_table_be", () -> BlockEntityType.Builder.of(DualTableBlockEntity::new, ListToArray(blocks_table2)).build(null));
-	public static final Supplier<BlockEntityType<PotionShelfBlockEntity>> POTION_SHELF_BE = BLOCK_ENTITIES.register("potion_shelf_be", () -> BlockEntityType.Builder.of(PotionShelfBlockEntity::new, ListToArray(blocks_pshelf)).build(null));
-	public static final Supplier<BlockEntityType<BookShelfBlockEntity>> BOOK_SHELF_BE = BLOCK_ENTITIES.register("book_shelf_be", () -> BlockEntityType.Builder.of(BookShelfBlockEntity::new, ListToArray(blocks_bshelf)).build(null));
+	public static final Supplier<BlockEntityType<ToolRackBlockEntity>> TOOL_RACK_BE = BLOCK_ENTITIES.register("tool_rack_be", () -> new BlockEntityType<>(ToolRackBlockEntity::new, false, ListToArray(blocks_rack)));
+	public static final Supplier<BlockEntityType<SimpleTableBlockEntity>> SIMPLE_TABLE_BE = BLOCK_ENTITIES.register("simple_table_be", () -> new BlockEntityType<>(SimpleTableBlockEntity::new, false, ListToArray(blocks_table1)));
+	public static final Supplier<BlockEntityType<DualTableBlockEntity>> DUAL_TABLE_BE = BLOCK_ENTITIES.register("dual_table_be", () -> new BlockEntityType<>(DualTableBlockEntity::new, false, ListToArray(blocks_table2)));
+	public static final Supplier<BlockEntityType<PotionShelfBlockEntity>> POTION_SHELF_BE = BLOCK_ENTITIES.register("potion_shelf_be", () -> new BlockEntityType<>(PotionShelfBlockEntity::new, false, ListToArray(blocks_pshelf)));
+	public static final Supplier<BlockEntityType<BookShelfBlockEntity>> BOOK_SHELF_BE = BLOCK_ENTITIES.register("book_shelf_be", () -> new BlockEntityType<>(BookShelfBlockEntity::new, false, ListToArray(blocks_bshelf)));
 	public static final Supplier<MenuType<SimpleTableMenu>> CRAFTING_SINGLE_MENU_TYPE = CONTAINER_TYPES.register("crafting_single", () -> IMenuTypeExtension.create(SimpleTableMenu::new));
 	public static final Supplier<MenuType<DualTableMenu>> CRAFTING_DUAL_MENU_TYPE = CONTAINER_TYPES.register("crafting_dual", () -> IMenuTypeExtension.create(DualTableMenu::new));
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public static final Supplier<RecipeSerializer<UnsupportedWoodRecipe>> TABLE_RECIPE = RECIPES.register("table_recipe_unknown_planks", () -> new SimpleCraftingRecipeSerializer<UnsupportedWoodRecipe>(UnsupportedWoodRecipe::new));
+	public static final Supplier<RecipeSerializer<UnsupportedWoodRecipe>> TABLE_RECIPE = RECIPES.register("table_recipe_unknown_planks", () -> new CustomRecipe.Serializer<UnsupportedWoodRecipe>(UnsupportedWoodRecipe::new));
 
 	public static final Supplier<CreativeModeTab> CREATIVE_TAB = CREATIVE_TABS.register("tab", CreativeTab::buildTab);
 
@@ -193,4 +194,5 @@ public class Registration
 	////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> TAB_FLAGS = DATA_COMPONENT_TYPES.register("tab_flags", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build() );
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Unit>> FIRE_RESISTANT = DATA_COMPONENT_TYPES.register("fire_resistant", () -> DataComponentType.<Unit>builder().persistent(Unit.CODEC).networkSynchronized(Unit.STREAM_CODEC).build() );
 }

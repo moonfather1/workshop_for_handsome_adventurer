@@ -40,7 +40,7 @@ public class AdvancedTableTopSecondary extends DualTableBaseBlock
 	private static final VoxelShape SHAPE_WALL_AND_LAMP_E = Block.box( 0.0D, 0.01D,  0.0D,  3.0D, 16.0D, 16.0D);
 
 	@Override
-	public VoxelShape getOcclusionShape(BlockState state, BlockGetter world, BlockPos blockPos)
+	public VoxelShape getOcclusionShape(BlockState state)
 	{
 		return this.ResolveShape(state.getValue(BlockStateProperties.HORIZONTAL_FACING), true);
 	}
@@ -85,12 +85,12 @@ public class AdvancedTableTopSecondary extends DualTableBaseBlock
 
 
 	@Override
-	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player)
+	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player)
 	{
 		BlockPos posMain = pos.below();
 		BlockState stateMain = level.getBlockState(posMain);
 		Block blockMain = stateMain.getBlock();
-		return blockMain.getCloneItemStack(stateMain, target, level, posMain, player);
+		return blockMain.getCloneItemStack(level, posMain, stateMain, includeData, player);
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class AdvancedTableTopSecondary extends DualTableBaseBlock
 		if (player.isCrouching() && state.getValue(AdvancedTableBottomPrimary.HAS_LANTERNS))
 		{
 			((DualTableBaseBlock) stateMain.getBlock()).toggleLights(stateMain, level, posMain);
-			return InteractionResult.sidedSuccess(level.isClientSide());
+			return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
 		}
 		BlockHitResult bhr2 = new BlockHitResult(bhr1.getLocation(), bhr1.getDirection(), posMain, bhr1.isInside());
 		return stateMain.useWithoutItem(level, player, bhr2);

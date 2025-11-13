@@ -92,13 +92,10 @@ public class UnsupportedWoodRecipe extends CustomRecipe
     }
 
     @Override
-    public boolean canCraftInDimensions(int d1, int d2)
-    {
-        return d1 >= 2 && d2 >= 2;
-    }
+    public boolean showNotification() { return false; }
 
     @Override
-    public RecipeSerializer<?> getSerializer()
+    public RecipeSerializer<? extends CustomRecipe> getSerializer()
     {
         return Registration.TABLE_RECIPE.get();
     }

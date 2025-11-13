@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -18,6 +17,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.ItemAbilities;
@@ -46,7 +46,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 
 
 	@Override
-	public void render(ToolRackBlockEntity tile, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay)
+	public void render(ToolRackBlockEntity tile, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay, Vec3 camera)
 	{
 		Direction direction = tile.getBlockState().getValue(HorizontalDirectionalBlock.FACING).getOpposite();
 		Direction itemDirection = direction.getCounterClockWise();
@@ -115,7 +115,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			{
 				this.itemRenderer = Minecraft.getInstance().getItemRenderer();
 			}
-			BakedModel model = this.itemRenderer.getModel(itemStack, tile.getLevel(), null, combinedLight);
+//			BakedModel model = this.itemRenderer. getModel(itemStack, tile.getLevel(), null, combinedLight);
 
 			matrixStack.mulPose(XMinus90);  // 1.19.4   Vector3f.XP.rotationDegrees(-90.0F)
 			matrixStack.mulPose(YPlus180);  // 1.19.4   Vector3f.YP.rotationDegrees(180.0F)
@@ -140,7 +140,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			{
 				matrixStack.translate(0, 0.1, 0);
 			}
-			else if (itemStack.getItem().canPerformAction(itemStack, ItemAbilities.SHIELD_BLOCK))
+			else if (itemStack.has(DataComponents.BLOCKS_ATTACKS))
 			{
 				matrixStack.translate(-0.00, -0.10, 0.14);
 				matrixStack.scale(1.75f, 1.60f, 1.75f);
@@ -148,7 +148,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 				//matrixStack.scale(2, 2, 2);
 			}
             else if (itemStack.getItem().canPerformAction(itemStack, ItemAbilities.SWORD_SWEEP)
-                || itemStack.is(ItemTags.SWORDS) || itemStack.getItem() instanceof SwordItem)
+                || itemStack.is(ItemTags.SWORDS))  // ?     || itemStack.has(DataComponents.WEAPON)
             {
                 // check ModularBladedItem ? stupid tetra doesn't tag swords and doesn't return true for any canPerformAction call
                 // currently using separate tag for tetra swords.
@@ -160,10 +160,10 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 				matrixStack.translate(0, -0.2, 0);
 				matrixStack.mulPose(ZPlus225);  // 1.19.4      Vector3f.ZP.rotationDegrees(225.0F)
 			}
-			else if (model.isGui3d())
-			{
-				matrixStack.mulPose(ZMinus45);  // 1.19.4      Vector3f.ZP.rotationDegrees(-45.0F)
-			}
+//			else if (model.isGui3d())
+//			{
+//				matrixStack.mulPose(ZMinus45);  // 1.19.4      Vector3f.ZP.rotationDegrees(-45.0F)
+//			}
 			else if (itemStack.get(DataComponents.POTION_CONTENTS) != null || itemStack.is(Items.GLASS_BOTTLE))
 			{
 				matrixStack.translate(0, 0.1, 0);

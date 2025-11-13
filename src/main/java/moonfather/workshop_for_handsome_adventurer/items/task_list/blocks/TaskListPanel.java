@@ -28,9 +28,11 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
@@ -122,26 +124,12 @@ public class TaskListPanel extends Block implements EntityBlock
     //////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
-    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, @Nullable Orientation orientation, boolean movedByPiston)
     {
-        if (state.getBlock() != newState.getBlock())
+        super.neighborChanged(state, level, pos, neighborBlock, orientation, movedByPiston);
+        if (! this.canSurvive(state, level, pos))
         {
-            BlockEntity be = worldIn.getBlockEntity(pos);
-            if (be instanceof TaskListBlockEntity panel)
-            {
-                Block.popResourceFromFace(worldIn, pos, state.getValue(FACING), panel.getItemForDrop());
-            }
-            super.onRemove(state, worldIn, pos, newState, isMoving);
-        }
-    }
-
-    @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos rackPos, Block block, BlockPos wallPos, boolean something)
-    {
-        super.neighborChanged(state, level, rackPos, block, wallPos, something);
-        if (! this.canSurvive(state, level, rackPos))
-        {
-            level.destroyBlock(rackPos, false);
+            level.destroyBlock(pos, false);
         }
     }
 
@@ -152,7 +140,7 @@ public class TaskListPanel extends Block implements EntityBlock
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) { return TaskListItem.Utility.createInstance(); }
+    public @NotNull ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player) { return TaskListItem.Utility.createInstance(); }
 
     @Override
     public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, net.minecraft.core.Direction direction)
@@ -188,7 +176,7 @@ public class TaskListPanel extends Block implements EntityBlock
                 if (level.getBlockEntity(pos) instanceof TaskListBlockEntity tile)
                 {
                     tile.invokeGUI();
-                    return InteractionResult.SUCCESS_NO_ITEM_USED;
+                    return InteractionResult.SUCCESS;
                 }
                 return InteractionResult.FAIL;
             }

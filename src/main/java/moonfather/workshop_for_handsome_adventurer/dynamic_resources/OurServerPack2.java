@@ -20,7 +20,7 @@ public class OurServerPack2  extends BaseResourcePack
 
     public OurServerPack2(PackLocationInfo locationInfo)
     {
-        super(PackType.SERVER_DATA, SharedConstants.getCurrentVersion().getPackVersion(PackType.SERVER_DATA));
+        super(PackType.SERVER_DATA, SharedConstants.getCurrentVersion().packVersion(PackType.SERVER_DATA));
         this.locationInfo = locationInfo;
     }
 

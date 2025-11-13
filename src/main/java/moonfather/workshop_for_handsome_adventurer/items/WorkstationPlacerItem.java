@@ -2,7 +2,6 @@ package moonfather.workshop_for_handsome_adventurer.items;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -10,22 +9,18 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Calendar;
-import java.util.List;
+import java.util.function.Consumer;
 
 public class WorkstationPlacerItem extends Item
 {
@@ -52,11 +47,11 @@ public class WorkstationPlacerItem extends Item
 
 	private final MutableComponent Tooltip1, Tooltip2;
 	@Override
-	public void appendHoverText(ItemStack itemStack, TooltipContext context, List<Component> list, TooltipFlag advanced)
+	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay, Consumer<Component> tooltipAdder, TooltipFlag flag)
 	{
-		super.appendHoverText(itemStack, context, list, advanced);
-		list.add(this.Tooltip1);
-		list.add(this.Tooltip2);
+		super.appendHoverText(stack, context, tooltipDisplay, tooltipAdder, flag);
+		tooltipAdder.accept(this.Tooltip1);
+		tooltipAdder.accept(this.Tooltip2);
 	}
 
 	@Override
@@ -83,10 +78,10 @@ public class WorkstationPlacerItem extends Item
 		}
 		Direction facingToSet = context.getHorizontalDirection().getOpposite();
 		Direction right = context.getHorizontalDirection().getClockWise();
-		Block bottomLeft = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(this.hostModId, this.prefix + "dual_table_bottom_left_" + this.woodType));
-		Block bottomRight = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(this.hostModId, this.prefix + "dual_table_bottom_right_" + this.woodType));
-		Block topLeft = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(this.hostModId, this.prefix + "dual_table_top_left_" + this.woodType));
-		Block topRight = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(this.hostModId, this.prefix + "dual_table_top_right_" + this.woodType));
+		Block bottomLeft = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(this.hostModId, this.prefix + "dual_table_bottom_left_" + this.woodType)).get().value();
+		Block bottomRight = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(this.hostModId, this.prefix + "dual_table_bottom_right_" + this.woodType)).get().value();
+		Block topLeft = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(this.hostModId, this.prefix + "dual_table_top_left_" + this.woodType)).get().value();
+		Block topRight = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(this.hostModId, this.prefix + "dual_table_top_right_" + this.woodType)).get().value();
 		context.getLevel().setBlock(position, bottomLeft.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, true), 0);
 		context.getLevel().setBlock(position.above(), topLeft.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, true), 0);
 		context.getLevel().setBlock(position.relative(right), bottomRight.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, true), 0);

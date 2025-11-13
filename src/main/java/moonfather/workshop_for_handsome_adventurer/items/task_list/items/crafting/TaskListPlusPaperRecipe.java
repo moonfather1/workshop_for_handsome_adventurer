@@ -84,15 +84,10 @@ public class TaskListPlusPaperRecipe extends CustomRecipe
         return ItemStack.EMPTY;
     }
 
-    public boolean canCraftInDimensions(int width, int height)
-    {
-        return width * height >= 2;
-    }
-
     ///////////////////////////////
 
     @Override
-    public RecipeSerializer<?> getSerializer()
+    public RecipeSerializer<? extends CustomRecipe> getSerializer()
     {
         return RegistrationForTaskList.TASK_LIST_EXPANSION_RECIPE.get();
     }

@@ -31,7 +31,7 @@ public class AdvancedTableBottomSecondary extends DualTableBaseBlock
 	private static final VoxelShape SHAPE_TABLE_E = Shapes.or(SHAPE_TOP, SHAPE_LEG1, SHAPE_LEG2);
 
 	@Override
-	public VoxelShape getOcclusionShape(BlockState state, BlockGetter p_60579_, BlockPos p_60580_)
+	public VoxelShape getOcclusionShape(BlockState state)
 	{
 		return this.ResolveShape(state.getValue(BlockStateProperties.HORIZONTAL_FACING));
 	}
@@ -84,12 +84,12 @@ public class AdvancedTableBottomSecondary extends DualTableBaseBlock
 
 
 	@Override
-	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player)
+	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player)
 	{
 		BlockPos posMain = pos.relative(state.getValue(BlockStateProperties.HORIZONTAL_FACING).getClockWise());
 		BlockState stateMain = level.getBlockState(posMain);
 		Block blockMain = stateMain.getBlock();
-		return blockMain.getCloneItemStack(stateMain, target, level, posMain, player);
+		return blockMain.getCloneItemStack(level, posMain, stateMain, includeData, player);
 	}
 
 

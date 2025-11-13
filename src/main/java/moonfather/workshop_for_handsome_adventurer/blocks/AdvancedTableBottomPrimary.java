@@ -6,6 +6,7 @@ import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.other.TableLockManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -17,7 +18,9 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -36,6 +39,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements EntityBlock
 {
@@ -60,7 +65,7 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements En
 	private static final VoxelShape SHAPE_TABLE_E = Shapes.or(SHAPE_TOP, SHAPE_LEG3, SHAPE_LEG4);
 
 	@Override
-	public VoxelShape getOcclusionShape(BlockState state, BlockGetter p_60579_, BlockPos p_60580_)
+	public VoxelShape getOcclusionShape(BlockState state)
 	{
 		return this.ResolveShape(state.getValue(BlockStateProperties.HORIZONTAL_FACING));
 	}
@@ -112,13 +117,18 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements En
 
 
 	@Override
-	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player)
+	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player)
 	{
 		ResourceLocation block = BuiltInRegistries.BLOCK.getKey(this);
 		String path = block.getPath();
 		String wood = path.substring(path.indexOf("_left_") + 6);
 		String prefix = path.substring(0, path.indexOf("dual_table_bottom_left_"));
-		return new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(block.getNamespace(), prefix + "workstation_placer_" + wood)));
+        Optional<Holder.Reference<Item>> item = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(block.getNamespace(),prefix + "workstation_placer_" + wood));
+		if (item.isEmpty())
+		{
+			return Items.OAK_PLANKS.getDefaultInstance();
+		}
+		return new ItemStack(item.get());
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,25 +155,11 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements En
 
 
 
-	@Override
-	public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving)
-	{
-		if (state.getBlock() != newState.getBlock())
-		{
-			BlockEntity te = worldIn.getBlockEntity(pos);
-			if (te instanceof DualTableBlockEntity entity)
-			{
-				entity.DropAll();
-			}
-			super.onRemove(state, worldIn, pos, newState, isMoving);
-		}
-	}
-
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState blockState)
 	{
-		return Registration.DUAL_TABLE_BE.get().create(pos, blockState);
+		return new DualTableBlockEntity(pos, blockState);
 	}
 
 	@Nullable

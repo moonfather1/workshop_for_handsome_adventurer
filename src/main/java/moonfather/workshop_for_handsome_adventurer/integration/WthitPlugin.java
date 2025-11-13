@@ -3,6 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.integration;
 import mcp.mobius.waila.api.*;
 import mcp.mobius.waila.api.component.ItemComponent;
 import moonfather.workshop_for_handsome_adventurer.ClientConfig;
+import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.block_entities.BookShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
@@ -56,7 +57,7 @@ public class WthitPlugin implements IWailaPlugin {
             if (map.containsKey(block)) {
                 return map.get(block);
             }
-            ItemStack placer = block.getCloneItemStack(accessor.getBlockState(), accessor.getBlockHitResult(), accessor.getWorld(), accessor.getPosition(), accessor.getPlayer());
+            ItemStack placer = block.getCloneItemStack(accessor.getWorld(), accessor.getPosition(), accessor.getBlockState(), false, accessor.getPlayer());
             ItemComponent result = new ItemComponent(placer);
             map.put(block, result);
             return result;
@@ -76,8 +77,8 @@ public class WthitPlugin implements IWailaPlugin {
                     int count, room;
                     if (accessor.getData().raw().contains("Bottles" + slot))
                     {
-                        count = accessor.getData().raw().getInt("Bottles" + slot);
-                        room = accessor.getData().raw().getInt("Space" + slot);
+                        count = accessor.getData().raw().getIntOr("Bottles" + slot, 0);
+                        room = accessor.getData().raw().getIntOr("Space" + slot, CommonConfig.SlotRoomMaximum.get()-count);
                     }
                     else
                     {

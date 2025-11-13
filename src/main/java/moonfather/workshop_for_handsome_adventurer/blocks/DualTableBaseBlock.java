@@ -15,7 +15,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.HitResult;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class DualTableBaseBlock extends Block
 {
@@ -54,12 +56,12 @@ public abstract class DualTableBaseBlock extends Block
 
 
 	@Override
-	public void neighborChanged(BlockState state, Level level, BlockPos rackPos, Block block, BlockPos wallPos, boolean something)
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, @Nullable Orientation orientation, boolean movedByPiston)
 	{
-		super.neighborChanged(state, level, rackPos, block, wallPos, something);
-		if (!this.canSurvive(state, level, rackPos))
+		super.neighborChanged(state, level, pos, neighborBlock, orientation, movedByPiston);
+		if (!this.canSurvive(state, level, pos))
 		{
-			level.destroyBlock(rackPos, true);
+			level.destroyBlock(pos, true);
 		}
 	}
 
@@ -77,7 +79,7 @@ public abstract class DualTableBaseBlock extends Block
 
 
 	@Override
-	public abstract ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player);
+	public abstract ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player);
 
 	protected abstract void toggleLights(BlockState state, Level level, BlockPos pos);
 }
