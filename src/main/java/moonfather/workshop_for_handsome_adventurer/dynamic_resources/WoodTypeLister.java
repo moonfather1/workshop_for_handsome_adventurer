@@ -41,6 +41,8 @@ public class WoodTypeLister
             woodToHostMap.put("acacia", "minecraft");
             ids.add("bamboo");
             woodToHostMap.put("bamboo", "minecraft");
+            ids.add("pale_pak");
+            woodToHostMap.put("pale_oak", "minecraft");
 
             ids.add("crimson");
             woodToHostMap.put("crimson", "minecraft");

@@ -7,12 +7,8 @@
     "sns"
   ],
   "key": {
-    "s": {
-      "item": "minecraft:birch_slab"
-    },
-	"n": {
-      "tag": "workshop_for_handsome_adventurer:metal_nuggets"
-    }
+    "s": "minecraft:birch_slab",
+	"n": "#workshop_for_handsome_adventurer:metal_nuggets"
   },
   "result": {
     "id": "workshop_for_handsome_adventurer:tool_rack_framed_birch",

@@ -6,13 +6,12 @@
     "##"
   ],
   "key": {
-    "#": {
-      "tag": "minecraft:planks"
-    }
+    "#": "#minecraft:planks"
   },
   "result": {
     "id": "minecraft:crafting_table"
   },
+  "show_notification": false,
   "neoforge:conditions": [
     {
       "type": "workshop_for_handsome_adventurer:optional",

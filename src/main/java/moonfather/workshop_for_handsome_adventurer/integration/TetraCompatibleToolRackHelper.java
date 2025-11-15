@@ -16,31 +16,17 @@ import java.util.Map;
 
 public class TetraCompatibleToolRackHelper
 {
-    public static ToolRack create(boolean dual, int itemCount, String subType)
+    public static ToolRack create(boolean dual, int itemCount, String subType, BlockBehaviour.Properties properties)
     {
         if (dual)
         {
-            return new DualToolRack(itemCount, subType);
+            return new DualToolRack(itemCount, subType, properties);
             //return new moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleDualToolRack(itemCount, subType);
         }
         else
         {
-            return new ToolRack(itemCount, subType);
+            return new ToolRack(itemCount, subType, properties);
             //return new moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleToolRack(itemCount, subType);
-        }
-    }
-
-    public static ToolRack create(boolean dual, int itemCount, String mainType, String subType)
-    {
-        if (dual)
-        {
-            return new DualToolRack(itemCount, subType);
-            //return new moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleDualToolRack(itemCount, subType);
-        }
-        else
-        {
-            return new ToolRack(itemCount, mainType, subType);
-            //return new moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleToolRack(itemCount, mainType, subType);
         }
     }
 
@@ -48,7 +34,7 @@ public class TetraCompatibleToolRackHelper
     {
         if (dual)
         {
-            return new DualToolRack(itemCount, subType);
+            return new DualToolRack(itemCount, subType, properties);
             //return new moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleDualToolRack(itemCount, subType);
         }
         else

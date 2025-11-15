@@ -10,12 +10,14 @@ import moonfather.workshop_for_handsome_adventurer.items.task_list.items.moving_
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.util.Unit;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -37,10 +39,11 @@ public class RegistrationForTaskList
         DATA_COMPONENT_TYPES.register(modBus);
     }
 
-    public static final Supplier<Item> TASK_LIST = ITEMS.register("task_list", TaskListItem::new);
-    public  static final Supplier<Block> TASK_LIST_PANEL = BLOCKS.register("task_list_panel", () -> new TaskListPanel());
+    public static final Supplier<Item> TASK_LIST = ITEMS.register("task_list", () -> new TaskListItem("task_list"));
+    public  static final Supplier<Block> TASK_LIST_PANEL = BLOCKS.register("task_list_panel", () -> new TaskListPanel("task_list_panel"));
 
     public static final Supplier<DataComponentType<TaskListComponent>> TASK_LIST_CONTENT = DATA_COMPONENT_TYPES.registerComponentType("task_list_data", builder -> builder.persistent(TaskListComponent.CODEC_FOR_COMPONENT).networkSynchronized(TaskListComponent.STREAM_CODEC_FOR_COMPONENT));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Unit>> FIRE_RESISTANT = DATA_COMPONENT_TYPES.register("fire_resistant", () -> DataComponentType.<Unit>builder().persistent(Unit.CODEC).networkSynchronized(Unit.STREAM_CODEC).build() );
     public static final Supplier<RecipeSerializer<TaskListPlusPaperRecipe>> TASK_LIST_EXPANSION_RECIPE = RECIPES.register("task_list_ex", () -> new CustomRecipe.Serializer<TaskListPlusPaperRecipe>(TaskListPlusPaperRecipe::new));
     public static final Supplier<RecipeSerializer<TaskListPlusCreamRecipe>> TASK_LIST_CREAMING_RECIPE = RECIPES.register("task_list_creaming", () -> new CustomRecipe.Serializer<TaskListPlusCreamRecipe>(TaskListPlusCreamRecipe::new));
 

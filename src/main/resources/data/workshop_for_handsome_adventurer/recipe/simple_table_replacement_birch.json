@@ -6,9 +6,7 @@
     "pp"
   ],
   "key": {
-    "p": {
-      "item": "minecraft:birch_planks"
-    }
+    "p": "minecraft:birch_planks"
   },
   "result": {
     "id": "workshop_for_handsome_adventurer:simple_table_birch",

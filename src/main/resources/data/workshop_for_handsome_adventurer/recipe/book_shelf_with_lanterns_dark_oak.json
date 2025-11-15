@@ -5,12 +5,8 @@
     "LsL"
   ],
   "key": {
-    "s": {
-      "item": "workshop_for_handsome_adventurer:book_shelf_open_minimal_dark_oak"
-    },
-    "L": {
-      "tag": "workshop_for_handsome_adventurer:lanterns"
-    }
+    "s": "workshop_for_handsome_adventurer:book_shelf_open_minimal_dark_oak",
+    "L": "#workshop_for_handsome_adventurer:lanterns"
   },
   "result": {
     "id": "workshop_for_handsome_adventurer:book_shelf_with_lanterns_dark_oak",

@@ -10,9 +10,12 @@ import moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleTo
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
@@ -32,8 +35,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.redstone.Orientation;
@@ -54,14 +57,14 @@ import java.util.Map;
 @ParametersAreNonnullByDefault
 public class ToolRack extends Block implements EntityBlock, IBlockWithCleverHoverText
 {
-    public ToolRack(int itemCount, String type)
+    public static Block.Properties getDefaultProperties()
     {
-        this(itemCount, "tool_rack", type);
+        return Properties.of().strength(2f, 3f).sound(SoundType.WOOD).ignitedByLava().mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY);
     }
 
-    public ToolRack(int itemCount, String mainType, @Nullable String subType)
+    public ToolRack(int itemCount, String type, Properties properties)
     {
-        this(itemCount, mainType, subType, Properties.of().strength(2f, 3f).sound(SoundType.WOOD).ignitedByLava().mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY));
+        this(itemCount, "tool_rack", type, properties);
     }
 
     public ToolRack(int itemCount, String mainType, @Nullable String subType, Properties properties)
@@ -83,15 +86,15 @@ public class ToolRack extends Block implements EntityBlock, IBlockWithCleverHove
         this.Tooltip2 = Component.translatable(translationKey).withStyle(Style.EMPTY.withItalic(true).withColor(0xaa77dd));
     }
 
-    public static ToolRack create(int itemCount, String type)
+    public static ToolRack create(int itemCount, String type, Properties properties)
     {
         if (ModList.get().isLoaded("tetra"))
         {
-            return TetraCompatibleToolRackHelper.create(false, itemCount, type);
+            return TetraCompatibleToolRackHelper.create(false, itemCount, type, properties);
         }
         else
         {
-            return new ToolRack(itemCount, type);
+            return new ToolRack(itemCount, type, properties);
         }
     }
 
@@ -101,7 +104,7 @@ public class ToolRack extends Block implements EntityBlock, IBlockWithCleverHove
     protected MutableComponent Tooltip1;
     protected MutableComponent Tooltip2;
 
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     private static final VoxelShape SHAPE_PLANK1N = Block.box(1.0D, 1.0D, 0.0D, 15.0D, 15.0D, 1.0D);
     private static final VoxelShape SHAPE_PLANK1E = Block.box(15.0D, 1.0D, 1.0D, 16.0D, 15.0D, 15.0D);

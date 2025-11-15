@@ -26,21 +26,21 @@ import javax.annotation.Nullable;
 
 public class DualToolRack extends ToolRack
 {
-    public DualToolRack(int itemCount, String type)
+    public DualToolRack(int itemCount, String type, Block.Properties properties)
     {
-        super(itemCount, type);
+        super(itemCount, type, properties);
         registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER));
     }
 
-    public static ToolRack create(int itemCount, String type)
+    public static ToolRack create(int itemCount, String type, Block.Properties properties)
     {
         if (ModList.get().isLoaded("tetra"))
         {
-            return TetraCompatibleToolRackHelper.create(true, itemCount, type);
+            return TetraCompatibleToolRackHelper.create(true, itemCount, type, properties);
         }
         else
         {
-            return new DualToolRack(itemCount, type);
+            return new DualToolRack(itemCount, type, properties);
         }
     }
 

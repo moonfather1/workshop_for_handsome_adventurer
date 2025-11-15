@@ -7,7 +7,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
@@ -17,6 +20,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -25,6 +29,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static com.mojang.blaze3d.platform.InputConstants.KEY_ESCAPE;
 
@@ -87,13 +92,13 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 					{
 						if (slot.getSlotIndex() < 27 || this.inventoryComponent.areSlotRowsFourToSixVisible())
 						{
-							graphics.pose().translate(0f, 0f, 101f);
+//							graphics.pose().translate(0f, 0f, 101f);
 							if (this.excessSlotSprite == null)
 							{
-								this.excessSlotSprite = this.minecraft.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(EXCESS_SLOT_BG);
+								this.excessSlotSprite = this.minecraft.getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(EXCESS_SLOT_BG);
 							}
-							graphics.blit(this.leftPos + slot.x, this.topPos + slot.y, 0/*z?*/, 16, 16, this.excessSlotSprite);
-							graphics.pose().translate(0f, 0f, -101f);
+//							graphics.blit(this.excessSlotSprite, this.leftPos + slot.x, this.topPos + slot.y, 0/*z?*/, 16, 16);
+//							graphics.pose().translate(0f, 0f, -101f);
 						}
 					}
 				}
@@ -140,13 +145,13 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		float scale = 1.0f, dx = 0f, dy = 0f;
 		if (itemstack.getCount() > 99) { scale = 0.75f; dx = 4; dy = 5; }
 		if (itemstack.getCount() > 999) { scale = 0.50f; dx = 14f; dy = 16f; }
-		guiGraphics.pose().pushPose();
-		guiGraphics.pose().scale(scale, scale, 1f);
-		guiGraphics.pose().translate(dx, dy, 0f);
+		guiGraphics.pose().pushMatrix();
+		guiGraphics.pose().scale(scale, scale);
+		guiGraphics.pose().translate(dx, dy);
 		x = (int) (x * (1/scale));
 		y = (int) (y * (1/scale));
 		guiGraphics.renderItemDecorations(this.font, itemstack, x, y, countString);
-		guiGraphics.pose().popPose();
+		guiGraphics.pose().popMatrix();
 	}
 
 
@@ -165,7 +170,9 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 				{
 					if (tooltipCustomizationsFull == null)
 					{
-						String itemKey = BuiltInRegistries.ITEM.get(ResourceLocation.parse(CommonConfig.AccessCustomizationItem.get())).getDescriptionId();
+						String itemKey = "??";
+						Optional<Holder.Reference<Item>> stupidWrapper = BuiltInRegistries.ITEM.get(ResourceLocation.parse(CommonConfig.AccessCustomizationItem.get()));
+						if (! stupidWrapper.isEmpty()) { itemKey = stupidWrapper.get().value().getDescriptionId(); }
 						String itemName = Language.getInstance().getOrDefault(itemKey);
 						tooltipCustomizationsFull = new ArrayList<>(15);
 						tooltipCustomizationsFull.add(tooltipCustomizationsTitle);
@@ -174,7 +181,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 												.split("\n"))
 								.forEach(text -> tooltipCustomizationsFull.add(Component.literal(text).withStyle(ChatFormatting.DARK_GRAY)));
 					}
-					graphics.renderComponentTooltip(this.font, tooltipCustomizationsFull, mouseX, mouseY);
+					graphics.setComponentTooltipForNextFrame(this.font, tooltipCustomizationsFull, mouseX, mouseY);
 				}
 				else
 				{
@@ -184,7 +191,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 						tooltipCustomizationsBrief.add(tooltipCustomizationsTitle);
 						tooltipCustomizationsBrief.add(tooltipCustomizationsShift);
 					}
-					graphics.renderComponentTooltip(this.font, tooltipCustomizationsBrief, mouseX, mouseY);
+					graphics.setComponentTooltipForNextFrame(this.font, tooltipCustomizationsBrief, mouseX, mouseY);
 				}
 			}
 		}

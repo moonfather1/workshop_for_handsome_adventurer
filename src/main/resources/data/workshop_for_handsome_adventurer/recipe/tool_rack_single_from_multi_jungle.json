@@ -5,9 +5,7 @@
     "m"
   ],
   "key": {
-    "m": {
-      "item": "workshop_for_handsome_adventurer:tool_rack_double_jungle"
-    }
+    "m": "workshop_for_handsome_adventurer:tool_rack_double_jungle"
   },
   "result": {
     "id": "workshop_for_handsome_adventurer:tool_rack_single_jungle",

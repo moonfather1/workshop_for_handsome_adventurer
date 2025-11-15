@@ -7,7 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,22 +19,22 @@ public class TaskListMessaging
 
     public static void sendPageToServer(TaskPageDTO page, TaskListExtraDTO extra)
     {
-        PacketDistributor.sendToServer(new TaskPageMessage(page, extra));
+        ClientPacketDistributor.sendToServer(new TaskPageMessage(page, extra));
         // sent to server on task list close or on page change
     }
 
     public static void sendBlockClickPageRightToServer(BlockPos pos)
     {
-        PacketDistributor.sendToServer(new BlockPagingMessage(pos, true));
+        ClientPacketDistributor.sendToServer(new BlockPagingMessage(pos, true));
     }
 
     public static void sendBlockClickPageLeftToServer(BlockPos pos)
     {
-        PacketDistributor.sendToServer(new BlockPagingMessage(pos, false));
+        ClientPacketDistributor.sendToServer(new BlockPagingMessage(pos, false));
     }
     public static void sendBlockClickCheckmarkServer(BlockPos pos, int index, int page)
     {
-        PacketDistributor.sendToServer(new BlockCheckmarkMessage(pos, index, page));
+        ClientPacketDistributor.sendToServer(new BlockCheckmarkMessage(pos, index, page));
     }
 
 

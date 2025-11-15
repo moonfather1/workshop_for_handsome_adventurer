@@ -16,6 +16,8 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.Slot;
@@ -230,12 +232,13 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     {
         if (this.isVisibleTotal()) {
             this.renameButton.renderTooltipsSeparately(graphics, this.parent.getFont(), mouseX, mouseY);
-            for(StateSwitchingButton tabButton : this.tabButtons)
+            for(TabButton tabButton : this.tabButtons)
             {
                 if (tabButton.isHoveredOrFocused())
                 {
-                    if (this.parent.getMinecraft().screen != null) {
-                        graphics.renderTooltip(this.parent.getFont(), tabButton.getMessage(), mouseX+2, mouseY+12);
+                    if (this.parent.getMinecraft().screen != null)
+                    {
+                        graphics.renderTooltip(this.parent.getFont(), tabButton.getMessageForTooltip(), mouseX+2, mouseY+12, DefaultTooltipPositioner.INSTANCE, null);
                     }
                     break;
                 }
@@ -531,16 +534,14 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             }
             else {
                 // main image - item    (belt, backpack...)
-                graphics.pose().pushPose();
-                graphics.pose().scale(2/3f, 2/3f, 2/3f); // why did i downsize? looks bad but i probably had a reason.
-                graphics.pose().translate(0, 0, +100.0D);
+                graphics.pose().pushMatrix();
+                graphics.pose().scale(2/3f, 2/3f); // why did i downsize? looks bad but i probably had a reason.
                 graphics.renderFakeItem(itemMain, (int)((x + tabIndexInRow * (WIDTH-1) + 7) * 1.5d), (int)((y+5)*1.5d));
-                graphics.pose().popPose();
+                graphics.pose().popMatrix();
             }
             // sub image
-            graphics.pose().pushPose();
-            graphics.pose().scale(2/3f, 2/3f, 2/3f);
-            graphics.pose().translate(0, 0, +100.0D);
+            graphics.pose().pushMatrix();
+            graphics.pose().scale(2/3f, 2/3f);
             graphics.renderFakeItem(itemSub, (int)((x + tabIndexInRow * (WIDTH-1) + 13) * 1.5d), (int)((y+12)*1.5d));
             graphics.pose().popMatrix();
         }
@@ -560,5 +561,15 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             }
             return super.mouseClicked(p_93641_, p_93642_, p_93643_);
         }
+
+        public List<ClientTooltipComponent> getMessageForTooltip()
+        {
+            if (this.tooltip == null)
+            {
+                this.tooltip = List.of(ClientTooltipComponent.create(this.getMessage().getVisualOrderText()));
+            }
+            return this.tooltip;
+        }
+        private List<ClientTooltipComponent> tooltip = null;
     }
 }

@@ -6,15 +6,9 @@
     "pw"
   ],
   "key": {
-    "p": {
-      "item": "minecraft:paper"
-    },
-	"n": {
-      "tag": "workshop_for_handsome_adventurer:metal_nuggets"
-    },
-	"w": {
-      "tag": "minecraft:planks"
-    }
+    "p": "minecraft:paper",
+	"n": "#workshop_for_handsome_adventurer:metal_nuggets",
+	"w": "#minecraft:planks"
   },
   "result": {
     "id": "workshop_for_handsome_adventurer:task_list",

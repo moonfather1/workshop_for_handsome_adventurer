@@ -14,14 +14,9 @@ import java.util.Collection;
 public class TetraCompatibleToolRack extends ToolRack /*implements IToolProviderBlock*/
 {
     private ToolRack rack;
-    public TetraCompatibleToolRack(int itemCount, String subType)
+    public TetraCompatibleToolRack(int itemCount, String subType, Properties properties)
     {
-        super(itemCount, subType);
-    }
-
-    public TetraCompatibleToolRack(int itemCount, String mainType, String subType)
-    {
-        super(itemCount, mainType, subType);
+        super(itemCount, subType, properties);
     }
 
     public TetraCompatibleToolRack(int itemCount, String mainType, String subType, Properties properties)

@@ -6,12 +6,8 @@
     "sns"
   ],
   "key": {
-    "s": {
-      "item": "minecraft:cherry_slab"
-    },
-	"n": {
-      "tag": "workshop_for_handsome_adventurer:metal_nuggets"
-    }
+    "s": "minecraft:cherry_slab",
+    "n": "#workshop_for_handsome_adventurer:metal_nuggets"
   },
   "result": {
     "id": "workshop_for_handsome_adventurer:potion_shelf_cherry",

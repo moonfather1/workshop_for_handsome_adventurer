@@ -5,9 +5,7 @@
     "f"
   ],
   "key": {
-    "f": {
-      "item": "workshop_for_handsome_adventurer:tool_rack_pframed_mangrove"
-    }
+    "f": "workshop_for_handsome_adventurer:tool_rack_pframed_mangrove"
   },
   "result": {
     "id": "workshop_for_handsome_adventurer:tool_rack_double_mangrove",

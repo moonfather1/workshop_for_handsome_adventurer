@@ -1,7 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.items.task_list.items;
 
-import com.mojang.datafixers.util.Either;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.RegistrationForTaskList;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.block_entities.TaskListBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.moving_data.TaskListComponent;
@@ -11,7 +10,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Unit;
@@ -32,9 +34,9 @@ import net.neoforged.neoforge.common.Tags;
 
 public class TaskListItem extends Item
 {
-    public TaskListItem()
+    public TaskListItem(String id)
     {
-        super((new Properties()).stacksTo(1));
+        super((new Properties()).stacksTo(1).setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id))));
     }
     //  abandoned, nice to have: tooltip line saying Completed: (orange) 0/6 (spacing) (greenish)5/6
     //  abandoned, consideration: consider keyboard paging
@@ -131,12 +133,12 @@ public class TaskListItem extends Item
 
         public static boolean isFireImmune(ItemStack taskList)
         {
-            return taskList.has(Registration.FIRE_RESISTANT);
+            return taskList.has(RegistrationForTaskList.FIRE_RESISTANT);
         }
 
         public static void setFireImmune(ItemStack taskList)
         {
-            taskList.set(Registration.FIRE_RESISTANT, Unit.INSTANCE);  // don't ask.  this wasn't retarded in 1.21.1, but now it is.
+            taskList.set(RegistrationForTaskList.FIRE_RESISTANT, Unit.INSTANCE);  // don't ask.  this wasn't retarded in 1.21.1, but now it is.
             taskList.set(DataComponents.DAMAGE_RESISTANT, new DamageResistant(DamageTypeTags.IS_FIRE));
         }
 

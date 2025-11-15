@@ -5,9 +5,7 @@
     "b"
   ],
   "key": {
-    "b": {
-      "item": "workshop_for_handsome_adventurer:book_shelf_double_cherry"
-    }
+    "b": "workshop_for_handsome_adventurer:book_shelf_double_cherry"
   },
   "result": {
     "id": "workshop_for_handsome_adventurer:book_shelf_minimal_cherry",

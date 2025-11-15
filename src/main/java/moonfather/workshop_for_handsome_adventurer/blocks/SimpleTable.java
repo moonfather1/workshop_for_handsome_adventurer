@@ -51,14 +51,14 @@ public class SimpleTable extends Block implements EntityBlock, IBlockWithCleverH
     public SimpleTable(Properties properties)
     {
         super(properties);
-    }
-
-    public SimpleTable()
-    {
-        super(Properties.of().strength(2f, 3f).sound(SoundType.WOOD).ignitedByLava().mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY));
         registerDefaultState(this.defaultBlockState().setValue(SimpleTable.HAS_INVENTORY, false));
         this.Tooltip1 = Component.translatable("block.workshop_for_handsome_adventurer.simple_table.tooltip1").withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
         this.Tooltip2 = Component.translatable("block.workshop_for_handsome_adventurer.simple_table.tooltip2").withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
+    }
+
+    public static Block.Properties getDefaultProperties()
+    {
+        return Properties.of().strength(2f, 3f).sound(SoundType.WOOD).ignitedByLava().mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY);
     }
 
     private MutableComponent Tooltip1, Tooltip2;
@@ -117,7 +117,7 @@ public class SimpleTable extends Block implements EntityBlock, IBlockWithCleverH
             {
                 player.displayClientMessage(MessageInaccessible, true);
             }
-            return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;;
+            return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
         else if (level.isClientSide)
         {

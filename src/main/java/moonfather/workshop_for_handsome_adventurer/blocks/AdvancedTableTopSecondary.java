@@ -21,9 +21,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class AdvancedTableTopSecondary extends DualTableBaseBlock
 {
-	public AdvancedTableTopSecondary()
+	public AdvancedTableTopSecondary(Block.Properties properties)
 	{
-		super();
+		super(properties);
 		registerDefaultState(this.defaultBlockState()
 				.setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
 				.setValue(AdvancedTableBottomPrimary.HAS_LANTERNS, false)

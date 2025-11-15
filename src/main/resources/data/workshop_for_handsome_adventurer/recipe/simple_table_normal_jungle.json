@@ -5,12 +5,8 @@
     "c","p"
   ],
   "key": {
-    "p": {
-      "item": "minecraft:jungle_planks"
-    },
-	"c": {
-      "tag": "c:player_workstations/crafting_tables"
-    }
+    "p": "minecraft:jungle_planks",
+	"c": "#c:player_workstations/crafting_tables"
   },
   "result": {
     "id": "workshop_for_handsome_adventurer:simple_table_jungle",

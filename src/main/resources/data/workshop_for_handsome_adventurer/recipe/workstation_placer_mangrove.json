@@ -6,12 +6,8 @@
     "ll"
   ],
   "key": {
-    "t": {
-      "tag": "c:player_workstations/crafting_tables"
-    },
-    "l": {
-      "item": "minecraft:stripped_mangrove_log"
-    }
+    "t": "#c:player_workstations/crafting_tables",
+    "l": "minecraft:stripped_mangrove_log"
   },
   "result": {
     "id": "workshop_for_handsome_adventurer:workstation_placer_mangrove",

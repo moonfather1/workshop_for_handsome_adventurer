@@ -162,7 +162,8 @@ dependencies {
     compileOnly "curse.maven:inventory-tweaks-refoxed-976858:5610776"
     //!! IT is still on 1.21.1
 
-    runtimeOnly "curse.maven:storage-drawers-223852:6967716"
+    //!!runtimeOnly "curse.maven:storage-drawers-223852:6967716"
+    //  sd above didn't work at all
     //!! runtimeOnly "curse.maven:functional-storage-556861:5861256"
     //!! runtimeOnly "curse.maven:titanium-287342:5889342"
     //!! FS is still on 1.21.1
@@ -188,7 +189,9 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             mod_license            : mod_license,
             mod_version            : mod_version,
             mod_authors            : mod_authors,
-            mod_description        : mod_description
+            mod_description        : mod_description,
+            loader_version_range   : loader_version_range,
+            neo_version_range      : neo_version_range
     ]
     inputs.properties replaceProperties
     expand replaceProperties

@@ -5,9 +5,7 @@
     "t"
   ],
   "key": {
-    "t": {
-      "tag": "c:player_workstations/crafting_tables"
-    }
+    "t": "#c:player_workstations/crafting_tables"
   },
   "result": {
     "id": "minecraft:crafting_table",

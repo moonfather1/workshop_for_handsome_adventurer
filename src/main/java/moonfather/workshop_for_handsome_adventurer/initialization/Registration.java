@@ -3,6 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.initialization;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import moonfather.workshop_for_handsome_adventurer.Constants;
+import moonfather.workshop_for_handsome_adventurer.ModWorkshop;
 import moonfather.workshop_for_handsome_adventurer.block_entities.*;
 import moonfather.workshop_for_handsome_adventurer.blocks.*;
 import moonfather.workshop_for_handsome_adventurer.items.BlockItemEx;
@@ -14,6 +15,8 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
@@ -22,6 +25,7 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
@@ -86,18 +90,29 @@ public class Registration
 		for (String woodType : Registration.woodTypes)
 		{
 			id = "simple_table_" + woodType;
-			Supplier<Block> block = BLOCKS.register(id, () -> new SimpleTable());
+			Block.Properties prop1 = SimpleTable.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			Supplier<Block> block = BLOCKS.register(id, () -> new SimpleTable(prop1));
 			blocks_table1.add(block);
 			items_table1.add(FromBlock(block, id));
 		}
 		// dual tables
 		for (String woodType : Registration.woodTypes)
 		{
-			Supplier<Block> primary = BLOCKS.register("dual_table_bottom_left_" + woodType, () -> new AdvancedTableBottomPrimary());
-			BLOCKS.register("dual_table_bottom_right_" + woodType, () -> new AdvancedTableBottomSecondary());
-			BLOCKS.register("dual_table_top_left_" + woodType, () -> new AdvancedTableTopSecondary());
-			BLOCKS.register("dual_table_top_right_" + woodType, () -> new AdvancedTableTopSecondary());
-			Supplier<Item> placer = ITEMS.register("workstation_placer_" + woodType, () -> new WorkstationPlacerItem(woodType));
+			String id1 = "dual_table_bottom_left_" + woodType;
+			String id2 = "dual_table_bottom_right_" + woodType;
+			String id3 = "dual_table_top_left_" + woodType;
+			String id4 = "dual_table_top_right_" + woodType;
+			Block.Properties prop1 = AdvancedTableBottomPrimary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id1)));
+			Block.Properties prop2 = AdvancedTableBottomSecondary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id2)));
+			Block.Properties prop3 = AdvancedTableTopSecondary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id3)));
+			Block.Properties prop4 = AdvancedTableTopSecondary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id4)));
+			Supplier<Block> primary = BLOCKS.register(id1, () -> new AdvancedTableBottomPrimary(prop1));
+			BLOCKS.register(id2, () -> new AdvancedTableBottomSecondary(prop2));
+			BLOCKS.register(id3, () -> new AdvancedTableTopSecondary(prop3));
+			BLOCKS.register(id4, () -> new AdvancedTableTopSecondary(prop4));
+			String id6 = "workstation_placer_" + woodType;
+			Item.Properties prop6 = new Item.Properties().stacksTo(1).setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id6)));
+			Supplier<Item> placer = ITEMS.register(id6, () -> new WorkstationPlacerItem(woodType, prop6));
 			items_table2.add(placer);
 			blocks_table2.add(primary);
 		}
@@ -106,19 +121,23 @@ public class Registration
 		{
 			Supplier<Block> rack;
 			id = "tool_rack_single_" + woodType;
-			rack = BLOCKS.register(id, () -> ToolRack.create(2, "single"));
+			Block.Properties prop1 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			rack = BLOCKS.register(id, () -> ToolRack.create(2, "single", prop1));
 			items_rack1.add(FromBlock(rack, id));
 			blocks_rack.add(rack);
 			id = "tool_rack_framed_" + woodType;
-			rack = BLOCKS.register(id, () -> DualToolRack.create(6, "framed"));
+			Block.Properties prop2 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			rack = BLOCKS.register(id, () -> DualToolRack.create(6, "framed", prop2));
 			items_rack2.add(FromBlock(rack, id));
 			blocks_rack.add(rack);
 			id = "tool_rack_pframed_" + woodType;
-			rack = BLOCKS.register(id, () -> DualToolRack.create(6, "pframed"));
+			Block.Properties prop3 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			rack = BLOCKS.register(id, () -> DualToolRack.create(6, "pframed", prop3));
 			items_rack3.add(FromBlock(rack, id));
 			blocks_rack.add(rack);
 			id = "tool_rack_double_" + woodType;
-			rack = BLOCKS.register(id, () -> DualToolRack.create(6, "double"));
+			Block.Properties prop4 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			rack = BLOCKS.register(id, () -> DualToolRack.create(6, "double", prop4));
 			items_rack4.add(FromBlock(rack, id));
 			blocks_rack.add(rack);
 		}
@@ -126,7 +145,8 @@ public class Registration
 		for (String woodType : Registration.woodTypes)
 		{
 			id = "potion_shelf_" + woodType;
-			Supplier<Block> shelf = BLOCKS.register(id, () -> new PotionShelf());
+			Block.Properties prop1 = PotionShelf.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			Supplier<Block> shelf = BLOCKS.register(id, () -> new PotionShelf(prop1));
 			items_pshelf.add(FromBlock(shelf, id));
 			blocks_pshelf.add(shelf);
 		}
@@ -135,23 +155,28 @@ public class Registration
 		{
 			Supplier<Block> rack;
 			id = "book_shelf_double_" + woodType;
-			rack = BLOCKS.register(id, () -> new BookShelf.Dual("double"));
+			Block.Properties prop1 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			rack = BLOCKS.register(id, () -> new BookShelf.Dual("double", prop1));
 			items_bshelf1.add(FromBlock(rack, id));
 			blocks_bshelf.add(rack);
 			id = "book_shelf_open_double_" + woodType;
-			rack = BLOCKS.register(id, () -> new BookShelf.Dual("open_double"));
+			Block.Properties prop2 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			rack = BLOCKS.register(id, () -> new BookShelf.Dual("open_double", prop2));
 			items_bshelf2.add(FromBlock(rack, id));
 			blocks_bshelf.add(rack);
 			id = "book_shelf_minimal_" + woodType;
-			rack = BLOCKS.register(id, () -> new BookShelf.TopSimple("minimal"));
+			Block.Properties prop3 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			rack = BLOCKS.register(id, () -> new BookShelf.TopSimple("minimal", prop3));
 			items_bshelf3.add(FromBlock(rack, id));
 			blocks_bshelf.add(rack);
 			id = "book_shelf_open_minimal_" + woodType;
-			rack = BLOCKS.register(id, () -> new BookShelf.TopSimple("open_minimal"));
+			Block.Properties prop4 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			rack = BLOCKS.register(id, () -> new BookShelf.TopSimple("open_minimal", prop4));
 			items_bshelf4.add(FromBlock(rack, id));
 			blocks_bshelf.add(rack);
 			id = "book_shelf_with_lanterns_" + woodType;
-			rack = BLOCKS.register(id, () -> new BookShelf.TopWithLanterns("with_lanterns"));
+			Block.Properties prop5 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			rack = BLOCKS.register(id, () -> new BookShelf.TopWithLanterns("with_lanterns", prop5));
 			items_bshelf5.add(FromBlock(rack, id));
 			blocks_bshelf.add(rack);
 		}
@@ -161,6 +186,7 @@ public class Registration
 	{
 		// could have passed deferred holder instead of separate string, but it doesn't matter
 		Item.Properties properties = new Item.Properties();
+		properties.setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id))).useBlockDescriptionPrefix();
 		return ITEMS.register(id, () -> new BlockItemEx(block.get(), properties));
 	}
 
@@ -189,10 +215,9 @@ public class Registration
 
 	public static final Supplier<CreativeModeTab> CREATIVE_TAB = CREATIVE_TABS.register("tab", CreativeTab::buildTab);
 
-	public static final Supplier<MapCodec<? extends ICondition>> OptionalRecipe = CONDITIONS.register("optional", () -> OptionalRecipeCondition.CODEC);
+	public static final Supplier<MapCodec<? extends ICondition>> OPTIONALRECIPE = CONDITIONS.register("optional", () -> OptionalRecipeCondition.CODEC);
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> TAB_FLAGS = DATA_COMPONENT_TYPES.register("tab_flags", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build() );
-	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Unit>> FIRE_RESISTANT = DATA_COMPONENT_TYPES.register("fire_resistant", () -> DataComponentType.<Unit>builder().persistent(Unit.CODEC).networkSynchronized(Unit.STREAM_CODEC).build() );
 }

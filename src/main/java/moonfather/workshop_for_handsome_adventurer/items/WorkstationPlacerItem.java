@@ -37,11 +37,6 @@ public class WorkstationPlacerItem extends Item
 		this.hostModId = hostMod;
 		this.prefix = prefix;
 	}
-
-	public WorkstationPlacerItem(String wood)
-	{
-		this(wood, new Properties().stacksTo(1));
-	}
 	private final String woodType;
 
 

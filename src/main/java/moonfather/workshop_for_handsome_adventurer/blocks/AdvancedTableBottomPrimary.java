@@ -12,7 +12,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
@@ -34,7 +33,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -44,9 +42,9 @@ import java.util.Optional;
 
 public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements EntityBlock
 {
-	public AdvancedTableBottomPrimary()
+	public AdvancedTableBottomPrimary(Block.Properties properties)
 	{
-		super();
+		super(properties);
 		registerDefaultState(this.defaultBlockState().setValue(SimpleTable.HAS_INVENTORY, false)
 		                                             .setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
 		                                             .setValue(HAS_LANTERNS, false));

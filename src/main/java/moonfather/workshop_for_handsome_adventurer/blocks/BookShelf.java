@@ -15,13 +15,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -29,12 +27,6 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class BookShelf extends ToolRack
 {
-    public BookShelf(String subType)
-    {
-        super(INITIAL_BOOK_COUNT, "book_shelf", subType);
-        this.registedDefaultState();
-    }
-
     public BookShelf(String subType, Properties properties)
     {
         super(INITIAL_BOOK_COUNT, "book_shelf", subType, properties);
@@ -267,9 +259,9 @@ public abstract class BookShelf extends ToolRack
 
     public static class Dual extends BookShelf
     {
-        public Dual(String type)
+        public Dual(String type, Block.Properties properties)
         {
-            super(type);
+            super(type, properties);
         }
 
         @Override
@@ -302,9 +294,9 @@ public abstract class BookShelf extends ToolRack
 
     public static class TopSimple extends BookShelf
     {
-        public TopSimple(String type)
+        public TopSimple(String type, Block.Properties properties)
         {
-            super(type);
+            super(type, properties);
         }
 
         @Override
@@ -337,9 +329,9 @@ public abstract class BookShelf extends ToolRack
 
     public static class TopWithLanterns extends BookShelf
     {
-        public TopWithLanterns(String type)
+        public TopWithLanterns(String type, BlockBehaviour.Properties properties)
         {
-            super(type, Properties.of().strength(2f, 3f).sound(SoundType.WOOD).ignitedByLava().mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY).lightLevel(TopWithLanterns::getLightLevel));
+            super(type, properties.lightLevel(TopWithLanterns::getLightLevel));
         }
 
         @Override

@@ -2,11 +2,15 @@ package moonfather.workshop_for_handsome_adventurer.items.task_list.blocks;
 
 
 import moonfather.workshop_for_handsome_adventurer.ClientConfig;
+import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.block_entities.TaskListBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.TaskListItem;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.moving_data.TaskListMessaging;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.redstone.Orientation;
@@ -39,9 +43,9 @@ import java.util.Map;
 
 public class TaskListPanel extends Block implements EntityBlock
 {
-    public TaskListPanel()
+    public TaskListPanel(String id)
     {
-        super(Properties.of().strength(0.3f, 0.6f).sound(SoundType.WOOD).mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY));
+        super(Properties.of().strength(0.3f, 0.6f).sound(SoundType.WOOD).mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY).setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id))));
         registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(EMPTY, true));
         this.PrepareListOfShapes();
     }
@@ -54,7 +58,7 @@ public class TaskListPanel extends Block implements EntityBlock
         builder.add(EMPTY);
     }
 
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty EMPTY = BooleanProperty.create("empty");
 
     private static final VoxelShape SHAPE_PLANK1S = Block.box(1.5D, 0.0D, 0.0D, 14.5D, 16.0D, 1.0D);

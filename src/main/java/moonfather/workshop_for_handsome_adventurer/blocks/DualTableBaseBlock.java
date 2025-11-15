@@ -21,10 +21,15 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class DualTableBaseBlock extends Block
 {
-	public DualTableBaseBlock()
+	public DualTableBaseBlock(Block.Properties properties)
 	{
-		super(Properties.of().strength(2f, 3f).sound(SoundType.WOOD).lightLevel(DualTableBaseBlock::getLightLevel).ignitedByLava().mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY));
+		super(properties);
 		registerDefaultState(this.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH));
+	}
+
+	public static Block.Properties getDefaultProperties()
+	{
+		return Properties.of().strength(2f, 3f).sound(SoundType.WOOD).lightLevel(DualTableBaseBlock::getLightLevel).ignitedByLava().mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY);
 	}
 
 

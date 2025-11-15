@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 
 
 @Mod(Constants.MODID)
-public class ModWorkshopInventoryAccessComponent
+public class ModWorkshop
 {
     private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -53,6 +53,17 @@ public class ModWorkshopInventoryAccessComponent
     //               using TextureAtlas.LOCATION_BLOCKS in SpecialFirstEverRenderer is sus
     //               interaction with tetra hammer is fixed - it was stupid in all  old versions
     //               remove commented out stuff from InventoryAccessComponent.render()
+    //               iac tab rendering is done blindly
+    //               customization tooltips are diff from a bunch i fixed already
+    //               SimpleTableCraftingScreen  renderSlotContents lost z
+    //               SimpleTableCraftingScreen !! x-es in tables disabled
+    //               SimpleTableCraftingScreen some comments in render method
+    //               jei types are likely broken
+    //               potion cloning disabled
+    //               todo: rework tetra creation when tetra is up.
+    //               try block desc prefix
+    //               disabled freeze
+    //               disabled 2 below
 
     public ModWorkshop(IEventBus modBus, ModContainer modContainer)
     {
@@ -65,10 +76,10 @@ public class ModWorkshopInventoryAccessComponent
         modBus.addListener(CarryOnBlacklisting::enqueueIMC);
         modBus.addListener(TOPProxyRegistration::enqueueIMC);
         modBus.addListener(CreativeTab::onCreativeTabPopulation);
-        modBus.addListener(FinderEvents::addServerPack);
+//        modBus.addListener(FinderEvents::addServerPack);
         modBus.addListener(MessagingInitialization::register);
         NeoForge.EVENT_BUS.addListener(PotionShelf::onRightClickBlock);
-        modBus.addListener(EventPriority.LOWEST, DynamicContentRegistration::handleRegistryEvent);
+//        modBus.addListener(EventPriority.LOWEST, DynamicContentRegistration::handleRegistryEvent);
         MissingMappingsHandler.read();
 		
         RegistrationForTaskList.init(modBus);
