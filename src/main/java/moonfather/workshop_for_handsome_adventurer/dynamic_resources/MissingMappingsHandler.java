@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.fml.loading.FMLConfig;
 import net.neoforged.fml.loading.FMLEnvironment;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -64,8 +65,11 @@ public class MissingMappingsHandler
         try
         {
             Path path = Path.of("config", "workshop", "mappings.dat");;
-            Files.writeString(path, raw, StandardOpenOption.CREATE_NEW);
+            Files.writeString(path, raw, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         }
-        catch (IOException ignored) {       }
+        catch (IOException e)
+        {
+            LogManager.getLogger().error("WFHA error 507 (" + e.getClass().getName() + "):  " + e.getMessage() + "  ~~~");
+        }
     }
 }

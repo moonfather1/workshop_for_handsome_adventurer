@@ -18,12 +18,9 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -33,7 +30,6 @@ import java.util.Optional;
 
 import static com.mojang.blaze3d.platform.InputConstants.KEY_ESCAPE;
 
-@OnlyIn(Dist.CLIENT)
 public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTableMenu>
 {
 	private static final ResourceLocation[] CRAFTING_TABLE_LOCATION = new ResourceLocation[3];
@@ -46,6 +42,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		super(p_98448_, p_98449_, p_98450_);
 	}
 
+	@Override
 	protected void init()
 	{
 		super.init();
@@ -70,6 +67,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		return imageWidth + leftPanel + (leftPanel > 0 ? 2 : 0);
 	}
 
+	@Override
 	public void containerTick()
 	{
 		super.containerTick();
@@ -92,13 +90,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 					{
 						if (slot.getSlotIndex() < 27 || this.inventoryComponent.areSlotRowsFourToSixVisible())
 						{
-//							graphics.pose().translate(0f, 0f, 101f);
-							if (this.excessSlotSprite == null)
-							{
-								this.excessSlotSprite = this.minecraft.getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(EXCESS_SLOT_BG);
-							}
-//							graphics.blit(this.excessSlotSprite, this.leftPos + slot.x, this.topPos + slot.y, 0/*z?*/, 16, 16);
-//							graphics.pose().translate(0f, 0f, -101f);
+							graphics.blitSprite(RenderPipelines.GUI_TEXTURED, EXCESS_SLOT_BG, this.leftPos + slot.x, this.topPos + slot.y, 16, 16);
 						}
 					}
 				}
@@ -110,7 +102,6 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		this.inventoryComponent.renderTooltip(graphics, p_98480_, p_98481_);
 		this.renderCustomizationTooltips(graphics, p_98480_, p_98481_);
 	}
-	private TextureAtlasSprite excessSlotSprite = null;
 	private static final ResourceLocation EXCESS_SLOT_BG = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "gui/x_slot");
 
 	@Override
@@ -118,13 +109,13 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	{
 		int i = this.renderLeftPos;
 		int j = (this.height - this.imageHeight) / 2;
-		graphics.blit(this.getBackgroundImage(), i, j, 0, 0, this.imageWidth, this.imageHeight, 256, 256);
+		graphics.blit(RenderPipelines.GUI_TEXTURED, this.getBackgroundImage(), i, j, 0.0F, 0.0F, this.imageWidth, this.imageHeight, 256, 256);
 	}
 
 	@Override
 	public void renderBackground(GuiGraphics graphics, int p_297538_, int p_300104_, float p_298759_)
 	{
-		super.renderBackground(graphics, p_297538_, p_300104_, p_298759_); // renders gray shading in the back, than calls renderBg
+		super.renderBackground(graphics, p_297538_, p_300104_, p_298759_); // renders gray shading in the back, then calls renderBg
 		if (this.inventoryComponent.isVisibleTotal())
 		{
 			this.inventoryComponent.render(graphics, p_297538_, p_300104_, p_298759_);
@@ -223,24 +214,38 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 
 
 
+	@Override
 	protected boolean hasClickedOutside(double mouseX, double mouseY, int left, int top, int button)
 	{
 		boolean flag = mouseX < (double)left || mouseY < (double)top || mouseX >= (double)(left + this.imageWidth) || mouseY >= (double)(top + this.imageHeight);
 		return this.inventoryComponent.hasClickedOutside(mouseX, mouseY, this.leftPos, this.topPos, this.imageWidth + this.inventoryComponent.getWidth() + 1, this.imageHeight, button) && flag;
 	}
 
+	@Override
 	protected void slotClicked(Slot p_98469_, int p_98470_, int p_98471_, ClickType p_98472_)
 	{
 		super.slotClicked(p_98469_, p_98470_, p_98471_, p_98472_);
 		this.inventoryComponent.slotClicked(p_98469_);
 	}
 
+	@Override
+	public boolean mouseClicked(double mouseX, double mouseY, int button)
+	{
+		if (this.inventoryComponent.mouseClicked(mouseX, mouseY, button))
+		{
+			return true;
+		}
+		return super.mouseClicked(mouseX, mouseY, button);
+	}
+
+	@Override
 	public void removed()
 	{
 		this.inventoryComponent.removed();
 		super.removed();
 	}
 
+	@Override
 	public boolean keyPressed(int p_97878_, int p_97879_, int p_97880_)
 	{
 		if (p_97878_ == KEY_ESCAPE)
@@ -255,10 +260,22 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		return super.keyPressed(p_97878_, p_97879_, p_97880_);
 	}
 
+	@Override
+	public boolean charTyped(char codePoint, int modifiers)
+	{
+		if (this.inventoryComponent.isVisibleTotal()
+				&& this.inventoryComponent.charTyped(codePoint, modifiers))
+		{
+			return true;
+		}
+		return super.charTyped(codePoint, modifiers);
+	}
+
 	public int getImageWidth()
 	{
 		return this.imageWidth;
 	}
 
+	@Override
 	public Font getFont() { return this.font; }
 }

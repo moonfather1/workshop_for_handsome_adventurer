@@ -18,6 +18,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.Slot;
@@ -90,7 +91,8 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             this.renameBox.setMaxLength(50);
             this.renameBox.setBordered(false);  // draw bg myself because some dumbass hardcoded black as background
             this.renameBox.setVisible(true);
-            this.renameBox.setTextColor(0xcccccc);
+            this.renameBox.setTextColor(0xffcccccc);
+            this.renameBox.setTextShadow(false);
             this.renameButton = new SimpleButton(this.xOffset, bottomY - 23, 25, 18, RENAME_BUTTON_LOCATION, "normal", "hovered", "disabled",  32, 32, p_93751_ -> this.renameButtonClicked(), Component.literal("Rename container"));
             this.renameButton.setTooltipKey(renameTooltipKey);
             this.renameButton.setTooltipInset(Component.literal(""));
@@ -199,13 +201,9 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     {
         if (this.isVisibleTotal())
         {
-////            RenderSystem.disableDepthTest();
-        //    graphics.pose().pushPose();
-        //    graphics.pose().translate(0.0D, 0.0D, 0.0D);
-        //    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             int x = this.parent.getGuiLeft();
             int y = (this.parent.height - parent.getYSize()) / 2;
-            graphics.blit(this.getBackground(), x, y,0, 0, PANEL_WIDTH, PANEL_HEIGHT_WITH_TABS, 256, 256);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, this.getBackground(), x, y,0, 0, PANEL_WIDTH, PANEL_HEIGHT_WITH_TABS, 256, 256);
 
             this.renameBox.render(graphics, p_100320_, p_100321_, p_100322_);
             this.renameButton.render(graphics, p_100320_, p_100321_, p_100322_);
@@ -214,8 +212,6 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             {
                 tabButton.render(graphics, p_100320_, p_100321_, p_100322_);
             }
-        //    graphics.pose().popPose();
-////            RenderSystem.enableDepthTest();
         }
     }
 
@@ -327,13 +323,15 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     ///////////////////////////////////////////
 
     @Override
-    public boolean keyPressed(int p_94745_, int p_94746_, int p_94747_) {
-        if (this.renameBox.isFocused()) {
-            if (this.renameBox.keyPressed(p_94745_, p_94746_, p_94747_) || this.renameBox.canConsumeInput()) {
+    public boolean keyPressed(int p_94745_, int p_94746_, int p_94747_)
+    {
+        if (this.renameBox.isFocused())
+        {
+            if (this.renameBox.keyPressed(p_94745_, p_94746_, p_94747_))
+            {
                 return true;
             }
         }
-
         return GuiEventListener.super.keyPressed(p_94745_, p_94746_, p_94747_);
     }
 
@@ -436,6 +434,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         }
     }
 
+    @Override
     public boolean mouseClicked(double v1, double v2, int mouseButton) {
         if (this.renameBox != null) {
             if (this.renameBox.isMouseOver(v1, v2)) {
@@ -447,7 +446,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
                 this.renameBox.setFocused(false);
             }
         }
-        for(TabButton tabButton : this.tabButtons)
+        for (TabButton tabButton : this.tabButtons)
         {
             if (tabButton.isMouseOver(v1, v2))
             {
@@ -504,7 +503,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
                 imageActiveTab = this.chestIndex < TAB_ROW_COUNT ? IMAGE_ACTIVE_TAB : IMAGE_ACTIVE_BOTTOM_TAB;
                 imageInactiveTab = this.chestIndex < TAB_ROW_COUNT ? IMAGE_INACTIVE_TAB : IMAGE_INACTIVE_BOTTOM_TAB;
             }
-            graphics.blit(this.isStateTriggered ? imageActiveTab : imageInactiveTab, this.getX(), this.getY(), texX, texY, this.width, this.height, 32, 32);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, this.isStateTriggered ? imageActiveTab : imageInactiveTab, this.getX(), this.getY(), texX, texY, this.width, this.height, 32, 32);
             this.renderIcon(graphics);
         }
 
@@ -542,7 +541,8 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             // sub image
             graphics.pose().pushMatrix();
             graphics.pose().scale(2/3f, 2/3f);
-            graphics.renderFakeItem(itemSub, (int)((x + tabIndexInRow * (WIDTH-1) + 13) * 1.5d), (int)((y+12)*1.5d));
+            //graphics.renderFakeItem(itemSub, (int)((x + tabIndexInRow * (WIDTH-1) + 13) * 1.5d), (int)((y+12)*1.5d));
+            graphics.renderFakeItem(itemSub, (int)((x + tabIndexInRow * (WIDTH-1) + 13) * 1.5d), (int)((this.getY() + textureYAdjustment2+12)*1.5d));
             graphics.pose().popMatrix();
         }
 

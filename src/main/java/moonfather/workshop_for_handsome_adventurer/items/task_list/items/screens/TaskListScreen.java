@@ -61,8 +61,8 @@ public class TaskListScreen extends Screen
     private static final ResourceLocation CHECKBOX_DONE = ResourceLocation.fromNamespaceAndPath(Constants.MODID,"textures/gui/task_list_check2.png");
     private static final ResourceLocation CHECKBOX_MOPE = ResourceLocation.fromNamespaceAndPath(Constants.MODID,"textures/gui/task_list_check3.png");
     private static final ResourceLocation CHECKBOX_QMARK = ResourceLocation.fromNamespaceAndPath(Constants.MODID,"textures/gui/task_list_check4.png");
-    private static final int NORMAL_TEXT_COLOR = 0x886666;
-    private static final int DIM_TEXT_COLOR = 0xbbaaaa;
+    private static final int NORMAL_TEXT_COLOR = 0xff886666;
+    private static final int DIM_TEXT_COLOR = 0xffbbaaaa;
 
     @Override
     protected void init()
@@ -224,11 +224,11 @@ public class TaskListScreen extends Screen
                 {
                     if (! firstRow)
                     {
-                        C_DUAL_TOOLTIP.add(ClientTooltipComponent.create(Component.literal(s).getVisualOrderText()));
+                        C_KEYBOARD_TOOLTIP.add(ClientTooltipComponent.create(Component.literal(s).getVisualOrderText()));
                     }
                     else
                     {
-                        C_DUAL_TOOLTIP.add(ClientTooltipComponent.create(Component.literal(s).withColor(0x95b5ff).getVisualOrderText()));
+                        C_KEYBOARD_TOOLTIP.add(ClientTooltipComponent.create(Component.literal(s).withColor(0x95b5ff).getVisualOrderText()));
                         firstRow = false;
                     }
                 }
@@ -477,7 +477,7 @@ public class TaskListScreen extends Screen
     @Override
     public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
     {
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, BG_LOCATION, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth, this.imageHeight);
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, BG_LOCATION, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth, this.imageHeight, 256, 256);
     }
 
     ///////////////////////////////

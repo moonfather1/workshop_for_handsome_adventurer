@@ -18,7 +18,6 @@ import org.joml.Quaternionf;
 import java.util.HashMap;
 import java.util.Map;
 
-@OnlyIn(Dist.CLIENT)
 public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEntity>
 {
     public SimpleTableTESR(BlockEntityRendererProvider.Context context) { }
@@ -40,7 +39,12 @@ public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEnti
         {
             // normal option: direction is dependent only on player position
             direction = Direction.getNearest(-1 * (int)playerDX, 0, -1 * (int)playerDZ, null);
-        } // ok we have direction. now to draw...
+            if (direction == null)
+            {
+                direction = Direction.fromYRot(Minecraft.getInstance().player.yHeadRot + 180); // i don't really care for the value, just can't have null.
+            }
+        }
+        // ok we have direction. now to draw...
         render3x3(poseStack, direction, bufferSource, combinedLight, combinedOverlay, table, 0, false, false);
     }
 

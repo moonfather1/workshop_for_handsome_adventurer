@@ -4,20 +4,19 @@ import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
 import net.minecraft.client.gui.layouts.LayoutElement;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
-import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.JadeUI;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class JadePotionTooltipProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor>
+public class JadePotionTooltipProvider implements IBlockComponentProvider
 {
     private static final JadePotionTooltipProvider instance = new JadePotionTooltipProvider();
     public static JadePotionTooltipProvider getInstance() { return instance; }
@@ -32,9 +31,10 @@ public class JadePotionTooltipProvider implements IBlockComponentProvider, IServ
             if (! shelf.GetItem(slot).isEmpty())
             {
                 int count;
-                if (accessor.getServerData().contains("Bottles" + slot))
+                Optional<List<Integer>> serverData = JadePotionDataProvider.getInstance().decodeFromData(accessor);
+                if (serverData.isPresent())
                 {
-                    count = accessor.getServerData().getIntOr("Bottles" + slot, 0);
+                    count = serverData.get().get(slot);
                 }
                 else
                 {
@@ -45,17 +45,6 @@ public class JadePotionTooltipProvider implements IBlockComponentProvider, IServ
                 list.add(JadeUI.text(shelf.GetItem(slot).getDisplayName()));
                 tooltip.add(list);
             }
-        }
-    }
-
-
-
-    @Override
-    public void appendServerData(CompoundTag data, BlockAccessor blockAccessor) {
-        for (int i = 0; i < 6; i++)
-        {
-            int bottles = ((PotionShelfBlockEntity)blockAccessor.getBlockEntity()).GetRemainingItems(i);
-            data.putInt("Bottles" + i, bottles);
         }
     }
 

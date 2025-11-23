@@ -3,6 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.integration;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.transfer.IRecipeTransferInfo;
+import mezz.jei.api.recipe.types.IRecipeType;
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
@@ -24,8 +25,8 @@ public class JEITransferInfoForDualTable implements IRecipeTransferInfo {
     }
 
     @Override
-    public RecipeType getRecipeType() {
-        return  RecipeType.createFromVanilla(net.minecraft.world.item.crafting.RecipeType.CRAFTING); // return RecipeTypes.CRAFTING;
+    public IRecipeType getRecipeType() {
+        return RecipeTypes.CRAFTING;
     }
 
     @Override

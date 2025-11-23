@@ -1,4 +1,4 @@
-thask list image is mostly    tool_clipboard_papers   by malcolm riley
+task list image is mostly    tool_clipboard_papers   by malcolm riley
    and is under the same license (CCA4). see  https://github.com/malcolmriley/unused-textures/
    
-   still, if you really need this, please take the original one and edit it somewhat so we don't have the same image.
+   still, if you really need this, please take the original one and edit it somewhat, so we don't have the same image.

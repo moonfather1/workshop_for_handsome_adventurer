@@ -30,7 +30,7 @@ public class PotionShelf extends ToolRack
 {
     public PotionShelf(Block.Properties properties)
     {
-        super(PotionShelfBlockEntity.CAPACITY, "potion_shelf", properties);
+        super(PotionShelfBlockEntity.CAPACITY, "potion_shelf", null, properties);
     }
 
 

@@ -14,13 +14,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Quaternionf;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
-@OnlyIn(Dist.CLIENT)
 public class TaskListPanelTESR implements BlockEntityRenderer<TaskListBlockEntity>
 {
     public TaskListPanelTESR(BlockEntityRendererProvider.Context context)

@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "workshop_for_handsome_adventurer:item/book_shelf_with_lanterns_birch"
+  },
+  "properties": {
+    "hand_animation_on_swap": false,
+    "oversized_in_gui": false
+  }
+}

@@ -26,7 +26,6 @@ import org.joml.Quaternionf;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-@OnlyIn(Dist.CLIENT)
 public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 {
 	private ItemRenderer itemRenderer = null;

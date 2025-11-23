@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -48,7 +49,7 @@ public class SimpleButton extends Button
         {
             image = this.resourceLocationDisabled;
         }
-        graphics.blit(image, this.getX(), this.getY(), 0, 0, this.width, this.height, this.textureWidth, this.textureHeight);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, image, this.getX(), this.getY(), 0, 0, this.width, this.height, this.textureWidth, this.textureHeight);
     }
 
     public void renderTooltipsSeparately(GuiGraphics graphics, Font font, int mouseX, int mouseY)

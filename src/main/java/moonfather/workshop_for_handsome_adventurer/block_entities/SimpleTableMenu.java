@@ -707,6 +707,10 @@ public class SimpleTableMenu extends AbstractContainerMenu
 				{
 					bcbe.name = Component.literal(newName);
 					player.giveExperienceLevels(-1);
+					this.tabElements.getItem(this.selectedTab*2).set(DataComponents.CUSTOM_NAME, Component.literal(newName));
+					this.tabElements.setChanged();
+					this.sendAllDataToRemote();
+					this.DataSlots.raiseDataSlotFlagForClientFlag(SimpleTableDataSlots.DATA_SLOT_TABS_NEED_UPDATE);
 				}
 			}
 		}
@@ -837,8 +841,6 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		public CustomizationSlot(Container p_39521_, int p_39522_, int p_39523_, int p_39524_)
 		{
 			super(p_39521_, p_39522_, p_39523_, p_39524_);
-//			this.setBackground(InventoryMenu.BLOCK_ATLAS, EMPTY_SLOT_BG);
-			// to make own atlas, start with PaintingTextureManager. gave up during 1.19.4 porting. too much effort.
 		}
 
 		@Override
@@ -871,7 +873,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		private boolean acceptsLanterns = false;
 		public void setAcceptsLanterns(boolean value) { this.acceptsLanterns = value; }
 
-		// may or may not help with inventory profiles
+
 
 		@Override
 		public boolean isFake() { return true; }

@@ -8,14 +8,12 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.Pack
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.ModList;
 
-@OnlyIn(Dist.CLIENT)
 public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 {
 	private static final ResourceLocation[] BACKGROUND_LOCATION = new ResourceLocation[5];
@@ -164,7 +162,7 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 			int localY = p_281379_ - this.getY();
 			boolean hovered = lastDestinationGrid != 2 && localX >= 10 && localX <= 20 && localY >= 4 && localY <= 14
 					|| lastDestinationGrid == 2 && localX >= 10 && localX <= 20 && localY >= 14 && localY <= 24;
-			guiGraphics.blit(this.sprites.get(this.isStateTriggered, hovered), this.getX(), this.getY(), 0, 0, this.width, this.height, 64, 64);
+			guiGraphics.blit(RenderPipelines.GUI_TEXTURED, this.sprites.get(this.isStateTriggered, hovered), this.getX(), this.getY(), 0, 0, this.width, this.height, 64, 64);
 		}
 	}
 }

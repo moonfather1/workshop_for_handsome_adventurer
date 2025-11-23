@@ -1,6 +1,8 @@
 package moonfather.workshop_for_handsome_adventurer.initialization;
 
+import com.mojang.logging.LogUtils;
 import moonfather.workshop_for_handsome_adventurer.Constants;
+import moonfather.workshop_for_handsome_adventurer.ModWorkshop;
 import moonfather.workshop_for_handsome_adventurer.blocks.*;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.MissingMappingsHandler;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.SecondCreativeTab;
@@ -50,7 +52,8 @@ public class DynamicContentRegistration
 
     private static void registerSinglePrimaryBlockForThirdPartyWood(Block block, String id, List<Supplier<Block>> listForBlockEntities, List<Item> listForCreativeTab)
     {
-        Item item = new BlockItemEx(block, new Item.Properties());
+        Item.Properties prop26 = new Item.Properties().setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id))).useBlockDescriptionPrefix();
+        Item item = new BlockItemEx(block, prop26);
         ResourceLocation fullId = ResourceLocation.fromNamespaceAndPath(Constants.MODID, id);
         Registry.register(BuiltInRegistries.BLOCK, fullId, block);
         Registry.register(BuiltInRegistries.ITEM, fullId, item);
@@ -71,11 +74,11 @@ public class DynamicContentRegistration
     {
         try  // because of unfreeze fuckery
         {
-//            boolean wasFrozen = ((MappedRegistry<Block>) BuiltInRegistries.BLOCK).frozen;
-//            if (wasFrozen)
-//            {
-//                ((MappedRegistry<Block>) BuiltInRegistries.BLOCK).unfreeze(false);
-//            }
+            boolean wasFrozen = ((MappedRegistry<Block>) BuiltInRegistries.BLOCK).frozen;
+            if (wasFrozen)
+            {
+                ((MappedRegistry<Block>) BuiltInRegistries.BLOCK).unfreeze(false);
+            }
             for (String wood : WoodTypeLister.getWoodIds())
             {
                 // can't just add wood types to Registration.woodTypes; def registry is filled at mod constructor. wood list is available much later, after RegisterEvent for blocks. that's why we do things here.
@@ -138,11 +141,14 @@ public class DynamicContentRegistration
                 registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.TopSimple("open_minimal", prop15), id15, Registration.blocks_bshelf, SecondCreativeTab.items_bshelf4);
                 registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.TopWithLanterns("with_lanterns", prop16), id16, Registration.blocks_bshelf, SecondCreativeTab.items_bshelf5);
             }
-//            if (wasFrozen)
-//            {
-//                BuiltInRegistries.BLOCK.freeze();
-//            }
+            if (wasFrozen)
+            {
+                BuiltInRegistries.BLOCK.freeze();
+            }
         }
-        catch (Exception ignored)	{ }
+        catch (Exception e)
+        {
+            LogUtils.getLogger().error("WFHA error 141: " + e.getMessage());
+        }
     }
 }

@@ -32,38 +32,36 @@ public class ModWorkshop
     private static final Logger LOGGER = LogUtils.getLogger();
 
 
-    // todo: 1.21.8 test in-world tooltip, things changed there, with positioning. passed DefaultTooltip thingy,   also don't know if guiGraphics.renderTooltip is the right call.
     // todo: 1.21.8 as above in simplebutton we used DefaultTooltipPositioner.INSTANCE
-    // todo: 1.21.8 JEITransferInfo ima sumnjiv novi tip. x2
-    // todo: 1.21.8  getMetadataSection in base res pack is different
+    // todo: 1.21.8  +   JEITransferInfo ima sumnjiv novi tip. x2
     // todo: 1.21.8  TL model switching changed    if works, remove old code
-    // todo: 1.21.8  toolrack save/load
+    // todo: 1.21.8  +   toolrack save/load
     // todo: 1.21.8  added camera to DualTableTESR;  not using it.
     // todo: 1.21.8  InventoryAccessHelper.getItemFromNamedSlot  now gets chest slot and leggings differently
     //               assi  record.ItemChest = be.getBlockState().getCloneItemStack  is different  for tab icons
     //               direction = Direction.getNearest is different in simpleTableTESR when we decide direction to turn items
-    //               model.isGui3d() in TR TESR is changed and i don't know what to replace it with
+    //               model.isGui3d() in TR TESR is changed and i don't know what to replace it with     ---- https://docs.neoforged.net/docs/resources/client/models/items/
     //               test TL saving thoroughly.  also toolrack saving/loading.
     //               TR canDepositItem might be too strict now
     //               verify bookshelf drops
     //               test dual toolrack at world bottom
     //               test dual table at world top
     //               checkboxes - blit in TaskListScreen, maybe remove last two args
-    //               review constructor of CustomizationSlot
     //               using TextureAtlas.LOCATION_BLOCKS in SpecialFirstEverRenderer is sus
     //               interaction with tetra hammer is fixed - it was stupid in all  old versions
     //               remove commented out stuff from InventoryAccessComponent.render()
-    //               iac tab rendering is done blindly
     //               customization tooltips are diff from a bunch i fixed already
-    //               SimpleTableCraftingScreen  renderSlotContents lost z
-    //               SimpleTableCraftingScreen !! x-es in tables disabled
-    //               SimpleTableCraftingScreen some comments in render method
     //               jei types are likely broken
     //               potion cloning disabled
     //               todo: rework tetra creation when tetra is up.
     //               try block desc prefix
-    //               disabled freeze
-    //               disabled 2 below
+    //---------------------------------------------------------------//
+    //   todo: tl gui isn't okay but isn't dead
+    //   https://modrinth.com/mod/frycooks-delight
+    //   + missing tables don't turn to oak.   verity in 1.21.1
+    //   keyboard in rename box; (worked)  keyboard in TL
+    //   bookshelf recipes
+    //   renaming doesn't update, also likely on 1.21.1
 
     public ModWorkshop(IEventBus modBus, ModContainer modContainer)
     {
@@ -76,10 +74,10 @@ public class ModWorkshop
         modBus.addListener(CarryOnBlacklisting::enqueueIMC);
         modBus.addListener(TOPProxyRegistration::enqueueIMC);
         modBus.addListener(CreativeTab::onCreativeTabPopulation);
-//        modBus.addListener(FinderEvents::addServerPack);
+        modBus.addListener(FinderEvents::addServerPack);
         modBus.addListener(MessagingInitialization::register);
         NeoForge.EVENT_BUS.addListener(PotionShelf::onRightClickBlock);
-//        modBus.addListener(EventPriority.LOWEST, DynamicContentRegistration::handleRegistryEvent);
+        modBus.addListener(EventPriority.LOWEST, DynamicContentRegistration::handleRegistryEvent);
         MissingMappingsHandler.read();
 		
         RegistrationForTaskList.init(modBus);

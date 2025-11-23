@@ -151,7 +151,7 @@ public class OurClientPack extends BaseResourcePack
     @Override
     protected boolean isNotOurThing(String path)
     {
-        return ! path.startsWith("blockstates") && ! path.startsWith("models") && ! path.startsWith("textures") && ! path.startsWith("lang");
+        return ! path.startsWith("blockstates") && ! path.startsWith("models") && ! path.startsWith("textures") && ! path.startsWith("lang") && ! path.startsWith("items");
     }
 
     //////////////////////////////////
@@ -323,9 +323,24 @@ public class OurClientPack extends BaseResourcePack
                     "models/item/tool_rack_pframed_spruce.json",
                     "models/item/tool_rack_single_spruce.json",
                     "models/item/workstation_placer_spruce.json",
+
                     "blockstates/tetra_table_spruce.json",
                     "models/block/tetra_table_spruce.json",
-                    "models/item/tetra_table_spruce.json"
+                    "models/item/tetra_table_spruce.json",
+                    "items/tetra_table_spruce.json",
+
+                    "items/book_shelf_double_spruce.json",    // client items introduced in 1.21.2
+                    "items/book_shelf_minimal_spruce.json",
+                    "items/book_shelf_open_double_spruce.json",
+                    "items/book_shelf_open_minimal_spruce.json",
+                    "items/book_shelf_with_lanterns_spruce.json",
+                    "items/potion_shelf_spruce.json",
+                    "items/simple_table_spruce.json",
+                    "items/tool_rack_double_spruce.json",
+                    "items/tool_rack_framed_spruce.json",
+                    "items/tool_rack_pframed_spruce.json",
+                    "items/tool_rack_single_spruce.json",
+                    "items/workstation_placer_spruce.json"
             };
 
 

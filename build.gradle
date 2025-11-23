@@ -127,20 +127,25 @@ configurations {
 
 dependencies {
     compileOnly "curse.maven:wthit-forge-455982:7052503"
+    //runtimeOnly "curse.maven:wthit-forge-455982:7052503"
     //runtimeOnly "curse.maven:badpackets-615134:6671481"
-    implementation "curse.maven:jade-324717:6902747"
+    compileOnly "curse.maven:jade-324717:6902747"
+    //runtimeOnly "curse.maven:jade-324717:6902747"
     compileOnly "curse.maven:the-one-probe-245211:6106998"
     //!! top is at 1.21.1
 
-    runtimeOnly "curse.maven:jei-238222:7025033"
+    //runtimeOnly "curse.maven:jei-238222:7025033"
     compileOnly "curse.maven:jei-238222:7025033"
     compileOnly "curse.maven:roughly-enough-items-310111:6833149"
     compileOnly "curse.maven:emi-580555:5436759"
     //!! EMI is on 1.21.1
-    //runtimeOnly "curse.maven:architectury-api-419699:6803291"
     compileOnly "curse.maven:cloth-config-348521:6669837"
+    runtimeOnly "curse.maven:cloth-config-348521:6669837"
+    runtimeOnly "curse.maven:roughly-enough-items-310111:6833149"
+    runtimeOnly "curse.maven:architectury-api-419699:6803291"
 
     compileOnly "curse.maven:crafting-tweaks-233071:6784521"
+    //runtimeOnly "curse.maven:crafting-tweaks-233071:6784521"
     //runtimeOnly "curse.maven:balm-531761:7047863"
 
     compileOnly "curse.maven:polymorph-388800:6451024"
@@ -149,9 +154,9 @@ dependencies {
     compileOnly "curse.maven:dynamic-asset-generator-577096:5471770"
     //!! DAG is on 1.21.1 at the moment
 
-    runtimeOnly "curse.maven:biomes-o-plenty-220318:7043631"
-    runtimeOnly "curse.maven:glitchcore-955399:6812823"
-    runtimeOnly "curse.maven:terrablender-neoforge-940057:6786184"
+    //runtimeOnly "curse.maven:biomes-o-plenty-220318:7043631"
+    //runtimeOnly "curse.maven:glitchcore-955399:6812823"
+    //runtimeOnly "curse.maven:terrablender-neoforge-940057:6786184"
 
     //runtimeOnly "curse.maven:owo-lib-532610:6994751"
     compileOnly "curse.maven:curios-309927:6538253"
@@ -162,8 +167,8 @@ dependencies {
     compileOnly "curse.maven:inventory-tweaks-refoxed-976858:5610776"
     //!! IT is still on 1.21.1
 
-    //!!runtimeOnly "curse.maven:storage-drawers-223852:6967716"
-    //  sd above didn't work at all
+    runtimeOnly "curse.maven:storage-drawers-223852:6967716"
+    //  sd above didn't work at all.  jsde?
     //!! runtimeOnly "curse.maven:functional-storage-556861:5861256"
     //!! runtimeOnly "curse.maven:titanium-287342:5889342"
     //!! FS is still on 1.21.1

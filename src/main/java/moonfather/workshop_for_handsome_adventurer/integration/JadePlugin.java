@@ -15,13 +15,13 @@ public class JadePlugin implements IWailaPlugin
     @Override
     public void register(IWailaCommonRegistration registration)
     {
-    //    registration.registerBlockDataProvider(JadePotionTooltipProvider.getInstance(), PotionShelfBlockEntity.class);
+        registration.registerBlockDataProvider(JadePotionDataProvider.getInstance(), PotionShelfBlockEntity.class);
     }
 
     @Override
     public void registerClient(IWailaClientRegistration registration)
     {
-    //    registration.registerBlockComponent(JadePotionTooltipProvider.getInstance(), PotionShelf.class);
+        registration.registerBlockComponent(JadePotionTooltipProvider.getInstance(), PotionShelf.class);
         registration.registerBlockComponent(JadeBookTooltipProvider.getInstance(), BookShelf.class);
         registration.registerBlockComponent(JadeToolTooltipProvider.getInstance(), ToolRack.class);
     }
