@@ -141,6 +141,10 @@ public class WorkstationPlacerItem extends Item
 
 	private boolean checkCanPlace(Level level, BlockPos position, Direction horizontalDirection)
 	{
+		if (position.getY() >= level.getMaxY())
+		{
+			return false;
+		}
 		BlockState current = level.getBlockState(position);
 		if (! current.isAir() && ! current.canBeReplaced())
 		{

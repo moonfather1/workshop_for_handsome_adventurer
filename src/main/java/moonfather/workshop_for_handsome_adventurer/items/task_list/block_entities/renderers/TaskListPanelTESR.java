@@ -109,9 +109,9 @@ public class TaskListPanelTESR implements BlockEntityRenderer<TaskListBlockEntit
     private static final Quaternionf YPlus090 = new Quaternionf().fromAxisAngleDeg(0, 1, 0,  90);
     private static final Quaternionf YPlus270 = new Quaternionf().fromAxisAngleDeg(0, 1, 0, 270);
     private static final Quaternionf ZPlus180 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 180);
-    private static final int textColorMain = 0x444455 ; // was ok with 0x111122, 0x444433  0xee00ee
-    private static final int textColorGrayed = 0x858585;
-    private static final int textColorDividers = 0x9a9a95;
+    private static final int textColorMain = 0xFF444455 ; // was ok with 0x111122, 0x444433  0xee00ee
+    private static final int textColorGrayed = 0xFF858585;
+    private static final int textColorDividers = 0xFF9a9a95;
 
 
 
@@ -135,6 +135,7 @@ public class TaskListPanelTESR implements BlockEntityRenderer<TaskListBlockEntit
         byteValue = (originalLight) & 0xFF;
         byteValue = byteValue * mul / 100;
         result = (result << 8) + byteValue;
+        result = result | (originalLight & 0xFF000000);     // opacity needed as of 1.21.8
         return result;
     }
 }

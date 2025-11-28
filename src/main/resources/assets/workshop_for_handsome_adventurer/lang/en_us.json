@@ -14,7 +14,7 @@
 	"block.workshop_for_handsome_adventurer.simple_table_birch": "Crafting Table (birch)",
 	"block.workshop_for_handsome_adventurer.simple_table_jungle": "Crafting Table (jungle)",
 	"block.workshop_for_handsome_adventurer.simple_table_dark_oak": "Crafting Table (dark oak)",
-	"block.workshop_for_handsome_adventurer.simple_table.tooltip1": "A tiny crafting table. Uncomfortable and a little embarrassing to use.",
+	"block.workshop_for_handsome_adventurer.simple_table.tooltip1": "A small crafting table. Uncomfortable but dependable.",
 	"block.workshop_for_handsome_adventurer.simple_table.tooltip2": "Can access nearby inventories. Can hold items.",
 
 	"block.workshop_for_handsome_adventurer.tool_rack_double_oak": "Tool Rack (oak, triple)",
@@ -143,8 +143,8 @@
 
 	"block.tetra_tables.tetra_table_spruce": "Workbench (spruce)",
 
-	"message.workshop_for_handsome_adventurer.extension_slot1": "Put a chest or a storage drawer here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests.",
-	"message.workshop_for_handsome_adventurer.extension_slot2": "Put a chest or a storage drawer here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests. \n(optionally one more [ITEM] for a range of two blocks)\n \nOr two lanterns to make them part of the workstation \nand light up the surroundings (put two in one slot).",
+	"message.workshop_for_handsome_adventurer.extension_slot1": "Put a wooden chest here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests.",
+	"message.workshop_for_handsome_adventurer.extension_slot2": "Put a wooden chest here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests. \n(optionally one more [ITEM] for a range of two blocks)\n \nOr two lanterns to make them part of the workstation \nand light up the surroundings (put two in one slot).",
 	"message.workshop_for_handsome_adventurer.extension_slotT": "Customization slot",
 	"message.workshop_for_handsome_adventurer.extension_slotS": "(shift for more)",
 	"message.workshop_for_handsome_adventurer.rename": "Rename container %s \nfor the cost of 1 XP level.",

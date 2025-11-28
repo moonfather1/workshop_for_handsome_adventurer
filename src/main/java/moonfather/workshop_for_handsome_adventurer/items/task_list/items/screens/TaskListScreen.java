@@ -97,7 +97,7 @@ public class TaskListScreen extends Screen
             this.header.setMaxLength(32);
             this.header.setBordered(false);
             this.header.setVisible(true);
-            this.header.setTextColor(0x555088);
+            this.header.setTextColor(0xFF555088);
             this.header.setTextShadow(false);
             this.header.setX(this.leftPos + 16);
             this.header.setY(this.topPos + 16);

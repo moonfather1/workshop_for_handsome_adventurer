@@ -371,6 +371,14 @@ public class ToolRack extends Block implements EntityBlock, IBlockWithCleverHove
         {
             return true;
         }
+        if (mainHandItem.is(Constants.Tags.NOT_ALLOWED_ON_TOOLRACK) || mainHandItem.is(ItemTags.BOOKSHELF_BOOKS) || mainHandItem.is(Constants.Tags.COMMON_BOOKS))
+        {
+            return false;
+        }
+        if (mainHandItem.has(DataComponents.BLOCKS_ATTACKS))
+        {
+            return true;  // i'm disallowing DataComponents.EQUIPPABLE below but we must allow shiolds
+        }
         if (mainHandItem.getMaxStackSize() > 1 && ! (mainHandItem.getItem().equals(Items.LEAD) || PackingTape.isTape(mainHandItem)))
         {
             return false;
@@ -385,10 +393,6 @@ public class ToolRack extends Block implements EntityBlock, IBlockWithCleverHove
             return false;
         }
         if (mainHandItem.get(DataComponents.POTION_CONTENTS) != null)
-        {
-            return false;
-        }
-        if (mainHandItem.is(Constants.Tags.NOT_ALLOWED_ON_TOOLRACK) || mainHandItem.is(ItemTags.BOOKSHELF_BOOKS))
         {
             return false;
         }

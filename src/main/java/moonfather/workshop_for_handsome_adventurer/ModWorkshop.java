@@ -56,12 +56,17 @@ public class ModWorkshop
     //               todo: rework tetra creation when tetra is up.
     //               try block desc prefix
     //---------------------------------------------------------------//
-    //   todo: tl gui isn't okay but isn't dead
     //   https://modrinth.com/mod/frycooks-delight
-    //   + missing tables don't turn to oak.   verity in 1.21.1
-    //   keyboard in rename box; (worked)  keyboard in TL
-    //   bookshelf recipes
-    //   renaming doesn't update, also likely on 1.21.1
+
+
+    //  !!new: opt for free ren, discs
+
+    // 1.21.1 : does rename update tabs?
+    // test placer on 319
+    // test keyboard in rename box, test f and e
+    // !   missing tables don't turn to oak.   verity in 1.21.1
+    //   ? bookshelf recipes
+    // sd in lang, emba in lang
 
     public ModWorkshop(IEventBus modBus, ModContainer modContainer)
     {

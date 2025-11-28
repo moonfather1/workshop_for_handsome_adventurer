@@ -6,6 +6,6 @@
 
     { "id": "quark:seed_pouch", "required": false },
     { "id": "botania:flower_bag", "required": false },
-    { "id": "minecraft:bundle", "required": false }
+    "#minecraft:bundles"
   ]
 }

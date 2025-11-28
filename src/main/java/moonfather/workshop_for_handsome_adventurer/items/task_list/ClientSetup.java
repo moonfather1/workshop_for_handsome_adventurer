@@ -11,8 +11,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 
-import java.util.Map;
-
 @EventBusSubscriber(value = Dist.CLIENT)
 public class ClientSetup
 {
@@ -31,18 +29,6 @@ public class ClientSetup
         if (! ClientConfig.taskListItemsAreDrawnOnWall)
         {
             // this replaces empty task list model with onw with fake text
-//            ModelResourceLocation key1;
-//            for (Map.Entry<ModelResourceLocation, BakedModel> i : event. getModels().entrySet())
-//            {
-//                key1 = i.getKey();
-//                if (key1.id().getNamespace().equals(Constants.MODID) && key1.variant().contains("empty=true"))  // "task_list"
-//                {
-//                    ModelResourceLocation key2 = new ModelResourceLocation(key1.id(), key1.variant().replace("true", "false"));
-//                    event.getModels().put(key1, event.getModels().get(key2));
-//                }
-//            }
-
-
             for (BlockState key1 : event.getBakingResult().blockStateModels().keySet())
             {
                 if (key1.toString().contains(Constants.MODID) && key1.toString().contains("empty=true"))  // "task_list"

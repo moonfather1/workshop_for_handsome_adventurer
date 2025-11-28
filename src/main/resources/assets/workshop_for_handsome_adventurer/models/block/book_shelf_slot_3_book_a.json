@@ -1,7 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"book3": "workshop_for_handsome_adventurer:block/book1"
+		"book3": "workshop_for_handsome_adventurer:block/book1",
+		"particle": "minecraft:block/birch_planks"
 	},
 	"elements": [
 		{

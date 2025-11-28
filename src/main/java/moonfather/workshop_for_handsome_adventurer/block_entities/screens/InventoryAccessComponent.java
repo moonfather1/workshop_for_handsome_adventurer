@@ -166,13 +166,34 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     }
 
 
-    private void onTabListChangedOnServer(Integer flag) {
+    private void onTabListChangedOnServer(Integer flag)
+    {
         if (flag % 2 == 0) return;
+        int previousTabCount = this.tabButtons.size(); //! N
+        int newTabCount = 0; //! N
+        for (int i = SimpleTableMenu.TABS_SLOT_START; i < SimpleTableMenu.TABS_SLOT_END; i += 2)         //!! N
+        {
+            ItemStack stack = this.parent.getMenu().slots.get(i).getItem();
+            if (stack.isEmpty())
+            {
+                break;
+            }
+            newTabCount += 1;
+        } //!! N
+        if (previousTabCount != newTabCount)
+        {
+            this.parent.getMenu().selectedTab = -1;
+        }
+
         this.tabsInitialized = false;
-        this.parent.getMenu().selectedTab = -1;
+//!!        this.parent.getMenu().selectedTab = -1;
         this.initVisuals();
-        if (this.tabButtons.size() > 0) {
-            this.tabChanged(this.tabButtons.get(0));
+        if (previousTabCount == 0 && newTabCount > 0)   //! N
+        {
+//!!            if (this.tabButtons.size() > 0)
+//!!            {
+//????????????            this.tabChanged(this.tabButtons.get(0));
+//!!            }
         }
     }
 
@@ -323,16 +344,21 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     ///////////////////////////////////////////
 
     @Override
-    public boolean keyPressed(int p_94745_, int p_94746_, int p_94747_)
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers)
     {
         if (this.renameBox.isFocused())
         {
-            if (this.renameBox.keyPressed(p_94745_, p_94746_, p_94747_))
+            if (scanCode == 23) // tab
             {
+                this.renameBox.setFocused(false);
                 return true;
             }
+            // if (keyCode == 69) /* E */ { return true; }
+            // if (this.renameBox.keyPressed(keyCode, scanCode, modifiers)) { return true; }
+            this.renameBox.keyPressed(keyCode, scanCode, modifiers);
+            return true;
         }
-        return GuiEventListener.super.keyPressed(p_94745_, p_94746_, p_94747_);
+        return GuiEventListener.super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
