@@ -100,10 +100,11 @@ public class Registration
 			String id2 = "dual_table_bottom_right_" + woodType;
 			String id3 = "dual_table_top_left_" + woodType;
 			String id4 = "dual_table_top_right_" + woodType;
-			Block.Properties prop1 = AdvancedTableBottomPrimary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id1)));
-			Block.Properties prop2 = AdvancedTableBottomSecondary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id2)));
-			Block.Properties prop3 = AdvancedTableTopSecondary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id3)));
-			Block.Properties prop4 = AdvancedTableTopSecondary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id4)));
+			String desc = "item.%s.workstation_placer_%s".formatted(Constants.MODID, woodType);
+			Block.Properties prop1 = AdvancedTableBottomPrimary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id1))).overrideDescription(desc);
+			Block.Properties prop2 = AdvancedTableBottomSecondary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id2))).overrideDescription(desc);
+			Block.Properties prop3 = AdvancedTableTopSecondary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id3))).overrideDescription(desc);
+			Block.Properties prop4 = AdvancedTableTopSecondary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id4))).overrideDescription(desc);
 			Supplier<Block> primary = BLOCKS.register(id1, () -> new AdvancedTableBottomPrimary(prop1));
 			BLOCKS.register(id2, () -> new AdvancedTableBottomSecondary(prop2));
 			BLOCKS.register(id3, () -> new AdvancedTableTopSecondary(prop3));

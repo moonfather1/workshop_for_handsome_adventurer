@@ -92,10 +92,11 @@ public class DynamicContentRegistration
                 String id3 = "dual_table_bottom_right_" + wood;
                 String id4 = "dual_table_top_left_" + wood;
                 String id5 = "dual_table_top_right_" + wood;
-                Block.Properties prop2 = DualTableBaseBlock.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id2)));
-                Block.Properties prop3 = DualTableBaseBlock.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id3)));
-                Block.Properties prop4 = DualTableBaseBlock.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id4)));
-                Block.Properties prop5 = DualTableBaseBlock.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id5)));
+                String desc = "item.%s.workstation_placer_%s".formatted(Constants.MODID, wood);
+                Block.Properties prop2 = DualTableBaseBlock.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id2))).overrideDescription(desc);
+                Block.Properties prop3 = DualTableBaseBlock.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id3))).overrideDescription(desc);
+                Block.Properties prop4 = DualTableBaseBlock.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id4))).overrideDescription(desc);
+                Block.Properties prop5 = DualTableBaseBlock.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id5))).overrideDescription(desc);
                 Block primary = new AdvancedTableBottomPrimary(prop2);
                 registerSingleSupportBlockForThirdPartyWood(primary, id2);
                 registerSingleSupportBlockForThirdPartyWood(new AdvancedTableBottomSecondary(prop3), id3);

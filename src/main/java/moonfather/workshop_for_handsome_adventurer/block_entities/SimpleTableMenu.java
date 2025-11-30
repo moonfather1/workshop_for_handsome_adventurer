@@ -694,7 +694,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	public void renameChest(String newName)
 	{
 		//System.out.println("rename on server");
-		if (this.player.experienceLevel == 0 && ! this.player.isCreative())
+		if (this.player.experienceLevel == 0 && ! this.player.isCreative() && ! CommonConfig.RenameChestsForFree.get())
 		{
 			return;
 		}
@@ -706,7 +706,10 @@ public class SimpleTableMenu extends AbstractContainerMenu
 				if (! bcbe.hasCustomName() || ! bcbe.getCustomName().getString().equals(newName))
 				{
 					bcbe.name = Component.literal(newName);
-					player.giveExperienceLevels(-1);
+					if (! CommonConfig.RenameChestsForFree.get() && ! player.isCreative())
+					{
+						player.giveExperienceLevels(-1);
+					}
 					this.tabElements.getItem(this.selectedTab*2).set(DataComponents.CUSTOM_NAME, Component.literal(newName));
 					this.tabElements.setChanged();
 					this.sendAllDataToRemote();

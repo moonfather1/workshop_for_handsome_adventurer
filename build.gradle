@@ -127,22 +127,22 @@ configurations {
 
 dependencies {
     compileOnly "curse.maven:wthit-forge-455982:7052503"
-    runtimeOnly "curse.maven:wthit-forge-455982:7052503"
-    runtimeOnly "curse.maven:badpackets-615134:6671481"
+    //runtimeOnly "curse.maven:wthit-forge-455982:7052503"
+    //runtimeOnly "curse.maven:badpackets-615134:6671481"
     compileOnly "curse.maven:jade-324717:6902747"
-    //runtimeOnly "curse.maven:jade-324717:6902747"
+    runtimeOnly "curse.maven:jade-324717:6902747"
     compileOnly "curse.maven:the-one-probe-245211:6106998"
     //!! top is at 1.21.1
 
-    //runtimeOnly "curse.maven:jei-238222:7025033"
+    runtimeOnly "curse.maven:jei-238222:7025033"
     compileOnly "curse.maven:jei-238222:7025033"
     compileOnly "curse.maven:roughly-enough-items-310111:6833149"
     compileOnly "curse.maven:emi-580555:5436759"
     //!! EMI is on 1.21.1
     compileOnly "curse.maven:cloth-config-348521:6669837"
-    runtimeOnly "curse.maven:cloth-config-348521:6669837"
-    runtimeOnly "curse.maven:roughly-enough-items-310111:6833149"
-    runtimeOnly "curse.maven:architectury-api-419699:6803291"
+    //runtimeOnly "curse.maven:cloth-config-348521:6669837"
+    //runtimeOnly "curse.maven:roughly-enough-items-310111:6833149"
+    //runtimeOnly "curse.maven:architectury-api-419699:6803291"
 
     compileOnly "curse.maven:crafting-tweaks-233071:6784521"
     //runtimeOnly "curse.maven:crafting-tweaks-233071:6784521"

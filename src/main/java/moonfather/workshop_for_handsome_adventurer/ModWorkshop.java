@@ -63,8 +63,6 @@ public class ModWorkshop
     //  ----------  ----------  ----------
     //  review ench removal     ItemRenderer.renderItem   ItemStackRenderState.FoilType.NONE
     //  cache
-    //  ----------
-    //  hint2
 
     //https://www.reddit.com/r/MinecraftMod/comments/1p91nz1/spent_a_year_making_a_musicmod_for_minecraft_c418/
 

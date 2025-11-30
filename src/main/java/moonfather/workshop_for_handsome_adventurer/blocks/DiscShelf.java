@@ -102,7 +102,7 @@ public class DiscShelf extends PotionShelf
         return aboveThisRow + horizontalIndex;
     }
 
-    
+
 
     @Override
     public InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult)
