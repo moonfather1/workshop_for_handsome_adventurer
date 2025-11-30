@@ -127,8 +127,8 @@ configurations {
 
 dependencies {
     compileOnly "curse.maven:wthit-forge-455982:7052503"
-    //runtimeOnly "curse.maven:wthit-forge-455982:7052503"
-    //runtimeOnly "curse.maven:badpackets-615134:6671481"
+    runtimeOnly "curse.maven:wthit-forge-455982:7052503"
+    runtimeOnly "curse.maven:badpackets-615134:6671481"
     compileOnly "curse.maven:jade-324717:6902747"
     //runtimeOnly "curse.maven:jade-324717:6902747"
     compileOnly "curse.maven:the-one-probe-245211:6106998"
@@ -167,8 +167,8 @@ dependencies {
     compileOnly "curse.maven:inventory-tweaks-refoxed-976858:5610776"
     //!! IT is still on 1.21.1
 
-    runtimeOnly "curse.maven:storage-drawers-223852:6967716"
-    //  sd above didn't work at all.  jsde?
+    //runtimeOnly "curse.maven:storage-drawers-223852:6967716"
+    //  sd  crashes with jsde
     //!! runtimeOnly "curse.maven:functional-storage-556861:5861256"
     //!! runtimeOnly "curse.maven:titanium-287342:5889342"
     //!! FS is still on 1.21.1

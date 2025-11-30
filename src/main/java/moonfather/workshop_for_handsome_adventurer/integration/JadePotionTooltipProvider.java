@@ -2,10 +2,13 @@ package moonfather.workshop_for_handsome_adventurer.integration;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
+import moonfather.workshop_for_handsome_adventurer.blocks.DiscShelf;
 import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
 import net.minecraft.client.gui.layouts.LayoutElement;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.*;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
@@ -27,7 +30,15 @@ public class JadePotionTooltipProvider implements IBlockComponentProvider
     {
         if (accessor.getBlockEntity() instanceof PotionShelfBlockEntity shelf)
         {
-            int slot = PotionShelf.getPotionShelfSlot(accessor.getHitResult());
+            int slot;
+            if (shelf.getNumberOfItems() != 9)
+            {
+                slot = PotionShelf.getPotionShelfSlot(accessor.getHitResult());
+            }
+            else
+            {
+                slot = DiscShelf.getDiscShelfSlot(accessor.getHitResult());
+            }
             if (! shelf.GetItem(slot).isEmpty())
             {
                 int count;
@@ -42,8 +53,17 @@ public class JadePotionTooltipProvider implements IBlockComponentProvider
                 }
                 List<LayoutElement> list = new ArrayList<>(2);
                 list.add(JadeUI.text(Component.literal(" " + count + "x  ")));
-                list.add(JadeUI.text(shelf.GetItem(slot).getDisplayName()));
+                list.add(JadeUI.text(shelf.GetItem(slot).getHoverName()));
                 tooltip.add(list);
+                JukeboxPlayable songContainer = shelf.GetItem(slot).get(DataComponents.JUKEBOX_PLAYABLE);
+                if (songContainer != null)
+                {
+                    List<LayoutElement> list2 = new ArrayList<>(2);
+                    list2.add(JadeUI.text(Component.literal(" ")));
+                    EitherHolder<JukeboxSong> song = songContainer.song();
+                    song.unwrap(accessor.getLevel().registryAccess()).ifPresent(holder -> list2.add(JadeUI.text(holder.value().description())));
+                    tooltip.add(list2);
+                }
             }
         }
     }

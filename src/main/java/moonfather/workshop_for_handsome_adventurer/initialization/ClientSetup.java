@@ -50,6 +50,7 @@ public class ClientSetup
 	{
 		event.registerBlockEntityRenderer(Registration.TOOL_RACK_BE.get(), ToolRackTESR::new);
 		event.registerBlockEntityRenderer(Registration.POTION_SHELF_BE.get(), ToolRackTESR::new);
+		event.registerBlockEntityRenderer(Registration.DISC_SHELF_BE.get(), DiscShelfTESR::new);
 		event.registerBlockEntityRenderer(Registration.DUAL_TABLE_BE.get(), DualTableTESR::new);
 		event.registerBlockEntityRenderer(Registration.SIMPLE_TABLE_BE.get(), SimpleTableTESR::new);
 	}

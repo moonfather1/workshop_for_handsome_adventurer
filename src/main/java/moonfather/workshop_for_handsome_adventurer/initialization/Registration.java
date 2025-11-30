@@ -3,7 +3,6 @@ package moonfather.workshop_for_handsome_adventurer.initialization;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.ModWorkshop;
 import moonfather.workshop_for_handsome_adventurer.block_entities.*;
 import moonfather.workshop_for_handsome_adventurer.blocks.*;
 import moonfather.workshop_for_handsome_adventurer.items.BlockItemEx;
@@ -17,7 +16,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Unit;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -25,7 +23,6 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
@@ -34,7 +31,6 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -66,6 +62,7 @@ public class Registration
 	public static final List<Supplier<Block>> blocks_table2 = new ArrayList<>();
 	public static final List<Supplier<Block>> blocks_rack = new ArrayList<>();
 	public static final List<Supplier<Block>> blocks_pshelf = new ArrayList<>();
+	public static final List<Supplier<Block>> blocks_dshelf = new ArrayList<>();
 	public static final List<Supplier<Block>> blocks_bshelf = new ArrayList<>();
 	public static final List<Supplier<Item>> items_table1 = new ArrayList<>();
 	public static final List<Supplier<Item>> items_table2 = new ArrayList<>(); // because of sorting in creative tabs, we can't just dump into one list
@@ -74,6 +71,7 @@ public class Registration
 	public static final List<Supplier<Item>> items_rack3 = new ArrayList<>();
 	public static final List<Supplier<Item>> items_rack4 = new ArrayList<>();
 	public static final List<Supplier<Item>> items_pshelf = new ArrayList<>();
+	public static final List<Supplier<Item>> items_dshelf = new ArrayList<>();
 	public static final List<Supplier<Item>> items_bshelf1 = new ArrayList<>();
 	public static final List<Supplier<Item>> items_bshelf2 = new ArrayList<>();
 	public static final List<Supplier<Item>> items_bshelf3 = new ArrayList<>();
@@ -180,6 +178,15 @@ public class Registration
 			items_bshelf5.add(FromBlock(rack, id));
 			blocks_bshelf.add(rack);
 		}
+		// disc shelves
+		for (String woodType : Registration.woodTypes)
+		{
+			id = "disc_shelf_" + woodType;
+			Block.Properties prop1 = DiscShelf.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			Supplier<Block> shelf = BLOCKS.register(id, () -> new DiscShelf(prop1));
+			items_dshelf.add(FromBlock(shelf, id));
+			blocks_dshelf.add(shelf);
+		}
 	}
 
 	private static Supplier<Item> FromBlock(Supplier<Block> block, String id)
@@ -205,6 +212,7 @@ public class Registration
 	public static final Supplier<BlockEntityType<SimpleTableBlockEntity>> SIMPLE_TABLE_BE = BLOCK_ENTITIES.register("simple_table_be", () -> new BlockEntityType<>(SimpleTableBlockEntity::new, false, ListToArray(blocks_table1)));
 	public static final Supplier<BlockEntityType<DualTableBlockEntity>> DUAL_TABLE_BE = BLOCK_ENTITIES.register("dual_table_be", () -> new BlockEntityType<>(DualTableBlockEntity::new, false, ListToArray(blocks_table2)));
 	public static final Supplier<BlockEntityType<PotionShelfBlockEntity>> POTION_SHELF_BE = BLOCK_ENTITIES.register("potion_shelf_be", () -> new BlockEntityType<>(PotionShelfBlockEntity::new, false, ListToArray(blocks_pshelf)));
+	public static final Supplier<BlockEntityType<DiscShelfBlockEntity>> DISC_SHELF_BE = BLOCK_ENTITIES.register("disc_shelf_be", () -> new BlockEntityType<>(DiscShelfBlockEntity::new, false, ListToArray(blocks_dshelf)));
 	public static final Supplier<BlockEntityType<BookShelfBlockEntity>> BOOK_SHELF_BE = BLOCK_ENTITIES.register("book_shelf_be", () -> new BlockEntityType<>(BookShelfBlockEntity::new, false, ListToArray(blocks_bshelf)));
 	public static final Supplier<MenuType<SimpleTableMenu>> CRAFTING_SINGLE_MENU_TYPE = CONTAINER_TYPES.register("crafting_single", () -> IMenuTypeExtension.create(SimpleTableMenu::new));
 	public static final Supplier<MenuType<DualTableMenu>> CRAFTING_DUAL_MENU_TYPE = CONTAINER_TYPES.register("crafting_dual", () -> IMenuTypeExtension.create(DualTableMenu::new));

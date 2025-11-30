@@ -59,7 +59,14 @@ public class ModWorkshop
     //   https://modrinth.com/mod/frycooks-delight
 
 
-    //  !!new: opt for free ren, discs
+    //  !!new: opt for free ren
+    //  ----------  ----------  ----------
+    //  review ench removal     ItemRenderer.renderItem   ItemStackRenderState.FoilType.NONE
+    //  cache
+    //  ----------
+    //  hint2
+
+    //https://www.reddit.com/r/MinecraftMod/comments/1p91nz1/spent_a_year_making_a_musicmod_for_minecraft_c418/
 
     // 1.21.1 : does rename update tabs?
     // test placer on 319
@@ -67,6 +74,7 @@ public class ModWorkshop
     // !   missing tables don't turn to oak.   verity in 1.21.1
     //   ? bookshelf recipes
     // sd in lang, emba in lang
+    // https://modrinth.com/mod/ars-elixirum
 
     public ModWorkshop(IEventBus modBus, ModContainer modContainer)
     {

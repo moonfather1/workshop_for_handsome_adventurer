@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "workshop_for_handsome_adventurer:item/disc_shelf_oak"
+  },
+  "properties": {
+    "hand_animation_on_swap": true,
+    "oversized_in_gui": false
+  }
+}

@@ -1,6 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import moonfather.workshop_for_handsome_adventurer.CommonConfig;
+import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
 import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
@@ -16,17 +17,20 @@ import java.util.Optional;
 
 public class PotionShelfBlockEntity extends ToolRackBlockEntity
 {
-    public PotionShelfBlockEntity(BlockPos pos, BlockState state) {
-        super(Registration.POTION_SHELF_BE.get(), pos, state, CAPACITY);
+    public PotionShelfBlockEntity(BlockPos pos, BlockState state)
+    {
+        super(Registration.POTION_SHELF_BE.get(), pos, state, MAX_CAPACITY, PotionShelf.SLOT_COUNT);
     }
-
     public PotionShelfBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state)
     {
-        super(blockEntityType, pos, state, CAPACITY); //needed this for EveryCompat
+        super(blockEntityType, pos, state, MAX_CAPACITY, PotionShelf.SLOT_COUNT); //needed this for EveryCompat
     }
-
-    public static final int CAPACITY = 6;
-    private final List<Integer> itemCounts = new ArrayList<Integer>(CAPACITY);
+    public PotionShelfBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state, int capacity, int slotCount)
+    {
+        super(blockEntityType, pos, state, capacity, slotCount);
+    }
+    private static final int MAX_CAPACITY = 9; // doesn't matter really.
+    private final List<Integer> itemCounts = new ArrayList<Integer>(MAX_CAPACITY);
 
 
 
@@ -61,6 +65,7 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
 
     //////////////////////////////////////////////////
 
+    @Override
     public void DropAll()
     {
         this.VerifyCapacity();
@@ -164,16 +169,16 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
         if (this.GetItem(slot).isEmpty()) {
             return false;
         }
-        return this.itemCounts.get(slot) >= Math.min(CommonConfig.SlotRoomMaximum.get(), this.GetItem(slot).getMaxStackSize() * CommonConfig.SlotRoomMultiplier.get());
+        return this.itemCounts.get(slot) >= Math.min(this.getSlotRoomMaximum(), this.GetItem(slot).getMaxStackSize() * this.getSlotRoomMultiplier());
     }
 
     public Integer GetRemainingRoom(int slot)
     {
         this.VerifyCapacity();
         if (this.itemCounts.get(slot) == 0) {
-            return CommonConfig.SlotRoomMaximum.get();
+            return this.getSlotRoomMaximum();
         }
-        return Math.min(CommonConfig.SlotRoomMaximum.get(), this.GetItem(slot).getMaxStackSize() * CommonConfig.SlotRoomMultiplier.get()) - this.itemCounts.get(slot);
+        return Math.min(this.getSlotRoomMaximum(), this.GetItem(slot).getMaxStackSize() * this.getSlotRoomMultiplier()) - this.itemCounts.get(slot);
     }
 
     public Integer GetRemainingItems(int slot) {
@@ -181,6 +186,20 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
         return this.itemCounts.get(slot);
     }
 
+    public boolean hasSlotWithSameItemWithRemainingRoom(int slotToPlaceNew, ItemStack itemStack)
+    {
+        for (int i = 0; i < this.getCapacity(); i++)
+        {
+            if (i != slotToPlaceNew
+                    && this.itemCounts.get(i) > 0
+                    && this.GetRemainingRoom(i) > 0
+                    && ItemStack.isSameItemSameComponents(itemStack, this.GetItem(i)))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
     protected void VerifyCapacity()
     {
@@ -188,4 +207,12 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
         for (int i = this.itemCounts.size(); i < this.getCapacity(); i++) { this.itemCounts.add(0); }
     }
 
+    protected int getSlotRoomMultiplier()
+    {
+        return CommonConfig.SlotRoomMultiplier.get();
+    }
+    protected int getSlotRoomMaximum()
+    {
+        return CommonConfig.SlotRoomMaximum.get();
+    }
 }

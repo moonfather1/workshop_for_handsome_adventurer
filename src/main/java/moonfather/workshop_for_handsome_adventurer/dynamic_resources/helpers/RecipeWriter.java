@@ -111,6 +111,7 @@ public class RecipeWriter
             "recipe/book_shelf_open_minimal_from_double_spruce.json",
             "recipe/book_shelf_open_minimal_spruce.json",
             "recipe/book_shelf_with_lanterns_spruce.json",
+            "recipe/disc_shelf_spruce.json",
             "recipe/tool_rack_double_spruce.json",
             "recipe/tool_rack_pframed_spruce.json",
             "recipe/tool_rack_single_from_multi_spruce.json"

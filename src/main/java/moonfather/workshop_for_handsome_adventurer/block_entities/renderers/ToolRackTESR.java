@@ -5,9 +5,11 @@ import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -30,10 +32,10 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 {
 	private ItemRenderer itemRenderer = null;
 	private final BlockEntityRendererProvider.Context context;
-	private static final TagKey<Item> TAG_DONT_ROTATE_ON_TOOLRACK = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "dont_rotate_on_toolrack"));
-	private static final TagKey<Item> TAG_ROTATE_180_ON_TOOLRACK = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "rotate_180_on_toolrack"));
-	private static final TagKey<Item> TAG_LARGER_ON_TOOLRACK_150 = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "larger_on_toolrack_150_percent"));
-	private static final TagKey<Item> TAG_LARGER_ON_TOOLRACK_125 = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "larger_on_toolrack_125_percent"));
+	protected static final TagKey<Item> TAG_DONT_ROTATE_ON_TOOLRACK = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "dont_rotate_on_toolrack"));
+	protected static final TagKey<Item> TAG_ROTATE_180_ON_TOOLRACK = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "rotate_180_on_toolrack"));
+	protected static final TagKey<Item> TAG_LARGER_ON_TOOLRACK_150 = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "larger_on_toolrack_150_percent"));
+	protected static final TagKey<Item> TAG_LARGER_ON_TOOLRACK_125 = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "larger_on_toolrack_125_percent"));
 
 
 
@@ -61,7 +63,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			{
 				for (int i = 0; i < itemsPerRow; i++)
 				{
-					if (tile.getCapacity() <= row * itemsPerRow) { break; }
+					if (tile.getNumberOfItems() <= row * itemsPerRow) { break; }
 					ItemStack itemStack = ToolRackTESR.RemoveEnchantments(tile.GetItem(row * itemsPerRow + i));
 					if (!itemStack.isEmpty())
 					{
@@ -81,12 +83,12 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			matrixStack.pushPose();
 			matrixStack.translate(0.5 - direction.getStepX() * 0.42, 0.7, 0.5 - direction.getStepZ() * 0.42);
 			matrixStack.scale(0.5f, 0.5f, 0.5f);
-			int rowHeight = (tile.getCapacity() % 4 == 0) ? 15 : 20;
+			int rowHeight = (tile.getNumberOfItems() % 4 == 0) ? 15 : 20;
 			for (int row = 0; row < 3; row++)
 			{
 				for (int i = 0; i < itemsPerRow; i++)
 				{
-					if (tile.getCapacity() <= row * itemsPerRow) { break; }
+					if (tile.getNumberOfItems() <= row * itemsPerRow) { break; }
 					ItemStack itemStack = ToolRackTESR.RemoveEnchantments(tile.GetItem(row * itemsPerRow + i));
 					if (!itemStack.isEmpty())
 					{
@@ -105,7 +107,8 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 
 
 
-	private void renderItemStack(ToolRackBlockEntity tile, ItemStack itemStack, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
+	private void renderItemStack(ToolRackBlockEntity tile, ItemStack itemStack, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay)
+	{
 		if (itemStack != null && ! itemStack.isEmpty())
 		{
 			int renderId = (int) tile.getBlockPos().asLong();
@@ -175,12 +178,12 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 			Minecraft.getInstance().getItemRenderer().renderStatic(itemStack, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, matrixStack, buffer, tile.getLevel(), renderId);
 		}
 	}
-	private static final Quaternionf ZMinus45 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, -45);
-	private static final Quaternionf ZPlus225 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 225);
-	private static final Quaternionf ZPlus135 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 135);
-	private static final Quaternionf ZPlus180 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 180);
-	private static final Quaternionf XMinus90 = new Quaternionf().fromAxisAngleDeg(1, 0, 0, -90);
-	private static final Quaternionf YPlus180 = new Quaternionf().fromAxisAngleDeg(0, 1, 0, 180);
+	protected static final Quaternionf ZMinus45 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, -45);
+	protected static final Quaternionf ZPlus225 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 225);
+	protected static final Quaternionf ZPlus135 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 135);
+	protected static final Quaternionf ZPlus180 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 180);
+	protected static final Quaternionf XMinus90 = new Quaternionf().fromAxisAngleDeg(1, 0, 0, -90);
+	protected static final Quaternionf YPlus180 = new Quaternionf().fromAxisAngleDeg(0, 1, 0, 180);
 
 	public static ItemStack RemoveEnchantments(ItemStack stored)
 	{

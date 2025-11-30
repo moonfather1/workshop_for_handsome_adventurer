@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "",
+  "pattern": [
+    "rn",
+    "nn"
+  ],
+  "key": {
+    "r": "workshop_for_handsome_adventurer:tool_rack_framed_jungle",
+    "n": "#workshop_for_handsome_adventurer:metal_nuggets"
+  },
+  "result": {
+    "id": "workshop_for_handsome_adventurer:disc_shelf_jungle",
+    "count": 1
+  }
+}

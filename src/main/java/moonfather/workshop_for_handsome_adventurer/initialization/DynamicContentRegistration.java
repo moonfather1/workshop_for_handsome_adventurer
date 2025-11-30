@@ -124,6 +124,10 @@ public class DynamicContentRegistration
                 String id11 = "potion_shelf_" + wood;
                 Block.Properties prop11 = PotionShelf.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id11)));
                 registerSinglePrimaryBlockForThirdPartyWood(new PotionShelf(prop11), id11, Registration.blocks_pshelf, SecondCreativeTab.items_pshelf);
+                // disc shelves
+                String id91 = "disc_shelf_" + wood;
+                Block.Properties prop91 = DiscShelf.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id91)));
+                registerSinglePrimaryBlockForThirdPartyWood(new DiscShelf(prop91), id91, Registration.blocks_dshelf, SecondCreativeTab.items_dshelf);
                 // book shelves
                 String id12 = "book_shelf_double_" + wood;
                 String id13 = "book_shelf_open_double_" + wood;
