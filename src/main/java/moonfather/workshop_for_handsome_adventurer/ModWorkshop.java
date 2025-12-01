@@ -59,11 +59,6 @@ public class ModWorkshop
     //   https://modrinth.com/mod/frycooks-delight
 
 
-    //  !!new: opt for free ren
-    //  ----------  ----------  ----------
-    //  review ench removal     ItemRenderer.renderItem   ItemStackRenderState.FoilType.NONE
-    //  cache
-
     //https://www.reddit.com/r/MinecraftMod/comments/1p91nz1/spent_a_year_making_a_musicmod_for_minecraft_c418/
 
     // 1.21.1 : does rename update tabs?

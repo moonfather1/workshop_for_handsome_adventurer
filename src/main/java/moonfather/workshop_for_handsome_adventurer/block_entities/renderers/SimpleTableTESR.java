@@ -11,8 +11,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Quaternionf;
 
 import java.util.HashMap;
@@ -52,7 +50,7 @@ public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEnti
     {
         for (int j = 0; j < 3*3; ++j)
         {
-            ItemStack itemstack = ToolRackTESR.RemoveEnchantments(table.GetItem(tableInventoryOffset + j));
+            ItemStack itemstack = ToolRackTESR.removeEnchantmentsStatic(table.GetItem(tableInventoryOffset + j));
             if (itemstack != ItemStack.EMPTY)
             {
                 poseStack.pushPose();

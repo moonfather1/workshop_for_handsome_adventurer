@@ -26,6 +26,7 @@ import net.neoforged.neoforge.common.ItemAbilities;
 import org.joml.Quaternionf;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.HashMap;
 
 @ParametersAreNonnullByDefault
 public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
@@ -64,7 +65,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 				for (int i = 0; i < itemsPerRow; i++)
 				{
 					if (tile.getNumberOfItems() <= row * itemsPerRow) { break; }
-					ItemStack itemStack = ToolRackTESR.RemoveEnchantments(tile.GetItem(row * itemsPerRow + i));
+					ItemStack itemStack = this.removeEnchantments(tile.GetItem(row * itemsPerRow + i));
 					if (!itemStack.isEmpty())
 					{
 						matrixStack.pushPose();
@@ -89,7 +90,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 				for (int i = 0; i < itemsPerRow; i++)
 				{
 					if (tile.getNumberOfItems() <= row * itemsPerRow) { break; }
-					ItemStack itemStack = ToolRackTESR.RemoveEnchantments(tile.GetItem(row * itemsPerRow + i));
+					ItemStack itemStack = this.removeEnchantments(tile.GetItem(row * itemsPerRow + i));
 					if (!itemStack.isEmpty())
 					{
 						matrixStack.pushPose();
@@ -185,12 +186,32 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 	protected static final Quaternionf XMinus90 = new Quaternionf().fromAxisAngleDeg(1, 0, 0, -90);
 	protected static final Quaternionf YPlus180 = new Quaternionf().fromAxisAngleDeg(0, 1, 0, 180);
 
-	public static ItemStack RemoveEnchantments(ItemStack stored)
+	public static ItemStack removeEnchantmentsStatic(ItemStack stored)
 	{
+		if (! stored.has(DataComponents.ENCHANTMENTS))
+		{
+			return stored;
+		}
 		ItemStack result = stored.copy();
 		result.remove(DataComponents.ENCHANTMENTS);
 		return result;
 	}
+	private ItemStack removeEnchantments(ItemStack stored)
+	{
+		if (! stored.has(DataComponents.ENCHANTMENTS))
+		{
+			return stored;
+		}
+		if (this.cacheForRemovingEnchantments.containsKey(stored.hashCode()))
+		{
+			return this.cacheForRemovingEnchantments.get(stored.hashCode());
+		}
+		ItemStack result = stored.copy();
+		result.remove(DataComponents.ENCHANTMENTS);
+		this.cacheForRemovingEnchantments.put(stored.hashCode(), result);
+		return result;
+	}
+	private final HashMap<Integer, ItemStack> cacheForRemovingEnchantments = new HashMap<>();
 
 	// run TESR even if main block isn't visible.
 	@Override
