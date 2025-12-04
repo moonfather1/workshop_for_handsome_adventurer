@@ -113,13 +113,13 @@ public class SimpleTable extends Block implements EntityBlock, IBlockWithCleverH
     {
         if (this.isObscured(level, pos))
         {
-            if (level.isClientSide)
+            if (level.isClientSide())
             {
                 player.displayClientMessage(MessageInaccessible, true);
             }
             return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
-        else if (level.isClientSide)
+        else if (level.isClientSide())
         {
             return InteractionResult.SUCCESS;
         }

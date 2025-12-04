@@ -175,7 +175,7 @@ public class TaskListPanel extends Block implements EntityBlock
         if (! ClientConfig.taskListItemsAreDrawnOnWall)
         {
             // create mode - just open the gui
-            if (level.isClientSide)
+            if (level.isClientSide())
             {
                 if (level.getBlockEntity(pos) instanceof TaskListBlockEntity tile)
                 {
@@ -190,7 +190,7 @@ public class TaskListPanel extends Block implements EntityBlock
                 return InteractionResult.CONSUME;
             }
         }
-        if (! level.isClientSide)
+        if (! level.isClientSide())
         {
             return InteractionResult.CONSUME;
         }

@@ -7,6 +7,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -259,14 +260,14 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	}
 
 	@Override
-	public boolean charTyped(char codePoint, int modifiers)
+	public boolean charTyped(CharacterEvent event)
 	{
 		if (this.inventoryComponent.isVisibleTotal()
-				&& this.inventoryComponent.charTyped(codePoint, modifiers))
+				&& this.inventoryComponent.charTyped(event))
 		{
 			return true;
 		}
-		return super.charTyped(codePoint, modifiers);
+		return super.charTyped(event);
 	}
 
 	public int getImageWidth()

@@ -129,10 +129,10 @@ public class PotionShelf extends ToolRack
                 ! (this.canInteractWithOffhand() && ! player.getOffhandItem().isEmpty() && this.canDepositItem(player.getOffhandItem())))
         {
             player.displayClientMessage(ShelfMessage, true);
-            return level.isClientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
+            return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
 
-        if (level.isClientSide)
+        if (level.isClientSide())
         {
             return InteractionResult.SUCCESS;
         }

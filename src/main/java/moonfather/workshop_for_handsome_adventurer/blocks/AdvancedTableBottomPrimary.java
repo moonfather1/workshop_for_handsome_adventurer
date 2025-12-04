@@ -134,7 +134,7 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements En
 	@Override
 	public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult)
 	{
-		if (level.isClientSide)
+		if (level.isClientSide())
 		{
 			return InteractionResult.SUCCESS;
 		}

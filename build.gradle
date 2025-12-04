@@ -126,27 +126,27 @@ configurations {
 }
 
 dependencies {
-    compileOnly "curse.maven:wthit-forge-455982:7052503"
-    //runtimeOnly "curse.maven:wthit-forge-455982:7052503"
-    //runtimeOnly "curse.maven:badpackets-615134:6671481"
-    compileOnly "curse.maven:jade-324717:6902747"
-    runtimeOnly "curse.maven:jade-324717:6902747"
+    compileOnly "curse.maven:wthit-forge-455982:7239804"
+    //runtimeOnly "curse.maven:wthit-forge-455982:7239804"
+    //runtimeOnly "curse.maven:badpackets-615134:7066076"
+    compileOnly "curse.maven:jade-324717:7056468"
+    runtimeOnly "curse.maven:jade-324717:7056468"
     compileOnly "curse.maven:the-one-probe-245211:6106998"
     //!! top is at 1.21.1
 
-    runtimeOnly "curse.maven:jei-238222:7025033"
-    compileOnly "curse.maven:jei-238222:7025033"
-    compileOnly "curse.maven:roughly-enough-items-310111:6833149"
+    runtimeOnly "curse.maven:jei-238222:7270397"
+    compileOnly "curse.maven:jei-238222:7270397"
+    compileOnly "curse.maven:roughly-enough-items-310111:7273703"
     compileOnly "curse.maven:emi-580555:5436759"
     //!! EMI is on 1.21.1
-    compileOnly "curse.maven:cloth-config-348521:6669837"
-    //runtimeOnly "curse.maven:cloth-config-348521:6669837"
+    compileOnly "curse.maven:cloth-config-348521:7151182"
+    //runtimeOnly "curse.maven:cloth-config-348521:7151182"
     //runtimeOnly "curse.maven:roughly-enough-items-310111:6833149"
-    //runtimeOnly "curse.maven:architectury-api-419699:6803291"
+    //runtimeOnly "curse.maven:architectury-api-419699:7149506"
 
-    compileOnly "curse.maven:crafting-tweaks-233071:6784521"
-    //runtimeOnly "curse.maven:crafting-tweaks-233071:6784521"
-    //runtimeOnly "curse.maven:balm-531761:7047863"
+    compileOnly "curse.maven:crafting-tweaks-233071:7083592"
+    //runtimeOnly "curse.maven:crafting-tweaks-233071:7083592"
+    //runtimeOnly "curse.maven:balm-531761:7210480"
 
     compileOnly "curse.maven:polymorph-388800:6451024"
     // PM is on 1.21.1 at the moment
@@ -154,32 +154,26 @@ dependencies {
     compileOnly "curse.maven:dynamic-asset-generator-577096:5471770"
     //!! DAG is on 1.21.1 at the moment
 
-    //runtimeOnly "curse.maven:biomes-o-plenty-220318:7043631"
-    //runtimeOnly "curse.maven:glitchcore-955399:6812823"
-    //runtimeOnly "curse.maven:terrablender-neoforge-940057:6786184"
 
-    //runtimeOnly "curse.maven:owo-lib-532610:6994751"
+    //runtimeOnly "curse.maven:owo-lib-532610:7248199"
     compileOnly "curse.maven:curios-309927:6538253"
     //!! curios is for 1.21.5
-    compileOnly "curse.maven:accessories-938917:7059226"
+    compileOnly "curse.maven:accessories-938917:7244520"
 
 
     compileOnly "curse.maven:inventory-tweaks-refoxed-976858:5610776"
     //!! IT is still on 1.21.1
 
-    //runtimeOnly "curse.maven:storage-drawers-223852:6967716"
+    //runtimeOnly "curse.maven:storage-drawers-223852:7107983"
     //  sd  crashes with jsde
     //!! runtimeOnly "curse.maven:functional-storage-556861:5861256"
     //!! runtimeOnly "curse.maven:titanium-287342:5889342"
     //!! FS is still on 1.21.1
 
-    //runtimeOnly "curse.maven:sophisticated-core-618298:7060901"
-    //runtimeOnly "curse.maven:sophisticated-backpacks-422301:7057705"
-
     compileOnly "curse.maven:backpacked-352835:5852973"
     //!!! backpacked is still on 1.21.1
-    runtimeOnly "curse.maven:travelers-backpack-321117:7005688"
-    compileOnly "curse.maven:travelers-backpack-321117:7005688"
+    //runtimeOnly "curse.maven:travelers-backpack-321117:7240675"
+    compileOnly "curse.maven:travelers-backpack-321117:7240675"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

@@ -69,6 +69,9 @@ public class ModWorkshop
     // sd in lang, emba in lang
     // https://modrinth.com/mod/ars-elixirum
 
+    ////////////////
+    //  BESRs different
+    //  can't read from IModFile
     public ModWorkshop(IEventBus modBus, ModContainer modContainer)
     {
         modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);

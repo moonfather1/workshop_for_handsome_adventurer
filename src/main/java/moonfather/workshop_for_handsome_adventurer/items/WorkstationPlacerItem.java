@@ -52,7 +52,7 @@ public class WorkstationPlacerItem extends Item
 	@Override
 	public InteractionResult useOn(UseOnContext context)
 	{
-		if (context.getLevel().isClientSide)
+		if (context.getLevel().isClientSide())
 		{
 			return InteractionResult.SUCCESS;
 		}

@@ -107,7 +107,7 @@ public abstract class BookShelf extends ToolRack
     @Override
     public InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult)
     {
-        if (level.isClientSide)
+        if (level.isClientSide())
         {
             return InteractionResult.SUCCESS;
         }
@@ -387,7 +387,7 @@ public abstract class BookShelf extends ToolRack
         @Override
         public InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult)
         {
-            if (level.isClientSide)
+            if (level.isClientSide())
             {
                 return InteractionResult.SUCCESS;
             }

@@ -18,6 +18,8 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -364,13 +366,13 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     }
 
     @Override
-    public boolean charTyped(char p_94732_, int p_94733_) {
+    public boolean charTyped(CharacterEvent event) {
         if (this.renameBox.isFocused()) {
-            if (this.renameBox.charTyped(p_94732_, p_94733_)) {
+            if (this.renameBox.charTyped(event)) {
                 return true;
             }
         }
-        return GuiEventListener.super.charTyped(p_94732_, p_94733_);
+        return GuiEventListener.super.charTyped(event);
     }
 
     ////////////////////////////////////////
@@ -463,9 +465,9 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     }
 
     @Override
-    public boolean mouseClicked(double v1, double v2, int mouseButton) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
         if (this.renameBox != null) {
-            if (this.renameBox.isMouseOver(v1, v2)) {
+            if (this.renameBox.isMouseOver(event.x(), v2)) {
                 //System.out.println("~~~mousecl E  " + this.renameBox.isFocused() + "/" + this.renameBox.isHoveredOrFocused());
                 this.renameBox.setFocused(true);
                 return true;

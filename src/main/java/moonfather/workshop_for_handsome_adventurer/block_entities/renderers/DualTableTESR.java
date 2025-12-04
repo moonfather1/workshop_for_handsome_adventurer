@@ -3,29 +3,49 @@ package moonfather.workshop_for_handsome_adventurer.block_entities.renderers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import moonfather.workshop_for_handsome_adventurer.ClientConfig;
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableBlockEntity;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.item.ItemModelResolver;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
 
-public class DualTableTESR implements BlockEntityRenderer<DualTableBlockEntity>
+public class DualTableTESR implements BlockEntityRenderer<DualTableBlockEntity, SimpleTableTESR.ItemHoldingBlockRenderState>
 {
-    public DualTableTESR(BlockEntityRendererProvider.Context context) { }
-
+    @Override
+    public SimpleTableTESR.ItemHoldingBlockRenderState createRenderState()
+    {
+        return new SimpleTableTESR.ItemHoldingBlockRenderState();
+    }
 
     @Override
-    public void render(DualTableBlockEntity table, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay, Vec3 cameraPos)
+    public void extractRenderState(DualTableBlockEntity blockEntity, SimpleTableTESR.ItemHoldingBlockRenderState renderState, float partialTick, Vec3 cameraPosition, @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress)
     {
-        Direction direction = table.getDirection(); // no rotation in case of dual tables.
-        SimpleTableTESR.render3x3(poseStack, direction, bufferSource, combinedLight, combinedOverlay, table, 0, true, false);
-        SimpleTableTESR.render3x3(poseStack, direction, bufferSource, combinedLight, combinedOverlay, table, 3*3+4, true, true);
+        BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, partialTick, cameraPosition, breakProgress);
+        renderState.direction = blockEntity.getDirection();
+        SimpleTableTESR.fillRenderState(blockEntity, renderState, this.itemModelResolver);
+    }
+
+    @Override
+    public void submit(SimpleTableTESR.ItemHoldingBlockRenderState tableRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState)
+    {
+        Direction direction = tableRenderState.direction; // no rotation in case of dual tables.
+        SimpleTableTESR.submit3x3(tableRenderState, poseStack, direction, submitNodeCollector, 0, false);
+        SimpleTableTESR.submit3x3(tableRenderState, poseStack, direction, submitNodeCollector, 3*3+4, true);
     }
 
 
+    public DualTableTESR(BlockEntityRendererProvider.Context context)
+    {
+        this.itemModelResolver = context.itemModelResolver();
+    }
+    private final ItemModelResolver itemModelResolver;
+
+    ////////////////////////////////////
 
     @Override
     public boolean shouldRender(DualTableBlockEntity blockEntity, Vec3 location)
@@ -37,6 +57,7 @@ public class DualTableTESR implements BlockEntityRenderer<DualTableBlockEntity>
         return this.shouldRender;
     }
     private boolean shouldRender = true;
+
 
 
     // run TESR even if main block isn't visible.

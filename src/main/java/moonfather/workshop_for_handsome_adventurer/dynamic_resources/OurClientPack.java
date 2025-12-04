@@ -24,7 +24,7 @@ public class OurClientPack extends BaseResourcePack
 
     public OurClientPack(PackLocationInfo locationInfo)
     {
-        super(PackType.CLIENT_RESOURCES, SharedConstants.getCurrentVersion().packVersion(PackType.CLIENT_RESOURCES));
+        super(PackType.CLIENT_RESOURCES, SharedConstants.getCurrentVersion().packVersion(PackType.CLIENT_RESOURCES).minor());
         this.locationInfo = locationInfo;
     }
 

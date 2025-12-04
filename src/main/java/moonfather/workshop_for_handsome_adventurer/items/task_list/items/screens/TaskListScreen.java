@@ -12,6 +12,8 @@ import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -277,20 +279,20 @@ public class TaskListScreen extends Screen
     private final Random randomProvider = new Random();
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button)
+    public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick)
     {
         // focusing
         boolean foundEditBox = false;
         for (int i = 0; i < this.editBoxes.size(); i++)
         {
-            if (this.editBoxes.get(i).mouseClicked(mouseX, mouseY, button))
+            if (this.editBoxes.get(i).mouseClicked(event, isDoubleClick))
             {
                 this.setFocused(this.editBoxes.get(i));
                 foundEditBox = true;
                 break;
             }
         }
-        if (! foundEditBox && this.header.mouseClicked(mouseX, mouseY, button))
+        if (! foundEditBox && this.header.mouseClicked(event, isDoubleClick))
         {
             this.setFocused(this.header);
             foundEditBox = true;
@@ -304,11 +306,11 @@ public class TaskListScreen extends Screen
         int y = this.topPos + this.topMarginMain + 3;
         int x = this.leftPos + 10;
         int size = 13;
-        if (mouseX >= x - 1 && mouseX <= x + size + 1)
+        if (event.x() >= x - 1 && event.x() <= x + size + 1)
         {
             for (int i = 0; i < this.checkBoxValues.size(); i++)
             {
-                if (mouseY >= y - 1 && mouseY <= y + size + 1)
+                if (event.y() >= y - 1 && event.y() <= y + size + 1)
                 {
                     String current = this.checkBoxValues.get(i);
                     if (current.equals("e"))
@@ -326,14 +328,14 @@ public class TaskListScreen extends Screen
             }
         }
         // paging
-        if (mouseY >= this.arrowNext1.getY() && mouseY <= this.arrowNext1.getY() + this.arrowNext1.getHeight())
+        if (event.y() >= this.arrowNext1.getY() && event.y() <= this.arrowNext1.getY() + this.arrowNext1.getHeight())
         {
             int offset = 0;
-            if (mouseX >= this.arrowNext1.getX() && mouseX <= this.arrowNext1.getX() + this.arrowNext1.getWidth() && this.page < this.pageCount)
+            if (event.x() >= this.arrowNext1.getX() && event.x() <= this.arrowNext1.getX() + this.arrowNext1.getWidth() && this.page < this.pageCount)
             {
                 offset = +1;
             }
-            if (mouseX >= this.arrowPrev1.getX() && mouseX <= this.arrowPrev1.getX() + this.arrowPrev1.getWidth() && this.page > 1)
+            if (event.x() >= this.arrowPrev1.getX() && event.x() <= this.arrowPrev1.getX() + this.arrowPrev1.getWidth() && this.page > 1)
             {
                 offset = -1;
             }
@@ -486,22 +488,23 @@ public class TaskListScreen extends Screen
     private static final int K_ESC = 256, K_DN = 264, K_UP = 265, K_ENT = 257, K_ENT_NP = 335;
     private static final int K_PLU = 334, K_MIN = 333, K_STR = 332;
     private static final int K_PG_DN = 267, K_PG_UP = 266;
+
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+    public boolean keyPressed(KeyEvent event)
     {
-        if (keyCode == K_ESC && this.shouldCloseOnEsc())
+        if (event.key() == K_ESC && this.shouldCloseOnEsc())
         {
             this.onClose();
             return true;
         }
-        if ((keyCode == K_DN || keyCode == K_UP)  && (modifiers & 1) == 1)
+        if ((event.key() == K_DN || event.key() == K_UP)  && (event.modifiers() & 1) == 1)
         {
             // special focus
             if (this.header.equals(this.getFocused())) { return true; }
             this.setFocused(this.header);
             return true;
         }
-        if (keyCode == K_DN || (keyCode == K_ENT && (modifiers & 1) == 0) || (keyCode == K_ENT_NP && (modifiers & 1) == 0))
+        if (event.key() == K_DN || (event.key() == K_ENT && (event.modifiers() & 1) == 0) || (event.key() == K_ENT_NP && (event.modifiers() & 1) == 0))
         {
             // focus down
             for (int i = 0; i < this.editBoxes.size(); i++)
@@ -522,7 +525,7 @@ public class TaskListScreen extends Screen
             this.setFocused(this.editBoxes.get(0));
             return true;
         }
-        if (keyCode == K_UP || (keyCode == K_ENT && (modifiers & 1) == 1) || (keyCode == K_ENT_NP && (modifiers & 1) == 1))
+        if (event.key() == K_UP || (event.key() == K_ENT && (event.modifiers() & 1) == 1) || (event.key() == K_ENT_NP && (event.modifiers() & 1) == 1))
         {
             // focus up
             for (int i = 0; i < this.editBoxes.size(); i++)
@@ -543,28 +546,24 @@ public class TaskListScreen extends Screen
             this.setFocused(this.editBoxes.get(0)); // first focus
             return true;
         }
-        if ((keyCode == K_PLU || keyCode == K_MIN || keyCode == K_STR) && ((modifiers & 1) == 0))
+        if ((event.key() == K_PLU || event.key() == K_MIN || event.key() == K_STR) && ((event.modifiers() & 1) == 0))
         {
-            this.checkByKeyboard(keyCode);
+            this.checkByKeyboard(event.key());
             return true;
         }
-        if (keyCode == K_PG_DN && this.page < this.pageCount)
+        if (event.key() == K_PG_DN && this.page < this.pageCount)
         {
             // paging
             this.changePage(1);
             return true;
         }
-        if (keyCode == K_PG_UP && this.page > 1)
+        if (event.key() == K_PG_UP && this.page > 1)
         {
             // paging
             this.changePage(-1);
             return true;
         }
-        if (super.keyPressed(keyCode, scanCode, modifiers))
-        {
-            return true;
-        }
-        return false;
+        return super.keyPressed(event);
     }
 
     @Override

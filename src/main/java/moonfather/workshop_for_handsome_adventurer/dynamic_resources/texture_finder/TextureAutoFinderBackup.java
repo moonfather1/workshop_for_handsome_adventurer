@@ -42,7 +42,7 @@ public class TextureAutoFinderBackup implements ITextureFinder
         }
         try
         {
-            // old style doesn't work in NF and i didn't notece
+            // old style doesn't work in NF and i didn't notice
             Path blockStatePath = ModList.get().getModFileById(modId).getFile().findResource("assets", modId, "blockstates", blockTemplate.formatted(wood) + ".json");
             String file1 = Files.readString(blockStatePath);
             Matcher m1 = PATTERN_IN_BLOCKSTATE.matcher(file1);

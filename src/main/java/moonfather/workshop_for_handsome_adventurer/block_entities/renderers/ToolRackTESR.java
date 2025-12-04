@@ -4,32 +4,24 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
-import net.minecraft.core.Direction;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.common.ItemAbilities;
 import org.joml.Quaternionf;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 
 @ParametersAreNonnullByDefault
-public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
+public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity, SimpleTableTESR.ItemHoldingBlockRenderState>
 {
 	private ItemRenderer itemRenderer = null;
 	private final BlockEntityRendererProvider.Context context;
@@ -47,138 +39,138 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 	}
 
 
-	@Override
-	public void render(ToolRackBlockEntity tile, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay, Vec3 camera)
-	{
-		Direction direction = tile.getBlockState().getValue(HorizontalDirectionalBlock.FACING).getOpposite();
-		Direction itemDirection = direction.getCounterClockWise();
-
-		int itemsPerRow = tile.getNumberOfItemsInOneRow();
-		if (itemsPerRow == 3)  // potions
-		{
-			matrixStack.pushPose();
-			matrixStack.translate(0.5 - direction.getStepX() * 0.42, 0.7, 0.5 - direction.getStepZ() * 0.42);
-			matrixStack.scale(0.3f, 0.40f, 0.3f);
-			int rowHeight = 15;
-			for (int row = 0; row < 3; row++)
-			{
-				for (int i = 0; i < itemsPerRow; i++)
-				{
-					if (tile.getNumberOfItems() <= row * itemsPerRow) { break; }
-					ItemStack itemStack = this.removeEnchantments(tile.GetItem(row * itemsPerRow + i));
-					if (!itemStack.isEmpty())
-					{
-						matrixStack.pushPose();
-						double antiZFighting = row * 0.003d + i * 0.001d;
-						matrixStack.translate(itemDirection.getStepX() * (i - 1d) + antiZFighting, 0 - row*(rowHeight/16f+3/16f)-2/16f, itemDirection.getStepZ() * (i - 1d) + antiZFighting);
-						matrixStack.mulPose(direction.getRotation());
-						renderItemStack(tile, itemStack, matrixStack, buffer, combinedLight, combinedOverlay);
-						matrixStack.popPose();
-					}
-				}
-			}
-			matrixStack.popPose();
-		}
-		else // items
-		{
-			matrixStack.pushPose();
-			matrixStack.translate(0.5 - direction.getStepX() * 0.42, 0.7, 0.5 - direction.getStepZ() * 0.42);
-			matrixStack.scale(0.5f, 0.5f, 0.5f);
-			int rowHeight = (tile.getNumberOfItems() % 4 == 0) ? 15 : 20;
-			for (int row = 0; row < 3; row++)
-			{
-				for (int i = 0; i < itemsPerRow; i++)
-				{
-					if (tile.getNumberOfItems() <= row * itemsPerRow) { break; }
-					ItemStack itemStack = this.removeEnchantments(tile.GetItem(row * itemsPerRow + i));
-					if (!itemStack.isEmpty())
-					{
-						matrixStack.pushPose();
-						double antiZFighting = row * 0.003d + i * 0.001d;
-						matrixStack.translate(itemDirection.getStepX() * (i - 0.5) + antiZFighting, 0 - row*(rowHeight/16f), itemDirection.getStepZ() * (i - 0.5) + antiZFighting);
-						matrixStack.mulPose(direction.getRotation());
-						renderItemStack(tile, itemStack, matrixStack, buffer, combinedLight, combinedOverlay);
-						matrixStack.popPose();
-					}
-				}
-			}
-			matrixStack.popPose();
-		}
-	}
-
-
-
-	private void renderItemStack(ToolRackBlockEntity tile, ItemStack itemStack, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay)
-	{
-		if (itemStack != null && ! itemStack.isEmpty())
-		{
-			int renderId = (int) tile.getBlockPos().asLong();
-
-			if (this.itemRenderer == null)
-			{
-				this.itemRenderer = Minecraft.getInstance().getItemRenderer();
-			}
-//			BakedModel model = this.itemRenderer. getModel(itemStack, tile.getLevel(), null, combinedLight);
-
-			matrixStack.mulPose(XMinus90);  // 1.19.4   Vector3f.XP.rotationDegrees(-90.0F)
-			matrixStack.mulPose(YPlus180);  // 1.19.4   Vector3f.YP.rotationDegrees(180.0F)
-
-			if (itemStack.is(TAG_LARGER_ON_TOOLRACK_150)) // first this. apply the rest on top of this.
-			{
-				// seems to be noo need for matrixStack.translate
-				matrixStack.scale(1.50f, 1.10f, 1.50f);
-			}
-			else if (itemStack.is(TAG_LARGER_ON_TOOLRACK_125))
-			{
-				// seems to be noo need for matrixStack.translate
-				matrixStack.scale(1.25f, 1.10f, 1.25f);
-			} // scaling is separate from main thing below.
-
-            if (itemStack.is(TAG_ROTATE_180_ON_TOOLRACK))
-            {
-                matrixStack.mulPose(ZPlus180);
-            } // this rotation is separate as it's added onto any rotation below
-
-			if (itemStack.is(TAG_DONT_ROTATE_ON_TOOLRACK))
-			{
-				matrixStack.translate(0, 0.1, 0);
-			}
-			else if (itemStack.has(DataComponents.BLOCKS_ATTACKS))
-			{
-				matrixStack.translate(-0.00, -0.10, 0.14);
-				matrixStack.scale(1.75f, 1.60f, 1.75f);
-				//matrixStack.translate(-0.25, 0, 0.16);
-				//matrixStack.scale(2, 2, 2);
-			}
-            else if (itemStack.getItem().canPerformAction(itemStack, ItemAbilities.SWORD_SWEEP)
-                || itemStack.is(ItemTags.SWORDS))  // ?     || itemStack.has(DataComponents.WEAPON)
-            {
-                // check ModularBladedItem ? stupid tetra doesn't tag swords and doesn't return true for any canPerformAction call
-                // currently using separate tag for tetra swords.
-				matrixStack.translate(0, -0.2, 0);
-				matrixStack.mulPose(ZPlus135);  // 1.19.4      Vector3f.ZP.rotationDegrees(135.0F)
-			}
-			else if (itemStack.getItem().getClass().getSimpleName().contains("rossbow") || itemStack.getItem() instanceof CrossbowItem)  //ModularCrossbowItem
-			{
-				matrixStack.translate(0, -0.2, 0);
-				matrixStack.mulPose(ZPlus225);  // 1.19.4      Vector3f.ZP.rotationDegrees(225.0F)
-			}
-//			else if (model.isGui3d())
+//	@Override
+//	public void render(ToolRackBlockEntity tile, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay, Vec3 camera)
+//	{
+//		Direction direction = tile.getBlockState().getValue(HorizontalDirectionalBlock.FACING).getOpposite();
+//		Direction itemDirection = direction.getCounterClockWise();
+//
+//		int itemsPerRow = tile.getNumberOfItemsInOneRow();
+//		if (itemsPerRow == 3)  // potions
+//		{
+//			matrixStack.pushPose();
+//			matrixStack.translate(0.5 - direction.getStepX() * 0.42, 0.7, 0.5 - direction.getStepZ() * 0.42);
+//			matrixStack.scale(0.3f, 0.40f, 0.3f);
+//			int rowHeight = 15;
+//			for (int row = 0; row < 3; row++)
 //			{
-//				matrixStack.mulPose(ZMinus45);  // 1.19.4      Vector3f.ZP.rotationDegrees(-45.0F)
+//				for (int i = 0; i < itemsPerRow; i++)
+//				{
+//					if (tile.getNumberOfItems() <= row * itemsPerRow) { break; }
+//					ItemStack itemStack = this.removeEnchantments(tile.GetItem(row * itemsPerRow + i));
+//					if (!itemStack.isEmpty())
+//					{
+//						matrixStack.pushPose();
+//						double antiZFighting = row * 0.003d + i * 0.001d;
+//						matrixStack.translate(itemDirection.getStepX() * (i - 1d) + antiZFighting, 0 - row*(rowHeight/16f+3/16f)-2/16f, itemDirection.getStepZ() * (i - 1d) + antiZFighting);
+//						matrixStack.mulPose(direction.getRotation());
+//						renderItemStack(tile, itemStack, matrixStack, buffer, combinedLight, combinedOverlay);
+//						matrixStack.popPose();
+//					}
+//				}
 //			}
-			else if (itemStack.get(DataComponents.POTION_CONTENTS) != null || itemStack.is(Items.GLASS_BOTTLE))
-			{
-				matrixStack.translate(0, 0.1, 0);
-			}
-			else
-			{
-				matrixStack.mulPose(ZMinus45);  // 1.19.4    Vector3f.ZP.rotationDegrees(-45.0F)
-			}
-
-			Minecraft.getInstance().getItemRenderer().renderStatic(itemStack, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, matrixStack, buffer, tile.getLevel(), renderId);
-		}
-	}
+//			matrixStack.popPose();
+//		}
+//		else // items
+//		{
+//			matrixStack.pushPose();
+//			matrixStack.translate(0.5 - direction.getStepX() * 0.42, 0.7, 0.5 - direction.getStepZ() * 0.42);
+//			matrixStack.scale(0.5f, 0.5f, 0.5f);
+//			int rowHeight = (tile.getNumberOfItems() % 4 == 0) ? 15 : 20;
+//			for (int row = 0; row < 3; row++)
+//			{
+//				for (int i = 0; i < itemsPerRow; i++)
+//				{
+//					if (tile.getNumberOfItems() <= row * itemsPerRow) { break; }
+//					ItemStack itemStack = this.removeEnchantments(tile.GetItem(row * itemsPerRow + i));
+//					if (!itemStack.isEmpty())
+//					{
+//						matrixStack.pushPose();
+//						double antiZFighting = row * 0.003d + i * 0.001d;
+//						matrixStack.translate(itemDirection.getStepX() * (i - 0.5) + antiZFighting, 0 - row*(rowHeight/16f), itemDirection.getStepZ() * (i - 0.5) + antiZFighting);
+//						matrixStack.mulPose(direction.getRotation());
+//						renderItemStack(tile, itemStack, matrixStack, buffer, combinedLight, combinedOverlay);
+//						matrixStack.popPose();
+//					}
+//				}
+//			}
+//			matrixStack.popPose();
+//		}
+//	}
+//
+//
+//
+//	private void renderItemStack(ToolRackBlockEntity tile, ItemStack itemStack, PoseStack matrixStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay)
+//	{
+//		if (itemStack != null && ! itemStack.isEmpty())
+//		{
+//			int renderId = (int) tile.getBlockPos().asLong();
+//
+//			if (this.itemRenderer == null)
+//			{
+//				this.itemRenderer = Minecraft.getInstance().getItemRenderer();
+//			}
+////			BakedModel model = this.itemRenderer. getModel(itemStack, tile.getLevel(), null, combinedLight);
+//
+//			matrixStack.mulPose(XMinus90);  // 1.19.4   Vector3f.XP.rotationDegrees(-90.0F)
+//			matrixStack.mulPose(YPlus180);  // 1.19.4   Vector3f.YP.rotationDegrees(180.0F)
+//
+//			if (itemStack.is(TAG_LARGER_ON_TOOLRACK_150)) // first this. apply the rest on top of this.
+//			{
+//				// seems to be noo need for matrixStack.translate
+//				matrixStack.scale(1.50f, 1.10f, 1.50f);
+//			}
+//			else if (itemStack.is(TAG_LARGER_ON_TOOLRACK_125))
+//			{
+//				// seems to be noo need for matrixStack.translate
+//				matrixStack.scale(1.25f, 1.10f, 1.25f);
+//			} // scaling is separate from main thing below.
+//
+//            if (itemStack.is(TAG_ROTATE_180_ON_TOOLRACK))
+//            {
+//                matrixStack.mulPose(ZPlus180);
+//            } // this rotation is separate as it's added onto any rotation below
+//
+//			if (itemStack.is(TAG_DONT_ROTATE_ON_TOOLRACK))
+//			{
+//				matrixStack.translate(0, 0.1, 0);
+//			}
+//			else if (itemStack.has(DataComponents.BLOCKS_ATTACKS))
+//			{
+//				matrixStack.translate(-0.00, -0.10, 0.14);
+//				matrixStack.scale(1.75f, 1.60f, 1.75f);
+//				//matrixStack.translate(-0.25, 0, 0.16);
+//				//matrixStack.scale(2, 2, 2);
+//			}
+//            else if (itemStack.getItem().canPerformAction(itemStack, ItemAbilities.SWORD_SWEEP)
+//                || itemStack.is(ItemTags.SWORDS))  // ?     || itemStack.has(DataComponents.WEAPON)
+//            {
+//                // check ModularBladedItem ? stupid tetra doesn't tag swords and doesn't return true for any canPerformAction call
+//                // currently using separate tag for tetra swords.
+//				matrixStack.translate(0, -0.2, 0);
+//				matrixStack.mulPose(ZPlus135);  // 1.19.4      Vector3f.ZP.rotationDegrees(135.0F)
+//			}
+//			else if (itemStack.getItem().getClass().getSimpleName().contains("rossbow") || itemStack.getItem() instanceof CrossbowItem)  //ModularCrossbowItem
+//			{
+//				matrixStack.translate(0, -0.2, 0);
+//				matrixStack.mulPose(ZPlus225);  // 1.19.4      Vector3f.ZP.rotationDegrees(225.0F)
+//			}
+////			else if (model.isGui3d())
+////			{
+////				matrixStack.mulPose(ZMinus45);  // 1.19.4      Vector3f.ZP.rotationDegrees(-45.0F)
+////			}
+//			else if (itemStack.get(DataComponents.POTION_CONTENTS) != null || itemStack.is(Items.GLASS_BOTTLE))
+//			{
+//				matrixStack.translate(0, 0.1, 0);
+//			}
+//			else
+//			{
+//				matrixStack.mulPose(ZMinus45);  // 1.19.4    Vector3f.ZP.rotationDegrees(-45.0F)
+//			}
+//
+//			Minecraft.getInstance().getItemRenderer().renderStatic(itemStack, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, matrixStack, buffer, tile.getLevel(), renderId);
+//		}
+//	}
 	protected static final Quaternionf ZMinus45 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, -45);
 	protected static final Quaternionf ZPlus225 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 225);
 	protected static final Quaternionf ZPlus135 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 135);
@@ -218,5 +210,18 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity>
 	public AABB getRenderBoundingBox(ToolRackBlockEntity blockEntity)
 	{
 		return blockEntity.getRenderBoundingBox();
+	}
+
+	//////////////////////////////
+	@Override
+	public SimpleTableTESR.ItemHoldingBlockRenderState createRenderState()
+	{
+		return new SimpleTableTESR.ItemHoldingBlockRenderState();
+	}
+
+	@Override
+	public void submit(SimpleTableTESR.ItemHoldingBlockRenderState tableRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState)
+	{
+
 	}
 }
