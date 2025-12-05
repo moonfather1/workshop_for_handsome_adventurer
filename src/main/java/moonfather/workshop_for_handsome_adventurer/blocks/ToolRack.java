@@ -244,7 +244,7 @@ public class ToolRack extends Block implements EntityBlock, IBlockWithCleverHove
             return this.useWithoutItem(level.getBlockState(above), level, above, player, blockHitResult.withPosition(above));
         }
         boolean doOffhand = CommonConfig.OffhandInteractsWithToolRack.get();
-        if (level.isClientSide)
+        if (level.isClientSide())
         {
             return InteractionResult.SUCCESS;
             // we were doing just fine without this statement, updating both sides in parallel, but then CarryOn caused desyncs.

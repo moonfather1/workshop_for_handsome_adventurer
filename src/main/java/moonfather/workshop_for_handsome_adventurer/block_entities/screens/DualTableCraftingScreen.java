@@ -8,6 +8,7 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.Pack
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -126,9 +127,9 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 
 
 		@Override
-		public boolean mouseClicked(double x, double y, int p_93643_) {
-			double localX = x - this.getX();
-			double localY = y - this.getY();
+		public boolean mouseClicked(MouseButtonEvent event, boolean isDouble) {
+			double localX = event.x() - this.getX();
+			double localY = event.y() - this.getY();
 			if (localX >= 10 && localX <= 20 && localY >= 4 && localY <= 14) {
 				if (lastDestinationGrid != 2)
 				{
@@ -147,7 +148,7 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 				}
 				return true;
 			}
-			return super.mouseClicked(x, y, p_93643_);
+			return super.mouseClicked(event, isDouble);
 		}
 
 		@Override

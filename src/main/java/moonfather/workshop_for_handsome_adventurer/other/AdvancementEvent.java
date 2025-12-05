@@ -20,15 +20,9 @@ public class AdvancementEvent
         {
             if (event.getEntity() instanceof ServerPlayer sp)
             {
-                sp.getAdvancements().award(GetAdvancement(sp, "minecraft", "story/root"), "crafting_table");
+                AdvancementHolder ah = sp.level().getServer().getAdvancements().get(ResourceLocation.fromNamespaceAndPath("minecraft", "story/root"));
+                sp.getAdvancements().award(ah, "crafting_table");
             }
         }
-    }
-
-
-
-    private static AdvancementHolder GetAdvancement(ServerPlayer sp, String namespace, String name)
-    {
-        return sp.getServer().getAdvancements().get(ResourceLocation.fromNamespaceAndPath(namespace, name));
     }
 }

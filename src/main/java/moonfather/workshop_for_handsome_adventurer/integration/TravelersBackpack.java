@@ -6,7 +6,8 @@ import com.tiviacz.travelersbackpack.inventory.BackpackWrapper;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 
 public class TravelersBackpack
 {
@@ -19,7 +20,7 @@ public class TravelersBackpack
     {
         BackpackWrapper wrapper = AttachmentUtils.getBackpackWrapper(player);
         if (wrapper == null) { return 0; }
-        return wrapper.getStorage().getSlots();
+        return wrapper.getStorageForInputOutput().size();
     }
 
     public static ItemStack getTabIcon(Player player)
@@ -47,11 +48,11 @@ public class TravelersBackpack
         return ItemStack.EMPTY;
     }
 
-    public static IItemHandler getItems(Player player)
+    public static ResourceHandler<ItemResource> getItems(Player player)
     {
         BackpackWrapper wrapper = AttachmentUtils.getBackpackWrapper(player);
         if (wrapper == null) { return null; }
-        return wrapper.getStorage();
+        return wrapper.getStorageForInputOutput();
     }
 
     public static SimpleContainer getContainer(Player player)

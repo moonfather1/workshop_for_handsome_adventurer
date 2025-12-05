@@ -72,6 +72,7 @@ public class ModWorkshop
     ////////////////
     //  BESRs different
     //  can't read from IModFile
+    //  test first renderer (atlas a little different)
     public ModWorkshop(IEventBus modBus, ModContainer modContainer)
     {
         modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);

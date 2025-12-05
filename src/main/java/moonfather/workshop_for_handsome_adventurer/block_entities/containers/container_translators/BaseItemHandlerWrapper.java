@@ -1,6 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators;
 
-import moonfather.workshop_for_handsome_adventurer.block_entities.containers.SimpleContainerEx;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
@@ -8,26 +8,33 @@ import net.neoforged.neoforge.items.IItemHandlerModifiable;
 ///
 /// turns item handler into a container. from horse to donkey.
 ///
-public abstract class BaseItemHandlerWrapper extends SimpleContainerEx
+public abstract class BaseItemHandlerWrapper extends SimpleContainer
 {
-    public BaseItemHandlerWrapper(IItemHandler wrapped, int totalSize)
+    public BaseItemHandlerWrapper(IItemHandler wrapped, int totalSize, boolean allowPlaceContainers)
     {
         super(totalSize);
+        this.allowPlaceContainers = allowPlaceContainers;
         this.internal = wrapped;
     }
 
     public BaseItemHandlerWrapper(IItemHandler wrapped)
     {
         super(wrapped.getSlots());
+        this.allowPlaceContainers = false;
         this.internal = wrapped;
     }
+    private final boolean allowPlaceContainers;
 
     ///////////////////////////////////////////////////
 
     protected final IItemHandler internal;
 
     @Override
-    public boolean canPlaceItem(int slot, ItemStack itemStack) { return internal.isItemValid(slot, itemStack); }
+    public boolean canPlaceItem(int slot, ItemStack itemStack)
+    {
+        if (! this.allowPlaceContainers && ! itemStack.getItem().canFitInsideContainerItems()) { return false; }
+        return internal.isItemValid(slot, itemStack);
+    }
 
     @Override
     public ItemStack getItem(int slot) { return internal.getStackInSlot(slot); }
@@ -76,7 +83,7 @@ public abstract class BaseItemHandlerWrapper extends SimpleContainerEx
             }
             else
             {
-                // replacing. causes issue for SD, we'll se about others.
+                // replacing.
                 resto = this.internal.extractItem(slot, old.getCount(), false);
                 resto = this.internal.insertItem(slot, itemStack, false);
             }

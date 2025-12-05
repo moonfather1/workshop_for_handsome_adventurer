@@ -1,6 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.ItemContainerContentsWrapper;
+import moonfather.workshop_for_handsome_adventurer.block_entities.containers.ResourceHandlerWrapper;
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.MultipartBarrelsSimpleTranslator;
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.StorageDrawersSimpleTranslator;
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.TetraBeltTranslator;
@@ -37,6 +38,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 
 import java.util.LinkedList;
 
@@ -112,12 +115,21 @@ public class InventoryAccessHelper
         }
         if (be.getBlockState().getBlock().getDescriptionId().contains("mm_storage"))
         {
-            if (!be.getBlockState().getBlock().getDescriptionId().contains("barrel")) { return; }
-            IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);
+            if (! be.getBlockState().getBlock().getDescriptionId().contains("barrel")) { return; }
+//            IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);
+//            if (handler != null)  //&& handler.getSlots() <= 54  ?
+//            {
+//                this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new MultipartBarrelsSimpleTranslator(handler), false);
+//                this.chosenContainerTrueSize = handler.getSlots() - 1;
+//                this.chosenContainerVisibleSize = 27;
+//                this.currentType = RecordTypes.BLOCK;
+//                return;
+//            }
+            ResourceHandler<ItemResource> handler = level.getCapability(Capabilities.Item.BLOCK, pos, (Direction) null);
             if (handler != null)  //&& handler.getSlots() <= 54  ?
             {
                 this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new MultipartBarrelsSimpleTranslator(handler), false);
-                this.chosenContainerTrueSize = handler.getSlots() - 1;
+                this.chosenContainerTrueSize = handler.size() - 1;
                 this.chosenContainerVisibleSize = 27;
                 this.currentType = RecordTypes.BLOCK;
                 return;

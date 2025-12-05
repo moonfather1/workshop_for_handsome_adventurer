@@ -2,7 +2,6 @@ package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.block_entities.containers.SimpleContainerEx;
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.BaseItemHandlerWrapper;
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.IExcessSlotManager;
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
@@ -122,7 +121,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		this.addSlot(new CustomizationSlot(this.customizationSlots, 3, 152, 17 + 3*22 + ((3 < custSlotCount) ? 0 : 9009)));
 		this.access.execute(this::loadFromWorld);
 		this.lastLanternCount = this.getLanternCount();
-		if (! this.player.level().isClientSide)
+		if (! this.player.level().isClientSide())
 		{
 			this.customizationSlots.addListener(new CustomizationListenerServer(this));
 		}
@@ -165,7 +164,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	protected static void slotChangedCraftingGrid(AbstractContainerMenu menu, Level level, BlockPos tablePos, Player player, CraftingContainer craftingContainer, ResultContainer resultContainer, int resultSlotIndex)
 	{
-		if (! level.isClientSide)
+		if (! level.isClientSide())
 		{
 			if (resultSlotIndex >= menu.slots.size())
 			{
@@ -224,7 +223,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	protected void setActiveResultSlotForPolymorph(int index)
 	{
 		// server to client message basically
-		if (this.player != null && ! this.player.level().isClientSide)
+		if (this.player != null && ! this.player.level().isClientSide())
 		{
 			this.DataSlots.setSlotValue(SimpleTableDataSlots.DATA_SLOT_POLYMORPH_TARGET, index);
 		}
@@ -1066,7 +1065,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 	}
 
-	public static class VariableSizeContainerWrapper extends SimpleContainerEx implements IExcessSlotManager
+	public static class VariableSizeContainerWrapper extends SimpleContainer implements IExcessSlotManager
 	{
 		private IExcessSlotManager excessManager = null;
 		private final Container internal;

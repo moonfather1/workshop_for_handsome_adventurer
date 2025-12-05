@@ -8,6 +8,8 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -156,7 +158,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		{
 			if (this.minecraft.screen != null)
 			{
-				if (hasShiftDown())
+				if (this.minecraft.hasShiftDown())
 				{
 					if (tooltipCustomizationsFull == null)
 					{
@@ -212,12 +214,11 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	protected ResourceLocation backgroundImageLocation = null;
 
 
-
 	@Override
-	protected boolean hasClickedOutside(double mouseX, double mouseY, int left, int top, int button)
+	protected boolean hasClickedOutside(double mouseX, double mouseY, int left, int top)
 	{
 		boolean flag = mouseX < (double)left || mouseY < (double)top || mouseX >= (double)(left + this.imageWidth) || mouseY >= (double)(top + this.imageHeight);
-		return this.inventoryComponent.hasClickedOutside(mouseX, mouseY, this.leftPos, this.topPos, this.imageWidth + this.inventoryComponent.getWidth() + 1, this.imageHeight, button) && flag;
+		return this.inventoryComponent.hasClickedOutside(mouseX, mouseY, this.leftPos, this.topPos, this.imageWidth + this.inventoryComponent.getWidth() + 1, this.imageHeight) && flag;
 	}
 
 	@Override
@@ -228,13 +229,13 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	}
 
 	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int button)
+	public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClicked)
 	{
-		if (this.inventoryComponent.mouseClicked(mouseX, mouseY, button))
+		if (this.inventoryComponent.mouseClicked(event, isDoubleClicked))
 		{
 			return true;
 		}
-		return super.mouseClicked(mouseX, mouseY, button);
+		return super.mouseClicked(event, isDoubleClicked);
 	}
 
 	@Override
@@ -245,18 +246,18 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	}
 
 	@Override
-	public boolean keyPressed(int p_97878_, int p_97879_, int p_97880_)
+	public boolean keyPressed(KeyEvent event)
 	{
-		if (p_97878_ == KEY_ESCAPE)
+		if (event.key() == KEY_ESCAPE)
 		{
 			this.minecraft.player.closeContainer(); // esc
 		}
 		if (this.inventoryComponent.isVisibleTotal()
-				&& this.inventoryComponent.keyPressed(p_97878_, p_97879_, p_97880_))
+				&& this.inventoryComponent.keyPressed(event))
 		{
 			return true;
 		}
-		return super.keyPressed(p_97878_, p_97879_, p_97880_);
+		return super.keyPressed(event);
 	}
 
 	@Override

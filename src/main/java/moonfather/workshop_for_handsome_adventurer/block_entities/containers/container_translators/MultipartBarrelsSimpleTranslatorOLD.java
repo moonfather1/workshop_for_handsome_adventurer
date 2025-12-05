@@ -1,14 +1,13 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators;
 
 
-import net.neoforged.neoforge.transfer.ResourceHandler;
-import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.items.IItemHandler;
 
-public class MultipartBarrelsSimpleTranslator extends BaseResourceHandlerTranslator implements IExcessSlotManager
+public class MultipartBarrelsSimpleTranslatorOLD extends BaseItemHandlerTranslator implements IExcessSlotManager
 {
-    public MultipartBarrelsSimpleTranslator(ResourceHandler<ItemResource> wrapped)
+    public MultipartBarrelsSimpleTranslatorOLD(IItemHandler wrapped)
     {
-        super(wrapped, wrapped.size() - 1, false);
+        super(wrapped, wrapped.getSlots() - 1);
     }
 
     @Override

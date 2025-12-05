@@ -19,6 +19,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -280,7 +281,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         list.addAll(this.tabButtons);
         Screen.NarratableSearchResult screen$narratablesearchresult = Screen.findNarratableWidget(list, (NarratableEntry) null);
         if (screen$narratablesearchresult != null) {
-            screen$narratablesearchresult.entry.updateNarration(output.nest());
+            screen$narratablesearchresult.entry().updateNarration(output.nest());
         }
     }
 
@@ -348,21 +349,19 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     ///////////////////////////////////////////
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+    public boolean keyPressed(KeyEvent event)
     {
         if (this.renameBox.isFocused())
         {
-            if (scanCode == 23) // tab
+            if (event.scancode() == 23) // tab
             {
                 this.renameBox.setFocused(false);
                 return true;
             }
-            // if (keyCode == 69) /* E */ { return true; }
-            // if (this.renameBox.keyPressed(keyCode, scanCode, modifiers)) { return true; }
-            this.renameBox.keyPressed(keyCode, scanCode, modifiers);
+            this.renameBox.keyPressed(event);
             return true;
         }
-        return GuiEventListener.super.keyPressed(keyCode, scanCode, modifiers);
+        return GuiEventListener.super.keyPressed(event);
     }
 
     @Override
@@ -452,7 +451,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         //System.out.println("~~~ slot clicked~ " + (slot == null ? "NULL" : (slot.index)));
     }
 
-    public boolean hasClickedOutside(double mouseX, double mouseY, int leftPos, int topPos, int width, int height, int mouseButton)
+    public boolean hasClickedOutside(double mouseX, double mouseY, int leftPos, int topPos, int width, int height)
     {
         if (! this.isVisibleTotal()) {
             return true;
@@ -467,7 +466,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
         if (this.renameBox != null) {
-            if (this.renameBox.isMouseOver(event.x(), v2)) {
+            if (this.renameBox.isMouseOver(event.x(), event.y())) {
                 //System.out.println("~~~mousecl E  " + this.renameBox.isFocused() + "/" + this.renameBox.isHoveredOrFocused());
                 this.renameBox.setFocused(true);
                 return true;
@@ -478,15 +477,15 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         }
         for (TabButton tabButton : this.tabButtons)
         {
-            if (tabButton.isMouseOver(v1, v2))
+            if (tabButton.isMouseOver(event.x(), event.y()))
             {
                 this.tabChanged(tabButton);
                 return true;
             }
         }
-        if (this.renameButton != null && this.renameButton.active && ! this.suppressRenameButton && this.renameButton.isMouseOver(v1, v2)) {
+        if (this.renameButton != null && this.renameButton.active && ! this.suppressRenameButton && this.renameButton.isMouseOver(event.x(), event.y())) {
             this.suppressRenameButton = true;
-            this.renameButton.mouseClicked(v1, v2, mouseButton);
+            this.renameButton.mouseClicked(event, isDoubleClick);
             return true;
         }
         //System.out.println("~~~mousecl  " + v1 + "   " + v2 + "    " + mouseButton + "/" + this.renameBox.isFocused());
@@ -583,13 +582,13 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         }
 
         @Override
-        public boolean mouseClicked(double p_93641_, double p_93642_, int p_93643_)
+        public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick)
         {
             if (this.handler != null)
             {
                 return this.handler.apply(this);
             }
-            return super.mouseClicked(p_93641_, p_93642_, p_93643_);
+            return super.mouseClicked(event, isDoubleClick);
         }
 
         public List<ClientTooltipComponent> getMessageForTooltip()
