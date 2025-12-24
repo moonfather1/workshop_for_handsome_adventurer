@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.*;
 import moonfather.workshop_for_handsome_adventurer.blocks.*;
+import moonfather.workshop_for_handsome_adventurer.dynamic_resources.DynamicAssetConfig;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.SecondCreativeTab;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLister;
 import moonfather.workshop_for_handsome_adventurer.items.BlockItemEx;
@@ -183,6 +184,10 @@ public class Registration
 			{
 				// can't just add wood types to Registration.woodTypes; def registry is filled at mod constructor. wood list is available much later, after RegisterEvent for blocks. that's why we do things here.
 				// anyway...
+				if (DynamicAssetConfig.isToBeMerged(WoodTypeLister.getHostMod(wood), wood))
+				{
+					continue;
+				}
 				// small tables
 				registerSingleBlockForThirdPartyWood(new SimpleTable(), "simple_table_", wood, blocks_table1, SecondCreativeTab.items_table1);
 				// dual tables

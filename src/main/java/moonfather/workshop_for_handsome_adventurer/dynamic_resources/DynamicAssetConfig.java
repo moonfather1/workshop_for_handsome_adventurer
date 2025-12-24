@@ -150,11 +150,25 @@ public class DynamicAssetConfig
         return blackList.contains(modId + ":" + wood) || blackList.contains(modId + ":*");
     }
 
+    public static boolean isToBeMerged(String modId, String wood)
+    {
+        if (! CustomTripletSupport.isSpecial(wood))
+        {
+            return false;
+        }
+        if (mergeList == null)
+        {
+            mergeList = Arrays.asList(getCommon().mergelist.split(", *"));
+        }
+        return mergeList.contains(modId + ":" + CustomTripletSupport.stripPrefix(wood)) || mergeList.contains(modId + ":*");
+    }
+
     private static final Map<String, String> plankPathList = new HashMap<>();
     private static final Map<String, String> subRecipeList = new HashMap<>();
     private static final Map<String, String> subTextureList = new HashMap<>();
     private static final Map<String, String> logPathList = new HashMap<>();
     private static List<String> blackList = null;
+    private static List<String> mergeList = null;
 
     private static String getFromSplitConfig(String input, Map<String, String> list, String wood)
     {
@@ -186,27 +200,56 @@ public class DynamicAssetConfig
                 if (temp2.length == 2)
                 {
                     String[] temp3 = temp2[1].split("/");
-                    if (temp3.length == 3)
+                    if (temp3.length % 3 != 0)
                     {
-                        woodSetsWithDumbassNames.add(new WoodSet(temp2[0], temp3[0], temp3[1], temp3[2]));
+                        continue;
                     }
+                    if (temp3.length > 3)
+                    {
+                        gluePartsBackTogether(temp3);
+                    }
+                    String woodId = temp3[0];
+                    if (woodId.contains("/")) { woodId = woodId.substring(woodId.lastIndexOf('/') + 1); }
+                    if (woodId.contains("_plank")) { woodId = woodId.substring(0, woodId.indexOf("_plank")); }
+                    woodId = CustomTripletSupport.addPrefixTo(woodId); //??this would make sense but it's a big change for this commit.
+                    woodSetsWithDumbassNames.add(new WoodSet(temp2[0], woodId,  temp3[0], temp3[1], temp3[2]));
                 }
             }
         }
         return woodSetsWithDumbassNames;
     }
+
+    private static void gluePartsBackTogether(String[] parts)
+    {
+        int partsPerPath = parts.length / 3;
+        for (int i = 1; i < partsPerPath; i++)
+        {
+            parts[0] = parts[0] + "/" + parts[i];
+        }
+        parts[1] = parts[partsPerPath];
+        for (int i = 1; i < partsPerPath; i++)
+        {
+            parts[1] = parts[1] + "/" + parts[partsPerPath + i];
+        }
+        parts[2] = parts[partsPerPath * 2];
+        for (int i = 1; i < partsPerPath; i++)
+        {
+            parts[2] = parts[2] + "/" + parts[partsPerPath * 2 + i];
+        }
+    }
+
     private static final Collection<WoodSet> woodSetsWithDumbassNames = new ArrayList<>();
 
     public static WoodSet getWoodSet(String wood)
     {
         for (WoodSet set: woodSetsWithDumbassNames)
         {
-            if (CustomTripletSupport.addPrefixTo(set.planks).equals(wood)) { return  set; }
+            if (set.woodId.equals(wood)) { return  set; }
         }
         return null;
     }
 
-    public record WoodSet(String modId, String planks, String slab, String log) { }
+    public record WoodSet(String modId, String woodId, String planks, String slab, String log) { }
 
     ////////////////////////////
 
@@ -217,13 +260,17 @@ public class DynamicAssetConfig
         public boolean generate_blocks_for_mod_added_woods = true;
 
         public String blacklist_comment = "First and obvious use is to blacklist wood types that you really, really hate to see. Second and non-obvious use: say you have a duplicate wood type; normally it just gets recipes that give blocks of other type of same name; but if you really, really wish to have blocks of this type, black-list them here so that they are not added to dupes list and in blocks_with_dumbass_names setting in this file, add them in format modid:planks/slab/strippedlog; good example is Vinery mod which insists on cherry wood even in 1.20; if you do this, you get workshop blocks in vanilla cherry (light pink) and Vinery's cherry (dark red) separately. Oh, and asterisk after the colon works.";
-        public String blacklist = "vinery:cherry";
+        public String blacklist = "vinery:cherry, tfc:birch";
+
+        public String mergelist_comment = "Wood types that you want merged with existing wood of the same name. Only works for wood listed at the bottom of this file (non-standard names).";
+        public String mergelist = "tfc:oak, tfc:spruce, tfc:acacia";
 
         public String stripped_log_substitution_comment = "For wood types that do not have stripped logs, you can specify table top block here. If you do not, we are skipping that wood type.";
         public String stripped_log_substitution_list_for_recipes = "bamboo=minecraft:smooth_stone, treated_wood_horizontal=minecraft:polished_blackstone,  embur=byg:stripped_embur_pedu,  sythian=byg:stripped_sythian_stem, bulbis=minecraft:smooth_stone, crimson=minecraft:stripped_crimson_stem, warped=minecraft:stripped_warped_stem,  edelwood=forbidden_arcanus:edelwood_planks";
 
         public String blocks_with_dumbass_names_comment = "This is a list of blocks that do not follow usual naming scheme. Set consists of planks, slab and log, separated by slashes. Separate all sets with comma. You can use stripped_log_substitution for these. Example is IE's treated wood as it has no logs.";
-        public String blocks_with_dumbass_names = "immersiveengineering:treated_wood_horizontal/slab_treated_wood_horizontal/no_log_for_this_one, growthcraft_apples:apple_plank/apple_plank_slab/apple_wood_log_stripped,   growthcraft_cellar:cork_plank/cork_plank_slab/cork_wood_log_stripped,   vinery:cherry_planks/cherry_slab/stripped_cherry_log,   quark:azalea_planks/azalea_planks_slab/stripped_azalea_log";
+        public String blocks_with_dumbass_names = "immersiveengineering:treated_wood_horizontal/slab_treated_wood_horizontal/no_log_for_this_one, growthcraft_apples:apple_plank/apple_plank_slab/apple_wood_log_stripped,   growthcraft_cellar:cork_plank/cork_plank_slab/cork_wood_log_stripped,   vinery:cherry_planks/cherry_slab/stripped_cherry_log,   quark:azalea_planks/azalea_planks_slab/stripped_azalea_log"
+                + ",   tfc:wood/planks/acacia/wood/planks/acacia_slab/wood/stripped_log/acacia, tfc:wood/planks/ash/wood/planks/ash_slab/wood/stripped_log/ash, tfc:wood/planks/aspen/wood/planks/aspen_slab/wood/stripped_log/aspen, tfc:wood/planks/birch/wood/planks/birch_slab/wood/stripped_log/birch, tfc:wood/planks/blackwood/wood/planks/blackwood_slab/wood/stripped_log/blackwood, tfc:wood/planks/chestnut/wood/planks/chestnut_slab/wood/stripped_log/chestnut";
     }
 
     private static class InstantConfigClient // because the other kind is unavailable early
@@ -238,9 +285,9 @@ public class DynamicAssetConfig
         public String stripped_log_substitution_list_for_textures = "embur=embur, sythian=sythian, bamboo=stripped_bamboo_block, bulbis=bulbis,  edelwood=edelwood";
 
         public String texture_template1_comment = "Tells us where to find plank textures, in case mod uses subdirectories (like byg) or different file names. Second %s below is the wood type. Separate using commas.";
-        public String texture_template1_list = "byg=%s:block/%s/planks, aether=%s:block/construction/%s_planks";
+        public String texture_template1_list = "byg=%s:block/%s/planks, aether=%s:block/construction/%s_planks,  tfc=%s:block/wood/planks/%s";
         public String texture_template2_comment = "Tells us where to find stripped log textures, in case mod uses subdirectories (like byg) or different file names. Second %s below is the wood type. Separate using commas.";
-        public String texture_template2_list = "byg=%s:block/%s/stripped_log,  aether=%s:block/natural/stripped_%s_log";
+        public String texture_template2_list = "byg=%s:block/%s/stripped_log,  aether=%s:block/natural/stripped_%s_log,  tfc=%s:block/wood/stripped_log/%s";
 
         public String use_darker_workstation_comment = "Slightly different model. Do not worry about this. Or just list dark woods here.";
         public String use_darker_workstation_model = "embur,hellbark,bulbis,cika,lament,dead,blackwood";

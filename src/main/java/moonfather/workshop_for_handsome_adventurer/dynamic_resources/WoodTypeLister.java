@@ -98,14 +98,26 @@ public class WoodTypeLister
                 if (! ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(woodSet.modId(), woodSet.slab()))) { continue; }
                 if (! ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(woodSet.modId(), woodSet.log())))
                 {
-                    String substitute = DynamicAssetConfig.getLogRecipeSubstitution(woodSet.planks());
+                    String substitute = DynamicAssetConfig.getLogRecipeSubstitution(woodSet.woodId());
                     if (substitute == null || ! ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(substitute)))
                     {
                         continue;
                     }
                 }
-                idsWithSpecials.add(CustomTripletSupport.addPrefixTo(woodSet.planks()));
-                woodToHostMap.put(CustomTripletSupport.addPrefixTo(woodSet.planks()), woodSet.modId());
+                if (! DynamicAssetConfig.isToBeMerged(woodSet.modId(), woodSet.woodId()))
+                {
+                    idsWithSpecials.add(CustomTripletSupport.addPrefixTo(woodSet.woodId()));
+                    woodToHostMap.put(CustomTripletSupport.addPrefixTo(woodSet.woodId()), woodSet.modId());
+                }
+                else
+                {
+                    String id = CustomTripletSupport.stripPrefix(woodSet.woodId());
+                    if (! Registration.woodTypes.contains(id) && ! ids.contains(id))
+                    {
+                        continue;
+                    }
+                    dupeIds.add(new ResourceLocation(woodSet.modId(), woodSet.woodId()));
+                }
             }
         }
     }

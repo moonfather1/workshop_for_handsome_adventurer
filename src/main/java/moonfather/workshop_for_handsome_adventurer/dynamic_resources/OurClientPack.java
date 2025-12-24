@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class OurClientPack extends BaseResourcePack
 {
@@ -38,7 +39,7 @@ public class OurClientPack extends BaseResourcePack
             json = AssetReader.getInstance(PackType.CLIENT_RESOURCES, Constants.MODID).getText(new ResourceLocation(Constants.MODID, spruceFile));
             if (json != null)
             {
-                String filePrefix = spruceFile.substring(spruceFile.lastIndexOf('/')+1, spruceFile.length() - "spruce.json".length()); // strip  something/    and     spruce.json
+                Pattern pattern = Pattern.compile("(?<=_[a-z0-9]+_)" + SPRUCE);
                 for (String wood: WoodTypeLister.getWoodIds())
                 {
                     String plankStringToInsert = getPlanks(wood); // because it might be null
@@ -47,9 +48,8 @@ public class OurClientPack extends BaseResourcePack
                     if (logStringToInsert == null) { logStringToInsert = SPRUCE_LOG; LOGGER.warn("Warning: workshop couldn't find files for " + wood + " log."); }
                     String replaced = json
                         .replace(SPRUCE_PLANKS, plankStringToInsert)
-                        .replace(SPRUCE_LOG, logStringToInsert)
-                        .replace(filePrefix+SPRUCE, filePrefix+wood)
-                        .replace("lanterns_"+SPRUCE, "lanterns_"+wood);
+                        .replace(SPRUCE_LOG, logStringToInsert);
+                    replaced = pattern.matcher(replaced).replaceAll(wood);  // need to do this in blockstate files because model names can be anything; it was either this or hardcode model names.
                     if (WoodTypeManager.isUsingDarkerWorkstation(wood))
                     {
                         replaced = replaced.replace("/stripped_dark_oak_log", "/stripped_spruce_log");
@@ -168,7 +168,7 @@ public class OurClientPack extends BaseResourcePack
             }
             else if (specialSet != null)
             {
-                result = TEMPLATE_PLANKS.replace("_planks", "").formatted(specialSet.modId(), specialSet.planks());
+                result = TEMPLATE_PLANKS_RAW.formatted(specialSet.modId(), specialSet.planks());
             }
             else
             {
@@ -255,6 +255,7 @@ public class OurClientPack extends BaseResourcePack
     private final Map<String, String> strippedLogCache = new HashMap<>(); // will be remade on reload
     private final Map<String, String> plankCache = new HashMap<>(); // same thing
     private static final String TEMPLATE_PLANKS = "%s:block/%s_planks";
+    private static final String TEMPLATE_PLANKS_RAW = "%s:block/%s";
     private static final String TEMPLATE_LOG = "%s:block/stripped_%s_log";
     private static final String TEMPLATE_ANY_BLOCK = "%s:block/%s";
 

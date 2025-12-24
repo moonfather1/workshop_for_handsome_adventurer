@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Sorting.class)
 public class InventoryTweaks
 {
-    @Inject(method = "executeSort", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "executeSort", at = @At("HEAD"), cancellable = true, remap = false)
     private static void check(Player player, boolean isPlayerSort, String screenClass, CallbackInfo ci)
     {
         if (! isPlayerSort && player != null && player.containerMenu instanceof SimpleTableMenu)

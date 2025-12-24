@@ -11,11 +11,13 @@ import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
 import net.minecraft.server.packs.resources.IoSupplier;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,11 +44,17 @@ public abstract class BaseResourcePack implements PackResources
 
     ////////////////////////////////////////////////////////////
 
+    //private static final Logger logger = LogUtils.getLogger();
+    //private static final Map<String, Integer> counters = new HashMap<>();
+
     private void buildOnDemand()
     {
         if (this.namespaces == null)
         {
-            //LogUtils.getLogger().info("(w) Starting dynamic {} : {}.", this.type.toString(), this.hashCode());
+            this.namespaces = Set.of();
+            //int counter = counters.getOrDefault(this.type.toString(), 0) + 1;
+            //counters.put(this.type.toString(), counter);
+            //logger.info("(w) Starting dynamic {} : hash == {}, counter == {}.", this.type.toString(), this.hashCode(), counter);
             Stopwatch stopwatch = Stopwatch.createStarted();
             this.buildResources(this.dataCache);
             this.namespaces = this.dataCache.keySet()
@@ -54,7 +62,10 @@ public abstract class BaseResourcePack implements PackResources
                                             .map(ResourceLocation::getNamespace)
                                             .collect(Collectors.toSet());
             stopwatch.stop();
-            //LogUtils.getLogger().info("(w) Generated dynamic {} : {} in {} ms.", this.type.toString(), this.hashCode(), stopwatch.elapsed(TimeUnit.MILLISECONDS));
+            //logger.info("(w) Generated dynamic {} : hash == {}, time == {} ms.", this.type.toString(), this.hashCode(), stopwatch.elapsed(TimeUnit.MILLISECONDS));
+            //counter = counters.get(this.type.toString());
+            //counters.put(this.type.toString(), counter - 1);
+            //logger.info("(w) Setting counter for {} to {}.", this.type.toString(), counter-1);
         }
     }
 

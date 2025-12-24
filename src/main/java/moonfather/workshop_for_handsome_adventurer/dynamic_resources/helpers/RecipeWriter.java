@@ -1,10 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources.helpers;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.dynamic_resources.AssetReader;
-import moonfather.workshop_for_handsome_adventurer.dynamic_resources.DynamicAssetConfig;
-import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLister;
-import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeManager;
+import moonfather.workshop_for_handsome_adventurer.dynamic_resources.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 
@@ -35,12 +32,26 @@ public class RecipeWriter
             {
                 for (ResourceLocation duplicate : WoodTypeLister.getDuplicateWoods()) // once again, with feeling
                 {
-                    StringBuilder newRecipe = new StringBuilder(original);
-                    replace(newRecipe, "minecraft:stripped_spruce", duplicate.getNamespace() + ":stripped_" + duplicate.getPath()); // these will have logs
-                    replace(newRecipe, "minecraft:spruce", duplicate.toString());
-                    replace(newRecipe, filePrefix+SPRUCE, filePrefix+duplicate.getPath());
-                    conversionNames.forEach(n -> replace(newRecipe, n, n.replace("spruce", duplicate.getPath())) );
-                    cache.put(new ResourceLocation(Constants.MODID, file.replace(SPRUCE, duplicate.getPath() + "_" + duplicate.getNamespace())), newRecipe.toString());
+                    if (! CustomTripletSupport.isSpecial(duplicate.getPath()))
+                    {
+                        StringBuilder newRecipe = new StringBuilder(original);
+                        replace(newRecipe, "minecraft:stripped_spruce", duplicate.getNamespace() + ":stripped_" + duplicate.getPath()); // these will have logs
+                        replace(newRecipe, "minecraft:spruce", duplicate.toString());
+                        replace(newRecipe, filePrefix + SPRUCE, filePrefix + duplicate.getPath());
+                        conversionNames.forEach(n -> replace(newRecipe, n, n.replace("spruce", duplicate.getPath())));
+                        cache.put(new ResourceLocation(Constants.MODID, file.replace(SPRUCE, duplicate.getPath() + "_" + duplicate.getNamespace())), newRecipe.toString());
+                    }
+                    else
+                    {
+                        DynamicAssetConfig.WoodSet wood = DynamicAssetConfig.getWoodSet(duplicate.getPath());
+                        StringBuilder newRecipe = new StringBuilder(original);
+                        replace(newRecipe, "minecraft:stripped_spruce_log", wood.modId() + ":" + wood.log()); // these will have logs
+                        replace(newRecipe, "minecraft:spruce_planks", wood.modId() + ":" + wood.planks());
+                        replace(newRecipe, "minecraft:spruce_slab", wood.modId() + ":" + wood.slab());
+                        replace(newRecipe, filePrefix + SPRUCE, filePrefix + CustomTripletSupport.stripPrefix(wood.woodId()));
+                        conversionNames.forEach(n -> replace(newRecipe, n, n.replace("spruce", CustomTripletSupport.stripPrefix(wood.woodId()))));
+                        cache.put(new ResourceLocation(Constants.MODID, file.replace(SPRUCE, wood.woodId() + "_" + wood.modId())), newRecipe.toString());
+                    }
                 }
             }
         }
