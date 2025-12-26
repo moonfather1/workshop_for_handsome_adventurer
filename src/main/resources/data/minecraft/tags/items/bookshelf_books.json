@@ -10,6 +10,9 @@
     { "id": "modopedia:book", "required": false },
     { "id": "solcarrot:food_book", "required": false },
     { "id": "gbook:guidebook", "required": false },
-    { "id": "integrateddynamics:on_the_dynamics_of_integration", "required": false }
+    { "id": "integrateddynamics:on_the_dynamics_of_integration", "required": false },
+    { "id": "livingthings:lexicon", "required": false },
+    { "id": "modern_industrialization:guidebook", "required": false },
+    { "id": "mahoutsukai:funbook", "required": false }
   ]
 }
