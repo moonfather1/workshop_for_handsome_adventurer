@@ -255,11 +255,9 @@ dependencies {
 
     //runtimeOnly fg.deobf("curse.maven:multipart-machines-storage-916819:5691568")
 
-    //runtimeOnly fg.deobf("curse.maven:vampirism-become-a-vampire-233029:6289561")
+    runtimeOnly fg.deobf("curse.maven:vampirism-become-a-vampire-233029:6289561")
 	//runtimeOnly fg.deobf("curse.maven:terrafirmacraft-302973:6990923")
     //runtimeOnly fg.deobf("curse.maven:patchouli-306770:4636277")
-    
-    runtimeOnly fg.deobf("curse.maven:bloom-boom-1250013:6501408")
 }
 
 mixin {

@@ -33,13 +33,13 @@ public class OurClientPack extends BaseResourcePack
         final String SPRUCE_PLANKS = "minecraft:block/spruce_planks";
         final String SPRUCE_LOG = "minecraft:block/stripped_spruce_log";
         final String SPRUCE = "spruce";
+        Pattern pattern = Pattern.compile("(?<=_[a-z0-9]{1,30}_)" + SPRUCE + "(?=\")");
         String json;
         for (String spruceFile: files)
         {
             json = AssetReader.getInstance(PackType.CLIENT_RESOURCES, Constants.MODID).getText(new ResourceLocation(Constants.MODID, spruceFile));
             if (json != null)
             {
-                Pattern pattern = Pattern.compile("(?<=_[a-z0-9]+_)" + SPRUCE);
                 for (String wood: WoodTypeLister.getWoodIds())
                 {
                     String plankStringToInsert = getPlanks(wood); // because it might be null
@@ -50,6 +50,7 @@ public class OurClientPack extends BaseResourcePack
                         .replace(SPRUCE_PLANKS, plankStringToInsert)
                         .replace(SPRUCE_LOG, logStringToInsert);
                     replaced = pattern.matcher(replaced).replaceAll(wood);  // need to do this in blockstate files because model names can be anything; it was either this or hardcode model names.
+                    // im block model files, planks and logs should be enough. quote at the end of the pattern makes sure we only replace in file names.
                     if (WoodTypeManager.isUsingDarkerWorkstation(wood))
                     {
                         replaced = replaced.replace("/stripped_dark_oak_log", "/stripped_spruce_log");
