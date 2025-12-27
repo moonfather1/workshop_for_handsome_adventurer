@@ -10,8 +10,8 @@
     { "id": "antiqueatlas:antique_atlas", "required": false },
     { "id": "tide:fishing_journal", "required": false },
 
-    { "id": "chipped:eccentrictome:tome", "required": false },
-    { "id": "chipped:akashictome:tome", "required": false },
+    { "id": "eccentrictome:tome", "required": false },
+    { "id": "akashictome:tome", "required": false },
     { "id": "not_enough_glyphs:spell_binder", "required": false },
     { "id": "railcraft:routing_table_book", "required": false },
     { "id": "cookingforblockheads:crafting_book", "required": false },
