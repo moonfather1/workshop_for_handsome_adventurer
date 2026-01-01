@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WoodTypeLister
 {
@@ -82,11 +83,17 @@ public class WoodTypeLister
                         }
                         else
                         {
-                            if (BuiltInRegistries.BLOCK.containsKey(ResourceLocation.fromNamespaceAndPath(id.getNamespace(), LOG1 + wood + LOG2)))
+                            if (! BuiltInRegistries.BLOCK.containsKey(ResourceLocation.fromNamespaceAndPath(id.getNamespace(), LOG1 + wood + LOG2)))
                             {
-                                dupeIds.add(ResourceLocation.fromNamespaceAndPath(id.getNamespace(), wood));
-                                // don't care for the final case.
+                                String substitute = DynamicAssetCommonConfig.getLogRecipeSubstitution(wood);
+                                if (substitute == null || ! BuiltInRegistries.BLOCK.containsKey(ResourceLocation.parse(substitute)))
+                                {
+                                    continue;
+                                }
                             }
+                            ResourceLocation rl = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), wood);
+                            dupeIds.add(rl);
+                            dupeTargetsSpecial.put(rl, false);
                         }
                     }
                 }
@@ -101,22 +108,48 @@ public class WoodTypeLister
                 if (! BuiltInRegistries.BLOCK.containsKey(ResourceLocation.fromNamespaceAndPath(woodSet.modId(), woodSet.slab()))) { continue; }
                 if (! BuiltInRegistries.BLOCK.containsKey(ResourceLocation.fromNamespaceAndPath(woodSet.modId(), woodSet.log())))
                 {
-                    String substitute = DynamicAssetCommonConfig.getLogRecipeSubstitution(woodSet.planks());
+                    String substitute = DynamicAssetCommonConfig.getLogRecipeSubstitution(woodSet.woodId());
                     if (substitute == null || ! BuiltInRegistries.BLOCK.containsKey(ResourceLocation.parse(substitute)))
                     {
                         continue;
                     }
                 }
-                idsWithSpecials.add(CustomTripletSupport.addPrefixTo(woodSet.planks()));
-                woodToHostMap.put(CustomTripletSupport.addPrefixTo(woodSet.planks()), woodSet.modId());
+                String id = CustomTripletSupport.addPrefixTo(woodSet.woodId());
+                if (! DynamicAssetCommonConfig.isToBeMerged(woodSet.modId(), woodSet.woodId()))
+                {
+                    if (! idsWithSpecials.contains(id))
+                    {
+                        idsWithSpecials.add(id);
+                        woodToHostMap.put(id, woodSet.modId());
+                    }
+                    else
+                    {
+                        ResourceLocation rl = ResourceLocation.fromNamespaceAndPath(woodSet.modId(), id);
+                        dupeIds.add(rl);
+                        dupeTargetsSpecial.put(rl, true);
+                    }
+                }
+                else
+                {
+                    String rawId = CustomTripletSupport.stripPrefix(woodSet.woodId());
+                    if (! Registration.woodTypes.contains(rawId) && ! ids.contains(rawId))
+                    {
+                        continue;
+                    }
+                    ResourceLocation rl = ResourceLocation.fromNamespaceAndPath(woodSet.modId(), id);
+                    dupeIds.add(rl);
+                    dupeTargetsSpecial.put(rl, false);
+                }
             }
         }
     }
     public static String getHostMod(String wood) { return woodToHostMap.get(wood); }
     public static List<ResourceLocation> getDuplicateWoods() { return dupeIds; }
+    public static boolean isDuplicateWoodTargetingSpecial(ResourceLocation id) { return dupeTargetsSpecial.get(id); }
 
     private static List<String> ids = null;
     private static List<String> idsWithSpecials = null;
     private static final HashMap<String, String> woodToHostMap = new HashMap<>();
     private static final List<ResourceLocation> dupeIds = new ArrayList<>();
+    private static final Map<ResourceLocation, Boolean> dupeTargetsSpecial = new HashMap<>();
 }

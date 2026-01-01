@@ -1,7 +1,9 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources.helpers;
 
+import com.mojang.logging.LogUtils;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.AssetReader;
+import moonfather.workshop_for_handsome_adventurer.dynamic_resources.CustomTripletSupport;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeCommonManager;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLister;
 import net.minecraft.resources.ResourceLocation;
@@ -9,7 +11,6 @@ import net.minecraft.server.packs.PackType;
 
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class RecipeWriter
 {
@@ -35,12 +36,29 @@ public class RecipeWriter
             {
                 for (ResourceLocation duplicate : WoodTypeLister.getDuplicateWoods()) // once again, with feeling
                 {
-                    StringBuilder newRecipe = new StringBuilder(original);
-                    replace(newRecipe, "minecraft:stripped_spruce", duplicate.getNamespace() + ":stripped_" + duplicate.getPath()); // these will have logs
-                    replace(newRecipe, "minecraft:spruce", duplicate.toString());
-                    replace(newRecipe, filePrefix+SPRUCE, filePrefix+duplicate.getPath());
-                    conversionNames.forEach(n -> replace(newRecipe, n, n.replace("spruce", duplicate.getPath())) );
-                    cache.put(ResourceLocation.fromNamespaceAndPath(Constants.MODID, file.replace(SPRUCE, duplicate.getPath() + "_" + duplicate.getNamespace())), newRecipe.toString());
+                    if (! CustomTripletSupport.isSpecial(duplicate.getPath()))
+                    {
+                        //IF ANY BUGS HAPPEN, MERGE THIS BRANCH INTO BELOW ONE
+                        StringBuilder newRecipe = new StringBuilder(original);
+                        replace(newRecipe, "minecraft:stripped_spruce", duplicate.getNamespace() + ":stripped_" + duplicate.getPath()); // these will have logs
+                        replace(newRecipe, "minecraft:spruce", duplicate.toString());
+                        replace(newRecipe, filePrefix + SPRUCE, filePrefix + duplicate.getPath());
+                        conversionNames.forEach(n -> replace(newRecipe, n, n.replace("spruce", duplicate.getPath())));
+                        cache.put(ResourceLocation.fromNamespaceAndPath(Constants.MODID, file.replace(SPRUCE, duplicate.getPath() + "_" + duplicate.getNamespace())), newRecipe.toString());
+                    }
+                    else
+                    {
+                        WoodTypeCommonManager.WoodSet wood = WoodTypeCommonManager.getWoodSetForDuplicate(duplicate.getNamespace(), duplicate.getPath());
+                        if (wood == null) { LogUtils.getLogger().error("Workshop error 623: recipe not made for {}.", duplicate); continue; }  // should never happen
+                        StringBuilder newRecipe = new StringBuilder(original);
+                        replace(newRecipe, "minecraft:stripped_spruce_log", wood.modId() + ":" + wood.log()); // these will have logs
+                        replace(newRecipe, "minecraft:spruce_planks", wood.modId() + ":" + wood.planks());
+                        replace(newRecipe, "minecraft:spruce_slab", wood.modId() + ":" + wood.slab());
+                        String targetWood = WoodTypeLister.isDuplicateWoodTargetingSpecial(duplicate) ? wood.woodId() : CustomTripletSupport.stripPrefix(wood.woodId());
+                        replace(newRecipe, filePrefix + SPRUCE, filePrefix + targetWood);
+                        conversionNames.forEach(n -> replace(newRecipe, n, n.replace("spruce", targetWood)));
+                        cache.put(ResourceLocation.fromNamespaceAndPath(Constants.MODID, file.replace(SPRUCE, wood.woodId() + "_" + wood.modId())), newRecipe.toString());
+                    }
                 }
             }
         }

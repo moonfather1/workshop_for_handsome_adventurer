@@ -64,7 +64,7 @@ public class MissingMappingsHandler
         try
         {
             Path path = Path.of("config", "workshop", "mappings.dat");;
-            Files.writeString(path, raw, StandardOpenOption.CREATE_NEW);
+            Files.writeString(path, raw, StandardOpenOption.CREATE);
         }
         catch (IOException ignored) {       }
     }

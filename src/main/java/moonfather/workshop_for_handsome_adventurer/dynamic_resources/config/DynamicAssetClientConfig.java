@@ -37,10 +37,10 @@ public class DynamicAssetClientConfig
                     .define("Stripped log substitution list for textures", "embur=embur, sythian=sythian, bamboo=stripped_bamboo_block, bulbis=bulbis,  edelwood=edelwood");
             TextureTemplate1List = BUILDER
                     .comment("Tells us where to find plank textures, in case mod uses subdirectories (like byg) or different file names. Second %s below is the wood type. Separate using commas.")
-                    .define("Texture template1 list", "biomeswevegone=%s:block/%s/planks, aether=%s:block/construction/%s_planks");
+                    .define("Texture template1 list", "biomeswevegone=%s:block/%s/planks, aether=%s:block/construction/%s_planks,  tfc=%s:block/wood/planks/%s");
             TextureTemplate2List = BUILDER
                     .comment("Tells us where to find stripped log textures, in case mod uses subdirectories (like byg) or different file names. Second %s below is the wood type. Separate using commas.")
-                    .define("Texture template2 list", "biomeswevegone=%s:block/%s/stripped_log,  aether=%s:block/natural/stripped_%s_log");
+                    .define("Texture template2 list", "biomeswevegone=%s:block/%s/stripped_log,  aether=%s:block/natural/stripped_%s_log,  tfc=%s:block/wood/stripped_log/%s");
             UseDarkerWorkstationModel = BUILDER
                     .comment("Slightly different model. Do not worry about this. Or just list dark woods here.")
                     .define("Use darker workstation model", "embur,hellbark,bulbis,cika,lament,dead,blackwood");

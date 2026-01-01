@@ -2,6 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 
 import com.mojang.logging.LogUtils;
 import moonfather.workshop_for_handsome_adventurer.Constants;
+import moonfather.workshop_for_handsome_adventurer.dynamic_resources.config.DynamicAssetCommonConfig;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.resources.language.LanguageInfo;
 import net.minecraft.client.resources.metadata.language.LanguageMetadataSection;
@@ -9,14 +10,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
+import net.neoforged.fml.ModList;
 import org.slf4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class OurClientPack extends BaseResourcePack
 {
@@ -38,24 +44,24 @@ public class OurClientPack extends BaseResourcePack
         final String SPRUCE_PLANKS = "minecraft:block/spruce_planks";
         final String SPRUCE_LOG = "minecraft:block/stripped_spruce_log";
         final String SPRUCE = "spruce";
+        Pattern pattern = Pattern.compile("(?<=_[a-z0-9]{1,60}_)" + SPRUCE + "(?=\")");
         String json;
         for (String spruceFile: files)
         {
             json = AssetReader.getInstance(PackType.CLIENT_RESOURCES, Constants.MODID).getText(ResourceLocation.fromNamespaceAndPath(Constants.MODID, spruceFile));
             if (json != null)
             {
-                String filePrefix = spruceFile.substring(spruceFile.lastIndexOf('/')+1, spruceFile.length() - "spruce.json".length()); // strip  something/    and     spruce.json
                 for (String wood: WoodTypeLister.getWoodIds())
                 {
                     String plankStringToInsert = getPlanks(wood); // because it might be null
-                    if (plankStringToInsert == null) { plankStringToInsert = SPRUCE_PLANKS; LOGGER.warn("Warning: workshop couldn't find files for " + wood + " planks."); }
+                    if (plankStringToInsert == null) { plankStringToInsert = SPRUCE_PLANKS;  LOGGER.warn("Warning: workshop couldn't find files for {} planks.", wood); }
                     String logStringToInsert = getStrippedLog(wood);  // because it might be null
-                    if (logStringToInsert == null) { logStringToInsert = SPRUCE_LOG; LOGGER.warn("Warning: workshop couldn't find files for " + wood + " log."); }
+                    if (logStringToInsert == null) { logStringToInsert = SPRUCE_LOG;  LOGGER.warn("Warning: workshop couldn't find files for {} log.", wood); }
                     String replaced = json
                         .replace(SPRUCE_PLANKS, plankStringToInsert)
-                        .replace(SPRUCE_LOG, logStringToInsert)
-                        .replace(filePrefix+SPRUCE, filePrefix+wood)
-                        .replace("lanterns_"+SPRUCE, "lanterns_"+wood);
+                        .replace(SPRUCE_LOG, logStringToInsert);
+                    replaced = pattern.matcher(replaced).replaceAll(wood);  // need to do this in blockstate files because model names can be anything; it was either this or hardcode model names.
+                    // ..in block model files, planks and logs should be enough. quote at the end of the pattern makes sure we only replace in file names.
                     if (WoodTypeClientManager.isUsingDarkerWorkstation(wood))
                     {
                         replaced = replaced.replace("/stripped_dark_oak_log", "/stripped_spruce_log");
@@ -147,13 +153,13 @@ public class OurClientPack extends BaseResourcePack
     @Override
     protected boolean isNotOurNamespace(String namespace)
     {
-        return ! namespace.equals(Constants.MODID) && ! namespace.equals("tetra_tables");
+        return ! namespace.equals(Constants.MODID) && ! (namespace.equals("tetra_tables") && ModList.get().isLoaded("tetra_tables"));
     }
 
     @Override
     protected boolean isNotOurThing(String path)
     {
-        return ! path.startsWith("blockstates") && ! path.startsWith("models") && ! path.startsWith("textures") && ! path.startsWith("lang");
+        return ! path.startsWith("blockstates") && ! path.startsWith("models") && ! path.startsWith("lang");
     }
 
     //////////////////////////////////
@@ -180,7 +186,7 @@ public class OurClientPack extends BaseResourcePack
             }
             else if (specialSet != null)
             {
-                result = TEMPLATE_PLANKS.replace("_planks", "").formatted(specialSet.modId(), specialSet.planks());
+                result = TEMPLATE_PLANKS_RAW.formatted(specialSet.modId(), specialSet.planks());
             }
             else
             {
@@ -267,6 +273,7 @@ public class OurClientPack extends BaseResourcePack
     private final Map<String, String> strippedLogCache = new HashMap<>(); // will be remade on reload
     private final Map<String, String> plankCache = new HashMap<>(); // same thing
     private static final String TEMPLATE_PLANKS = "%s:block/%s_planks";
+    private static final String TEMPLATE_PLANKS_RAW = "%s:block/%s";
     private static final String TEMPLATE_LOG = "%s:block/stripped_%s_log";
     private static final String TEMPLATE_ANY_BLOCK = "%s:block/%s";
 

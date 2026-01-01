@@ -19,10 +19,18 @@ public class WoodTypeCommonManager
     {
         for (WoodSet set: DynamicAssetCommonConfig.getWoodSetsWithDumbassNames())
         {
-            if (CustomTripletSupport.addPrefixTo(set.planks).equals(wood)) { return  set; }
+            if (set.woodId.equals(wood)) { return  set; }
+        }
+        return null;
+    }
+    public static WoodSet getWoodSetForDuplicate(String modId, String wood)
+    {
+        for (WoodSet set: DynamicAssetCommonConfig.getWoodSetsWithDumbassNames())
+        {
+            if (set.woodId().equals(wood) && set.modId().equals(modId)) { return  set; }
         }
         return null;
     }
 
-    public record WoodSet(String modId, String planks, String slab, String log) { }
+    public record WoodSet(String modId, String woodId, String planks, String slab, String log) { }
 }

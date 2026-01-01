@@ -9,7 +9,7 @@ public class CustomTripletSupport
 
     public static String addPrefixTo(String id)
     {
-        return "sx_" + id;
+        return id.startsWith("sx_") ? id : "sx_" + id;
     }
 
     public static boolean isSpecial(String id)

@@ -1,6 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 
 import com.google.common.base.Stopwatch;
+import com.mojang.logging.LogUtils;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public abstract class BaseResourcePack implements PackResources
@@ -45,6 +47,7 @@ public abstract class BaseResourcePack implements PackResources
     {
         if (this.namespaces == null)
         {
+    //        this.namespaces = Set.of();       // seems to work in 1.20.1.  kills resources on 1.21.1
             Stopwatch stopwatch = Stopwatch.createStarted();
             this.buildResources(this.dataCache);
             this.namespaces = this.dataCache.keySet()
@@ -53,6 +56,7 @@ public abstract class BaseResourcePack implements PackResources
                                             .collect(Collectors.toSet());
             stopwatch.stop();
             //LogUtils.getLogger().info("~~~Generated dynamic {} in {} ms.", this.type.toString(), stopwatch.elapsed(TimeUnit.MILLISECONDS));
+            //LogUtils.getLogger().info("~~~Resource pack hash: {}.", this.hashCode());
         }
     }
 

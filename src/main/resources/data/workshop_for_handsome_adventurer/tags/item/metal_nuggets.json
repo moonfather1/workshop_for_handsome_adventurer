@@ -3,6 +3,7 @@
   "values": [
     "#c:nuggets/iron",
     { "id": "#c:nuggets/bronze", "required": false },
-    { "id": "#c:nuggets/brass", "required": false }
+    { "id": "#c:nuggets/brass", "required": false },
+    { "id": "#c:nuggets/steel", "required": false }
   ]
 }
