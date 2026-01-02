@@ -1,5 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources.helpers;
 
+import com.mojang.logging.LogUtils;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.*;
 import net.minecraft.resources.ResourceLocation;
@@ -43,13 +44,15 @@ public class RecipeWriter
                     }
                     else
                     {
-                        DynamicAssetConfig.WoodSet wood = DynamicAssetConfig.getWoodSet(duplicate.getPath());
+                        DynamicAssetConfig.WoodSet wood = DynamicAssetConfig.getWoodSetForDuplicate(duplicate.getNamespace(), duplicate.getPath());
+                        if (wood == null) { LogUtils.getLogger().error("Workshop error 623: recipe not made for {}.", duplicate); continue; }  // should never happen
                         StringBuilder newRecipe = new StringBuilder(original);
                         replace(newRecipe, "minecraft:stripped_spruce_log", wood.modId() + ":" + wood.log()); // these will have logs
                         replace(newRecipe, "minecraft:spruce_planks", wood.modId() + ":" + wood.planks());
                         replace(newRecipe, "minecraft:spruce_slab", wood.modId() + ":" + wood.slab());
-                        replace(newRecipe, filePrefix + SPRUCE, filePrefix + CustomTripletSupport.stripPrefix(wood.woodId()));
-                        conversionNames.forEach(n -> replace(newRecipe, n, n.replace("spruce", CustomTripletSupport.stripPrefix(wood.woodId()))));
+                        String targetWood = WoodTypeLister.isDuplicateWoodTargetingSpecial(duplicate) ? wood.woodId() : CustomTripletSupport.stripPrefix(wood.woodId());
+                        replace(newRecipe, filePrefix + SPRUCE, filePrefix + targetWood);
+                        conversionNames.forEach(n -> replace(newRecipe, n, n.replace("spruce", targetWood)));
                         cache.put(new ResourceLocation(Constants.MODID, file.replace(SPRUCE, wood.woodId() + "_" + wood.modId())), newRecipe.toString());
                     }
                 }

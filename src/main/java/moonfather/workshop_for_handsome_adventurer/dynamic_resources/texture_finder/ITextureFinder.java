@@ -1,6 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources.texture_finder;
 
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.CustomTripletSupport;
+import moonfather.workshop_for_handsome_adventurer.dynamic_resources.DynamicAssetConfig;
 
 public interface ITextureFinder
 {
@@ -12,8 +13,10 @@ public interface ITextureFinder
         }
         else
         {
-            return getTexturePathForPlanks(modId, wood, wood.substring(3));
-        }    }
+            DynamicAssetConfig.WoodSet set = DynamicAssetConfig.getWoodSet(wood);
+            return getTexturePathForPlanks(modId, wood, set.planks());
+        }
+    }
 
     default String getTexturePathForLogs(String modId, String wood)
     {
@@ -23,7 +26,8 @@ public interface ITextureFinder
         }
         else
         {
-            return getTexturePathForLogs(modId, wood, wood.substring(3));
+            DynamicAssetConfig.WoodSet set = DynamicAssetConfig.getWoodSet(wood);
+            return getTexturePathForPlanks(modId, wood, set.log());
         }
     }
 

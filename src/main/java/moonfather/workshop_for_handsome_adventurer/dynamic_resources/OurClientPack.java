@@ -7,6 +7,7 @@ import net.minecraft.client.resources.metadata.language.LanguageMetadataSection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
+import net.minecraftforge.fml.ModList;
 import org.slf4j.Logger;
 
 import java.io.BufferedReader;
@@ -142,7 +143,7 @@ public class OurClientPack extends BaseResourcePack
     @Override
     protected boolean isNotOurRecipe(String namespace)
     {
-        return ! namespace.equals(Constants.MODID) && ! namespace.equals("tetra_tables");
+        return ! namespace.equals(Constants.MODID) && ! (namespace.equals("tetra_tables") && ModList.get().isLoaded("tetra_tables"));
     }
 
     //////////////////////////////////
