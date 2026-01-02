@@ -250,7 +250,7 @@ public class InventoryAccessHelper
             }
         }
         // mr crayfish' backpack
-        if (ModList.get().isLoaded("backpacked"))
+        if (ModList.get().isLoaded("backpacked") && backpackedSupportEnabled())
         {
             if (BackpackedBackpack.isPresent(player) && BackpackedBackpack.slotCount(player) <= 54)
             {
@@ -336,6 +336,11 @@ public class InventoryAccessHelper
     {
         if (dx == 0 && dz == 0) return false;
         return Math.abs(dx) + Math.abs(dz) <= range;
+    }
+
+    private static boolean backpackedSupportEnabled()
+    {
+        return ModList.get().getModContainerById("backpacked").get().getModInfo().getVersion().toString().startsWith("3");
     }
 
     ////////////////////////////////////////////
