@@ -188,9 +188,10 @@ dependencies {
     //runtimeOnly "curse.maven:sophisticated-backpacks-422301:5927499"
     //runtimeOnly "curse.maven:sophisticated-storage-619320:5909296"
 
-    //runtimeOnly "curse.maven:backpacked-352835:5852973"
-    compileOnly "curse.maven:backpacked-352835:5852973"
-    //runtimeOnly "curse.maven:framework-549225:5911998"
+
+    compileOnly "curse.maven:backpacked-352835:7500602"     // 3.0
+    runtimeOnly "curse.maven:backpacked-352835:7500602"     // 3.0
+    runtimeOnly "curse.maven:framework-549225:7462477"
 
 	//runtimeOnly "curse.maven:the-twilight-forest-227639:5906799"
 	//runtimeOnly "curse.maven:oh-the-biomes-weve-gone-1070751:5932848"

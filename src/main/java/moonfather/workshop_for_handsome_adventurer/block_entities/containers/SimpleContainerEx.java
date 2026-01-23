@@ -15,8 +15,8 @@ public class SimpleContainerEx extends SimpleContainer
     {
         if (! stack.getItem().canFitInsideContainerItems())
         {
-            return false; //todo: check portable.
-        } // todo: VariableSizeContainerWrapper doesn't call this
+            return false;
+        }
         return super.canPlaceItem(slot, stack);
     }
 }
