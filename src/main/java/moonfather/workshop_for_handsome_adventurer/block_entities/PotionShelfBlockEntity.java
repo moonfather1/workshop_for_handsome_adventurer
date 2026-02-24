@@ -2,7 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -19,7 +19,7 @@ public class PotionShelfBlockEntity extends ToolRackBlockEntity
 {
     public PotionShelfBlockEntity(BlockPos pos, BlockState state)
     {
-        super(Registration.POTION_SHELF_BE.get(), pos, state, MAX_CAPACITY, PotionShelf.SLOT_COUNT);
+        super(ContentRegistration.POTION_SHELF_BE.get(), pos, state, MAX_CAPACITY, PotionShelf.SLOT_COUNT);
     }
     public PotionShelfBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state)
     {

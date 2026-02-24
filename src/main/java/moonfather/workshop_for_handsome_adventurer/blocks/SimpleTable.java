@@ -2,7 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.blocks;
 
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
 import moonfather.workshop_for_handsome_adventurer.integration.TetraHammerSupport;
 import moonfather.workshop_for_handsome_adventurer.other.TableLockManager;
 import net.minecraft.core.BlockPos;
@@ -194,7 +194,7 @@ public class SimpleTable extends Block implements EntityBlock, IBlockWithCleverH
     {
         return new SimpleMenuProvider((containerId, inventory, p_52231_) ->
         {
-            return new SimpleTableMenu(containerId, inventory, ContainerLevelAccess.create(level, blockPos), Registration.CRAFTING_SINGLE_MENU_TYPE.get());
+            return new SimpleTableMenu(containerId, inventory, ContainerLevelAccess.create(level, blockPos), ContentRegistration.CRAFTING_SINGLE_MENU_TYPE.get());
         }, CONTAINER_TITLE);
     }
 

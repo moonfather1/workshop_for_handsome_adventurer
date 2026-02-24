@@ -2,15 +2,13 @@ package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.ItemContainerContentsWrapper;
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.ResourceHandlerWrapper;
+import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.BackpackedVersion3Translator;
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.MultipartBarrelsSimpleTranslator;
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.StorageDrawersSimpleTranslator;
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.TetraBeltTranslator;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
-import moonfather.workshop_for_handsome_adventurer.integration.BackpackAccessor;
-import moonfather.workshop_for_handsome_adventurer.integration.BackpackedBackpack;
-import moonfather.workshop_for_handsome_adventurer.integration.TetraBeltSupport;
-import moonfather.workshop_for_handsome_adventurer.integration.TravelersBackpack;
+import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
+import moonfather.workshop_for_handsome_adventurer.integration.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -34,7 +32,6 @@ import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -167,7 +164,9 @@ public class InventoryAccessHelper
         }
         if (be.getBlockState().getBlock().getDescriptionId().contains("storagedrawers"))
         {
-            IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);
+            ResourceHandler<ItemResource> newHandler = level.getCapability(Capabilities.Item.BLOCK, pos, (Direction) null);
+            //IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);
+            IItemHandler handler = newHandler == null ? null : IItemHandler.of(newHandler);  //todo: remove this. make translator below accept newHandler
             if (handler != null)  //&& handler.getSlots() <= 54  ?
             {
                 this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new StorageDrawersSimpleTranslator(handler), false);
@@ -177,18 +176,36 @@ public class InventoryAccessHelper
                 return;
             }
         }
-        // IItemHandler capability
-        IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);
+//        // IItemHandler capability
+//        IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);
+//        if (handler == null)
+//        {
+//            handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, Direction.UP);
+//        }
+//        if (handler != null)
+//        {
+//            if (handler.getSlots() <= 54)
+//            {
+//                this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(handler, true);
+//                this.chosenContainerTrueSize = handler.getSlots();
+//                this.chosenContainerVisibleSize = this.chosenContainerTrueSize <= 27 ? 27 : 54;
+//                this.chosenContainerForRename = be;
+//                this.currentType = RecordTypes.BLOCK;
+//                return;
+//            }
+//        }
+        // 2025 capability
+        ResourceHandler<ItemResource> handler = level.getCapability(Capabilities.Item.BLOCK, pos, (Direction) null);
         if (handler == null)
         {
-            handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, Direction.UP);
+            handler = level.getCapability(Capabilities.Item.BLOCK, pos, Direction.UP);
         }
         if (handler != null)
         {
-            if (handler.getSlots() <= 54)
+            if (handler.size() <= 54)
             {
-                this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(handler, true);
-                this.chosenContainerTrueSize = handler.getSlots();
+                this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new ResourceHandlerWrapper(handler), true);
+                this.chosenContainerTrueSize = handler.size();
                 this.chosenContainerVisibleSize = this.chosenContainerTrueSize <= 27 ? 27 : 54;
                 this.chosenContainerForRename = be;
                 this.currentType = RecordTypes.BLOCK;
@@ -257,7 +274,8 @@ public class InventoryAccessHelper
             String slotName = RecordTypes.NAMED_SLOTS[slot];
             ItemStack maybeStorageItem = getItemFromNamedSlot(player, slotName);
 
-            IItemHandler itemHandler = maybeStorageItem.getCapability(Capabilities.ItemHandler.ITEM, null); // should cover ComponentItemHandler
+            ResourceHandler<ItemResource> newHandler = maybeStorageItem.getCapability(Capabilities.Item.ITEM, null); // should cover ComponentItemHandler
+            IItemHandler itemHandler = newHandler == null ? null : IItemHandler.of(newHandler);  //todo: remove this, use above handler normally, maybe check ComponentItemHandler
             if (itemHandler != null)
             {
                 InventoryAccessRecord record = new InventoryAccessRecord();
@@ -312,9 +330,12 @@ public class InventoryAccessHelper
         // mr crayfish' backpack
         if (ModList.get().isLoaded("backpacked"))
         {
-            if (BackpackedBackpack.isPresent(player) && BackpackedBackpack.slotCount(player) <= 54)
+            for (int i = 0; i < BackpackedManager.getBackpackCount(player); i++)  // usually 5
             {
-                ItemStack icon = BackpackedBackpack.getTabIcon(player);
+                IBackpack backpack = BackpackedManager.get(player, i);
+                if (backpack == null) { continue; }
+                if (backpack.slotCount() > 54) { continue; }
+                ItemStack icon = backpack.getTabIcon();
                 if (! icon.isEmpty()) // probably can't be empty
                 {
                     InventoryAccessRecord record = new InventoryAccessRecord();
@@ -322,10 +343,10 @@ public class InventoryAccessHelper
                     record.Nameable = true;
                     record.Name = record.ItemChest.getHoverName();
                     record.Type = RecordTypes.FLOATING;
-                    record.VisibleSlotCount = BackpackedBackpack.slotCount(player) <= 27 ? 27 : 54;
-                    record.ItemFirst = BackpackedBackpack.getFirst(player);
+                    record.VisibleSlotCount = backpack.slotCount() <= 27 ? 27 : 54;
+                    record.ItemFirst = backpack.getFirst();
                     record.Index = this.adjacentInventories.size();
-                    record.ModId = "backpacked";
+                    record.ModId = "backpacked/" + i;
                     this.adjacentInventories.add(record);
                 }
             }
@@ -443,7 +464,7 @@ public class InventoryAccessHelper
             {
                 flags |= 4;
             }
-            chest.set(Registration.TAB_FLAGS.get(), flags);
+            chest.set(ContentRegistration.TAB_FLAGS.get(), flags);
             ItemStack suff = current.ItemFirst.copy();
             tabElements.setItem(i * 2, chest);
             tabElements.setItem(i * 2 + 1, suff);
@@ -491,11 +512,11 @@ public class InventoryAccessHelper
         else if (record.Type.equals(RecordTypes.LEGGINGS) || record.Type.equals(RecordTypes.CHESTSLOT) || record.Type.equals(RecordTypes.BACKSLOT))
         {
             ItemStack item = getItemFromNamedSlot(player, record.Type);
-            IItemHandler itemHandler = item.getCapability(Capabilities.ItemHandler.ITEM, null);
+            ResourceHandler<ItemResource>  itemHandler = item.getCapability(Capabilities.Item.ITEM, null);
             if (itemHandler != null)
             {
-                this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(itemHandler, false);
-                this.chosenContainerTrueSize = itemHandler.getSlots();
+                this.chosenContainer = new SimpleTableMenu.VariableSizeResourceHandlerWrapper(itemHandler, false);
+                this.chosenContainerTrueSize = itemHandler.size();         //todo: replace VariableSizeContainerWrapper with direct-from-capability wrapper
                 this.chosenContainerItem = item;
                 this.currentType = record.Type;
             }
@@ -520,21 +541,23 @@ public class InventoryAccessHelper
                 // traveller's backpack. this should be in an addon.
                 if (TravelersBackpack.isPresent(player) && TravelersBackpack.slotCount(player) <= 54)
                 {
-                    this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(TravelersBackpack.getItems(player), false);
+                    this.chosenContainer = new SimpleTableMenu.VariableSizeResourceHandlerWrapper(TravelersBackpack.getItems(player), false);
                     this.chosenContainerTrueSize = TravelersBackpack.slotCount(player);
                     this.chosenContainerItem = TravelersBackpack.getContainerItem(player);
                     this.currentType = RecordTypes.FLOATING;
                     return true;
                 }
             }
-            if (ModList.get().isLoaded("backpacked") && record.ModId.equals("backpacked"))
+            if (ModList.get().isLoaded("backpacked") && record.ModId.startsWith("backpacked"))
             {
                 // mr crayfish's backpack.
-                if (BackpackedBackpack.isPresent(player))
+                int backpackedIndex = Integer.parseInt(record.ModId.split("/")[1]);  // we can have multiples as of v 3.0
+                IBackpack backpack = BackpackedManager.get(player, backpackedIndex);
+                if (backpack != null)
                 {
-                    this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(BackpackedBackpack.getContainer(player), false);
-                    this.chosenContainerTrueSize = BackpackedBackpack.slotCount(player);
-                    this.chosenContainerItem = BackpackedBackpack.getContainerItem(player);
+                    this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new BackpackedVersion3Translator(backpack.getContainer(), backpack.slotCount()), false);
+                    this.chosenContainerTrueSize = backpack.slotCount();
+                    this.chosenContainerItem = backpack.getContainerItem();
                     this.currentType = record.Type;
                     return true;
                 }

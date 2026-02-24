@@ -8,7 +8,7 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMen
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screen_components.SimpleButton;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screen_components.SlightlyNicerEditBox;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
 import moonfather.workshop_for_handsome_adventurer.integration.PolymorphAccessorClient;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.*;
@@ -153,7 +153,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             }
             this.renameButton.setTooltipInset(button.itemMain.getHoverName());
             this.renameBox.setValue("");
-            Integer flagsBoxed = button.itemMain.get(Registration.TAB_FLAGS.get());
+            Integer flagsBoxed = button.itemMain.get(ContentRegistration.TAB_FLAGS.get());
             int flags = flagsBoxed != null ? flagsBoxed : 1;
             boolean canRenameContainer = (flags & 4) == 0;
             this.renameBox.visible = canRenameContainer;

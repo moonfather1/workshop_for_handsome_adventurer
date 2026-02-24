@@ -2,20 +2,15 @@ package moonfather.workshop_for_handsome_adventurer.blocks;
 
 import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.block_entities.BaseContainerBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
 import moonfather.workshop_for_handsome_adventurer.integration.PackingTape;
 import moonfather.workshop_for_handsome_adventurer.integration.TetraCompatibleToolRackHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
@@ -44,7 +39,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.fml.ModList;
-import net.neoforged.neoforge.common.ItemAbilities;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;

@@ -39,8 +39,8 @@ public class ClientSetup
 	@SubscribeEvent
 	public static void RegisterScreens(RegisterMenuScreensEvent event)
 	{
-		event.register(Registration.CRAFTING_SINGLE_MENU_TYPE.get(), SimpleTableCraftingScreen::new);
-		event.register(Registration.CRAFTING_DUAL_MENU_TYPE.get(), DualTableCraftingScreen::new);
+		event.register(ContentRegistration.CRAFTING_SINGLE_MENU_TYPE.get(), SimpleTableCraftingScreen::new);
+		event.register(ContentRegistration.CRAFTING_DUAL_MENU_TYPE.get(), DualTableCraftingScreen::new);
 	}
 
 
@@ -48,11 +48,11 @@ public class ClientSetup
 	@SubscribeEvent
 	public static void RegisterRenderers(EntityRenderersEvent.RegisterRenderers event)
 	{
-		event.registerBlockEntityRenderer(Registration.TOOL_RACK_BE.get(), ToolRackTESR::new);
-		event.registerBlockEntityRenderer(Registration.POTION_SHELF_BE.get(), ToolRackTESR::new);
-		event.registerBlockEntityRenderer(Registration.DISC_SHELF_BE.get(), DiscShelfTESR::new);
-		event.registerBlockEntityRenderer(Registration.DUAL_TABLE_BE.get(), DualTableTESR::new);
-		event.registerBlockEntityRenderer(Registration.SIMPLE_TABLE_BE.get(), SimpleTableTESR::new);
+		event.registerBlockEntityRenderer(ContentRegistration.TOOL_RACK_BE.get(), ToolRackTESR::new);
+		event.registerBlockEntityRenderer(ContentRegistration.POTION_SHELF_BE.get(), ToolRackTESR::new);
+		event.registerBlockEntityRenderer(ContentRegistration.DISC_SHELF_BE.get(), DiscShelfTESR::new);
+		event.registerBlockEntityRenderer(ContentRegistration.DUAL_TABLE_BE.get(), DualTableTESR::new);
+		event.registerBlockEntityRenderer(ContentRegistration.SIMPLE_TABLE_BE.get(), SimpleTableTESR::new);
 	}
 
 

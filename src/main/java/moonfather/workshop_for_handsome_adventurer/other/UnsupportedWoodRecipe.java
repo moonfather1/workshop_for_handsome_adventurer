@@ -3,7 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.other;
 
 import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -97,6 +97,6 @@ public class UnsupportedWoodRecipe extends CustomRecipe
     @Override
     public RecipeSerializer<? extends CustomRecipe> getSerializer()
     {
-        return Registration.TABLE_RECIPE.get();
+        return ContentRegistration.TABLE_RECIPE.get();
     }
 }

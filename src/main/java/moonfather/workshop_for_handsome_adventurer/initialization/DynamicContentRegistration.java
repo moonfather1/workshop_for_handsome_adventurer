@@ -2,12 +2,10 @@ package moonfather.workshop_for_handsome_adventurer.initialization;
 
 import com.mojang.logging.LogUtils;
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.ModWorkshop;
 import moonfather.workshop_for_handsome_adventurer.blocks.*;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.MissingMappingsHandler;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.SecondCreativeTab;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLister;
-import moonfather.workshop_for_handsome_adventurer.dynamic_resources.config.DynamicAssetClientConfig;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.config.DynamicAssetCommonConfig;
 import moonfather.workshop_for_handsome_adventurer.items.BlockItemEx;
 import moonfather.workshop_for_handsome_adventurer.items.WorkstationPlacerItem;
@@ -19,7 +17,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.registries.BaseMappedRegistry;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
 import java.util.List;
@@ -86,7 +83,7 @@ public class DynamicContentRegistration
                 // small tables
                 String id1 = "simple_table_" + wood;
                 Block.Properties prop1 = SimpleTable.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id1)));
-                registerSinglePrimaryBlockForThirdPartyWood(new SimpleTable(prop1), id1, Registration.blocks_table1, SecondCreativeTab.items_table1);
+                registerSinglePrimaryBlockForThirdPartyWood(new SimpleTable(prop1), id1, ContentRegistration.blocks_table1, SecondCreativeTab.items_table1);
                 // dual tables
                 String id2 = "dual_table_bottom_left_" + wood;
                 String id3 = "dual_table_bottom_right_" + wood;
@@ -106,7 +103,7 @@ public class DynamicContentRegistration
                 Item.Properties prop6 = new Item.Properties().stacksTo(1).setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id6)));
                 Item placer = new WorkstationPlacerItem(wood, prop6);
                 Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id6), placer);
-                Registration.blocks_table2.add(() -> primary); // for the block entity
+                ContentRegistration.blocks_table2.add(() -> primary); // for the block entity
                 SecondCreativeTab.items_table2.add(placer);
                 // toolracks
                 String id7 = "tool_rack_single_" + wood;
@@ -117,18 +114,18 @@ public class DynamicContentRegistration
                 Block.Properties prop8 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id8)));
                 Block.Properties prop9 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id9)));
                 Block.Properties propA = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, idA)));
-                registerSinglePrimaryBlockForThirdPartyWood(ToolRack.create(2, "single", prop7), id7, Registration.blocks_rack, SecondCreativeTab.items_rack1);
-                registerSinglePrimaryBlockForThirdPartyWood(DualToolRack.create(6, "framed", prop8), id8, Registration.blocks_rack, SecondCreativeTab.items_rack2);
-                registerSinglePrimaryBlockForThirdPartyWood(DualToolRack.create(6, "pframed", prop9), id9, Registration.blocks_rack, SecondCreativeTab.items_rack3);
-                registerSinglePrimaryBlockForThirdPartyWood(DualToolRack.create(6, "double", propA), idA, Registration.blocks_rack, SecondCreativeTab.items_rack4);
+                registerSinglePrimaryBlockForThirdPartyWood(ToolRack.create(2, "single", prop7), id7, ContentRegistration.blocks_rack, SecondCreativeTab.items_rack1);
+                registerSinglePrimaryBlockForThirdPartyWood(DualToolRack.create(6, "framed", prop8), id8, ContentRegistration.blocks_rack, SecondCreativeTab.items_rack2);
+                registerSinglePrimaryBlockForThirdPartyWood(DualToolRack.create(6, "pframed", prop9), id9, ContentRegistration.blocks_rack, SecondCreativeTab.items_rack3);
+                registerSinglePrimaryBlockForThirdPartyWood(DualToolRack.create(6, "double", propA), idA, ContentRegistration.blocks_rack, SecondCreativeTab.items_rack4);
                 // potion shelves
                 String id11 = "potion_shelf_" + wood;
                 Block.Properties prop11 = PotionShelf.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id11)));
-                registerSinglePrimaryBlockForThirdPartyWood(new PotionShelf(prop11), id11, Registration.blocks_pshelf, SecondCreativeTab.items_pshelf);
+                registerSinglePrimaryBlockForThirdPartyWood(new PotionShelf(prop11), id11, ContentRegistration.blocks_pshelf, SecondCreativeTab.items_pshelf);
                 // disc shelves
                 String id91 = "disc_shelf_" + wood;
                 Block.Properties prop91 = DiscShelf.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id91)));
-                registerSinglePrimaryBlockForThirdPartyWood(new DiscShelf(prop91), id91, Registration.blocks_dshelf, SecondCreativeTab.items_dshelf);
+                registerSinglePrimaryBlockForThirdPartyWood(new DiscShelf(prop91), id91, ContentRegistration.blocks_dshelf, SecondCreativeTab.items_dshelf);
                 // book shelves
                 String id12 = "book_shelf_double_" + wood;
                 String id13 = "book_shelf_open_double_" + wood;
@@ -140,11 +137,11 @@ public class DynamicContentRegistration
                 Block.Properties prop14 = BookShelf.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id14)));
                 Block.Properties prop15 = BookShelf.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id15)));
                 Block.Properties prop16 = BookShelf.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id16)));
-                registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.Dual("double", prop12), id12, Registration.blocks_bshelf, SecondCreativeTab.items_bshelf1);
-                registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.Dual("open_double", prop13), id13, Registration.blocks_bshelf, SecondCreativeTab.items_bshelf2);
-                registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.TopSimple("minimal", prop14), id14, Registration.blocks_bshelf, SecondCreativeTab.items_bshelf3);
-                registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.TopSimple("open_minimal", prop15), id15, Registration.blocks_bshelf, SecondCreativeTab.items_bshelf4);
-                registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.TopWithLanterns("with_lanterns", prop16), id16, Registration.blocks_bshelf, SecondCreativeTab.items_bshelf5);
+                registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.Dual("double", prop12), id12, ContentRegistration.blocks_bshelf, SecondCreativeTab.items_bshelf1);
+                registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.Dual("open_double", prop13), id13, ContentRegistration.blocks_bshelf, SecondCreativeTab.items_bshelf2);
+                registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.TopSimple("minimal", prop14), id14, ContentRegistration.blocks_bshelf, SecondCreativeTab.items_bshelf3);
+                registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.TopSimple("open_minimal", prop15), id15, ContentRegistration.blocks_bshelf, SecondCreativeTab.items_bshelf4);
+                registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.TopWithLanterns("with_lanterns", prop16), id16, ContentRegistration.blocks_bshelf, SecondCreativeTab.items_bshelf5);
             }
             if (wasFrozen)
             {

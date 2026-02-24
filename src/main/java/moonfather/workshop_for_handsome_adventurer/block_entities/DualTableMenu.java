@@ -2,7 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.blocks.DualTableBaseBlock;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
 import moonfather.workshop_for_handsome_adventurer.integration.PolymorphAccessorClient;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -27,7 +27,7 @@ public class DualTableMenu extends SimpleTableMenu
 
 	public DualTableMenu(int containerId, Inventory inventory, FriendlyByteBuf friendlyByteBuf)
 	{
-		this(containerId, inventory, ContainerLevelAccess.NULL, Registration.CRAFTING_DUAL_MENU_TYPE.get());
+		this(containerId, inventory, ContainerLevelAccess.NULL, ContentRegistration.CRAFTING_DUAL_MENU_TYPE.get());
 	}
 
 	public DualTableMenu(int containerId, Inventory inventory, ContainerLevelAccess levelAccess, @Nullable MenuType<?> menuType)

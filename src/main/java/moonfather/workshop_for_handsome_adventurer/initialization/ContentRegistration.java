@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class Registration
+public class ContentRegistration
 {
 	private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(BuiltInRegistries.BLOCK, Constants.MODID);
 	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(BuiltInRegistries.ITEM, Constants.MODID);
@@ -85,7 +85,7 @@ public class Registration
 	{
 		String id;
 		// small tables
-		for (String woodType : Registration.woodTypes)
+		for (String woodType : ContentRegistration.woodTypes)
 		{
 			id = "simple_table_" + woodType;
 			Block.Properties prop1 = SimpleTable.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
@@ -94,7 +94,7 @@ public class Registration
 			items_table1.add(FromBlock(block, id));
 		}
 		// dual tables
-		for (String woodType : Registration.woodTypes)
+		for (String woodType : ContentRegistration.woodTypes)
 		{
 			String id1 = "dual_table_bottom_left_" + woodType;
 			String id2 = "dual_table_bottom_right_" + woodType;
@@ -116,7 +116,7 @@ public class Registration
 			blocks_table2.add(primary);
 		}
 		// toolracks
-		for (String woodType : Registration.woodTypes)
+		for (String woodType : ContentRegistration.woodTypes)
 		{
 			Supplier<Block> rack;
 			id = "tool_rack_single_" + woodType;
@@ -141,7 +141,7 @@ public class Registration
 			blocks_rack.add(rack);
 		}
 		// potion shelves
-		for (String woodType : Registration.woodTypes)
+		for (String woodType : ContentRegistration.woodTypes)
 		{
 			id = "potion_shelf_" + woodType;
 			Block.Properties prop1 = PotionShelf.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
@@ -150,7 +150,7 @@ public class Registration
 			blocks_pshelf.add(shelf);
 		}
 		// book shelves
-		for (String woodType : Registration.woodTypes)
+		for (String woodType : ContentRegistration.woodTypes)
 		{
 			Supplier<Block> rack;
 			id = "book_shelf_double_" + woodType;
@@ -180,7 +180,7 @@ public class Registration
 			blocks_bshelf.add(rack);
 		}
 		// disc shelves
-		for (String woodType : Registration.woodTypes)
+		for (String woodType : ContentRegistration.woodTypes)
 		{
 			id = "disc_shelf_" + woodType;
 			Block.Properties prop1 = DiscShelf.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));

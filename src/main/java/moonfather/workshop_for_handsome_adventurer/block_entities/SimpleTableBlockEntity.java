@@ -1,6 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -12,7 +12,7 @@ public class SimpleTableBlockEntity extends BaseContainerBlockEntity
 
 	public SimpleTableBlockEntity(BlockPos pos, BlockState state)
 	{
-		super(Registration.SIMPLE_TABLE_BE.get(), pos, state);
+		super(ContentRegistration.SIMPLE_TABLE_BE.get(), pos, state);
 		this.setCapacity(9 /*crafting*/ + 4 /*customization, was forced to put max here*/);
 	}
 

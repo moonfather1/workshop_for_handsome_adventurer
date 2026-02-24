@@ -3,7 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.config.DynamicAssetClientConfig;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.config.DynamicAssetCommonConfig;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -80,7 +80,7 @@ public class SecondCreativeTab
                 i++;
             }
         }
-        if (event.getTab() == Registration.CREATIVE_TAB.get())
+        if (event.getTab() == ContentRegistration.CREATIVE_TAB.get())
         {
             if (DynamicAssetCommonConfig.masterLeverOn() && ! (SecondCreativeTab.items_table1.size() >= DynamicAssetClientConfig.MinimumNumberOfSetsForSeparateCreativeTab.getAsInt()))
             {

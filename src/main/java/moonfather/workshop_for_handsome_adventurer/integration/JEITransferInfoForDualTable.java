@@ -1,17 +1,14 @@
 package moonfather.workshop_for_handsome_adventurer.integration;
 
 import mezz.jei.api.constants.RecipeTypes;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.transfer.IRecipeTransferInfo;
 import mezz.jei.api.recipe.types.IRecipeType;
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
-import net.minecraft.resources.ResourceLocation;
+import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
 import java.util.ArrayList;
@@ -70,6 +67,6 @@ public class JEITransferInfoForDualTable implements IRecipeTransferInfo {
 
     @Override
     public Optional<MenuType> getMenuType() {
-        return Optional.of(Registration.CRAFTING_DUAL_MENU_TYPE.get());
+        return Optional.of(ContentRegistration.CRAFTING_DUAL_MENU_TYPE.get());
     }
 }

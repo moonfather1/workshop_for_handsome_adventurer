@@ -3,7 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.integration;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLister;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.config.DynamicAssetCommonConfig;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
 import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 
@@ -11,7 +11,7 @@ public class CarryOnBlacklisting
 {
     public static void enqueueIMC(final InterModEnqueueEvent event)
     {
-        for (String woodType: Registration.woodTypes)
+        for (String woodType: ContentRegistration.woodTypes)
         {
             blacklistForCarryOn(woodType);
         }

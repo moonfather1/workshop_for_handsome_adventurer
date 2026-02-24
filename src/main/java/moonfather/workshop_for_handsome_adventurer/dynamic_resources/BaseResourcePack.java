@@ -2,6 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 
 import com.google.common.base.Stopwatch;
 import moonfather.workshop_for_handsome_adventurer.Constants;
+import net.minecraft.SharedConstants;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackResources;
@@ -9,6 +10,7 @@ import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionType;
 import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
 import net.minecraft.server.packs.resources.IoSupplier;
+import net.minecraft.util.InclusiveRange;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayInputStream;
@@ -30,7 +32,7 @@ public abstract class BaseResourcePack implements PackResources
     protected BaseResourcePack(PackType type, int packFormat)
     {
         this.type = type;
-        this.packMetadata = new PackMetadataSection(Component.literal(this.packId()), packFormat, null);
+        this.packMetadata = new PackMetadataSection(Component.literal(this.packId()), SharedConstants.getCurrentVersion().packVersion(type).minorRange());
     }
 
     ////////////////////////////////////
@@ -121,7 +123,7 @@ public abstract class BaseResourcePack implements PackResources
     @Override
     public <T> T getMetadataSection(MetadataSectionType<T> metadataSectionType) throws IOException
     {
-        if (metadataSectionType.equals(PackMetadataSection.TYPE))
+        if (metadataSectionType.equals(this.type))  // why was this PackMetadataSection.TYPE?
         {
             return (T) this.packMetadata;
         }

@@ -15,7 +15,7 @@ public abstract class BaseItemHandlerTranslator extends BaseItemHandlerWrapper
 
     public BaseItemHandlerTranslator(IItemHandler wrapped, int usableSlotCount)
     {
-        super(wrapped, usableSlotCount);
+        super(wrapped, usableSlotCount, false);
     }
 
     protected abstract int translateVisibleToInternalSlot(int slot);

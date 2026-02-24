@@ -43,14 +43,24 @@ public class TextureAutoFinderBackup implements ITextureFinder
         try
         {
             // old style doesn't work in NF and i didn't notice
-            Path blockStatePath = ModList.get().getModFileById(modId).getFile().findResource("assets", modId, "blockstates", blockTemplate.formatted(wood) + ".json");
-            String file1 = Files.readString(blockStatePath);
+            String path1Full = "/assets/%s/blockstates/%s.json".formatted(modId, blockTemplate.formatted(wood));
+            if (! ModList.get().getModFileById(modId).getFile().getContents().containsFile(path1Full))
+            {
+                PATH_CACHE.put(key, null);
+                return null;
+            }
+            String file1 = new String(ModList.get().getModFileById(modId).getFile().getContents().openFile(path1Full).readAllBytes()); //let's assume it's in the same mod
             Matcher m1 = PATTERN_IN_BLOCKSTATE.matcher(file1);
             m1.find();
-            String path1 = m1.group(3); // model
+            String path2 = m1.group(3); // model
 
-            Path modelPath = ModList.get().getModFileById(modId).getFile().findResource("/assets/%s/models/%s.json".formatted(modId, path1));
-            String file2 = Files.readString(modelPath); //let's assume it's in the same mod
+            String path2full = "/assets/%s/models/%s.json".formatted(modId, path2);
+            if (! ModList.get().getModFileById(modId).getFile().getContents().containsFile(path2full))
+            {
+                PATH_CACHE.put(key, null);
+                return null;
+            }
+            String file2 = new String(ModList.get().getModFileById(modId).getFile().getContents().openFile(path2full).readAllBytes()); //let's assume it's in the same mod
             Matcher m2 = (textureIsSide ? PATTERN_IN_MODEL_SIDE : PATTERN_IN_MODEL_ALL).matcher(file2); // %s is all for planks and side for logs
             m2.find();
             String result = m2.group(3); // texture
@@ -60,7 +70,7 @@ public class TextureAutoFinderBackup implements ITextureFinder
         }
         catch (Exception e)
         {
-            System.out.println("!!~~ " + e.getMessage());
+            System.out.println("!!~~ WFHA error:  " + e.getMessage());
         }
         return null;
     }

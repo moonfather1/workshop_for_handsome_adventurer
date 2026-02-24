@@ -2,7 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.blocks;
 
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableMenu;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
 import moonfather.workshop_for_handsome_adventurer.other.TableLockManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -173,7 +173,7 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements En
 	{
 		return new SimpleMenuProvider((containerId, inventory, p_52231_) ->
 		{
-			return new DualTableMenu(containerId, inventory, ContainerLevelAccess.create(level, blockPos), Registration.CRAFTING_DUAL_MENU_TYPE.get());
+			return new DualTableMenu(containerId, inventory, ContainerLevelAccess.create(level, blockPos), ContentRegistration.CRAFTING_DUAL_MENU_TYPE.get());
 		}, CONTAINER_TITLE);
 	}
 

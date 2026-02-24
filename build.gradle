@@ -126,27 +126,27 @@ configurations {
 }
 
 dependencies {
-    compileOnly "curse.maven:wthit-forge-455982:7239804"
-    //runtimeOnly "curse.maven:wthit-forge-455982:7239804"
-    //runtimeOnly "curse.maven:badpackets-615134:7066076"
-    compileOnly "curse.maven:jade-324717:7056468"
-    //runtimeOnly "curse.maven:jade-324717:7056468"
+    compileOnly "curse.maven:wthit-forge-455982:7546202"
+    //runtimeOnly "curse.maven:wthit-forge-455982:7546202"
+    //runtimeOnly "curse.maven:badpackets-615134:7324636"
+    compileOnly "curse.maven:jade-324717:7313008"
+    //runtimeOnly "curse.maven:jade-324717:7313008"
     compileOnly "curse.maven:the-one-probe-245211:6106998"
     //!! top is at 1.21.1
 
-    runtimeOnly "curse.maven:jei-238222:7270397"
-    compileOnly "curse.maven:jei-238222:7270397"
-    compileOnly "curse.maven:roughly-enough-items-310111:7273703"
+    runtimeOnly "curse.maven:jei-238222:7428957"
+    compileOnly "curse.maven:jei-238222:7428957"
     compileOnly "curse.maven:emi-580555:5436759"
     //!! EMI is on 1.21.1
-    compileOnly "curse.maven:cloth-config-348521:7151182"
-    //runtimeOnly "curse.maven:cloth-config-348521:7151182"
-    //runtimeOnly "curse.maven:roughly-enough-items-310111:6833149"
-    //runtimeOnly "curse.maven:architectury-api-419699:7149506"
+    compileOnly "curse.maven:cloth-config-348521:7361439"
+    //runtimeOnly "curse.maven:cloth-config-348521:7361439"
+    compileOnly "curse.maven:roughly-enough-items-310111:7486490"
+    //runtimeOnly "curse.maven:roughly-enough-items-310111:7486490"
+    //runtimeOnly "curse.maven:architectury-api-419699:7339257"
 
-    compileOnly "curse.maven:crafting-tweaks-233071:7083592"
-    //runtimeOnly "curse.maven:crafting-tweaks-233071:7083592"
-    //runtimeOnly "curse.maven:balm-531761:7210480"
+    compileOnly "curse.maven:crafting-tweaks-233071:7530387"
+    //runtimeOnly "curse.maven:crafting-tweaks-233071:7530387"
+    //runtimeOnly "curse.maven:balm-531761:7467954"
 
     compileOnly "curse.maven:polymorph-388800:6451024"
     // PM is on 1.21.1 at the moment
@@ -164,17 +164,17 @@ dependencies {
     compileOnly "curse.maven:inventory-tweaks-refoxed-976858:5610776"
     //!! IT is still on 1.21.1
 
-    runtimeOnly "curse.maven:storage-drawers-223852:7107983"
+    runtimeOnly "curse.maven:storage-drawers-223852:7335085"
     //  sd  crashes with jsde
     //!! runtimeOnly "curse.maven:functional-storage-556861:5861256"
     //!! runtimeOnly "curse.maven:titanium-287342:5889342"
     //!! FS is still on 1.21.1
 
-    compileOnly "curse.maven:backpacked-352835:5852973"
-    //!!! backpacked is still on 1.21.1
-    //runtimeOnly "curse.maven:travelers-backpack-321117:7240675"
-    compileOnly "curse.maven:travelers-backpack-321117:7240675"
-}
+    compileOnly "curse.maven:backpacked-352835:7573691"
+    runtimeOnly "curse.maven:backpacked-352835:7573691"
+    //runtimeOnly "curse.maven:travelers-backpack-321117:7543696"
+    compileOnly "curse.maven:travelers-backpack-321117:7543696"
+    }
 
 // This block of code expands all declared replace properties in the specified resource targets.
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.

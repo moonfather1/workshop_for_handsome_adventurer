@@ -1,49 +1,73 @@
 package moonfather.workshop_for_handsome_adventurer.integration;
 
+import com.mrcrayfish.backpacked.inventory.BackpackInventory;
 import com.mrcrayfish.backpacked.inventory.BackpackedInventoryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
-public class BackpackedBackpack
+public class BackpackedBackpack implements IBackpack
 {
-    private BackpackedBackpack()
+    private BackpackedBackpack(BackpackInventory container)
     {
+        this.container = container;
     }
+
+    static BackpackedBackpack instance(Player player, int index)
+    {
+        if (player instanceof BackpackedInventoryAccess access)
+        {
+            //iiif (index < access.backpacked$GetBackpackInventoryCount())  // useless; usually count == 5, first one is empty, other 4 are locked.
+            BackpackInventory c = access.backpacked$GetBackpackInventory(index);
+            if (c != null) // actual backpack
+            {
+                return new BackpackedBackpack(c);
+            }
+        }
+        return null;
+    }
+
+    private final BackpackInventory container;
 
     //////////////////////////////////////
 
-    public static boolean isPresent(Player player)
+    @Override
+    public boolean isPresent()
     {
-        return player instanceof BackpackedInventoryAccess access && access.backpacked$GetBackpackInventory() != null;
+        return this.container != null;
     }
 
-    public static int slotCount(Player player)
+    @Override
+    public int slotCount()
     {
-        return player instanceof BackpackedInventoryAccess access ? access.backpacked$GetBackpackInventory().getContainerSize() : 0;
+        return this.container.getContainerSize();
     }
 
-    public static ItemStack getTabIcon(Player player)
+    @Override
+    public ItemStack getTabIcon()
     {
-        ItemStack result = getContainerItem(player).copy();
+        ItemStack result = getContainerItem().copy();
         result.remove(DataComponents.CONTAINER);
         return result;
     }
 
-    public static ItemStack getContainerItem(Player player)
+    @Override
+    public ItemStack getContainerItem()
     {
-        return player instanceof BackpackedInventoryAccess access ? access.backpacked$GetBackpackInventory().getBackpackStack() : Items.DEAD_BUSH.getDefaultInstance();
+        return this.container.getBackpackStack();
     }
 
-    public static ItemStack getFirst(Player player)
+    @Override
+    public ItemStack getFirst()
     {
-        return ItemStack.EMPTY; // can obtain but i don't want to
+        return this.container.findFirst(is -> ! is.isEmpty());
+        // i usually don't want to, but now he added ability to have multiples on back at once, so...
     }
 
-    public static Container getContainer(Player player)
+    @Override
+    public Container getContainer()
     {
-        return ((BackpackedInventoryAccess) player).backpacked$GetBackpackInventory();
+        return this.container;
     }
 }

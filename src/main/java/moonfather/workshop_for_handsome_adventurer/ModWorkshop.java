@@ -9,10 +9,9 @@ import moonfather.workshop_for_handsome_adventurer.dynamic_resources.config.Dyna
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.config.DynamicAssetCommonConfig;
 import moonfather.workshop_for_handsome_adventurer.initialization.CommonSetup;
 import moonfather.workshop_for_handsome_adventurer.initialization.DynamicContentRegistration;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
 import moonfather.workshop_for_handsome_adventurer.integration.CarryOnBlacklisting;
 import moonfather.workshop_for_handsome_adventurer.integration.TOPProxyRegistration;
-import moonfather.workshop_for_handsome_adventurer.integration.TOPRegistration;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.RegistrationForTaskList;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.MissingMappingsHandler2;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.moving_data.TaskListMessagingInitialization;
@@ -79,7 +78,7 @@ public class ModWorkshop
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         modContainer.registerConfig(ModConfig.Type.STARTUP, DynamicAssetClientConfig.SPEC, "workshop/special-client.toml");
         modContainer.registerConfig(ModConfig.Type.STARTUP, DynamicAssetCommonConfig.SPEC, "workshop/special-server.toml");
-        Registration.init(modBus);
+        ContentRegistration.init(modBus);
         modBus.addListener(CommonSetup::init);
         modBus.addListener(CarryOnBlacklisting::enqueueIMC);
         modBus.addListener(TOPProxyRegistration::enqueueIMC);

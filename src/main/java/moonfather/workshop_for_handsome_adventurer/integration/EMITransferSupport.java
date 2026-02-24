@@ -4,11 +4,10 @@ import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.widget.Bounds;
-import dev.emi.emi.handler.CraftingRecipeHandler;
 import dev.emi.emi.mixin.accessor.HandledScreenAccessor;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screens.DualTableCraftingScreen;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screens.SimpleTableCraftingScreen;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
 
 @EmiEntrypoint
 public class EMITransferSupport implements EmiPlugin
@@ -16,8 +15,8 @@ public class EMITransferSupport implements EmiPlugin
     @Override
     public void register(EmiRegistry emiRegistry)
     {
-        emiRegistry.addRecipeHandler(Registration.CRAFTING_DUAL_MENU_TYPE.get(), new EMIRecipeHandlerForDualTable());
-        emiRegistry.addRecipeHandler(Registration.CRAFTING_SINGLE_MENU_TYPE.get(), new EMIRecipeHandlerForSmallTable());
+        emiRegistry.addRecipeHandler(ContentRegistration.CRAFTING_DUAL_MENU_TYPE.get(), new EMIRecipeHandlerForDualTable());
+        emiRegistry.addRecipeHandler(ContentRegistration.CRAFTING_SINGLE_MENU_TYPE.get(), new EMIRecipeHandlerForSmallTable());
 
         emiRegistry.addExclusionArea(SimpleTableCraftingScreen.class, (screen, consumer) -> {
             int left = screen.getGuiLeft();

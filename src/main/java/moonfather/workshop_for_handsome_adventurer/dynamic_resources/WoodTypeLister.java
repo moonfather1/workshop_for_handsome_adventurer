@@ -2,7 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 
 import com.google.common.base.Stopwatch;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.config.DynamicAssetCommonConfig;
-import moonfather.workshop_for_handsome_adventurer.initialization.Registration;
+import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 
@@ -68,7 +68,7 @@ public class WoodTypeLister
                     }
                     if (BuiltInRegistries.BLOCK.containsKey(ResourceLocation.fromNamespaceAndPath(id.getNamespace(), id.getPath().replace(planks, slab))))
                     {
-                        if (! ids.contains(wood) && ! Registration.woodTypes.contains(wood))  // normal dupes and vanilla dupes get recipes only
+                        if (! ids.contains(wood) && ! ContentRegistration.woodTypes.contains(wood))  // normal dupes and vanilla dupes get recipes only
                         {
                             // check for stripped logs. if we don't have them, we allow a substitution:
                             if (! BuiltInRegistries.BLOCK.containsKey(ResourceLocation.fromNamespaceAndPath(id.getNamespace(), LOG1 + wood + LOG2)))
