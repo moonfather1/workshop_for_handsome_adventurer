@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class SimpleButton extends Button
 {
-    private final ResourceLocation resourceLocationNormal, resourceLocationHovered, resourceLocationDisabled;
+    private final Identifier resourceLocationNormal, resourceLocationHovered, resourceLocationDisabled;
     private final int textureWidth;
     private final int textureHeight;
 
@@ -31,16 +31,16 @@ public class SimpleButton extends Button
         super(x, y, width, height, message, onPress, DEFAULT_NARRATION);
         this.textureWidth = textureWidth;
         this.textureHeight = textureHeight;
-        this.resourceLocationNormal = ResourceLocation.parse(texture.formatted(suffixNormal));
-        this.resourceLocationHovered = ResourceLocation.parse(texture.formatted(suffixHovered));
-        this.resourceLocationDisabled = ResourceLocation.parse(texture.formatted(suffixDisabled));
+        this.resourceLocationNormal = Identifier.parse(texture.formatted(suffixNormal));
+        this.resourceLocationHovered = Identifier.parse(texture.formatted(suffixHovered));
+        this.resourceLocationDisabled = Identifier.parse(texture.formatted(suffixDisabled));
     }
 
 
     @Override
-    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float p_94285_)
+    public void renderContents(GuiGraphics graphics, int mouseX, int mouseY, float p_94285_)
     {
-        ResourceLocation image = this.resourceLocationNormal;
+        Identifier image = this.resourceLocationNormal;
         if (this.isActive() && this.isHoveredOrFocused())
         {
             image = this.resourceLocationHovered;

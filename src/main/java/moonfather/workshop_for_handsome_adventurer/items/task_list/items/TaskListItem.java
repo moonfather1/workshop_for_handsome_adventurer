@@ -13,7 +13,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Unit;
@@ -36,7 +36,7 @@ public class TaskListItem extends Item
 {
     public TaskListItem(String id)
     {
-        super((new Properties()).stacksTo(1).setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id))));
+        super((new Properties()).stacksTo(1).setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Constants.MODID, id))));
     }
     //  abandoned, nice to have: tooltip line saying Completed: (orange) 0/6 (spacing) (greenish)5/6
     //  abandoned, consideration: consider keyboard paging

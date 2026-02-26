@@ -8,7 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -73,10 +73,10 @@ public class WorkstationPlacerItem extends Item
 		}
 		Direction facingToSet = context.getHorizontalDirection().getOpposite();
 		Direction right = context.getHorizontalDirection().getClockWise();
-		Block bottomLeft = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(this.hostModId, this.prefix + "dual_table_bottom_left_" + this.woodType)).get().value();
-		Block bottomRight = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(this.hostModId, this.prefix + "dual_table_bottom_right_" + this.woodType)).get().value();
-		Block topLeft = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(this.hostModId, this.prefix + "dual_table_top_left_" + this.woodType)).get().value();
-		Block topRight = BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(this.hostModId, this.prefix + "dual_table_top_right_" + this.woodType)).get().value();
+		Block bottomLeft = BuiltInRegistries.BLOCK.get(Identifier.fromNamespaceAndPath(this.hostModId, this.prefix + "dual_table_bottom_left_" + this.woodType)).get().value();
+		Block bottomRight = BuiltInRegistries.BLOCK.get(Identifier.fromNamespaceAndPath(this.hostModId, this.prefix + "dual_table_bottom_right_" + this.woodType)).get().value();
+		Block topLeft = BuiltInRegistries.BLOCK.get(Identifier.fromNamespaceAndPath(this.hostModId, this.prefix + "dual_table_top_left_" + this.woodType)).get().value();
+		Block topRight = BuiltInRegistries.BLOCK.get(Identifier.fromNamespaceAndPath(this.hostModId, this.prefix + "dual_table_top_right_" + this.woodType)).get().value();
 		context.getLevel().setBlock(position, bottomLeft.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, true), 0);
 		context.getLevel().setBlock(position.above(), topLeft.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, true), 0);
 		context.getLevel().setBlock(position.relative(right), bottomRight.defaultBlockState().setValue(BlockStateProperties.HORIZONTAL_FACING, facingToSet).setValue(AdvancedTableBottomPrimary.BEING_PLACED, true), 0);

@@ -1,7 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import it.unimi.dsi.fastutil.HashCommon;
 import moonfather.workshop_for_handsome_adventurer.ClientConfig;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableBlockEntity;
 import net.minecraft.client.Minecraft;
@@ -26,55 +25,6 @@ import java.util.Map;
 
 public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEntity, SimpleTableTESR.ItemHoldingBlockRenderState>
 {
-//    public void render0(SimpleTableBlockEntity table, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay, Vec3 camera)
-//    {
-//        Direction direction = null;
-//        double playerDX = table.getBlockPos().getX() + 0.5d - Minecraft.getInstance().player.position().x;
-//        double playerDZ = table.getBlockPos().getZ() + 0.5d - Minecraft.getInstance().player.position().z;
-//        if ((Math.abs(playerDZ) > 1e-4 && Math.abs(Math.abs(playerDX / playerDZ) - 1) < 0.2) // player is diagonally positioned compared to the table
-//                || (table.getBlockPos().getX() == Minecraft.getInstance().player.blockPosition().getX() && table.getBlockPos().getZ() == Minecraft.getInstance().player.blockPosition().getZ())) // player is right on top of the table
-//        {
-//            // special option: direction is dependent on where the player looks
-//            direction = Direction.fromYRot(Minecraft.getInstance().player.yHeadRot + 180);
-//        }
-//        else
-//        {
-//            // normal option: direction is dependent only on player position
-//            direction = Direction.getNearest(-1 * (int)playerDX, 0, -1 * (int)playerDZ, null);
-//            if (direction == null)
-//            {
-//                direction = Direction.fromYRot(Minecraft.getInstance().player.yHeadRot + 180); // i don't really care for the value, just can't have null.
-//            }
-//        }
-//        // ok we have direction. now to draw...
-//        render3x3(poseStack, direction, bufferSource, combinedLight, combinedOverlay, table, 0, false, false);
-//    }
-
-//    public static void render3x3(PoseStack poseStack, Direction direction, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay, SimpleTableBlockEntity table, int tableInventoryOffset, boolean unused, boolean secondary)
-//    {
-//        for (int j = 0; j < 3*3; ++j)
-//        {
-//            ItemStack itemstack = ToolRackTESR.removeEnchantmentsStatic(table.GetItem(tableInventoryOffset + j));
-//            if (itemstack != ItemStack.EMPTY)
-//            {
-//                poseStack.pushPose();
-//                poseStack.translate(0, 1.01f, 0);   // on top
-//                int tableOffsetX = secondary ? direction.getStepX() : 0;
-//                int tableOffsetZ = secondary ? direction.getStepZ() : 0;
-//                poseStack.translate(0.5D + tableOffsetZ, 0, 0.5D - tableOffsetX); // center
-//                poseStack.mulPose(getYRotation(direction, direction.getStepZ() == 0));  // rotate towards player
-//                double positionScale = 0.63f;
-//                poseStack.translate(j % 3 * 0.3D * positionScale, 0, j / 3 * 0.3D * positionScale); // spread into grid
-//                poseStack.translate(-0.19D, 0, -0.19D); // center the grid
-//                poseStack.mulPose(XPlus90); // lay items horizontal
-//                poseStack.mulPose(ZPlus180); // lay items horizontal
-//                float itemScale = 0.15f;
-//                poseStack.scale(itemScale, itemScale, itemScale / 3); // last part flattens them a little. i don't know how else to deal with blocks
-//                Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, poseStack, bufferSource, null, j);
-//                poseStack.popPose();
-//            }
-//        }
-//    }
     private static final Quaternionf XPlus90 = new Quaternionf().fromAxisAngleDeg(1, 0, 0, 90);
     private static final Quaternionf ZPlus180 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, 180);
     private static final Map<Integer, Quaternionf> YRotCache = new HashMap<>();
@@ -111,8 +61,7 @@ public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEnti
 
     public static class ItemHoldingBlockRenderState extends BlockEntityRenderState
     {
-        public ItemStackRenderState[] items = new ItemStackRenderState[18];
-        public Direction direction = Direction.EAST;
+        public ItemStackRenderState[] items = new ItemStackRenderState[24];
     }
 
     @Override
@@ -133,17 +82,19 @@ public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEnti
     }
 
     public static void fillRenderState(SimpleTableBlockEntity blockEntity, ItemHoldingBlockRenderState renderState, ItemModelResolver itemModelResolver) {
-        int seedBase = HashCommon.long2int(blockEntity.getBlockPos().asLong());
+        int seedBase = Long.valueOf(blockEntity.getBlockPos().asLong()).hashCode();
         for (int i = 0; i < blockEntity.getCapacity(); i++)
         {
             ItemStack itemstack = blockEntity.GetItem(i);
             if (! itemstack.isEmpty())
             {
                 ItemStackRenderState itemstackrenderstate = new ItemStackRenderState();
-                //this.itemModelResolver.updateForTopItem(itemstackrenderstate, itemstack, ItemDisplayContext.ON_SHELF, p_445792_.level(), p_445792_, i + j);
-                itemModelResolver.updateForTopItem(itemstackrenderstate, itemstack, ItemDisplayContext.FIXED, blockEntity.getLevel(), null, seedBase + i);
-//!! implement ItemOwner
+                itemModelResolver.updateForTopItem(itemstackrenderstate, ToolRackTESR.removeEnchantmentsStatic(itemstack), ItemDisplayContext.FIXED, blockEntity.getLevel(), null, seedBase + i);
                 renderState.items[i] = itemstackrenderstate;
+            }
+            else
+            {
+                renderState.items[i] = null;
             }
         }
     }
@@ -178,7 +129,6 @@ public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEnti
     {
         for (int j = 0; j < 3*3; ++j)
         {
-//!!            ItemStack itemstack = ToolRackTESR.removeEnchantmentsStatic(table.GetItem(tableInventoryOffset + j));
             ItemStackRenderState itemStackRenderState = tableRenderState.items[tableInventoryOffset + j];
             if (itemStackRenderState != null)
             {
@@ -195,7 +145,6 @@ public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEnti
                 poseStack.mulPose(ZPlus180); // lay items horizontal
                 float itemScale = 0.15f;
                 poseStack.scale(itemScale, itemScale, itemScale / 3); // last part flattens them a little. i don't know how else to deal with blocks
-//!!                Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, poseStack, bufferSource, null, j);
                 itemStackRenderState.submit(poseStack, nodeCollector, tableRenderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
                 poseStack.popPose();
             }

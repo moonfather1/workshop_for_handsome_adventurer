@@ -1,13 +1,13 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources.helpers;
 
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLister;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Map;
 
 public class BlockTagWriter1
 {
-    public static void writeFiles(Map<ResourceLocation, String> cache)
+    public static void writeFiles(Map<Identifier, String> cache)
     {
         StringBuilder builder = new StringBuilder();
         builder.append("{\n");
@@ -29,8 +29,8 @@ public class BlockTagWriter1
             builder.append(line).append(wood).append('"');
         }
         builder.append("\n  ]\n}\n");
-        cache.put(ResourceLocation.fromNamespaceAndPath("c", "tags/block/workbench.json"), builder.toString());
-        cache.put(ResourceLocation.fromNamespaceAndPath("c", "tags/item/workbench.json"), builder.toString());
-        cache.put(ResourceLocation.fromNamespaceAndPath("c", "tags/item/player_workstations/crafting_tables.json"), builder.toString());
+        cache.put(Identifier.fromNamespaceAndPath("c", "tags/block/workbench.json"), builder.toString());
+        cache.put(Identifier.fromNamespaceAndPath("c", "tags/item/workbench.json"), builder.toString());
+        cache.put(Identifier.fromNamespaceAndPath("c", "tags/item/player_workstations/crafting_tables.json"), builder.toString());
     }
 }

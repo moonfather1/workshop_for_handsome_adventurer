@@ -8,7 +8,7 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMen
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screens.SimpleTableCraftingScreen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.Slot;
 
 public class PolymorphAccessorClient
@@ -86,11 +86,11 @@ public class PolymorphAccessorClient
 
         ////////
 
-        @Override
-        public void selectRecipe(ResourceLocation resourceLocation)
-        {
-            super.selectRecipe(resourceLocation);
-            PacketSender.sendCraftingResultUpdateRequestToServer(this.getOutputSlot().index);
-        }
+//        @Override
+//        public void selectRecipe(Identifier resourceLocation)
+//        {
+//            super.selectRecipe(resourceLocation);
+//            PacketSender.sendCraftingResultUpdateRequestToServer(this.getOutputSlot().index);
+//        }
     }
 }

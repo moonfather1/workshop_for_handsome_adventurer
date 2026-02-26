@@ -4,7 +4,7 @@ import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.AssetReader;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeCommonManager;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLister;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 
 import java.util.List;
@@ -12,12 +12,12 @@ import java.util.Map;
 
 public class RecipeWriter
 {
-    public static void writeFiles(Map<ResourceLocation, String> cache)
+    public static void writeFiles(Map<Identifier, String> cache)
     {
         final String SPRUCE = "spruce";
         for (String file: allRecipes)
         {
-            String original = AssetReader.getInstance(PackType.SERVER_DATA, Constants.MODID).getText(ResourceLocation.fromNamespaceAndPath(Constants.MODID, file));
+            String original = AssetReader.getInstance(PackType.SERVER_DATA, Constants.MODID).getText(Identifier.fromNamespaceAndPath(Constants.MODID, file));
             // it never will be null, won't even check
             for (String wood: WoodTypeLister.getWoodIds())
             {
@@ -26,17 +26,17 @@ public class RecipeWriter
                         .replace("minecraft:spruce_slab", getSlab(wood))
                         .replace("minecraft:spruce_planks", getPlanks(wood))
                         .replace(SPRUCE, wood);
-                cache.put(ResourceLocation.fromNamespaceAndPath(Constants.MODID, file.replace(SPRUCE, wood)), newRecipe);
+                cache.put(Identifier.fromNamespaceAndPath(Constants.MODID, file.replace(SPRUCE, wood)), newRecipe);
             }
             if (! conversionRecipes.contains(file))
             {
-                for (ResourceLocation duplicate : WoodTypeLister.getDuplicateWoods()) // once again, with feeling
+                for (Identifier duplicate : WoodTypeLister.getDuplicateWoods()) // once again, with feeling
                 {
                     String newRecipe = original
                             .replace("minecraft:stripped_spruce", duplicate.getNamespace() + ":stripped_" + duplicate.getPath()) // these will have logs
                             .replace("minecraft:spruce", duplicate.toString())
                             .replace(SPRUCE, duplicate.getPath());
-                    cache.put(ResourceLocation.fromNamespaceAndPath(Constants.MODID, file.replace(SPRUCE, duplicate.getPath() + "_" + duplicate.getNamespace())), newRecipe);
+                    cache.put(Identifier.fromNamespaceAndPath(Constants.MODID, file.replace(SPRUCE, duplicate.getPath() + "_" + duplicate.getNamespace())), newRecipe);
                 }
             }
         }

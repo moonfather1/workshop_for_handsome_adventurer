@@ -2,14 +2,14 @@ package moonfather.workshop_for_handsome_adventurer.dynamic_resources.helpers;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLister;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.fml.ModList;
 
 import java.util.Map;
 
 public class BlockTagWriter2
 {
-    public static void writeFiles(Map<ResourceLocation, String> cache)
+    public static void writeFiles(Map<Identifier, String> cache)
     {
         StringBuilder builder = new StringBuilder();
         builder.append("{\n");
@@ -36,7 +36,7 @@ public class BlockTagWriter2
             }
         }
         builder.append("  ]\n}\n");
-        cache.put(ResourceLocation.fromNamespaceAndPath("minecraft", "tags/block/mineable/axe.json"), builder.toString());
+        cache.put(Identifier.fromNamespaceAndPath("minecraft", "tags/block/mineable/axe.json"), builder.toString());
     }
 
 

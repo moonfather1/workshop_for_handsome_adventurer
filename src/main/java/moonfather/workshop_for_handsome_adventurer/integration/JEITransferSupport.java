@@ -3,7 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.integration;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 @JeiPlugin
 public class JEITransferSupport implements IModPlugin
@@ -16,8 +16,8 @@ public class JEITransferSupport implements IModPlugin
 	}
 
 	@Override
-	public ResourceLocation getPluginUid()
+	public Identifier getPluginUid()
 	{
-		return ResourceLocation.parse("workshop_for_handsome_adventurer:jei_transfer_plugin");
+		return Identifier.parse("workshop_for_handsome_adventurer:jei_transfer_plugin");
 	}
 }

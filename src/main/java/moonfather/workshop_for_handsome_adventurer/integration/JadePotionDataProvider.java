@@ -7,7 +7,7 @@ import snownee.jade.api.StreamServerDataProvider;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.List;
 public class JadePotionDataProvider implements StreamServerDataProvider<BlockAccessor, List<Integer>>
 {
     private static final JadePotionDataProvider INSTANCE = new JadePotionDataProvider();
-    private static final ResourceLocation id = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "jade_wfha_ps");
+    private static final Identifier id = Identifier.fromNamespaceAndPath(Constants.MODID, "jade_wfha_ps");
 
     public static JadePotionDataProvider getInstance() { return INSTANCE; }
 
@@ -42,7 +42,7 @@ public class JadePotionDataProvider implements StreamServerDataProvider<BlockAcc
     }
 
     @Override
-    public ResourceLocation getUid()
+    public Identifier getUid()
     {
         return id;
     }

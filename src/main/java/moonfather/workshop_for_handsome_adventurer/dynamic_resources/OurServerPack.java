@@ -3,15 +3,11 @@ package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.helpers.*;
 import net.minecraft.SharedConstants;
-import net.minecraft.Util;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.registries.VanillaRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackType;
 
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 public class OurServerPack extends BaseResourcePack
 {
@@ -26,7 +22,7 @@ public class OurServerPack extends BaseResourcePack
 
 
     @Override
-    protected void buildResources(Map<ResourceLocation, String> cache)
+    protected void buildResources(Map<Identifier, String> cache)
     {
         // CompletableFuture<HolderLookup.Provider> holderProvider = CompletableFuture.supplyAsync(VanillaRegistries::createLookup, Util.backgroundExecutor());
         // removed because of traverse/terrestria issue.

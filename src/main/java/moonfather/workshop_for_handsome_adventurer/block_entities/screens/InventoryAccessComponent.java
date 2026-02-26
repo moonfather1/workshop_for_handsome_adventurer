@@ -19,11 +19,13 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -40,8 +42,8 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     public static final int PANEL_WIDTH = 176;
     public static final int PANEL_HEIGHT_WITHOUT_TABS = 134;
     public static final int PANEL_HEIGHT_WITH_TABS = 166;
-    protected static final ResourceLocation BG_CHEST_LOCATION_3_ROWS = ResourceLocation.parse("workshop_for_handsome_adventurer:textures/gui/left_panel_normal_chest.png");
-    protected static final ResourceLocation BG_CHEST_LOCATION_6_ROWS = ResourceLocation.parse("workshop_for_handsome_adventurer:textures/gui/left_panel_double_chest.png");
+    protected static final Identifier BG_CHEST_LOCATION_3_ROWS = Identifier.parse("workshop_for_handsome_adventurer:textures/gui/left_panel_normal_chest.png");
+    protected static final Identifier BG_CHEST_LOCATION_6_ROWS = Identifier.parse("workshop_for_handsome_adventurer:textures/gui/left_panel_double_chest.png");
     private static final String RENAME_BUTTON_LOCATION = "workshop_for_handsome_adventurer:textures/gui/rename_%s.png";
     private static final String renameTooltipKey = "message.workshop_for_handsome_adventurer.rename";
     private static final String renameTooltip0Key = "message.workshop_for_handsome_adventurer.rename0";
@@ -143,9 +145,9 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     {
         if (! button.equals(this.selectedTab)) {
             if (this.selectedTab != null) {
-                this.selectedTab.setStateTriggered(false);
+                this.selectedTab.setActive(false);
             }
-            button.setStateTriggered(true);
+            button.setActive(true);
             this.selectedTab = button;
             this.parent.getMenu().selectedTab = button.chestIndex; // we separately set this here as we need it in listener. this value change only happens on client and is only needed here.
             if (! dontSendToServer) {
@@ -233,7 +235,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             this.renameBox.render(graphics, p_100320_, p_100321_, p_100322_);
             this.renameButton.render(graphics, p_100320_, p_100321_, p_100322_);
 
-            for (StateSwitchingButton tabButton : this.tabButtons)
+            for (AbstractButton tabButton : this.tabButtons)
             {
                 tabButton.render(graphics, p_100320_, p_100321_, p_100322_);
             }
@@ -242,7 +244,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
 
 
 
-    private ResourceLocation getBackground() {
+    private Identifier getBackground() {
         if (this.selectedTab != null && this.slotRowsFourToSixVisible) {
             return BG_CHEST_LOCATION_6_ROWS;
         }
@@ -421,7 +423,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         int starty = (this.parent.height - this.parent.getYSize()) / 2;
         int counter = 0;
         boolean topRow = true;
-        for (StateSwitchingButton tabButton : this.tabButtons)
+        for (AbstractButton tabButton : this.tabButtons)
         {
             if (counter >= TabButton.TAB_ROW_COUNT)
             {
@@ -501,7 +503,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
 
     ///////////////////////////////////////////////////////
 
-    private static class TabButton extends StateSwitchingButton
+    private static class TabButton extends AbstractButton
     {
         private static final int TAB_ROW_COUNT = 8;
         public static final int WIDTH = 22;
@@ -509,22 +511,28 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         public InventoryAccessComponent parent;
         private ItemStack itemMain = ItemStack.EMPTY, itemSub = ItemStack.EMPTY;
         private int chestIndex;
+        private boolean isTabActive = false;
 
-        private static final ResourceLocation IMAGE_ACTIVE_TAB = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/tab_top_active.png"); // no need for WidgetSprites class
-        private static final ResourceLocation IMAGE_INACTIVE_TAB = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/tab_top_inactive.png");
-        private static final ResourceLocation IMAGE_ACTIVE_BOTTOM_TAB = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/tab_bottom_active.png"); // no need for WidgetSprites class
-        private static final ResourceLocation IMAGE_INACTIVE_BOTTOM_TAB = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/tab_bottom_inactive.png");
-        private ResourceLocation imageActiveTab, imageInactiveTab;
+        private static final Identifier IMAGE_ACTIVE_TAB = Identifier.fromNamespaceAndPath(Constants.MODID, "textures/gui/tab_top_active.png"); // no need for WidgetSprites class
+        private static final Identifier IMAGE_INACTIVE_TAB = Identifier.fromNamespaceAndPath(Constants.MODID, "textures/gui/tab_top_inactive.png");
+        private static final Identifier IMAGE_ACTIVE_BOTTOM_TAB = Identifier.fromNamespaceAndPath(Constants.MODID, "textures/gui/tab_bottom_active.png"); // no need for WidgetSprites class
+        private static final Identifier IMAGE_INACTIVE_BOTTOM_TAB = Identifier.fromNamespaceAndPath(Constants.MODID, "textures/gui/tab_bottom_inactive.png");
+        private Identifier imageActiveTab, imageInactiveTab;
 
         public TabButton()
         {
-            super(0, 0, WIDTH, HEIGHT, false);
-            // not calling initTextureValues. will do things manually it requires atlas for this control.
+            super(0, 0, WIDTH, HEIGHT, CommonComponents.EMPTY);
+            // not calling initTextureValues. will do things manually. it requires atlas for this control.
         }
 
 
         @Override
-        public void renderWidget(GuiGraphics graphics, int p_100458_, int p_100459_, float p_100460_)
+        public void onPress(InputWithModifiers input) {
+
+        }
+
+        @Override
+        protected void renderContents(GuiGraphics graphics, int mouseX, int mouseY, float partialTick)
         {
             int texX = 2;  // ignoring isHoveredOrFocused()
             int texY = this.chestIndex < TAB_ROW_COUNT ? 2 : 4;
@@ -532,11 +540,11 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
                 imageActiveTab = this.chestIndex < TAB_ROW_COUNT ? IMAGE_ACTIVE_TAB : IMAGE_ACTIVE_BOTTOM_TAB;
                 imageInactiveTab = this.chestIndex < TAB_ROW_COUNT ? IMAGE_INACTIVE_TAB : IMAGE_INACTIVE_BOTTOM_TAB;
             }
-            graphics.blit(RenderPipelines.GUI_TEXTURED, this.isStateTriggered ? imageActiveTab : imageInactiveTab, this.getX(), this.getY(), texX, texY, this.width, this.height, 32, 32);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, this.isTabActive ? imageActiveTab : imageInactiveTab, this.getX(), this.getY(), texX, texY, this.width, this.height, 32, 32);
             this.renderIcon(graphics);
         }
 
-        boolean checkedForSpecialScaling = false, doSpecialScaling = false;
+        private boolean checkedForSpecialScaling = false, doSpecialScaling = false;
         private void renderIcon(GuiGraphics graphics)
         {
             int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
@@ -591,6 +599,9 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             return super.mouseClicked(event, isDoubleClick);
         }
 
+        @Override
+        protected void updateWidgetNarration(NarrationElementOutput p_259196_) { this.defaultButtonNarrationText(p_259196_); }
+
         public List<ClientTooltipComponent> getMessageForTooltip()
         {
             if (this.tooltip == null)
@@ -600,5 +611,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             return this.tooltip;
         }
         private List<ClientTooltipComponent> tooltip = null;
+
+        public void setActive(boolean value) { this.isTabActive = value; }
     }
 }

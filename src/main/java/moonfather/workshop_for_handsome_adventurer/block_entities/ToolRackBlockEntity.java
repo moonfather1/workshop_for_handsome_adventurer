@@ -1,12 +1,16 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
+import moonfather.workshop_for_handsome_adventurer.blocks.ToolRack;
 import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ItemOwner;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
-public class ToolRackBlockEntity extends BaseContainerBlockEntity
+public class ToolRackBlockEntity extends BaseContainerBlockEntity implements ItemOwner
 {
 	public ToolRackBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -42,4 +46,14 @@ public class ToolRackBlockEntity extends BaseContainerBlockEntity
 		return this.cachedRenderingAABB;
 	}
 	private AABB cachedRenderingAABB = null;
+
+	///////////////////////////////////  ItemOwner /////////////
+	@Override
+	public Level level() { return this.level; }
+
+	@Override
+	public Vec3 position() { return this.getBlockPos().getBottomCenter(); }
+
+	@Override
+	public float getVisualRotationYInDegrees() { return this.level().getBlockState(this.getBlockPos()).getValue(ToolRack.FACING).toYRot(); }
 }

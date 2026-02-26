@@ -5,13 +5,11 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.AtlasManager;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.resources.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,10 +22,10 @@ public class SpecialFirstEverRenderer
     {
         if (sprites.size() == 0)
         {
-            sprites.put("e", Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check1")));
-            sprites.put("y", Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check2")));
-            sprites.put("n", Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check3")));
-            sprites.put("q", Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check4")));
+            sprites.put("e", Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(Identifier.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check1")));
+            sprites.put("y", Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(Identifier.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check2")));
+            sprites.put("n", Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(Identifier.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check3")));
+            sprites.put("q", Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(Identifier.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check4")));
         }
         TextureAtlasSprite sprite = sprites.get(image);
         poseStack.pushPose();
@@ -35,7 +33,7 @@ public class SpecialFirstEverRenderer
         float yScaleSpecial = 160f; // special is a fancy way of saying i'm adjusting things by hand
         float xScaleSpecial = 160f; // special is a fancy way of saying i'm adjusting things by hand
         poseStack.translate(-4 + xInPixels * 1/16f * xScaleSpecial,  -4 + yInPixelsFromTop * 1/16f * yScaleSpecial, 0.5);
-        VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.cutoutMipped());
+        VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderTypes.cutoutMovingBlock());
 
         int w = 13, h = 13;
         vertex(poseStack.last(), vertexConsumer,  0, 16, sprite.getU0(), sprite.getV1(), combinedLight);

@@ -4,7 +4,7 @@ import com.google.common.base.Stopwatch;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.config.DynamicAssetCommonConfig;
 import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,7 +56,7 @@ public class WoodTypeLister
             final String vertical = "vertical";
             final String LOG1 = "stripped_";
             final String LOG2 = "_log";
-            for (ResourceLocation id: BuiltInRegistries.BLOCK.keySet())
+            for (Identifier id: BuiltInRegistries.BLOCK.keySet())
             {
                 if (! id.getNamespace().equals(mc) && id.getPath().endsWith(planks) && ! id.getPath().contains(vertical))
                 {
@@ -66,15 +66,15 @@ public class WoodTypeLister
                     {
                         continue;
                     }
-                    if (BuiltInRegistries.BLOCK.containsKey(ResourceLocation.fromNamespaceAndPath(id.getNamespace(), id.getPath().replace(planks, slab))))
+                    if (BuiltInRegistries.BLOCK.containsKey(Identifier.fromNamespaceAndPath(id.getNamespace(), id.getPath().replace(planks, slab))))
                     {
                         if (! ids.contains(wood) && ! ContentRegistration.woodTypes.contains(wood))  // normal dupes and vanilla dupes get recipes only
                         {
                             // check for stripped logs. if we don't have them, we allow a substitution:
-                            if (! BuiltInRegistries.BLOCK.containsKey(ResourceLocation.fromNamespaceAndPath(id.getNamespace(), LOG1 + wood + LOG2)))
+                            if (! BuiltInRegistries.BLOCK.containsKey(Identifier.fromNamespaceAndPath(id.getNamespace(), LOG1 + wood + LOG2)))
                             {
                                 String substitute = DynamicAssetCommonConfig.getLogRecipeSubstitution(wood);
-                                if (substitute == null || ! BuiltInRegistries.BLOCK.containsKey(ResourceLocation.parse(substitute)))
+                                if (substitute == null || ! BuiltInRegistries.BLOCK.containsKey(Identifier.parse(substitute)))
                                 {
                                     continue;
                                 }
@@ -84,9 +84,9 @@ public class WoodTypeLister
                         }
                         else
                         {
-                            if (BuiltInRegistries.BLOCK.containsKey(ResourceLocation.fromNamespaceAndPath(id.getNamespace(), LOG1 + wood + LOG2)))
+                            if (BuiltInRegistries.BLOCK.containsKey(Identifier.fromNamespaceAndPath(id.getNamespace(), LOG1 + wood + LOG2)))
                             {
-                                dupeIds.add(ResourceLocation.fromNamespaceAndPath(id.getNamespace(), wood));
+                                dupeIds.add(Identifier.fromNamespaceAndPath(id.getNamespace(), wood));
                                 // don't care for the final case.
                             }
                         }
@@ -99,12 +99,12 @@ public class WoodTypeLister
             idsWithSpecials = new ArrayList<>(ids);
             for (WoodTypeCommonManager.WoodSet woodSet: WoodTypeCommonManager.getWoodSetsWithDumbassNames())
             {
-                if (! BuiltInRegistries.BLOCK.containsKey(ResourceLocation.fromNamespaceAndPath(woodSet.modId(), woodSet.planks()))) { continue; }
-                if (! BuiltInRegistries.BLOCK.containsKey(ResourceLocation.fromNamespaceAndPath(woodSet.modId(), woodSet.slab()))) { continue; }
-                if (! BuiltInRegistries.BLOCK.containsKey(ResourceLocation.fromNamespaceAndPath(woodSet.modId(), woodSet.log())))
+                if (! BuiltInRegistries.BLOCK.containsKey(Identifier.fromNamespaceAndPath(woodSet.modId(), woodSet.planks()))) { continue; }
+                if (! BuiltInRegistries.BLOCK.containsKey(Identifier.fromNamespaceAndPath(woodSet.modId(), woodSet.slab()))) { continue; }
+                if (! BuiltInRegistries.BLOCK.containsKey(Identifier.fromNamespaceAndPath(woodSet.modId(), woodSet.log())))
                 {
                     String substitute = DynamicAssetCommonConfig.getLogRecipeSubstitution(woodSet.planks());
-                    if (substitute == null || ! BuiltInRegistries.BLOCK.containsKey(ResourceLocation.parse(substitute)))
+                    if (substitute == null || ! BuiltInRegistries.BLOCK.containsKey(Identifier.parse(substitute)))
                     {
                         continue;
                     }
@@ -115,10 +115,10 @@ public class WoodTypeLister
         }
     }
     public static String getHostMod(String wood) { return woodToHostMap.get(wood); }
-    public static List<ResourceLocation> getDuplicateWoods() { return dupeIds; }
+    public static List<Identifier> getDuplicateWoods() { return dupeIds; }
 
     private static List<String> ids = null;
     private static List<String> idsWithSpecials = null;
     private static final HashMap<String, String> woodToHostMap = new HashMap<>();
-    private static final List<ResourceLocation> dupeIds = new ArrayList<>();
+    private static final List<Identifier> dupeIds = new ArrayList<>();
 }

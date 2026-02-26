@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -26,6 +27,8 @@ public class TaskListPanelTESR implements BlockEntityRenderer<TaskListBlockEntit
     public TaskListPanelTESR(BlockEntityRendererProvider.Context context)
     {
     }
+
+
 
 //    @Override
 //    public void render(TaskListBlockEntity tile, float partialTicks, PoseStack poseStack, MultiBufferSource multiBufferSource, int combinedLight, int combinedOverlay, Vec3 camera)
@@ -144,6 +147,11 @@ public class TaskListPanelTESR implements BlockEntityRenderer<TaskListBlockEntit
 
     /////////////////////////////
 
+
+    @Override
+    public void extractRenderState(TaskListBlockEntity blockEntity, BlockEntityRenderState renderState, float partialTick, Vec3 cameraPosition, ModelFeatureRenderer.CrumblingOverlay breakProgress) {
+        BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, partialTick, cameraPosition, breakProgress);
+    }
 
     @Override
     public BlockEntityRenderState createRenderState()

@@ -2,6 +2,14 @@
   "replace": false,
   "values": [
     "minecraft:lantern",
+    "minecraft:copper_lantern",
+    "minecraft:exposed_copper_lantern",
+    "minecraft:oxidized_copper_lantern",
+    "minecraft:weathered_copper_lantern",
+    "minecraft:waxed_copper_lantern",
+    "minecraft:waxed_exposed_copper_lantern",
+    "minecraft:waxed_oxidized_copper_lantern",
+    "minecraft:waxed_weathered_copper_lantern",
     { "id": "byg:glowstone_lantern", "required": false },
     { "id": "byg:therium_lantern", "required": false }
   ]

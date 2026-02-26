@@ -10,7 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -45,7 +45,7 @@ public class TaskListPanel extends Block implements EntityBlock
 {
     public TaskListPanel(String id)
     {
-        super(Properties.of().strength(0.3f, 0.6f).sound(SoundType.WOOD).mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY).setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id))));
+        super(Properties.of().strength(0.3f, 0.6f).sound(SoundType.WOOD).mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY).setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id))));
         registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(EMPTY, true));
         this.PrepareListOfShapes();
     }

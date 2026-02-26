@@ -7,7 +7,7 @@ import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
 import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.*;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
@@ -71,8 +71,8 @@ public class JadePotionTooltipProvider implements IBlockComponentProvider
 
 
     @Override
-    public ResourceLocation getUid() {
+    public Identifier getUid() {
         return this.pluginId;
     }
-    private final ResourceLocation pluginId = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "jade_plugin1");
+    private final Identifier pluginId = Identifier.fromNamespaceAndPath(Constants.MODID, "jade_plugin1");
 }

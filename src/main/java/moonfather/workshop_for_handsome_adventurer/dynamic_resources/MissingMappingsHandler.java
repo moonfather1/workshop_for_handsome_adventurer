@@ -1,24 +1,17 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.dynamic_resources.config.DynamicAssetCommonConfig;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.helpers.BlockTagWriter2;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-import net.neoforged.fml.loading.FMLConfig;
-import net.neoforged.fml.loading.FMLEnvironment;
+import net.minecraft.resources.Identifier;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 
 public class MissingMappingsHandler
 {
@@ -31,8 +24,8 @@ public class MissingMappingsHandler
             {
                 for (String prefix : BlockTagWriter2.files)
                 {
-                    ResourceLocation missing = ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix + earlier);
-                    ResourceLocation fallback = ResourceLocation.fromNamespaceAndPath(Constants.MODID, prefix + "oak");
+                    Identifier missing = Identifier.fromNamespaceAndPath(Constants.MODID, prefix + earlier);
+                    Identifier fallback = Identifier.fromNamespaceAndPath(Constants.MODID, prefix + "oak");
                     BuiltInRegistries.BLOCK.addAlias(missing, fallback);
                 }
             }

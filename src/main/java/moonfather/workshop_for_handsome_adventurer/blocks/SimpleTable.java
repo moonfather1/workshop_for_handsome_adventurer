@@ -12,7 +12,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -133,7 +133,7 @@ public class SimpleTable extends Block implements EntityBlock, IBlockWithCleverH
             String id = BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString();
             String wood = id.substring(id.indexOf("simple_table") + 13);
             String newName = "tetra_table_" + wood;
-            ResourceLocation key = ResourceLocation.fromNamespaceAndPath("tetra_tables", newName);
+            Identifier key = Identifier.fromNamespaceAndPath("tetra_tables", newName);
             Optional<Holder.Reference<Block>> wrapper = BuiltInRegistries.BLOCK.get(key);
             if (wrapper.isPresent())
             {

@@ -1,16 +1,15 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities.messaging;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public record CraftingUpdateRequestMessage(int value) implements CustomPacketPayload
 {
-    private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "message_craftingupdate");
+    private static final Identifier ID = Identifier.fromNamespaceAndPath(Constants.MODID, "message_craftingupdate");
     public static final Type<CraftingUpdateRequestMessage> TYPE = new Type<>(ID);
 
 

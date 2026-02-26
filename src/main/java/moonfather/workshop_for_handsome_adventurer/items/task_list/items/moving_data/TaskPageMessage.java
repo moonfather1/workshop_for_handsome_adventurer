@@ -7,7 +7,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import static moonfather.workshop_for_handsome_adventurer.items.task_list.items.
 
 public record TaskPageMessage(TaskListMessaging.TaskPageDTO value, TaskListMessaging.TaskListExtraDTO extra) implements CustomPacketPayload
 {
-    private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "message_task_page");
+    private static final Identifier ID = Identifier.fromNamespaceAndPath(Constants.MODID, "message_task_page");
     public static final Type<TaskPageMessage> TYPE = new Type<>(ID);
 
 

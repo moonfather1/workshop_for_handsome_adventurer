@@ -16,7 +16,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
@@ -33,7 +33,7 @@ import static com.mojang.blaze3d.platform.InputConstants.KEY_ESCAPE;
 
 public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTableMenu>
 {
-	private static final ResourceLocation[] CRAFTING_TABLE_LOCATION = new ResourceLocation[3];
+	private static final Identifier[] CRAFTING_TABLE_LOCATION = new Identifier[3];
 	private List<Component> tooltipCustomizationsFull = null, tooltipCustomizationsBrief = null;
 	private final InventoryAccessComponent inventoryComponent = new InventoryAccessComponent();
 	protected int renderLeftPos;
@@ -103,7 +103,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		this.inventoryComponent.renderTooltip(graphics, p_98480_, p_98481_);
 		this.renderCustomizationTooltips(graphics, p_98480_, p_98481_);
 	}
-	private static final ResourceLocation EXCESS_SLOT_BG = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "gui/x_slot");
+	private static final Identifier EXCESS_SLOT_BG = Identifier.fromNamespaceAndPath(Constants.MODID, "gui/x_slot");
 
 	@Override
 	protected void renderBg(GuiGraphics graphics, float p_98475_, int p_98476_, int p_98477_)
@@ -163,7 +163,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 					if (tooltipCustomizationsFull == null)
 					{
 						String itemKey = "??";
-						Optional<Holder.Reference<Item>> stupidWrapper = BuiltInRegistries.ITEM.get(ResourceLocation.parse(CommonConfig.AccessCustomizationItem.get()));
+						Optional<Holder.Reference<Item>> stupidWrapper = BuiltInRegistries.ITEM.get(Identifier.parse(CommonConfig.AccessCustomizationItem.get()));
 						if (! stupidWrapper.isEmpty()) { itemKey = stupidWrapper.get().value().getDescriptionId(); }
 						String itemName = Language.getInstance().getOrDefault(itemKey);
 						tooltipCustomizationsFull = new ArrayList<>(15);
@@ -197,13 +197,13 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 
 
 
-	protected ResourceLocation getBackgroundImage()
+	protected Identifier getBackgroundImage()
 	{
 		if (CRAFTING_TABLE_LOCATION[0] == null)
 		{
-			CRAFTING_TABLE_LOCATION[0] = ResourceLocation.parse("workshop_for_handsome_adventurer:textures/gui/gui_simple_table_0_slots.png");
-			CRAFTING_TABLE_LOCATION[1] = ResourceLocation.parse("workshop_for_handsome_adventurer:textures/gui/gui_simple_table_1_slots.png");
-			CRAFTING_TABLE_LOCATION[2] = ResourceLocation.parse("workshop_for_handsome_adventurer:textures/gui/gui_simple_table_2_slots.png");
+			CRAFTING_TABLE_LOCATION[0] = Identifier.parse("workshop_for_handsome_adventurer:textures/gui/gui_simple_table_0_slots.png");
+			CRAFTING_TABLE_LOCATION[1] = Identifier.parse("workshop_for_handsome_adventurer:textures/gui/gui_simple_table_1_slots.png");
+			CRAFTING_TABLE_LOCATION[2] = Identifier.parse("workshop_for_handsome_adventurer:textures/gui/gui_simple_table_2_slots.png");
 		}
 		if (this.backgroundImageLocation == null)
 		{
@@ -211,7 +211,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		}
 		return this.backgroundImageLocation;
 	}
-	protected ResourceLocation backgroundImageLocation = null;
+	protected Identifier backgroundImageLocation = null;
 
 
 	@Override

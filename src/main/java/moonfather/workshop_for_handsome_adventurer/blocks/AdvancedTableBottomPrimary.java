@@ -10,7 +10,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -117,11 +117,11 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements En
 	@Override
 	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player)
 	{
-		ResourceLocation block = BuiltInRegistries.BLOCK.getKey(this);
+		Identifier block = BuiltInRegistries.BLOCK.getKey(this);
 		String path = block.getPath();
 		String wood = path.substring(path.indexOf("_left_") + 6);
 		String prefix = path.substring(0, path.indexOf("dual_table_bottom_left_"));
-        Optional<Holder.Reference<Item>> item = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(block.getNamespace(),prefix + "workstation_placer_" + wood));
+        Optional<Holder.Reference<Item>> item = BuiltInRegistries.ITEM.get(Identifier.fromNamespaceAndPath(block.getNamespace(),prefix + "workstation_placer_" + wood));
 		if (item.isEmpty())
 		{
 			return Items.OAK_PLANKS.getDefaultInstance();

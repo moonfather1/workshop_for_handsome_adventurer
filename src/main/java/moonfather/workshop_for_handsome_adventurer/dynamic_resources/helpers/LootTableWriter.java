@@ -3,7 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.dynamic_resources.helpers;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.AssetReader;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLister;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.neoforged.fml.ModList;
 
@@ -11,16 +11,16 @@ import java.util.Map;
 
 public class LootTableWriter
 {
-    public static void writeFiles(Map<ResourceLocation, String> cache)
+    public static void writeFiles(Map<Identifier, String> cache)
     {
         final String SPRUCE = "spruce";
         for (String file: files)
         {
-            String original = AssetReader.getInstance(PackType.SERVER_DATA, Constants.MODID).getText(ResourceLocation.fromNamespaceAndPath(Constants.MODID, file));
+            String original = AssetReader.getInstance(PackType.SERVER_DATA, Constants.MODID).getText(Identifier.fromNamespaceAndPath(Constants.MODID, file));
             // it never will be null, won't even check
             for (String wood: WoodTypeLister.getWoodIds())
             {
-                cache.put(ResourceLocation.fromNamespaceAndPath(Constants.MODID, file.replace(SPRUCE, wood)), original.replace(SPRUCE, wood));
+                cache.put(Identifier.fromNamespaceAndPath(Constants.MODID, file.replace(SPRUCE, wood)), original.replace(SPRUCE, wood));
             }
         }
         // support for addon mod
@@ -28,7 +28,7 @@ public class LootTableWriter
         {
             for (String wood: WoodTypeLister.getWoodIds())
             {
-                cache.put(ResourceLocation.fromNamespaceAndPath("tetra_tables", "loot_table/blocks/tetra_table_spruce.json".replace(SPRUCE, wood)), tetraTableLoot.replace(SPRUCE, wood));
+                cache.put(Identifier.fromNamespaceAndPath("tetra_tables", "loot_table/blocks/tetra_table_spruce.json".replace(SPRUCE, wood)), tetraTableLoot.replace(SPRUCE, wood));
             }
         }
     }

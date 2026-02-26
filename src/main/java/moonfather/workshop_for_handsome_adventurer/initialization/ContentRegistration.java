@@ -15,7 +15,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -88,7 +88,7 @@ public class ContentRegistration
 		for (String woodType : ContentRegistration.woodTypes)
 		{
 			id = "simple_table_" + woodType;
-			Block.Properties prop1 = SimpleTable.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			Block.Properties prop1 = SimpleTable.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id)));
 			Supplier<Block> block = BLOCKS.register(id, () -> new SimpleTable(prop1));
 			blocks_table1.add(block);
 			items_table1.add(FromBlock(block, id));
@@ -101,16 +101,16 @@ public class ContentRegistration
 			String id3 = "dual_table_top_left_" + woodType;
 			String id4 = "dual_table_top_right_" + woodType;
 			String desc = "item.%s.workstation_placer_%s".formatted(Constants.MODID, woodType);
-			Block.Properties prop1 = AdvancedTableBottomPrimary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id1))).overrideDescription(desc);
-			Block.Properties prop2 = AdvancedTableBottomSecondary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id2))).overrideDescription(desc);
-			Block.Properties prop3 = AdvancedTableTopSecondary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id3))).overrideDescription(desc);
-			Block.Properties prop4 = AdvancedTableTopSecondary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id4))).overrideDescription(desc);
+			Block.Properties prop1 = AdvancedTableBottomPrimary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id1))).overrideDescription(desc);
+			Block.Properties prop2 = AdvancedTableBottomSecondary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id2))).overrideDescription(desc);
+			Block.Properties prop3 = AdvancedTableTopSecondary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id3))).overrideDescription(desc);
+			Block.Properties prop4 = AdvancedTableTopSecondary.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id4))).overrideDescription(desc);
 			Supplier<Block> primary = BLOCKS.register(id1, () -> new AdvancedTableBottomPrimary(prop1));
 			BLOCKS.register(id2, () -> new AdvancedTableBottomSecondary(prop2));
 			BLOCKS.register(id3, () -> new AdvancedTableTopSecondary(prop3));
 			BLOCKS.register(id4, () -> new AdvancedTableTopSecondary(prop4));
 			String id6 = "workstation_placer_" + woodType;
-			Item.Properties prop6 = new Item.Properties().stacksTo(1).setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id6)));
+			Item.Properties prop6 = new Item.Properties().stacksTo(1).setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Constants.MODID, id6)));
 			Supplier<Item> placer = ITEMS.register(id6, () -> new WorkstationPlacerItem(woodType, prop6));
 			items_table2.add(placer);
 			blocks_table2.add(primary);
@@ -120,22 +120,22 @@ public class ContentRegistration
 		{
 			Supplier<Block> rack;
 			id = "tool_rack_single_" + woodType;
-			Block.Properties prop1 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			Block.Properties prop1 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id)));
 			rack = BLOCKS.register(id, () -> ToolRack.create(2, "single", prop1));
 			items_rack1.add(FromBlock(rack, id));
 			blocks_rack.add(rack);
 			id = "tool_rack_framed_" + woodType;
-			Block.Properties prop2 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			Block.Properties prop2 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id)));
 			rack = BLOCKS.register(id, () -> DualToolRack.create(6, "framed", prop2));
 			items_rack2.add(FromBlock(rack, id));
 			blocks_rack.add(rack);
 			id = "tool_rack_pframed_" + woodType;
-			Block.Properties prop3 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			Block.Properties prop3 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id)));
 			rack = BLOCKS.register(id, () -> DualToolRack.create(6, "pframed", prop3));
 			items_rack3.add(FromBlock(rack, id));
 			blocks_rack.add(rack);
 			id = "tool_rack_double_" + woodType;
-			Block.Properties prop4 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			Block.Properties prop4 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id)));
 			rack = BLOCKS.register(id, () -> DualToolRack.create(6, "double", prop4));
 			items_rack4.add(FromBlock(rack, id));
 			blocks_rack.add(rack);
@@ -144,7 +144,7 @@ public class ContentRegistration
 		for (String woodType : ContentRegistration.woodTypes)
 		{
 			id = "potion_shelf_" + woodType;
-			Block.Properties prop1 = PotionShelf.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			Block.Properties prop1 = PotionShelf.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id)));
 			Supplier<Block> shelf = BLOCKS.register(id, () -> new PotionShelf(prop1));
 			items_pshelf.add(FromBlock(shelf, id));
 			blocks_pshelf.add(shelf);
@@ -154,27 +154,27 @@ public class ContentRegistration
 		{
 			Supplier<Block> rack;
 			id = "book_shelf_double_" + woodType;
-			Block.Properties prop1 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			Block.Properties prop1 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id)));
 			rack = BLOCKS.register(id, () -> new BookShelf.Dual("double", prop1));
 			items_bshelf1.add(FromBlock(rack, id));
 			blocks_bshelf.add(rack);
 			id = "book_shelf_open_double_" + woodType;
-			Block.Properties prop2 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			Block.Properties prop2 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id)));
 			rack = BLOCKS.register(id, () -> new BookShelf.Dual("open_double", prop2));
 			items_bshelf2.add(FromBlock(rack, id));
 			blocks_bshelf.add(rack);
 			id = "book_shelf_minimal_" + woodType;
-			Block.Properties prop3 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			Block.Properties prop3 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id)));
 			rack = BLOCKS.register(id, () -> new BookShelf.TopSimple("minimal", prop3));
 			items_bshelf3.add(FromBlock(rack, id));
 			blocks_bshelf.add(rack);
 			id = "book_shelf_open_minimal_" + woodType;
-			Block.Properties prop4 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			Block.Properties prop4 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id)));
 			rack = BLOCKS.register(id, () -> new BookShelf.TopSimple("open_minimal", prop4));
 			items_bshelf4.add(FromBlock(rack, id));
 			blocks_bshelf.add(rack);
 			id = "book_shelf_with_lanterns_" + woodType;
-			Block.Properties prop5 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			Block.Properties prop5 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id)));
 			rack = BLOCKS.register(id, () -> new BookShelf.TopWithLanterns("with_lanterns", prop5));
 			items_bshelf5.add(FromBlock(rack, id));
 			blocks_bshelf.add(rack);
@@ -183,7 +183,7 @@ public class ContentRegistration
 		for (String woodType : ContentRegistration.woodTypes)
 		{
 			id = "disc_shelf_" + woodType;
-			Block.Properties prop1 = DiscShelf.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id)));
+			Block.Properties prop1 = DiscShelf.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id)));
 			Supplier<Block> shelf = BLOCKS.register(id, () -> new DiscShelf(prop1));
 			items_dshelf.add(FromBlock(shelf, id));
 			blocks_dshelf.add(shelf);
@@ -194,7 +194,7 @@ public class ContentRegistration
 	{
 		// could have passed deferred holder instead of separate string, but it doesn't matter
 		Item.Properties properties = new Item.Properties();
-		properties.setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, id))).useBlockDescriptionPrefix();
+		properties.setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Constants.MODID, id))).useBlockDescriptionPrefix();
 		return ITEMS.register(id, () -> new BlockItemEx(block.get(), properties));
 	}
 

@@ -6,7 +6,7 @@ import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -73,7 +73,7 @@ public class UnsupportedWoodRecipe extends CustomRecipe
 
 
 
-    private final TagKey<Item> supportedPlanks = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "supported_planks"));
+    private final TagKey<Item> supportedPlanks = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Constants.MODID, "supported_planks"));
 
     private boolean isAnUnsupportedPlank(ItemStack item)
     {

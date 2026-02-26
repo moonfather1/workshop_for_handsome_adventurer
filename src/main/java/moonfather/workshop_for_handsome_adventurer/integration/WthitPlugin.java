@@ -11,7 +11,7 @@ import moonfather.workshop_for_handsome_adventurer.blocks.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.JukeboxPlayable;
@@ -39,7 +39,7 @@ public class WthitPlugin implements IWailaPlugin {
 
     private static class WorkstationProvider implements IBlockComponentProvider {
         private static final Map<Block, ItemComponent> map = new HashMap<>();
-        private static final ResourceLocation topLine = ResourceLocation.fromNamespaceAndPath("waila", "object_name");
+        private static final Identifier topLine = Identifier.fromNamespaceAndPath("waila", "object_name");
 
         @Override
         public @Nullable ITooltipComponent getIcon(IBlockAccessor accessor, IPluginConfig config) {

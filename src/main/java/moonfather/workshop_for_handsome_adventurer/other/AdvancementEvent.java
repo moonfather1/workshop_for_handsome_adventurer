@@ -2,7 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.other;
 
 import moonfather.workshop_for_handsome_adventurer.blocks.SimpleTable;
 import net.minecraft.advancements.AdvancementHolder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.BlockItem;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -20,7 +20,7 @@ public class AdvancementEvent
         {
             if (event.getEntity() instanceof ServerPlayer sp)
             {
-                AdvancementHolder ah = sp.level().getServer().getAdvancements().get(ResourceLocation.fromNamespaceAndPath("minecraft", "story/root"));
+                AdvancementHolder ah = sp.level().getServer().getAdvancements().get(Identifier.fromNamespaceAndPath("minecraft", "story/root"));
                 sp.getAdvancements().award(ah, "crafting_table");
             }
         }

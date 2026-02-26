@@ -19,7 +19,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
@@ -838,9 +838,9 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	public static class CustomizationSlot extends Slot
 	{
-		private static final TagKey<Item> ChestTag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", "chests"));
-		private static final TagKey<Item> LanternTag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MODID, "lanterns"));
-		private static final ResourceLocation EMPTY_SLOT_BG = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "gui/c_slot");
+		private static final TagKey<Item> ChestTag = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", "chests"));
+		private static final TagKey<Item> LanternTag = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Constants.MODID, "lanterns"));
+		private static final Identifier EMPTY_SLOT_BG = Identifier.fromNamespaceAndPath(Constants.MODID, "gui/c_slot");
 
 
 		public CustomizationSlot(Container p_39521_, int p_39522_, int p_39523_, int p_39524_)
@@ -849,7 +849,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 
 		@Override
-		public ResourceLocation getNoItemIcon() { return EMPTY_SLOT_BG; }
+		public Identifier getNoItemIcon() { return EMPTY_SLOT_BG; }
 
 		@Override
 		public boolean mayPlace(ItemStack itemStack)
@@ -869,7 +869,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		{
 			if (accessItem == null)
 			{
-                Optional<Holder.Reference<Item>> stupidWrapping = BuiltInRegistries.ITEM.get(ResourceLocation.parse(CommonConfig.AccessCustomizationItem.get()));
+                Optional<Holder.Reference<Item>> stupidWrapping = BuiltInRegistries.ITEM.get(Identifier.parse(CommonConfig.AccessCustomizationItem.get()));
                 accessItem = stupidWrapping.map(Holder.Reference::value).orElse(Items.NAME_TAG);
 			}
 			return accessItem;

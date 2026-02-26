@@ -16,7 +16,7 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 
 import java.util.*;
@@ -35,7 +35,7 @@ public class TaskListScreen extends Screen
         this.isFireImmune = isFireImmune;
     }
 
-    private static final ResourceLocation BG_LOCATION = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/gui_task_list_bg.png");
+    private static final Identifier BG_LOCATION = Identifier.fromNamespaceAndPath(Constants.MODID, "textures/gui/gui_task_list_bg.png");
     private final int imageWidth = 179;
     private final int imageHeight = 209;
     protected int leftPos;
@@ -52,17 +52,17 @@ public class TaskListScreen extends Screen
     private final List<EditBox> editBoxes = new ArrayList<>();
     private EditBox header;
     private final List<String> checkBoxValues = new ArrayList<>(6);
-    private final HashMap<String, ResourceLocation> checkBoxImages = new HashMap<>(4);
+    private final HashMap<String, Identifier> checkBoxImages = new HashMap<>(4);
     private ImageWidget arrowPrev1, arrowPrev2, arrowNext1, arrowNext2;
-    private static final ResourceLocation BTN_LEFT_NORMAL = ResourceLocation.withDefaultNamespace("widget/page_backward");
-    private static final ResourceLocation BTN_LEFT_ACTIVE = ResourceLocation.withDefaultNamespace("widget/page_backward_highlighted");   // withDefaultNamespace("assets/minecraft/textures/gui/sprites/widget/page_backward.png"); // full path
-    private static final ResourceLocation BTN_RIGHT_NORMAL = ResourceLocation.withDefaultNamespace("widget/page_forward");
-    private static final ResourceLocation BTN_RIGHT_ACTIVE = ResourceLocation.withDefaultNamespace("widget/page_forward_highlighted");
-    //private static final ResourceLocation BTN_RIGHT_ACTIVE = ResourceLocation.withDefaultNamespace("textures/gui/sprites/widget/page_forward_highlighted.png"); // this works with texture() call instead of sprioe()
-    private static final ResourceLocation CHECKBOX_EMPTY = ResourceLocation.fromNamespaceAndPath(Constants.MODID,"textures/gui/task_list_check1.png");
-    private static final ResourceLocation CHECKBOX_DONE = ResourceLocation.fromNamespaceAndPath(Constants.MODID,"textures/gui/task_list_check2.png");
-    private static final ResourceLocation CHECKBOX_MOPE = ResourceLocation.fromNamespaceAndPath(Constants.MODID,"textures/gui/task_list_check3.png");
-    private static final ResourceLocation CHECKBOX_QMARK = ResourceLocation.fromNamespaceAndPath(Constants.MODID,"textures/gui/task_list_check4.png");
+    private static final Identifier BTN_LEFT_NORMAL = Identifier.withDefaultNamespace("widget/page_backward");
+    private static final Identifier BTN_LEFT_ACTIVE = Identifier.withDefaultNamespace("widget/page_backward_highlighted");   // withDefaultNamespace("assets/minecraft/textures/gui/sprites/widget/page_backward.png"); // full path
+    private static final Identifier BTN_RIGHT_NORMAL = Identifier.withDefaultNamespace("widget/page_forward");
+    private static final Identifier BTN_RIGHT_ACTIVE = Identifier.withDefaultNamespace("widget/page_forward_highlighted");
+    //private static final Identifier BTN_RIGHT_ACTIVE = Identifier.withDefaultNamespace("textures/gui/sprites/widget/page_forward_highlighted.png"); // this works with texture() call instead of sprioe()
+    private static final Identifier CHECKBOX_EMPTY = Identifier.fromNamespaceAndPath(Constants.MODID,"textures/gui/task_list_check1.png");
+    private static final Identifier CHECKBOX_DONE = Identifier.fromNamespaceAndPath(Constants.MODID,"textures/gui/task_list_check2.png");
+    private static final Identifier CHECKBOX_MOPE = Identifier.fromNamespaceAndPath(Constants.MODID,"textures/gui/task_list_check3.png");
+    private static final Identifier CHECKBOX_QMARK = Identifier.fromNamespaceAndPath(Constants.MODID,"textures/gui/task_list_check4.png");
     private static final int NORMAL_TEXT_COLOR = 0xff886666;
     private static final int DIM_TEXT_COLOR = 0xffbbaaaa;
 

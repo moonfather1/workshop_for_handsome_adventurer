@@ -2,13 +2,13 @@ package moonfather.workshop_for_handsome_adventurer.dynamic_resources.helpers;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLister;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Map;
 
 public class ItemTagWriter1
 {
-    public static void writeFiles(Map<ResourceLocation, String> cache)
+    public static void writeFiles(Map<Identifier, String> cache)
     {
         StringBuilder builder = new StringBuilder();
         builder.append("{\n");
@@ -29,6 +29,6 @@ public class ItemTagWriter1
             builder.append("\"").append(RecipeWriter.getPlanks(wood)).append("\"");
         }
         builder.append("\n  ]\n}\n");
-        cache.put(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "tags/item/supported_planks.json"), builder.toString());
+        cache.put(Identifier.fromNamespaceAndPath(Constants.MODID, "tags/item/supported_planks.json"), builder.toString());
     }
 }

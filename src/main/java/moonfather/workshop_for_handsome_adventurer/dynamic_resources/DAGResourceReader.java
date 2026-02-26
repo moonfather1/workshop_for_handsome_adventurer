@@ -4,14 +4,12 @@ import dev.lukebemish.dynamicassetgenerator.api.DataResourceCache;
 import dev.lukebemish.dynamicassetgenerator.api.ResourceCache;
 import dev.lukebemish.dynamicassetgenerator.api.ResourceGenerationContext;
 import dev.lukebemish.dynamicassetgenerator.api.client.AssetResourceCache;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.IoSupplier;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 public class DAGResourceReader extends AssetReader
 {
@@ -33,34 +31,34 @@ public class DAGResourceReader extends AssetReader
     {
         if (this.context == null)
         {
-            if (packType.equals(PackType.SERVER_DATA))
-            {
-                this.cache = ResourceCache.register(new DataResourceCache(ResourceLocation.fromNamespaceAndPath(namespace, "data")));
-            }
-            else
-            {
-                this.cache = ResourceCache.register(new AssetResourceCache(ResourceLocation.fromNamespaceAndPath(namespace, "assets")));
-            }
-            this.context = this.cache.makeContext(true).withResourceSource(ResourceGenerationContext.ResourceSource.filtered((s) -> true, packType));
+//            if (packType.equals(PackType.SERVER_DATA))
+//            {
+//                this.cache = ResourceCache.register(new DataResourceCache(Identifier.fromNamespaceAndPath(namespace, "data")));
+//            }
+//            else
+//            {
+//                this.cache = ResourceCache.register(new AssetResourceCache(Identifier.fromNamespaceAndPath(namespace, "assets")));
+//            }
+//            this.context = this.cache.makeContext(true).withResourceSource(ResourceGenerationContext.ResourceSource.filtered((s) -> true, packType));
         }
     }
 
     @Override
-    public InputStream getStream(ResourceLocation location)
+    public InputStream getStream(Identifier location)
     {
-        this.initContext();
-        IoSupplier<InputStream> sup =  this.context.getResourceSource().getResource(location);
-        if (sup != null)
-        {
-            try
-            {
-                return sup.get();
-            }
-            catch (IOException e)
-            {
-                return null;
-            }
-        }
+//        this.initContext();
+//        IoSupplier<InputStream> sup =  this.context.getResourceSource().getResource(location);
+//        if (sup != null)
+//        {
+//            try
+//            {
+//                return sup.get();
+//            }
+//            catch (IOException e)
+//            {
+//                return null;
+//            }
+//        }
         return null;
     }
 }

@@ -5,7 +5,7 @@ import moonfather.workshop_for_handsome_adventurer.Constants;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.resources.language.LanguageInfo;
 import net.minecraft.client.resources.metadata.language.LanguageMetadataSection;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionType;
@@ -33,7 +33,7 @@ public class OurClientPack extends BaseResourcePack
 
 
     @Override
-    protected void buildResources(Map<ResourceLocation, String> cache)
+    protected void buildResources(Map<Identifier, String> cache)
     {
         final String SPRUCE_PLANKS = "minecraft:block/spruce_planks";
         final String SPRUCE_LOG = "minecraft:block/stripped_spruce_log";
@@ -41,7 +41,7 @@ public class OurClientPack extends BaseResourcePack
         String json;
         for (String spruceFile: files)
         {
-            json = AssetReader.getInstance(PackType.CLIENT_RESOURCES, Constants.MODID).getText(ResourceLocation.fromNamespaceAndPath(Constants.MODID, spruceFile));
+            json = AssetReader.getInstance(PackType.CLIENT_RESOURCES, Constants.MODID).getText(Identifier.fromNamespaceAndPath(Constants.MODID, spruceFile));
             if (json != null)
             {
                 for (String wood: WoodTypeLister.getWoodIds())
@@ -59,12 +59,12 @@ public class OurClientPack extends BaseResourcePack
                         replaced = replaced.replace("/stripped_dark_oak_log", "/stripped_spruce_log");
                     }
                     String namespace = spruceFile.contains("tetra") ? "tetra_tables" : Constants.MODID;
-                    cache.put(ResourceLocation.fromNamespaceAndPath(namespace, spruceFile.replace(SPRUCE, wood)), replaced);
+                    cache.put(Identifier.fromNamespaceAndPath(namespace, spruceFile.replace(SPRUCE, wood)), replaced);
                 }
             }
         }
         // that was easy, now the language file:
-        InputStream originalLang = AssetReader.getInstance(PackType.CLIENT_RESOURCES, Constants.MODID).getStream(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "lang/en_us.json"));
+        InputStream originalLang = AssetReader.getInstance(PackType.CLIENT_RESOURCES, Constants.MODID).getStream(Identifier.fromNamespaceAndPath(Constants.MODID, "lang/en_us.json"));
         if (originalLang != null)
         {
             BufferedReader reader = new BufferedReader(new InputStreamReader(originalLang));
@@ -112,7 +112,7 @@ public class OurClientPack extends BaseResourcePack
                 e.printStackTrace();
             }
             builder.append("\n}\n");
-            cache.put(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "lang/en_us.json"), builder.toString());
+            cache.put(Identifier.fromNamespaceAndPath(Constants.MODID, "lang/en_us.json"), builder.toString());
         }
         // and now a totally unneeded emi aliases file
         StringBuilder builder = new StringBuilder();
@@ -139,7 +139,7 @@ public class OurClientPack extends BaseResourcePack
         builder.append("        \"alias.emi.workbench\"\n");
         builder.append("      ]\n");
         builder.append("    }\n  ]\n}\n");
-        cache.put(ResourceLocation.fromNamespaceAndPath("emi", "aliases/list2.json"), builder.toString());
+        cache.put(Identifier.fromNamespaceAndPath("emi", "aliases/list2.json"), builder.toString());
     }
 
     @Override
@@ -234,14 +234,14 @@ public class OurClientPack extends BaseResourcePack
             }
             else
             {
-                ResourceLocation rl = ResourceLocation.parse(sub);
+                Identifier rl = Identifier.parse(sub);
                 String namespace = rl.getNamespace(), path = rl.getPath();
                 String sub2 = WoodTypeClientManager.getLogTextureSubstitute(wood);
                 if (sub2 != null)
                 {
                     if (sub2.contains(":"))
                     {
-                        ResourceLocation rl2 = ResourceLocation.parse(sub2);
+                        Identifier rl2 = Identifier.parse(sub2);
                         namespace = rl2.getNamespace();
                         path = rl2.getPath();
                     }

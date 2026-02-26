@@ -3,7 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.dynamic_resources.texture_fi
 import dev.lukebemish.dynamicassetgenerator.api.ResourceCache;
 import dev.lukebemish.dynamicassetgenerator.api.ResourceGenerationContext;
 import dev.lukebemish.dynamicassetgenerator.api.client.AssetResourceCache;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.IoSupplier;
 
 import java.io.BufferedReader;
@@ -37,29 +37,29 @@ public class TextureAutoFinderDAG implements ITextureFinder
         {
             return PATH_CACHE.get(key);
         }
-        ResourceGenerationContext context = getContext(modId);
-        try
-        {
-            ResourceLocation rl1 = ResourceLocation.fromNamespaceAndPath(modId, "blockstates/" + blockTemplate.formatted(wood) + ".json");
-            IoSupplier<InputStream> sup1 = context.getResourceSource().getResource(rl1);
-            BufferedReader br1 = new BufferedReader(new InputStreamReader(sup1.get()));
-            String file1 = br1.lines().collect(Collectors.joining("\n"));
-            Matcher m1 = PATTERN_IN_BLOCKSTATE.matcher(file1);
-            m1.find();
-            String path1 = m1.group(1); // model
-
-            ResourceLocation rl2 = ResourceLocation.fromNamespaceAndPath(modId, "models/" + path1 + ".json");
-            IoSupplier<InputStream> sup2 = context.getResourceSource().getResource(rl2);
-            BufferedReader br2 = new BufferedReader(new InputStreamReader(sup2.get()));
-            String file2 = br2.lines().collect(Collectors.joining("\n"));
-            Matcher m2 = (textureNameInModelFile.equals("all") ? PATTERN_IN_MODEL_ALL : PATTERN_IN_MODEL_SIDE).matcher(file2); // %s is all for planks and side for logs
-            m2.find();
-            String result = m2.group(1); // texture
-
-            PATH_CACHE.put(key, result);
-            return result;
-        }
-        catch (Exception ignored) {}
+//        ResourceGenerationContext context = getContext(modId);
+//        try
+//        {
+//            Identifier rl1 = Identifier.fromNamespaceAndPath(modId, "blockstates/" + blockTemplate.formatted(wood) + ".json");
+//            IoSupplier<InputStream> sup1 = context.getResourceSource().getResource(rl1);
+//            BufferedReader br1 = new BufferedReader(new InputStreamReader(sup1.get()));
+//            String file1 = br1.lines().collect(Collectors.joining("\n"));
+//            Matcher m1 = PATTERN_IN_BLOCKSTATE.matcher(file1);
+//            m1.find();
+//            String path1 = m1.group(1); // model
+//
+//            Identifier rl2 = Identifier.fromNamespaceAndPath(modId, "models/" + path1 + ".json");
+//            IoSupplier<InputStream> sup2 = context.getResourceSource().getResource(rl2);
+//            BufferedReader br2 = new BufferedReader(new InputStreamReader(sup2.get()));
+//            String file2 = br2.lines().collect(Collectors.joining("\n"));
+//            Matcher m2 = (textureNameInModelFile.equals("all") ? PATTERN_IN_MODEL_ALL : PATTERN_IN_MODEL_SIDE).matcher(file2); // %s is all for planks and side for logs
+//            m2.find();
+//            String result = m2.group(1); // texture
+//
+//            PATH_CACHE.put(key, result);
+//            return result;
+//        }
+//        catch (Exception ignored) {}
         return null;
     }
     private static final Pattern PATTERN_IN_BLOCKSTATE = Pattern.compile("\"model\"\\s*:\\s*\"[a-z0-9_]+:(.+?)\"");
@@ -76,14 +76,15 @@ public class TextureAutoFinderDAG implements ITextureFinder
     private static final Map<String, ResourceGenerationContext> CONTEXTS = new HashMap<>();
     private static AssetResourceCache getCache(String namespace)
     {
-        if (CACHES.containsKey(namespace))
-        {
-            return CACHES.get(namespace);
-        }
-        AssetResourceCache newOne = ResourceCache.register(new AssetResourceCache(ResourceLocation.fromNamespaceAndPath(namespace, "assets")));
-        CACHES.put(namespace, newOne);
-        newOne.reset(newOne.makeContext(false));
-        return newOne;
+//        if (CACHES.containsKey(namespace))
+//        {
+//            return CACHES.get(namespace);
+//        }
+//        AssetResourceCache newOne = ResourceCache.register(new AssetResourceCache(Identifier.fromNamespaceAndPath(namespace, "assets")));
+//        CACHES.put(namespace, newOne);
+//        newOne.reset(newOne.makeContext(false));
+//        return newOne;
+        return null;//todo remove
     }
     private static ResourceGenerationContext getContext(String namespace)
     {

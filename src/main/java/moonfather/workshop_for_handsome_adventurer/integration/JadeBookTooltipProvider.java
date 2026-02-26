@@ -4,7 +4,7 @@ import moonfather.workshop_for_handsome_adventurer.ClientConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.BookShelfBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.blocks.BookShelf;
-import net.minecraft.resources.Ide;
+import net.minecraft.resources.Identifier;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
@@ -39,6 +39,6 @@ public class JadeBookTooltipProvider extends JadeBaseTooltipProvider implements 
 
 
     @Override
-    public ResourceLocation getUid() {  return this.pluginId;  }
-    private final ResourceLocation pluginId = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "jade_plugin2");
+    public Identifier getUid() {  return this.pluginId;  }
+    private final Identifier pluginId = Identifier.fromNamespaceAndPath(Constants.MODID, "jade_plugin2");
 }

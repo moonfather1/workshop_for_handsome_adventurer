@@ -8,7 +8,7 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.renderers.*;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.FinderEvents;
 import moonfather.workshop_for_handsome_adventurer.integration.PolymorphAccessorClient;
 import moonfather.workshop_for_handsome_adventurer.other.InWorldTooltip;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
@@ -67,7 +67,7 @@ public class ClientSetup
 			if (ClientConfig.ownWorldTooltipForceEnabled
 				|| (! ModList.get().isLoaded("jade") && ! ModList.get().isLoaded("theoneprobe") && ! ModList.get().isLoaded("wthit")))
 			{
-				event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "world_tooltip"), InWorldTooltip.getInstance());
+				event.registerAboveAll(Identifier.fromNamespaceAndPath(Constants.MODID, "world_tooltip"), InWorldTooltip.getInstance());
 			}
 		}
 	}

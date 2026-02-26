@@ -6,18 +6,21 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.StateSwitchingButton;
+import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.fml.ModList;
 
 public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 {
-	private static final ResourceLocation[] BACKGROUND_LOCATION = new ResourceLocation[5];
+	private static final Identifier[] BACKGROUND_LOCATION = new Identifier[5];
 
 	public DualTableCraftingScreen(SimpleTableMenu p_98448_, Inventory p_98449_, Component p_98450_) {
 		super(p_98448_, p_98449_, p_98450_);
@@ -33,12 +36,12 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 
 
 	@Override
-	protected ResourceLocation getBackgroundImage()
+	protected Identifier getBackgroundImage()
 	{
 		if (BACKGROUND_LOCATION[0] == null)
 		{
 			for (int i = 0; i <= 4; i++) {
-				BACKGROUND_LOCATION[i] = ResourceLocation.parse("workshop_for_handsome_adventurer:textures/gui/gui_dual_table_%d_slots.png".formatted(i));
+				BACKGROUND_LOCATION[i] = Identifier.parse("workshop_for_handsome_adventurer:textures/gui/gui_dual_table_%d_slots.png".formatted(i));
 			}
 		}
 		if (this.backgroundImageLocation == null)
@@ -58,7 +61,7 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 	}
 
 	//////jei////////
-	private StateSwitchingButton jeiButton = null;
+	private DestinationPickerButton jeiButton = null;
 	private int lastDestinationGrid = 1;
 	@Override
 	protected void init() {
@@ -102,32 +105,37 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 			this.addRenderableWidget(this.jeiButton);
 		}
 	}
-    private static final WidgetSprites spritesJEI = new WidgetSprites(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/jei_up_normal.png"),
-                                                                      ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/jei_down_normal.png"),
-                                                                      ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/jei_up_hovered.png"),
-                                                                      ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/jei_down_hovered.png"));
-    private static final WidgetSprites spritesREI = new WidgetSprites(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/rei_up_normal.png"),
-                                                                      ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/rei_down_normal.png"),
-                                                                      ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/rei_up_hovered.png"),
-                                                                      ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/rei_down_hovered.png"));
-    private static final WidgetSprites spritesEMI = new WidgetSprites(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/emi_up_normal.png"),
-                                                                      ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/emi_down_normal.png"),
-                                                                      ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/emi_up_hovered.png"),
-                                                                      ResourceLocation.fromNamespaceAndPath(Constants.MODID, "textures/gui/emi_down_hovered.png"));
+    private static final WidgetSprites spritesJEI = new WidgetSprites(Identifier.fromNamespaceAndPath(Constants.MODID, "textures/gui/jei_up_normal.png"),
+                                                                      Identifier.fromNamespaceAndPath(Constants.MODID, "textures/gui/jei_down_normal.png"),
+                                                                      Identifier.fromNamespaceAndPath(Constants.MODID, "textures/gui/jei_up_hovered.png"),
+                                                                      Identifier.fromNamespaceAndPath(Constants.MODID, "textures/gui/jei_down_hovered.png"));
+    private static final WidgetSprites spritesREI = new WidgetSprites(Identifier.fromNamespaceAndPath(Constants.MODID, "textures/gui/rei_up_normal.png"),
+                                                                      Identifier.fromNamespaceAndPath(Constants.MODID, "textures/gui/rei_down_normal.png"),
+                                                                      Identifier.fromNamespaceAndPath(Constants.MODID, "textures/gui/rei_up_hovered.png"),
+                                                                      Identifier.fromNamespaceAndPath(Constants.MODID, "textures/gui/rei_down_hovered.png"));
+    private static final WidgetSprites spritesEMI = new WidgetSprites(Identifier.fromNamespaceAndPath(Constants.MODID, "textures/gui/emi_up_normal.png"),
+                                                                      Identifier.fromNamespaceAndPath(Constants.MODID, "textures/gui/emi_down_normal.png"),
+                                                                      Identifier.fromNamespaceAndPath(Constants.MODID, "textures/gui/emi_up_hovered.png"),
+                                                                      Identifier.fromNamespaceAndPath(Constants.MODID, "textures/gui/emi_down_hovered.png"));
 
 
 
-	private class DestinationPickerButton extends StateSwitchingButton
+	private class DestinationPickerButton extends AbstractButton
 	{
 		private static final int JEI_BUTTON_WIDTH = 40, JEI_BUTTON_HEIGTH = 28, JEI_BUTTON_MARGIN = 0, JEI_BUTTON_RENDERX = 80, JEI_BUTTON_RENDERY = 62;
 
-		public DestinationPickerButton(int p_94615_, int p_94616_, int p_94617_, int p_94618_, boolean p_94619_) {
-			super(p_94615_, p_94616_, p_94617_, p_94618_, p_94619_);
+		private boolean isStateUp;
+		private WidgetSprites sprites;
+
+		public DestinationPickerButton(int x, int y, int w, int h, boolean initialStateUp) {
+			super(x, y, w, h, CommonComponents.EMPTY);
+			this.isStateUp = initialStateUp;
 		}
 
 
 		@Override
 		public boolean mouseClicked(MouseButtonEvent event, boolean isDouble) {
+			if (isDouble) { return  false; }
 			double localX = event.x() - this.getX();
 			double localY = event.y() - this.getY();
 			if (localX >= 10 && localX <= 20 && localY >= 4 && localY <= 14) {
@@ -135,7 +143,7 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 				{
 					PacketSender.sendDestinationGridChangeToServer(2);
 					lastDestinationGrid = 2;
-					this.setStateTriggered(true);
+					this.isStateUp = true;
 				}
 				return true;
 			}
@@ -144,7 +152,7 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 				{
 					PacketSender.sendDestinationGridChangeToServer(1);
 					lastDestinationGrid = 1;
-					this.setStateTriggered(false);
+					this.isStateUp = false;
 				}
 				return true;
 			}
@@ -157,13 +165,27 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 		}
 
 		@Override
-		public void renderWidget(GuiGraphics guiGraphics, int p_283010_, int p_281379_, float p_283453_)
+		protected void updateWidgetNarration(NarrationElementOutput p_259196_) { this.defaultButtonNarrationText(p_259196_); }
+
+		@Override
+		public void onPress(InputWithModifiers input) { }
+
+		@Override
+		public void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float p_283453_)
 		{
-			int localX = p_283010_ - this.getX();
-			int localY = p_281379_ - this.getY();
+			int localX = mouseX - this.getX();
+			int localY = mouseY - this.getY();
 			boolean hovered = lastDestinationGrid != 2 && localX >= 10 && localX <= 20 && localY >= 4 && localY <= 14
 					|| lastDestinationGrid == 2 && localX >= 10 && localX <= 20 && localY >= 14 && localY <= 24;
-			guiGraphics.blit(RenderPipelines.GUI_TEXTURED, this.sprites.get(this.isStateTriggered, hovered), this.getX(), this.getY(), 0, 0, this.width, this.height, 64, 64);
+			guiGraphics.blit(RenderPipelines.GUI_TEXTURED, this.sprites.get(this.isStateUp, hovered), this.getX(), this.getY(), 0, 0, this.width, this.height, 64, 64);
+		}
+
+		public void setStateTriggered(boolean value) {
+			this.isStateUp = value;
+		}
+
+		public void initTextureValues(WidgetSprites sprites) {
+			this.sprites = sprites;
 		}
 	}
 }

@@ -5,13 +5,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 
 public record BlockPagingMessage(BlockPos pos, boolean movingRight) implements CustomPacketPayload
 {
-    private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Constants.MODID, "message_block_paging");
+    private static final Identifier ID = Identifier.fromNamespaceAndPath(Constants.MODID, "message_block_paging");
     public static final Type<BlockPagingMessage> TYPE = new Type<>(ID);
 
 

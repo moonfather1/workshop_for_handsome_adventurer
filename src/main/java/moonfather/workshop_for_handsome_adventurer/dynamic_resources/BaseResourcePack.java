@@ -4,7 +4,7 @@ import com.google.common.base.Stopwatch;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import net.minecraft.SharedConstants;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionType;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 public abstract class BaseResourcePack implements PackResources
 {
-    private final Map<ResourceLocation, String> dataCache = new ConcurrentHashMap<>();
+    private final Map<Identifier, String> dataCache = new ConcurrentHashMap<>();
     private final PackType type;
     private final PackMetadataSection packMetadata;
     private Set<String> namespaces = null;
@@ -37,7 +37,7 @@ public abstract class BaseResourcePack implements PackResources
 
     ////////////////////////////////////
 
-    protected abstract void buildResources(Map<ResourceLocation, String> cache);
+    protected abstract void buildResources(Map<Identifier, String> cache);
     protected abstract boolean isNotOurNamespace(String namespace);
     protected abstract boolean isNotOurThing(String path);
 
@@ -51,7 +51,7 @@ public abstract class BaseResourcePack implements PackResources
             this.buildResources(this.dataCache);
             this.namespaces = this.dataCache.keySet()
                                             .stream()
-                                            .map(ResourceLocation::getNamespace)
+                                            .map(Identifier::getNamespace)
                                             .collect(Collectors.toSet());
             stopwatch.stop();
             //LogUtils.getLogger().info("~~~Generated dynamic {} in {} ms.", this.type.toString(), stopwatch.elapsed(TimeUnit.MILLISECONDS));
@@ -68,7 +68,7 @@ public abstract class BaseResourcePack implements PackResources
 
     @Nullable
     @Override
-    public IoSupplier<InputStream> getResource(PackType type, ResourceLocation location)
+    public IoSupplier<InputStream> getResource(PackType type, Identifier location)
     {
         if (this.isNotOurNamespace(location.getNamespace())) { return null; }
         if (this.isNotOurThing(location.getPath())) { return null; }
@@ -103,7 +103,7 @@ public abstract class BaseResourcePack implements PackResources
 
 
 
-    private IoSupplier<InputStream> supplierForPath(ResourceLocation loc)
+    private IoSupplier<InputStream> supplierForPath(Identifier loc)
     {
         return () -> new ByteArrayInputStream(this.dataCache.get(loc).getBytes(StandardCharsets.UTF_8));
     }

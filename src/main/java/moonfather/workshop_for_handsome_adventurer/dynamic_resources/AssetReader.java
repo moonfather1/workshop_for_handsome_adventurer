@@ -1,7 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.config.DynamicAssetClientConfig;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.neoforged.fml.ModList;
 
@@ -49,9 +49,9 @@ public abstract class AssetReader
         return null;
     }
 
-    public abstract InputStream getStream(ResourceLocation location);
+    public abstract InputStream getStream(Identifier location);
 	
-	public String getText(ResourceLocation location)
+	public String getText(Identifier location)
 	{
 		InputStream is = this.getStream(location);
 		if (is == null) 
@@ -74,7 +74,7 @@ public abstract class AssetReader
         private final String prefix;
 
         @Override
-        public InputStream getStream(ResourceLocation location)
+        public InputStream getStream(Identifier location)
         {
             String path = this.prefix + location.getPath();
             return this.getClass().getResourceAsStream(path);

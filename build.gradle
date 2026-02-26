@@ -130,7 +130,7 @@ dependencies {
     //runtimeOnly "curse.maven:wthit-forge-455982:7546202"
     //runtimeOnly "curse.maven:badpackets-615134:7324636"
     compileOnly "curse.maven:jade-324717:7313008"
-    //runtimeOnly "curse.maven:jade-324717:7313008"
+    runtimeOnly "curse.maven:jade-324717:7313008"
     compileOnly "curse.maven:the-one-probe-245211:6106998"
     //!! top is at 1.21.1
 
@@ -164,14 +164,15 @@ dependencies {
     compileOnly "curse.maven:inventory-tweaks-refoxed-976858:5610776"
     //!! IT is still on 1.21.1
 
-    runtimeOnly "curse.maven:storage-drawers-223852:7335085"
+//    runtimeOnly "curse.maven:storage-drawers-223852:7335085"
     //  sd  crashes with jsde
     //!! runtimeOnly "curse.maven:functional-storage-556861:5861256"
     //!! runtimeOnly "curse.maven:titanium-287342:5889342"
     //!! FS is still on 1.21.1
 
     compileOnly "curse.maven:backpacked-352835:7573691"
-    runtimeOnly "curse.maven:backpacked-352835:7573691"
+//    runtimeOnly "curse.maven:backpacked-352835:7573691"
+//    runtimeOnly "curse.maven:framework-549225:7530356"
     //runtimeOnly "curse.maven:travelers-backpack-321117:7543696"
     compileOnly "curse.maven:travelers-backpack-321117:7543696"
     }
@@ -189,7 +190,7 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             mod_version            : mod_version,
             mod_authors            : mod_authors,
             mod_description        : mod_description,
-            loader_version_range   : loader_version_range,
+//            loader_version_range   : loader_version_range,
             neo_version_range      : neo_version_range
     ]
     inputs.properties replaceProperties
