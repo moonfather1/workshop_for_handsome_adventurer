@@ -58,6 +58,10 @@ public class OurClientPack extends BaseResourcePack
                     {
                         replaced = replaced.replace("/stripped_dark_oak_log", "/stripped_spruce_log");
                     }
+                    if (spruceFile.contains("tetra"))
+                    {
+                        replaced = replaced.replace(Constants.MODID, "tetra_tables");
+                    }
                     String namespace = spruceFile.contains("tetra") ? "tetra_tables" : Constants.MODID;
                     cache.put(Identifier.fromNamespaceAndPath(namespace, spruceFile.replace(SPRUCE, wood)), replaced);
                 }
