@@ -62,6 +62,7 @@ public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEnti
     public static class ItemHoldingBlockRenderState extends BlockEntityRenderState
     {
         public ItemStackRenderState[] items = new ItemStackRenderState[24];
+        public Direction direction = Direction.NORTH;
     }
 
     @Override

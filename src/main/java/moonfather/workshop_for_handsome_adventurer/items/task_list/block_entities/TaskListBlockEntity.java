@@ -1,6 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.items.task_list.block_entities;
 
 import moonfather.workshop_for_handsome_adventurer.items.task_list.RegistrationForTaskList;
+import moonfather.workshop_for_handsome_adventurer.items.task_list.block_entities.renderers.RenderStateManagement;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.blocks.TaskListPanel;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.TaskListItem;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.moving_data.TaskListComponent;
@@ -144,6 +145,7 @@ public class TaskListBlockEntity extends BasicBlockEntity implements Nameable
             this.onArrowNext();
             this.footer = null;
             TaskListMessaging.sendBlockClickPageRightToServer(this.getBlockPos());
+            this.setCachedRenderState(null);
         }
     }
     public void onClientArrowPrev()  // client only method
@@ -153,6 +155,7 @@ public class TaskListBlockEntity extends BasicBlockEntity implements Nameable
             this.onArrowPrev();
             this.footer = null;
             TaskListMessaging.sendBlockClickPageLeftToServer(this.getBlockPos());
+            this.setCachedRenderState(null);
         }
     }
 
@@ -160,6 +163,7 @@ public class TaskListBlockEntity extends BasicBlockEntity implements Nameable
     {
         this.updateCheckmark(index, this.getCurrentPage()); // try calling a server method here. will be called on the server in a few moments too.
         TaskListMessaging.sendBlockClickCheckmarkServer(this.getBlockPos(), index, this.getCurrentPage());
+        this.setCachedRenderState(null);
     }
 
 
@@ -230,4 +234,10 @@ public class TaskListBlockEntity extends BasicBlockEntity implements Nameable
         super.preRemoveSideEffects(pos, state);
         Block.popResourceFromFace(this.level, pos, state.getValue(TaskListPanel.FACING), this.getItemForDrop());
     }
+
+    // rendering support // // //
+
+    public RenderStateManagement.Page getCachedRenderState() { return this.cachedRenderState; }
+    private RenderStateManagement.Page cachedRenderState = null;
+    public void setCachedRenderState(RenderStateManagement.Page value) { this.cachedRenderState = value; }
 }

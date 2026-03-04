@@ -1,19 +1,19 @@
 {
     "sources": [
 		{
-            "type": "single",
+            "type": "minecraft:single",
             "resource": "workshop_for_handsome_adventurer:gui/task_list_check1"
         },
         {
-            "type": "single",
+            "type": "minecraft:single",
             "resource": "workshop_for_handsome_adventurer:gui/task_list_check2"
         },
         {
-            "type": "single",
+            "type": "minecraft:single",
             "resource": "workshop_for_handsome_adventurer:gui/task_list_check3"
         },
         {
-            "type": "single",
+            "type": "minecraft:single",
             "resource": "workshop_for_handsome_adventurer:gui/task_list_check4"
         } 
     ]

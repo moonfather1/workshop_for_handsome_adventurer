@@ -18,32 +18,40 @@ import java.util.Map;
 // even though i'd expect it to just be available.
 public class SpecialFirstEverRenderer
 {
-    public static void render(String image, float xInPixels, float yInPixelsFromTop, PoseStack poseStack, MultiBufferSource multiBufferSource, int combinedLight, int combinedOverlay, int lightColor)
+    public static void render(String image, float xInPixels, float yInPixelsFromTop, PoseStack.Pose pose, VertexConsumer vertexConsumer, int combinedLight)
     {
         if (sprites.size() == 0)
         {
-            sprites.put("e", Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(Identifier.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check1")));
-            sprites.put("y", Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(Identifier.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check2")));
-            sprites.put("n", Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(Identifier.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check3")));
-            sprites.put("q", Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(TextureAtlas.LOCATION_BLOCKS).getSprite(Identifier.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check4")));
+            sprites.put("e", Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(atlasId).getSprite(Identifier.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check1")));
+            sprites.put("y", Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(atlasId).getSprite(Identifier.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check2")));
+            sprites.put("n", Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(atlasId).getSprite(Identifier.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check3")));
+            sprites.put("q", Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(atlasId).getSprite(Identifier.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check4")));
         }
         TextureAtlasSprite sprite = sprites.get(image);
-        poseStack.pushPose();
-        poseStack.scale(1.875f, 1.3125f, 1.0f);
-        float yScaleSpecial = 160f; // special is a fancy way of saying i'm adjusting things by hand
-        float xScaleSpecial = 160f; // special is a fancy way of saying i'm adjusting things by hand
-        poseStack.translate(-4 + xInPixels * 1/16f * xScaleSpecial,  -4 + yInPixelsFromTop * 1/16f * yScaleSpecial, 0.5);
-        VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderTypes.cutoutMovingBlock());
+        PoseStack.Pose pose2 = pose.copy();
+        preparePose(pose2, xInPixels, yInPixelsFromTop);
 
         int w = 13, h = 13;
-        vertex(poseStack.last(), vertexConsumer,  0, 16, sprite.getU0(), sprite.getV1(), combinedLight);
-        vertex(poseStack.last(), vertexConsumer, 16, 16, sprite.getU1(), sprite.getV1(), combinedLight);
-        vertex(poseStack.last(), vertexConsumer, 16,  0, sprite.getU1(), sprite.getV0(), combinedLight);
-        vertex(poseStack.last(), vertexConsumer,  0,  0, sprite.getU0(), sprite.getV0(), combinedLight);
-
-        poseStack.popPose();
+        vertex(pose2, vertexConsumer,  0, 16, sprite.getU0(), sprite.getV1(), combinedLight);
+        vertex(pose2, vertexConsumer, 16, 16, sprite.getU1(), sprite.getV1(), combinedLight);
+        vertex(pose2, vertexConsumer, 16,  0, sprite.getU1(), sprite.getV0(), combinedLight);
+        vertex(pose2, vertexConsumer,  0,  0, sprite.getU0(), sprite.getV0(), combinedLight);
+    }
+    public static void render(String image, float xInPixels, float yInPixelsFromTop, PoseStack.Pose pose, MultiBufferSource multiBufferSource, int combinedLight, int combinedOverlay, int lightColor)
+    {
+        render(image, xInPixels, yInPixelsFromTop, pose, multiBufferSource.getBuffer(RenderTypes.cutoutMovingBlock()), combinedLight);
     }
     private static final Map<String, TextureAtlasSprite> sprites = new HashMap<>(4);
+    private static final Identifier atlasId = Identifier.fromNamespaceAndPath("minecraft", "blocks");
+
+    public static void preparePose(PoseStack.Pose pose, float xInPixels, float yInPixelsFromTop)
+    {
+        pose.scale(1.875f, 1.3125f, 1.0f);
+        float yScaleSpecial = 160f; // special is a fancy way of saying i'm adjusting things by hand
+        float xScaleSpecial = 160f; // special is a fancy way of saying i'm adjusting things by hand
+        pose.translate(-4 + xInPixels * 1/16f * xScaleSpecial,  -4 + yInPixelsFromTop * 1/16f * yScaleSpecial, 0.45f);
+    }
+    //////////////////////////////////////////////////////////////////
 
     private static void vertex(
             PoseStack.Pose pose,
