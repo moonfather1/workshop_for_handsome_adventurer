@@ -4,6 +4,23 @@
     { "id": "quark:ancient_tome", "required": false },
     { "id": "silentgear:blueprint_book", "required": false },
     { "id": "map_atlases:atlas", "required": false },
-    { "id": "ae2:guide", "required": false }
+    { "id": "ae2:guide", "required": false },
+    { "id": "guideapi_vp:vampirism-guidebook", "required": false },
+    { "id": "antiqueatlas:antique_atlas", "required": false },
+    { "id": "vampirism:vampire_book", "required": false },
+    { "id": "tide:fishing_journal", "required": false },
+
+    { "id": "not_enough_glyphs:spell_binder", "required": false },
+    { "id": "railcraft:routing_table_book", "required": false },
+    { "id": "cookingforblockheads:crafting_book", "required": false },
+    { "id": "cookingforblockheads:recipe_book", "required": false },
+    { "id": "ftbquests:book", "required": false },
+    { "id": "allthearcanistgear:allthemodium_spell_book", "required": false },
+    { "id": "allthearcanistgear:vibranium_spell_book", "required": false },
+    { "id": "allthearcanistgear:unobtainium_spell_book", "required": false },
+    { "id": "allthearcanistgear:creative_spell_book", "required": false },
+    { "id": "eccentrictome:tome", "required": false },
+    { "id": "akashictome:tome", "required": false },
+    { "id": "chipped:alchemy_book", "required": false }
   ]
 }
