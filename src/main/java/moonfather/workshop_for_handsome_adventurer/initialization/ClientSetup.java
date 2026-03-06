@@ -25,9 +25,6 @@ public class ClientSetup
 	@SubscribeEvent
 	public static void Initialize(FMLClientSetupEvent event)
 	{
-		//ItemBlockRenderTypes.setRenderLayer(Registration.SIMPLE_TABLE.get(), RenderType.cutoutMipped()); // apparently unnecessary.
-		//BlockEntityRenderers.register(Registration.TOOL_RACK.get(), ToolRackTESR::new); //maybe this would be ok too
-
 		if (ModList.get().isLoaded("polymorph"))
 		{
 			PolymorphAccessorClient.register();

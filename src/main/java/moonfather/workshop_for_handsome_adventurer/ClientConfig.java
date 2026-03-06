@@ -43,9 +43,11 @@ public class ClientConfig
         BUILDER.pop();
         BUILDER.push("Our in-world tooltips");
             ownWorldTooltipForceEnabled_internal = BUILDER
+                    .gameRestart()
                     .comment("We have a system that tells you what's under crosshair in tool rack / potion shelf / book shelf. It's disabled by default if mod pack has Jade/TOP/WTHIT, and it's enabled if none of the three are there. If you enable this, the system will be enabled even if you have Jade/TOP/WTHIT. ")
                     .define("Our world tooltip - force enabled", false);
             ownWorldTooltipForceDisabled_internal = BUILDER
+                    .gameRestart()
                     .comment("We have a system that tells you what's under crosshair in tool rack / potion shelf / book shelf. It's disabled by default if mod pack has Jade/TOP/WTHIT, and it's enabled if none of the three are there. If you enable this, the system will be disabled even if you don't have Jade/TOP/WTHIT. ")
                     .define("Our world tooltip - force disabled", false);
         BUILDER.pop();
@@ -58,14 +60,33 @@ public class ClientConfig
                 .define("Task list pauses singleplayer", false);
 			taskListItemsAreDrawnOnWall_internal = BUILDER
                 .comment("Are item texts are checkmarks drawn on the task list block (when it's hanging on a wall)? Default is true (Bibliocraft style) - text is visible and checkmarks and paging work. Alternatively (simple mode) - right-clicking just opens the gui.  Even though this is true by default, the Author plays with it turned off and recommends that you try with it turned off and then make a decision.")
+                .gameRestart()
                 .define("Items are drawn on wall", true);
         BUILDER.pop();
         SPEC = BUILDER.build();
     }
-	
+
+    /////////////////////////////////////////////////////
 	
     @SubscribeEvent
-    static void onLoad(final ModConfigEvent event)
+    static void onLoad(final ModConfigEvent.Loading event)
+    {
+        if (event.getConfig().getSpec().equals(SPEC))
+        {
+            reloadInternal();
+        }
+    }
+
+    @SubscribeEvent
+    static void onLoad2(final ModConfigEvent.Reloading event)
+    {
+        if (event.getConfig().getSpec().equals(SPEC))
+        {
+            reloadInternal();
+        }
+    }
+
+    private static void reloadInternal()
     {
         taskListColoringForFinishedItems = taskListColoringForFinishedItems_internal.get();
         taskListPausesSingleplayer = taskListPausesSingleplayer_internal.get();

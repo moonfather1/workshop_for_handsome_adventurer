@@ -71,6 +71,7 @@ public class TaskListScreen extends Screen
     {
         this.leftPos = (this.width - this.imageWidth) / 2;
         this.topPos = 0;  // normally middle but i'm thinking top here  (this.height - this.imageHeight) / 2;
+        int arrowHeight = 13, arrowWidth = 23;
         if (this.editBoxes.size() == 0)
         {
             this.topMarginMain = 42; // can do 44 if we need more room above
@@ -85,8 +86,7 @@ public class TaskListScreen extends Screen
                 eb1.setTextColor(NORMAL_TEXT_COLOR);
                 eb1.setTextShadow(false);
 
-                eb1.setX(this.leftPos + 26);
-                eb1.setY(this.topPos + y);
+                eb1.setY(this.topPos + y); // x set below
                 y += (height - 1);
 
                 this.editBoxes.add(eb1);
@@ -101,26 +101,15 @@ public class TaskListScreen extends Screen
             this.header.setVisible(true);
             this.header.setTextColor(0xFF555088);
             this.header.setTextShadow(false);
-            this.header.setX(this.leftPos + 16);
             this.header.setY(this.topPos + 16);
             this.renderables.add(this.header);
             this.header.setValue(this.itemName);
 
             // edit boxes done, now paging arrows
-            int arrowHeight = 13, arrowWidth = 23;
-            int hmargin = 10, vmargin = 10;
             this.arrowPrev1 = ImageWidget.sprite(arrowWidth, arrowHeight, BTN_LEFT_NORMAL);
-            this.arrowPrev1.setPosition(this.leftPos + hmargin, this.topPos + this.imageHeight - arrowHeight - vmargin);
             this.arrowPrev2 = ImageWidget.sprite(arrowWidth, arrowHeight, BTN_LEFT_ACTIVE);
-            this.arrowPrev2.setPosition(this.arrowPrev1.getX(), this.arrowPrev1.getY());
             this.arrowNext1 = ImageWidget.sprite(arrowWidth, arrowHeight, BTN_RIGHT_NORMAL);
-            this.arrowNext1.setPosition(this.leftPos + this.imageWidth - arrowWidth - hmargin, this.topPos + this.imageHeight - arrowHeight - vmargin);
             this.arrowNext2 = ImageWidget.sprite(arrowWidth, arrowHeight, BTN_RIGHT_ACTIVE);
-            this.arrowNext2.setPosition(this.arrowNext1.getX(), this.arrowNext1.getY());
-            this.addRenderableOnly(this.arrowPrev1);
-            this.addRenderableOnly(this.arrowPrev2);
-            this.addRenderableOnly(this.arrowNext1);
-            this.addRenderableOnly(this.arrowNext2);
             this.setArrowVisibilityInitial();
             // paging arrows done, now checkboxes
             this.checkBoxImages.put("e", CHECKBOX_EMPTY);
@@ -128,6 +117,26 @@ public class TaskListScreen extends Screen
             this.checkBoxImages.put("n", CHECKBOX_MOPE);
             this.checkBoxImages.put("q", CHECKBOX_QMARK);
         }
+
+        // ok, now controls are created byt not added to renderables and position is not set.
+        // that's because we want the creation (above) once and positioning and adding to renderables (below) on every init, which includes post-resize too.
+        for (EditBox editBox : this.editBoxes)
+        {
+            this.renderables.add(editBox);
+            editBox.setX(this.leftPos + 27);
+        }
+        this.renderables.add(this.header);
+        this.header.setX(this.leftPos + 16);
+        this.addRenderableOnly(this.arrowPrev1);
+        this.addRenderableOnly(this.arrowPrev2);
+        this.addRenderableOnly(this.arrowNext1);
+        this.addRenderableOnly(this.arrowNext2);
+        int hmargin = 10, vmargin = 10;
+        this.arrowPrev1.setPosition(this.leftPos + hmargin, this.topPos + this.imageHeight - arrowHeight - vmargin);
+        this.arrowPrev2.setPosition(this.arrowPrev1.getX(), this.arrowPrev1.getY());
+        this.arrowNext1.setPosition(this.leftPos + this.imageWidth - arrowWidth - hmargin, this.topPos + this.imageHeight - arrowHeight - vmargin);
+        this.arrowNext2.setPosition(this.arrowNext1.getX(), this.arrowNext1.getY());
+
         // this repeats for every page shown (after paging)
         for (int i = 0; i < this.editBoxes.size(); i++)
         {
@@ -463,9 +472,9 @@ public class TaskListScreen extends Screen
         }
         guiGraphics.drawString(Minecraft.getInstance().font, this.footer, this.leftPos + this.imageWidth / 2 - 12, this.topPos + this.imageHeight - 18, 0xff776666, false);
         // checkboxes
-        int y = this.topPos + this.topMarginMain + 3;
+        int y = this.topPos + this.topMarginMain + 2;
         int x = this.leftPos + 10;
-        int size = 13;
+        int size = 16; // actually it's 13
         for (int i = 0; i < this.checkBoxValues.size(); i++)
         {
             guiGraphics.blit(RenderPipelines.GUI_TEXTURED, this.checkBoxImages.get(this.checkBoxValues.get(i)), x, y, 0.0F, 0.0F, size, size, 16, 16, 16, 16);
