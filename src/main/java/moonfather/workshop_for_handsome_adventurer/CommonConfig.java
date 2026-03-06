@@ -78,4 +78,6 @@ public class CommonConfig
         BUILDER.pop();
         SPEC = BUILDER.build();
     }
+
+    // i'm using these spec-fields directly.  i know now how to have them internal (in ModConfigEvent.Reloading and Loading, you must compare getSpec to SPEC), but by the time i learned that, i removed the event.
 }
