@@ -14,7 +14,7 @@
 	"block.workshop_for_handsome_adventurer.simple_table_birch": "Crafting Table (birch)",
 	"block.workshop_for_handsome_adventurer.simple_table_jungle": "Crafting Table (jungle)",
 	"block.workshop_for_handsome_adventurer.simple_table_dark_oak": "Crafting Table (dark oak)",
-	"block.workshop_for_handsome_adventurer.simple_table.tooltip1": "A tiny crafting table. Uncomfortable and a little embarrassing to use.",
+	"block.workshop_for_handsome_adventurer.simple_table.tooltip1": "A tiny crafting table. Uncomfortable but dependable.",
 	"block.workshop_for_handsome_adventurer.simple_table.tooltip2": "Can access nearby inventories. Can hold items.",
 
 	"block.workshop_for_handsome_adventurer.tool_rack_double_oak": "Tool Rack (oak, triple)",
@@ -24,7 +24,7 @@
 	"block.workshop_for_handsome_adventurer.tool_rack_double_jungle": "Tool Rack (jungle, triple)",
 	"block.workshop_for_handsome_adventurer.tool_rack_double_birch": "Tool Rack (birch, triple)",
 	"block.workshop_for_handsome_adventurer.tool_rack_double.tooltip1": "Holds 6 items.",
-	"block.workshop_for_handsome_adventurer.tool_rack_double.tooltip2": "Convenient usage, decent aesthetics.",
+	"block.workshop_for_handsome_adventurer.tool_rack_double.tooltip2": "Convenient usage, questionable design.",
 
 	"block.workshop_for_handsome_adventurer.tool_rack_framed_oak": "Tool Rack (oak, framed)",
 	"block.workshop_for_handsome_adventurer.tool_rack_framed_spruce": "Tool Rack (spruce, framed)",
@@ -33,7 +33,7 @@
 	"block.workshop_for_handsome_adventurer.tool_rack_framed_jungle": "Tool Rack (jungle, framed)",
 	"block.workshop_for_handsome_adventurer.tool_rack_framed_birch": "Tool Rack (birch, framed)",
 	"block.workshop_for_handsome_adventurer.tool_rack_framed.tooltip1": "Holds 6 items.",
-	"block.workshop_for_handsome_adventurer.tool_rack_framed.tooltip2": "Convenient usage, elegant design.",
+	"block.workshop_for_handsome_adventurer.tool_rack_framed.tooltip2": "Convenient usage, decent aesthetics.",
 
 	"block.workshop_for_handsome_adventurer.tool_rack_pframed_oak": "Tool Rack (oak, partly framed)",
 	"block.workshop_for_handsome_adventurer.tool_rack_pframed_spruce": "Tool Rack (spruce, partly framed)",
@@ -42,7 +42,7 @@
 	"block.workshop_for_handsome_adventurer.tool_rack_pframed_jungle": "Tool Rack (jungle, partly framed)",
 	"block.workshop_for_handsome_adventurer.tool_rack_pframed_birch": "Tool Rack (birch, partly framed)",
 	"block.workshop_for_handsome_adventurer.tool_rack_pframed.tooltip1": "Holds 6 items.",
-	"block.workshop_for_handsome_adventurer.tool_rack_pframed.tooltip2": "Convenient usage, questionable design.",
+	"block.workshop_for_handsome_adventurer.tool_rack_pframed.tooltip2": "Convenient usage, elegant design.",
 
 	"block.workshop_for_handsome_adventurer.tool_rack_single_oak": "Tool Rack (oak, single)",
 	"block.workshop_for_handsome_adventurer.tool_rack_single_spruce": "Tool Rack (spruce, single)",
@@ -117,6 +117,17 @@
 	"block.workshop_for_handsome_adventurer.book_shelf_with_lanterns.tooltip1": "Holds 4 books.",
 	"block.workshop_for_handsome_adventurer.book_shelf_with_lanterns.tooltip2": "Likely intended to hold cookbooks in a kitchen.",
 
+	"block.workshop_for_handsome_adventurer.disc_shelf_oak": "Disc Shelf (oak)",
+	"block.workshop_for_handsome_adventurer.disc_shelf_spruce": "Disc Shelf (spruce)",
+	"block.workshop_for_handsome_adventurer.disc_shelf_dark_oak": "Disc Shelf (dark oak)",
+	"block.workshop_for_handsome_adventurer.disc_shelf_acacia": "Disc Shelf (acacia)",
+	"block.workshop_for_handsome_adventurer.disc_shelf_jungle": "Disc Shelf (jungle)",
+	"block.workshop_for_handsome_adventurer.disc_shelf_birch": "Disc Shelf (birch)",
+	"block.workshop_for_handsome_adventurer.disc_shelf_mangrove": "Disc Shelf (mangrove)",
+	"block.workshop_for_handsome_adventurer.disc_shelf_cherry": "Disc Shelf (cherry)",
+	"block.workshop_for_handsome_adventurer.disc_shelf.tooltip1": "Holds 9 sets of discs.",
+	"block.workshop_for_handsome_adventurer.disc_shelf.tooltip2": "Best discs deserve to be on display.",
+
 	"message.workshop_for_handsome_adventurer.no_room_for_workstation": "No room to place a workstation there.",
 	"message.workshop_for_handsome_adventurer.workshop_table_obscured": "Crafting table is obscured.",
 	"message.workshop_for_handsome_adventurer.invalid_item_for_rack": "You can't put that onto the rack.",
@@ -127,6 +138,12 @@
 	"message.workshop_for_handsome_adventurer.shelf_wrong_potion": "Not the same potion. Put it in an empty slot.",
 	"message.workshop_for_handsome_adventurer.shelf_probe_tooltip": "Number of bottles: %d, can fit %d.",
 	"message.workshop_for_handsome_adventurer.invalid_item_for_book_shelf": "You can't put that onto the shelf.",
+	"message.workshop_for_handsome_adventurer.shelf_invalid_item2": "You can't put that onto the disc rack.",
+	"message.workshop_for_handsome_adventurer.shelf_remaining_items2": "Remaining discs: ",
+	"message.workshop_for_handsome_adventurer.shelf_wrong_potion2": "Not the same disc. Put it in an empty slot.",
+	"message.workshop_for_handsome_adventurer.shelf_probe_tooltip2": "Number of discs: %d, can fit %d.",
+	"message.workshop_for_handsome_adventurer.shelf_hint2": "You could put that one together with same discs in another slot.",
+	"message.workshop_for_handsome_adventurer.shelf_hint": "You could put that one together with same potions in another slot.",
 
 	"block.workshop_for_handsome_adventurer.simple_table_mangrove": "Crafting Table (mangrove)",
 	"block.workshop_for_handsome_adventurer.tool_rack_double_mangrove": "Tool Rack (mangrove, triple)",
@@ -143,11 +160,12 @@
 
 	"block.tetra_tables.tetra_table_spruce": "Workbench (spruce)",
 
-	"message.workshop_for_handsome_adventurer.extension_slot1": "Put a chest or a storage drawer here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests.",
-	"message.workshop_for_handsome_adventurer.extension_slot2": "Put a chest or a storage drawer here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests. \n(optionally one more [ITEM] for a range of two blocks)\n \nOr two lanterns to make them part of the workstation \nand light up the surroundings (put two in one slot).",
+	"message.workshop_for_handsome_adventurer.extension_slot1": "Put a wooden chest here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests.",
+	"message.workshop_for_handsome_adventurer.extension_slot2": "Put a wooden chest here \nto have items stay in crafting grid. \n \nOr, put a [ITEM] here \nto access nearby chests. \n(optionally one more [ITEM] for a range of two blocks)\n \nOr two lanterns to make them part of the workstation \nand light up the surroundings (put two in one slot).",
 	"message.workshop_for_handsome_adventurer.extension_slotT": "Customization slot",
 	"message.workshop_for_handsome_adventurer.extension_slotS": "(shift for more)",
-	"message.workshop_for_handsome_adventurer.rename": "Rename container %s \nfor the cost of 1 XP level.",
+	"message.workshop_for_handsome_adventurer.rename": "Rename container %s \nfor the cost of 1 XP level",
+	"message.workshop_for_handsome_adventurer.rename0": "Rename container %s",
 	"message.workshop_for_handsome_adventurer.workshop_table_in_use": "Crafting table is in use by %s. You need to wait.",
 
 	"itemGroup.workshop_for_handsome_adventurer": "Workshop for handsome adventurer",

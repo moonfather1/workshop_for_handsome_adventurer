@@ -33,7 +33,7 @@ public class JadeBookTooltipProvider extends JadeBaseTooltipProvider implements 
     @Override
     protected boolean showDetails()
     {
-        return ClientConfig.detailedWailaInfoForEnchantedBooks;
+        return ClientConfig.detailedWailaInfoForEnchantedBooks.getAsBoolean();
     }
 
 

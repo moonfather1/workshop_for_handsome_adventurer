@@ -2,9 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "group": "",
   "pattern": [
-    "ss",
-    "nn",
-    "ss"
+    "sns",
+    "s s",
+    "sns"
   ],
   "key": {
     "s": {

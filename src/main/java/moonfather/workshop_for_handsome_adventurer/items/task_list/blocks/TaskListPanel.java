@@ -180,7 +180,7 @@ public class TaskListPanel extends Block implements EntityBlock
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult)
     {
-        if (! ClientConfig.taskListItemsAreDrawnOnWall)
+        if (! ClientConfig.taskListItemsAreDrawnOnWall.getAsBoolean())
         {
             // create mode - just open the gui
             if (level.isClientSide)

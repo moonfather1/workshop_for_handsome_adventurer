@@ -66,6 +66,8 @@ public class TaskListScreen extends Screen
     {
         this.leftPos = (this.width - this.imageWidth) / 2;
         this.topPos = 0;  // normally middle but i'm thinking top here  (this.height - this.imageHeight) / 2;
+        int arrowHeight = 13, arrowWidth = 23;
+        // time to create gui parts
         if (this.editBoxes.size() == 0)
         {
             this.topMarginMain = 42; // can do 44 if we need more room above
@@ -80,13 +82,10 @@ public class TaskListScreen extends Screen
                 eb1.setTextColor(NORMAL_TEXT_COLOR);
                 eb1.setTextShadow(false);
 
-                eb1.setX(this.leftPos + 26);
                 eb1.setY(this.topPos + y);
                 y += (height - 1);
 
                 this.editBoxes.add(eb1);
-                this.renderables.add(eb1);
-
                 if (i % 2 ==1) { y += 2; } // for hor line
             }
             // name edit box; maybe a help button on top
@@ -96,26 +95,14 @@ public class TaskListScreen extends Screen
             this.header.setVisible(true);
             this.header.setTextColor(0x555088);
             this.header.setTextShadow(false);
-            this.header.setX(this.leftPos + 16);
             this.header.setY(this.topPos + 16);
-            this.renderables.add(this.header);
             this.header.setValue(this.itemName);
 
             // edit boxes done, now paging arrows
-            int arrowHeight = 13, arrowWidth = 23;
-            int hmargin = 10, vmargin = 10;
             this.arrowPrev1 = ImageWidget.sprite(arrowWidth, arrowHeight, BTN_LEFT_NORMAL);
-            this.arrowPrev1.setPosition(this.leftPos + hmargin, this.topPos + this.imageHeight - arrowHeight - vmargin);
             this.arrowPrev2 = ImageWidget.sprite(arrowWidth, arrowHeight, BTN_LEFT_ACTIVE);
-            this.arrowPrev2.setPosition(this.arrowPrev1.getX(), this.arrowPrev1.getY());
             this.arrowNext1 = ImageWidget.sprite(arrowWidth, arrowHeight, BTN_RIGHT_NORMAL);
-            this.arrowNext1.setPosition(this.leftPos + this.imageWidth - arrowWidth - hmargin, this.topPos + this.imageHeight - arrowHeight - vmargin);
             this.arrowNext2 = ImageWidget.sprite(arrowWidth, arrowHeight, BTN_RIGHT_ACTIVE);
-            this.arrowNext2.setPosition(this.arrowNext1.getX(), this.arrowNext1.getY());
-            this.addRenderableOnly(this.arrowPrev1);
-            this.addRenderableOnly(this.arrowPrev2);
-            this.addRenderableOnly(this.arrowNext1);
-            this.addRenderableOnly(this.arrowNext2);
             this.setArrowVisibilityInitial();
             // paging arrows done, now checkboxes
             this.checkBoxImages.put("e", CHECKBOX_EMPTY);
@@ -123,6 +110,24 @@ public class TaskListScreen extends Screen
             this.checkBoxImages.put("n", CHECKBOX_MOPE);
             this.checkBoxImages.put("q", CHECKBOX_QMARK);
         }
+        // gui parts created, now to position them and add to renderables. this part happens after window resize as well as on startup.
+        for (EditBox editBox : this.editBoxes)
+        {
+            editBox.setX(this.leftPos + 26);
+            this.renderables.add(editBox);
+        }
+        this.header.setX(this.leftPos + 16);
+        this.renderables.add(this.header);
+        int hmargin = 10, vmargin = 10;
+        this.arrowPrev1.setPosition(this.leftPos + hmargin, this.topPos + this.imageHeight - arrowHeight - vmargin);
+        this.arrowPrev2.setPosition(this.arrowPrev1.getX(), this.arrowPrev1.getY());
+        this.arrowNext1.setPosition(this.leftPos + this.imageWidth - arrowWidth - hmargin, this.topPos + this.imageHeight - arrowHeight - vmargin);
+        this.arrowNext2.setPosition(this.arrowNext1.getX(), this.arrowNext1.getY());
+        this.addRenderableOnly(this.arrowPrev1);
+        this.addRenderableOnly(this.arrowPrev2);
+        this.addRenderableOnly(this.arrowNext1);
+        this.addRenderableOnly(this.arrowNext2);
+
         // this repeats for every page shown (after paging)
         for (int i = 0; i < this.editBoxes.size(); i++)
         {
@@ -142,7 +147,7 @@ public class TaskListScreen extends Screen
     }
     private void greyOutDoneAndAbandoned(boolean oneItemOnly, int index)
     {
-        if (ClientConfig.taskListColoringForFinishedItems)
+        if (ClientConfig.taskListColoringForFinishedItems.getAsBoolean())
         {
             int startIndex, loopEnd;
             if (! oneItemOnly)
@@ -556,6 +561,6 @@ public class TaskListScreen extends Screen
     @Override
     public boolean isPauseScreen()
     {
-        return ClientConfig.taskListPausesSingleplayer;
+        return ClientConfig.taskListPausesSingleplayer.getAsBoolean();
     }
 }

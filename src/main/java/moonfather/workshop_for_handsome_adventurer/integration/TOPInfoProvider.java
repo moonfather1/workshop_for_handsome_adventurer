@@ -51,7 +51,7 @@ public class TOPInfoProvider extends WailaBaseProvider implements IProbeInfoProv
                 BookShelfBlockEntity shelf = (BookShelfBlockEntity) level.getBlockEntity(probeHitData.getPos());
                 ItemStack book = shelf.GetItem(slot);
                 probeInfo.horizontal().item(book).vertical().padding(2, 4).itemLabel(book);
-                if (ClientConfig.detailedWailaInfoForEnchantedBooks)
+                if (ClientConfig.detailedWailaInfoForEnchantedBooks.getAsBoolean())
                 {
                     List<Component> enchantments = this.getEnchantmentParts(book);
                     if (enchantments != null)
@@ -82,7 +82,7 @@ public class TOPInfoProvider extends WailaBaseProvider implements IProbeInfoProv
             if (slot >= 0 && ! tool.isEmpty())
             {
                 probeInfo.horizontal().item(tool).vertical().padding(2, 4).itemLabel(tool);
-                if (ClientConfig.detailedWailaInfoForEnchantedTools)
+                if (ClientConfig.detailedWailaInfoForEnchantedTools.getAsBoolean())
                 {
                     List<Component> enchantments = this.getEnchantmentParts(tool);
                     if (enchantments != null)

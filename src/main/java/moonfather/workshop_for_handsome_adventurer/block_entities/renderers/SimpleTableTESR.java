@@ -95,7 +95,7 @@ public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEnti
     {
         if (blockEntity.hasLevel() && blockEntity.getLevel().getLevelData().getGameTime() % 40 == 7)
         {
-            this.shouldRender = ClientConfig.renderItemsOnTable;
+            this.shouldRender = ClientConfig.renderItemsOnTable.getAsBoolean();
         }
         return this.shouldRender;
     }

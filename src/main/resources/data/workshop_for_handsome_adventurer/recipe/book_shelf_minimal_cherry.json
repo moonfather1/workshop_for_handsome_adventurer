@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "group": "",
   "pattern": [
-    "b"
+    "bb"
   ],
   "key": {
     "b": {
@@ -11,6 +11,6 @@
   },
   "result": {
     "id": "workshop_for_handsome_adventurer:book_shelf_minimal_cherry",
-    "count": 1
+    "count": 2
   }
 }

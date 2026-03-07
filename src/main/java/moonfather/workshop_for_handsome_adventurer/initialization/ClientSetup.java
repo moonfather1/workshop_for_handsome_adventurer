@@ -61,9 +61,9 @@ public class ClientSetup
 	@SubscribeEvent
 	public static void RegisterGuiLayers(RegisterGuiLayersEvent event)
 	{
-		if (! ClientConfig.ownWorldTooltipForceDisabled)
+		if (! ClientConfig.ownWorldTooltipForceDisabled.getAsBoolean())
 		{
-			if (ClientConfig.ownWorldTooltipForceEnabled
+			if (ClientConfig.ownWorldTooltipForceEnabled.getAsBoolean()
 				|| (! ModList.get().isLoaded("jade") && ! ModList.get().isLoaded("theoneprobe") && ! ModList.get().isLoaded("wthit")))
 			{
 				event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(Constants.MODID, "world_tooltip"), InWorldTooltip.getInstance());

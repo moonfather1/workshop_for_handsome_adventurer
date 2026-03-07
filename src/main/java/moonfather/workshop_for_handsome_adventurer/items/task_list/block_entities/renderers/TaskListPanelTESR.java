@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -29,7 +28,7 @@ public class TaskListPanelTESR implements BlockEntityRenderer<TaskListBlockEntit
     @Override
     public void render(TaskListBlockEntity tile, float partialTicks, PoseStack poseStack, MultiBufferSource multiBufferSource, int combinedLight, int combinedOverlay)
     {
-        if (! ClientConfig.taskListItemsAreDrawnOnWall)
+        if (! ClientConfig.taskListItemsAreDrawnOnWall.getAsBoolean())
         {
             return;
         }
@@ -72,7 +71,7 @@ public class TaskListPanelTESR implements BlockEntityRenderer<TaskListBlockEntit
         {
             int color = textColorMain;
             int light = normalTextLight;
-            if (ClientConfig.taskListColoringForFinishedItems && (page.items().get(i).status().equals("y") || page.items().get(i).status().equals("n")))
+            if (ClientConfig.taskListColoringForFinishedItems.getAsBoolean() && (page.items().get(i).status().equals("y") || page.items().get(i).status().equals("n")))
             {
                 color = textColorGrayed;
                 light = finishedTextLight;

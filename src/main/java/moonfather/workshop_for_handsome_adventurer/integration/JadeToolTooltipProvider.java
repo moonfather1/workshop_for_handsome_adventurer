@@ -52,7 +52,7 @@ public class JadeToolTooltipProvider extends JadeBaseTooltipProvider implements 
     @Override
     protected boolean showDetails()
     {
-        return ClientConfig.detailedWailaInfoForEnchantedTools;
+        return ClientConfig.detailedWailaInfoForEnchantedTools.getAsBoolean();
     }
 
 

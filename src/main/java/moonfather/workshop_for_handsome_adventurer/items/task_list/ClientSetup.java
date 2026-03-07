@@ -19,7 +19,7 @@ public class ClientSetup
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event)
     {
-        if (ClientConfig.taskListItemsAreDrawnOnWall)
+        if (ClientConfig.taskListItemsAreDrawnOnWall.getAsBoolean())
         {
             event.registerBlockEntityRenderer(RegistrationForTaskList.TASK_LIST_PANEL_BE.get(), TaskListPanelTESR::new);
         }
@@ -28,7 +28,7 @@ public class ClientSetup
     @SubscribeEvent
     public static void messWithBaking(ModelEvent.ModifyBakingResult event)
     {
-        if (! ClientConfig.taskListItemsAreDrawnOnWall)
+        if (! ClientConfig.taskListItemsAreDrawnOnWall.getAsBoolean())
         {
             // this replaces empty task list model with onw with fake text
             ModelResourceLocation key1;

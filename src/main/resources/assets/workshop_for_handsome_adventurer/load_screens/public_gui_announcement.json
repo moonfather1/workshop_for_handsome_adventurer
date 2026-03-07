@@ -1,0 +1,14 @@
+{
+	"screens" : [{
+			"class" : "moonfather.workshop_for_handsome_adventurer.block_entities.screens.SimpleTableCraftingScreen",
+			"texture" : "workshop_for_handsome_adventurer:textures/gui/gui_simple_table_0_slots.png",
+			"size" : [176, 166],
+			"texSize" : [256, 256]
+		},
+                {
+			"class" : "moonfather.workshop_for_handsome_adventurer.block_entities.screens.DualTableCraftingScreen",
+			"texture" : "workshop_for_handsome_adventurer:textures/gui/gui_dual_table_3_slots.png",
+			"size" : [176, 233],
+			"texSize" : [256, 256]
+		}]
+}

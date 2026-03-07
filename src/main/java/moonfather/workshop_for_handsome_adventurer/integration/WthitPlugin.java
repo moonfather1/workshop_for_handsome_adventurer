@@ -123,7 +123,7 @@ public class WthitPlugin implements IWailaPlugin {
                 if (slot >= 0 && ! shelf.GetItem(slot).isEmpty())
                 {
                     tooltip.addLine().with(new ItemComponent(shelf.GetItem(slot))).with(shelf.GetItem(slot).getHoverName());
-                    if (ClientConfig.detailedWailaInfoForEnchantedBooks)
+                    if (ClientConfig.detailedWailaInfoForEnchantedBooks.getAsBoolean())
                     {
                         List<Component> enchantments = this.getEnchantmentParts(shelf.GetItem(slot));
                         if (enchantments != null)
@@ -158,7 +158,7 @@ public class WthitPlugin implements IWailaPlugin {
                 return;
             }
             tooltip.addLine().with(new ItemComponent(tool)).with(tool.getHoverName());
-            if (ClientConfig.detailedWailaInfoForEnchantedTools)
+            if (ClientConfig.detailedWailaInfoForEnchantedTools.getAsBoolean())
             {
                 List<Component> enchantments = this.getEnchantmentParts(tool);
                 if (enchantments != null)
@@ -189,7 +189,7 @@ public class WthitPlugin implements IWailaPlugin {
                 return;
             }
             tooltip.addLine().with(new ItemComponent(tool)).with(tool.getHoverName());
-            if (ClientConfig.detailedWailaInfoForEnchantedTools)
+            if (ClientConfig.detailedWailaInfoForEnchantedTools.getAsBoolean())
             {
                 List<Component> enchantments = this.getEnchantmentParts(tool);
                 if (enchantments != null)
