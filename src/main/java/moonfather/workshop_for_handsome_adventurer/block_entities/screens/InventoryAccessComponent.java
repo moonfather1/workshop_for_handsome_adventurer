@@ -2,6 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.block_entities.screens;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
+import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableDataSlots;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
@@ -37,7 +38,8 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     protected static final ResourceLocation BG_CHEST_LOCATION_3_ROWS = ResourceLocation.parse("workshop_for_handsome_adventurer:textures/gui/left_panel_normal_chest.png");
     protected static final ResourceLocation BG_CHEST_LOCATION_6_ROWS = ResourceLocation.parse("workshop_for_handsome_adventurer:textures/gui/left_panel_double_chest.png");
     private static final String RENAME_BUTTON_LOCATION = "workshop_for_handsome_adventurer:textures/gui/rename_%s.png";
-    private final String renameTooltipKey = "message.workshop_for_handsome_adventurer.rename";
+    private static final String renameTooltipKey = "message.workshop_for_handsome_adventurer.rename";
+    private static final String renameTooltip0Key = "message.workshop_for_handsome_adventurer.rename0";
 
     private int xOffset;
     private final List<TabButton> tabButtons = Lists.newArrayList();
@@ -90,7 +92,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             this.renameBox.setVisible(true);
             this.renameBox.setTextColor(0xcccccc);
             this.renameButton = new SimpleButton(this.xOffset, bottomY - 23, 25, 18, RENAME_BUTTON_LOCATION, "normal", "hovered", "disabled",  32, 32, p_93751_ -> this.renameButtonClicked(), Component.literal("Rename container"));
-            this.renameButton.setTooltipKey(renameTooltipKey);
+            this.renameButton.setTooltipKey(CommonConfig.RenameChestsForFree.get() ? renameTooltip0Key : renameTooltipKey);
             this.renameButton.setTooltipInset(Component.literal(""));
             this.renameButton.active = false;
         }
@@ -316,7 +318,8 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         {
             if (this.tickCount % 10 == 5) {
                 this.suppressRenameButton = false;
-                this.renameButton.active = !this.renameBox.getValue().isEmpty() && (this.parent.getMinecraft().player.experienceLevel > 0 || this.parent.getMinecraft().player.isCreative());
+                boolean hasEnoughXP = this.parent.getMinecraft().player.isCreative() || CommonConfig.RenameChestsForFree.get() || this.parent.getMinecraft().player.experienceLevel > 0;
+                this.renameButton.active = ! this.renameBox.getValue().isEmpty() && hasEnoughXP;
             }
         }
     }

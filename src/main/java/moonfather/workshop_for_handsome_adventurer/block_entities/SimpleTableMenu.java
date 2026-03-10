@@ -693,11 +693,12 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	public void renameChest(String newName)
 	{
 		//System.out.println("rename on server");
-		if (this.player.experienceLevel == 0 && ! this.player.isCreative())
+		if (this.player.experienceLevel == 0 && ! this.player.isCreative() && ! CommonConfig.RenameChestsForFree.get())
 		{
 			return;
 		}
 		if (newName.equals("")) { return; }
+		int xpCost = CommonConfig.RenameChestsForFree.get() ? 0 : 1; // levels
 		if (this.inventoryAccessHelper.currentType.equals(InventoryAccessHelper.RecordTypes.BLOCK))
 		{
 			if (this.inventoryAccessHelper.chosenContainerForRename instanceof net.minecraft.world.level.block.entity.BaseContainerBlockEntity bcbe)
@@ -705,7 +706,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 				if (! bcbe.hasCustomName() || ! bcbe.getCustomName().getString().equals(newName))
 				{
 					bcbe.name = Component.literal(newName);
-					player.giveExperienceLevels(-1);
+					player.giveExperienceLevels(-1 * xpCost);
 				}
 			}
 		}
@@ -713,7 +714,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		{
 			// RecordTypes.TOOLBELT, RecordTypes.LEGGINGS..., RecordTypes.FLOATING
 			this.inventoryAccessHelper.chosenContainerItem.set(DataComponents.CUSTOM_NAME, Component.literal(newName));
-			player.giveExperienceLevels(-1);
+			player.giveExperienceLevels(-1 * xpCost);
 		}
 	}
 

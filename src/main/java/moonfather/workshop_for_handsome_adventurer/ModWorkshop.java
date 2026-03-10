@@ -31,9 +31,7 @@ public class ModWorkshop
 {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-
-    // todo: test carryon
-    // instant config, do net sync
+    // todo: instant config, do net sync
     public ModWorkshop(IEventBus modBus, ModContainer modContainer)
     {
         modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
