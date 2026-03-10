@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    { "id": "minecraft:music_disc_tears", "required": false },
+
+    { "id": "apotheosis:music_disc_flash", "required": false },
+    { "id": "apotheosis:music_disc_glimmer", "required": false },
+    { "id": "apotheosis:music_disc_shimmer", "required": false },
+    { "id": "apothic_enchanting:music_disc_eterna", "required": false },
+    { "id": "apothic_enchanting:music_disc_quanta", "required": false },
+    { "id": "apothic_enchanting:music_disc_arcana", "required": false },
+    { "id": "irons_spellbooks:music_disc_dead_king_lullaby", "required": false },
+    { "id": "irons_spellbooks:flame_still_burns", "required": false },
+    { "id": "cataclysm:music_disc_netherite_monstrosity", "required": false },
+    { "id": "cataclysm:music_disc_ender_guardian", "required": false },
+    { "id": "cataclysm:music_disc_ignis", "required": false },
+    { "id": "cataclysm:music_disc_the_harbinger", "required": false },
+    { "id": "cataclysm:music_disc_the_leviathan", "required": false },
+    { "id": "cataclysm:music_disc_ancient_remnant", "required": false },
+    { "id": "cataclysm:music_disc_maledictus", "required": false },
+    { "id": "cataclysm:music_disc_scylla", "required": false },
+    { "id": "cataclysm:music_disc_the_cataclysmfarer", "required": false },
+    { "id": "marrymaking:christmas_music_disc_1", "required": false }
+  ]
+}

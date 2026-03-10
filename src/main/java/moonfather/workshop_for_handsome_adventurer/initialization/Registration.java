@@ -61,6 +61,7 @@ public class Registration
 	public static final List<Supplier<Block>> blocks_table2 = new ArrayList<>();
 	public static final List<Supplier<Block>> blocks_rack = new ArrayList<>();
 	public static final List<Supplier<Block>> blocks_pshelf = new ArrayList<>();
+	public static final List<Supplier<Block>> blocks_dshelf = new ArrayList<>();
 	public static final List<Supplier<Block>> blocks_bshelf = new ArrayList<>();
 	public static final List<Supplier<Item>> items_table1 = new ArrayList<>();
 	public static final List<Supplier<Item>> items_table2 = new ArrayList<>(); // because of sorting in creative tabs, we can't just dump into one list
@@ -69,6 +70,7 @@ public class Registration
 	public static final List<Supplier<Item>> items_rack3 = new ArrayList<>();
 	public static final List<Supplier<Item>> items_rack4 = new ArrayList<>();
 	public static final List<Supplier<Item>> items_pshelf = new ArrayList<>();
+	public static final List<Supplier<Item>> items_dshelf = new ArrayList<>();
 	public static final List<Supplier<Item>> items_bshelf1 = new ArrayList<>();
 	public static final List<Supplier<Item>> items_bshelf2 = new ArrayList<>();
 	public static final List<Supplier<Item>> items_bshelf3 = new ArrayList<>();
@@ -129,6 +131,14 @@ public class Registration
 			items_pshelf.add(FromBlock(shelf, id));
 			blocks_pshelf.add(shelf);
 		}
+		// disc shelves
+		for (String woodType : Registration.woodTypes)
+		{
+			id = "disc_shelf_" + woodType;
+			Supplier<Block> shelf = BLOCKS.register(id, () -> new DiscShelf());
+			items_dshelf.add(FromBlock(shelf, id));
+			blocks_dshelf.add(shelf);
+		}
 		// book shelves
 		for (String woodType : Registration.woodTypes)
 		{
@@ -178,6 +188,7 @@ public class Registration
 	public static final Supplier<BlockEntityType<SimpleTableBlockEntity>> SIMPLE_TABLE_BE = BLOCK_ENTITIES.register("simple_table_be", () -> BlockEntityType.Builder.of(SimpleTableBlockEntity::new, ListToArray(blocks_table1)).build(null));
 	public static final Supplier<BlockEntityType<DualTableBlockEntity>> DUAL_TABLE_BE = BLOCK_ENTITIES.register("dual_table_be", () -> BlockEntityType.Builder.of(DualTableBlockEntity::new, ListToArray(blocks_table2)).build(null));
 	public static final Supplier<BlockEntityType<PotionShelfBlockEntity>> POTION_SHELF_BE = BLOCK_ENTITIES.register("potion_shelf_be", () -> BlockEntityType.Builder.of(PotionShelfBlockEntity::new, ListToArray(blocks_pshelf)).build(null));
+	public static final Supplier<BlockEntityType<DiscShelfBlockEntity>> DISC_SHELF_BE = BLOCK_ENTITIES.register("disc_shelf_be", () -> BlockEntityType.Builder.of(DiscShelfBlockEntity::new, ListToArray(blocks_dshelf)).build(null));
 	public static final Supplier<BlockEntityType<BookShelfBlockEntity>> BOOK_SHELF_BE = BLOCK_ENTITIES.register("book_shelf_be", () -> BlockEntityType.Builder.of(BookShelfBlockEntity::new, ListToArray(blocks_bshelf)).build(null));
 	public static final Supplier<MenuType<SimpleTableMenu>> CRAFTING_SINGLE_MENU_TYPE = CONTAINER_TYPES.register("crafting_single", () -> IMenuTypeExtension.create(SimpleTableMenu::new));
 	public static final Supplier<MenuType<DualTableMenu>> CRAFTING_DUAL_MENU_TYPE = CONTAINER_TYPES.register("crafting_dual", () -> IMenuTypeExtension.create(DualTableMenu::new));

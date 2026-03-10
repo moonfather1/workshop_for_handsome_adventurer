@@ -25,6 +25,7 @@ public class SecondCreativeTab
     public static final List<Item> items_rack3 = new ArrayList<>();
     public static final List<Item> items_rack4 = new ArrayList<>();
     public static final List<Item> items_pshelf = new ArrayList<>();
+    public static final List<Item> items_dshelf = new ArrayList<>();
     public static final List<Item> items_bshelf1 = new ArrayList<>();
     public static final List<Item> items_bshelf2 = new ArrayList<>();
     public static final List<Item> items_bshelf3 = new ArrayList<>();
@@ -75,6 +76,7 @@ public class SecondCreativeTab
                 event.accept(SecondCreativeTab.items_bshelf3.get(i));
                 event.accept(SecondCreativeTab.items_bshelf4.get(i));
                 event.accept(SecondCreativeTab.items_bshelf5.get(i));
+                event.accept(SecondCreativeTab.items_dshelf.get(i));
                 i++;
             }
         }
@@ -97,6 +99,7 @@ public class SecondCreativeTab
                     event.accept(SecondCreativeTab.items_bshelf3.get(i));
                     event.accept(SecondCreativeTab.items_bshelf4.get(i));
                     event.accept(SecondCreativeTab.items_bshelf5.get(i));
+                    event.accept(SecondCreativeTab.items_dshelf.get(i));
                     i++;
                 }
             }

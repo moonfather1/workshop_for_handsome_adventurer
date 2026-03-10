@@ -8,10 +8,14 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlo
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.blocks.*;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.JukeboxPlayable;
+import net.minecraft.world.item.JukeboxSong;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
@@ -70,7 +74,17 @@ public class WthitPlugin implements IWailaPlugin {
         public void appendTail(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
             if (accessor.getBlockEntity() instanceof PotionShelfBlockEntity shelf)
             {
-                int slot = PotionShelf.getPotionShelfSlot(accessor.getBlockHitResult(), accessor.getPosition(), accessor.getSide());
+                String message;  int slot;
+                if (shelf.getNumberOfItems() == 9)
+                {
+                    message = messageD;
+                    slot = DiscShelf.getDiscShelfSlot(accessor.getBlockHitResult(), accessor.getPosition(), accessor.getSide());
+                }
+                else
+                {
+                    message = messageP;
+                    slot = PotionShelf.getPotionShelfSlot(accessor.getBlockHitResult(), accessor.getPosition(), accessor.getSide());
+                }
                 if (! shelf.GetItem(slot).isEmpty())
                 {
                     int count, room;
@@ -86,16 +100,30 @@ public class WthitPlugin implements IWailaPlugin {
                     }
                     ItemStack bottle = shelf.GetItem(slot);
                     tooltip.addLine().with(new ItemComponent(bottle)).with(bottle.getHoverName());
-                    tooltip.addLine(Component.translatable(message, count, count+room));
+                    JukeboxPlayable songContainer = bottle.get(DataComponents.JUKEBOX_PLAYABLE);
+                    if (songContainer != null)
+                    {
+                        EitherHolder<JukeboxSong> song = songContainer.song();
+                        song.unwrap(accessor.getPlayer().registryAccess()).ifPresent(holder -> tooltip.addLine().with(holder.value().description()));
+                    }
+                    if (count+room > 1)  // no msg if no stacking
+                    {
+                        tooltip.addLine(Component.translatable(message, count, count + room));
+                    }
                 }
                 else
                 {
-                    tooltip.addLine(Component.translatable(message, 0, shelf.GetRemainingRoom(slot)));
+                    int roomTotal = shelf.GetRemainingRoom(slot);
+                    if (roomTotal > 1)  // no msg if no stacking
+                    {
+                        tooltip.addLine(Component.translatable(message, 0, roomTotal));
+                    }
                 }
             }
         }
 
-        private static final String message = "message.workshop_for_handsome_adventurer.shelf_probe_tooltip";
+        private static final String messageP = "message.workshop_for_handsome_adventurer.shelf_probe_tooltip";
+        private static final String messageD = "message.workshop_for_handsome_adventurer.shelf_probe_tooltip2";
     }
 
     private static class PotionShelfDataProvider implements IDataProvider<PotionShelfBlockEntity>

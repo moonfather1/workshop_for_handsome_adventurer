@@ -2,7 +2,6 @@ package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 
 import com.mojang.logging.LogUtils;
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.dynamic_resources.config.DynamicAssetCommonConfig;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.resources.language.LanguageInfo;
 import net.minecraft.client.resources.metadata.language.LanguageMetadataSection;
@@ -17,9 +16,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -291,6 +287,7 @@ public class OurClientPack extends BaseResourcePack
                     "blockstates/dual_table_top_left_spruce.json",
                     "blockstates/dual_table_top_right_spruce.json",
                     "blockstates/potion_shelf_spruce.json",
+                    "blockstates/disc_shelf_spruce.json",
                     "blockstates/simple_table_spruce.json",
                     "blockstates/tool_rack_double_spruce.json",
                     "blockstates/tool_rack_framed_spruce.json",
@@ -318,6 +315,7 @@ public class OurClientPack extends BaseResourcePack
                     "models/block/framed_rack_hollow_top_spruce.json",
                     "models/block/mini_rack_spruce.json",
                     "models/block/potion_shelf_spruce.json",
+                    "models/block/disc_shelf_spruce.json",
                     "models/block/simple_table_spruce.json",
                     "models/block/simple_table_with_drawer_spruce.json",
                     "models/item/book_shelf_double_spruce.json",
@@ -326,6 +324,7 @@ public class OurClientPack extends BaseResourcePack
                     "models/item/book_shelf_open_minimal_spruce.json",
                     "models/item/book_shelf_with_lanterns_spruce.json",
                     "models/item/potion_shelf_spruce.json",
+                    "models/item/disc_shelf_spruce.json",
                     "models/item/simple_table_spruce.json",
                     "models/item/tool_rack_double_spruce.json",
                     "models/item/tool_rack_framed_spruce.json",

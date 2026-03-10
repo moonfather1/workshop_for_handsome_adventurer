@@ -3,6 +3,7 @@ package moonfather.workshop_for_handsome_adventurer.other;
 import moonfather.workshop_for_handsome_adventurer.block_entities.BaseContainerBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.blocks.BookShelf;
+import moonfather.workshop_for_handsome_adventurer.blocks.DiscShelf;
 import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
 import moonfather.workshop_for_handsome_adventurer.blocks.ToolRack;
 import net.minecraft.client.DeltaTracker;
@@ -34,7 +35,13 @@ public class InWorldTooltip implements LayeredDraw.Layer
                 //guiGraphics.drawString(Minecraft.getInstance().font, "posi %f, %f, %f".formatted(hitResult.getLocation().x, hitResult.getLocation().y, hitResult.getLocation().z), 100, 200, 0xffee55);
                 //guiGraphics.drawString(Minecraft.getInstance().font, "win wi" + Minecraft.getInstance().getWindow().getWidth() + ", swi " + Minecraft.getInstance().getWindow().getScreenWidth() + ", sca " + Minecraft.getInstance().getWindow().getGuiScaledWidth() , 100, 182, 0xcc66ff);
                 int slot = -5;  boolean above = false;
-                if (blockState.getBlock() instanceof PotionShelf)
+                if (blockState.getBlock() instanceof DiscShelf)
+                {
+                    if (! blockState.getValue(DiscShelf.FACING).equals(hitResult.getDirection().getOpposite())) { return; }
+                    slot = DiscShelf.getDiscShelfSlot(hitResult);
+                    //guiGraphics.drawString(Minecraft.getInstance().font, "dshelf slot " + slot, 100, 164, 0xccff55);
+                }
+                else if (blockState.getBlock() instanceof PotionShelf)
                 {
                     if (! blockState.getValue(PotionShelf.FACING).equals(hitResult.getDirection().getOpposite())) { return; }
                     slot = PotionShelf.getPotionShelfSlot(hitResult);

@@ -16,7 +16,7 @@
 	"block.workshop_for_handsome_adventurer.simple_table_jungle": "Радни сто (од прашумског дрвета)",
 	"block.workshop_for_handsome_adventurer.simple_table_dark_oak": "Радни сто (од тамног храста)",
 	"block.workshop_for_handsome_adventurer.simple_table_acacia": "Радни сто (од акације)",
-	"block.workshop_for_handsome_adventurer.simple_table.tooltip1": "Малени радни сто. Неудобан и стидећеш се ако га користиш.",
+	"block.workshop_for_handsome_adventurer.simple_table.tooltip1": "Малени радни сто. Неудобан али поуздан.",
 	"block.workshop_for_handsome_adventurer.simple_table.tooltip2": "Лак приступ сандуцима и фиокама поред стола. Може да држи стварчице.",
 
 	"block.workshop_for_handsome_adventurer.tool_rack_double_oak": "Држач за алатке (три реда, од храста)",
@@ -35,7 +35,7 @@
 	"block.workshop_for_handsome_adventurer.tool_rack_framed_jungle": "Држач за алатке (са оквиром, од прашумског дрвета)",
 	"block.workshop_for_handsome_adventurer.tool_rack_framed_birch": "Држач за алатке (са оквиром, од брезе)",
 	"block.workshop_for_handsome_adventurer.tool_rack_framed.tooltip1": "Држи 6 алатки.",
-	"block.workshop_for_handsome_adventurer.tool_rack_framed.tooltip2": "Лак за употребу, елегантан дизајн.",
+	"block.workshop_for_handsome_adventurer.tool_rack_framed.tooltip2": "Лак за употребу, штити зид од прљавштине.",
 
 	"block.workshop_for_handsome_adventurer.tool_rack_pframed_oak": "Држач за алатке (са стубовима, од храста)",
 	"block.workshop_for_handsome_adventurer.tool_rack_pframed_spruce": "Држач за алатке (са стубовима, од смреке)",
@@ -44,7 +44,7 @@
 	"block.workshop_for_handsome_adventurer.tool_rack_pframed_jungle": "Држач за алатке (са стубовима, од прашумског дрвета)",
 	"block.workshop_for_handsome_adventurer.tool_rack_pframed_birch": "Држач за алатке (са стубовима, од брезе)",
 	"block.workshop_for_handsome_adventurer.tool_rack_pframed.tooltip1": "Држи 6 алатки.",
-	"block.workshop_for_handsome_adventurer.tool_rack_pframed.tooltip2": "Лак за употребу, дизајн није нешто.",
+	"block.workshop_for_handsome_adventurer.tool_rack_pframed.tooltip2": "Лак за употребу, елегантан дизајн.",
 
 	"block.workshop_for_handsome_adventurer.tool_rack_single_oak": "Држач за алатке (један ред, од храста)",
 	"block.workshop_for_handsome_adventurer.tool_rack_single_spruce": "Држач за алатке (један ред, од смреке)",
@@ -119,6 +119,17 @@
 	"block.workshop_for_handsome_adventurer.book_shelf_with_lanterns.tooltip1": "Држи 4 књиге.",
 	"block.workshop_for_handsome_adventurer.book_shelf_with_lanterns.tooltip2": "Мултифункционално решење.",
 
+	"block.workshop_for_handsome_adventurer.disc_shelf_oak": "Полица за дискове (од храста)",
+	"block.workshop_for_handsome_adventurer.disc_shelf_spruce": "Полица за дискове (од смреке)",
+	"block.workshop_for_handsome_adventurer.disc_shelf_dark_oak": "Полица за дискове (од тамног храста)",
+	"block.workshop_for_handsome_adventurer.disc_shelf_acacia": "Полица за дискове (од акације)",
+	"block.workshop_for_handsome_adventurer.disc_shelf_jungle": "Полица за дискове (од прашумског дрвета)",
+	"block.workshop_for_handsome_adventurer.disc_shelf_birch": "Полица за дискове (од брезе)",
+	"block.workshop_for_handsome_adventurer.disc_shelf_mangrove": "Полица за дискове (од мангрове)",
+	"block.workshop_for_handsome_adventurer.disc_shelf_cherry": "Полица за дискове (од трешње)",
+	"block.workshop_for_handsome_adventurer.disc_shelf.tooltip1": "Држи 9 сетова дискова.",
+	"block.workshop_for_handsome_adventurer.disc_shelf.tooltip2": "Најбоље дискове треба приказати на зиду.",
+
 	"block.workshop_for_handsome_adventurer.simple_table_mangrove": "Радни сто (од мангрове)",
 	"block.workshop_for_handsome_adventurer.tool_rack_double_mangrove": "Држач за алатке (три реда, од мангрове)",
 	"block.workshop_for_handsome_adventurer.tool_rack_framed_mangrove": "Држач за алатке (са оквиром, од мангрове)",
@@ -141,12 +152,20 @@
 	"message.workshop_for_handsome_adventurer.shelf_remaining_items": "Преостале бочице: ",
 	"message.workshop_for_handsome_adventurer.shelf_wrong_potion": "Није исти напитак. Стави овај на друго место.",
 	"message.workshop_for_handsome_adventurer.shelf_probe_tooltip": "Број бочица: %d, има места за %d укупно.",
+	"message.workshop_for_handsome_adventurer.shelf_invalid_item2": "То не иде на сталак за дискове.",
+	"message.workshop_for_handsome_adventurer.shelf_remaining_items2": "Преостали дискови: ",
+	"message.workshop_for_handsome_adventurer.shelf_wrong_potion2": "Није исти диск. Стави га у празан одељак.",
+	"message.workshop_for_handsome_adventurer.shelf_probe_tooltip2": "Број дискова: %d, може да стане %d.",
+	"message.workshop_for_handsome_adventurer.shelf_hint2": "Могао би то да ставиш заједно са истим дисковима у другом одељку.",
+	"message.workshop_for_handsome_adventurer.shelf_hint": "Могао би то да ставиш заједно са истим напицима у другом одељку.",
+
 
 	"message.workshop_for_handsome_adventurer.extension_slot1": "Стави овде сандук или фиоку да \nомогућиш да стварчице остају у гриду. \n \nИли, стави [ITEM] овде\nза приступ суседним сандуцима.",
 	"message.workshop_for_handsome_adventurer.extension_slot2": "Стави овде сандук или фиоку да \nомогућиш да стварчице остају у гриду. \n \nИли, стави [ITEM] овде\nза приступ суседним сандуцима. \n(опционо још један за домет од два блока)\n \nИли две светиљке да постану део радне станице\nи осветљавају околину.",
 	"message.workshop_for_handsome_adventurer.extension_slotT": "Прилагођавање стола",
 	"message.workshop_for_handsome_adventurer.extension_slotS": "(shift за детаље)",
-	"message.workshop_for_handsome_adventurer.rename": "Промени назив контејнера %s \nза цену 1 нивоа искуства.",
+	"message.workshop_for_handsome_adventurer.rename": "Промени назив контејнера %s \nза цену 1 нивоа искуства",
+	"message.workshop_for_handsome_adventurer.rename0": "Промени назив контејнера %s",
 	"message.workshop_for_handsome_adventurer.workshop_table_in_use": "Тај сто користи %s. Сачекај да заврши.",
 
 	"itemGroup.workshop_for_handsome_adventurer": "Радионица за згодног авантуристу",

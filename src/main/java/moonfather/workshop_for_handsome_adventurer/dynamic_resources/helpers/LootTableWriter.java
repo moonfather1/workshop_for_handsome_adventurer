@@ -41,6 +41,7 @@ public class LootTableWriter
             "loot_table/blocks/book_shelf_with_lanterns_spruce.json",
             "loot_table/blocks/dual_table_bottom_left_spruce.json",
             "loot_table/blocks/potion_shelf_spruce.json",
+            "loot_table/blocks/disc_shelf_spruce.json",
             "loot_table/blocks/simple_table_spruce.json",
             "loot_table/blocks/tool_rack_double_spruce.json",
             "loot_table/blocks/tool_rack_framed_spruce.json",

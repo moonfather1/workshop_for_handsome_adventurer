@@ -32,6 +32,7 @@ public class CreativeTab
                 event.accept(Registration.items_bshelf3.get(i).get());
                 event.accept(Registration.items_bshelf4.get(i).get());
                 event.accept(Registration.items_bshelf5.get(i).get());
+                event.accept(Registration.items_dshelf.get(i).get());
                 i++;
             }
         }

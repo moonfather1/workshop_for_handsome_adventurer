@@ -12,17 +12,25 @@ public class ToolRackBlockEntity extends BaseContainerBlockEntity
 	{
 		super(Registration.TOOL_RACK_BE.get(), pos, state);
 		this.setCapacity(6);
+		this.itemCount = 6;
 	}
 
-	public ToolRackBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state, int capacity)
+	public ToolRackBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state, int capacity, int itemCount)
 	{
 		super(blockEntityType, pos, state);
 		this.setCapacity(capacity);
+		this.itemCount = itemCount;
 	}
 
     public int getNumberOfItemsInOneRow() {
 		return 2;
 	}
+
+	public int getNumberOfItems()
+	{
+		return this.itemCount;
+	}
+	private final int itemCount; // i added this in 1.35.0 after 50ish versions of not needing it. added for jade/wthit. could have done without it (with some instanceof checks) but that would just go downhill.
 
 
 

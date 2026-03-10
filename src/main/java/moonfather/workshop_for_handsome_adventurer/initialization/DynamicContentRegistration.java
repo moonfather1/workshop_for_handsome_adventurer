@@ -95,6 +95,8 @@ public class DynamicContentRegistration
                 registerSinglePrimaryBlockForThirdPartyWood(DualToolRack.create(6, "double"), "tool_rack_double_", wood, Registration.blocks_rack, SecondCreativeTab.items_rack4);
                 // potion shelves
                 registerSinglePrimaryBlockForThirdPartyWood(new PotionShelf(), "potion_shelf_", wood, Registration.blocks_pshelf, SecondCreativeTab.items_pshelf);
+                // disc shelves
+                registerSinglePrimaryBlockForThirdPartyWood(new DiscShelf(), "disc_shelf_", wood, Registration.blocks_dshelf, SecondCreativeTab.items_dshelf);
                 // book shelves
                 registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.Dual("double"), "book_shelf_double_", wood, Registration.blocks_bshelf, SecondCreativeTab.items_bshelf1);
                 registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.Dual("open_double"), "book_shelf_open_double_", wood, Registration.blocks_bshelf, SecondCreativeTab.items_bshelf2);

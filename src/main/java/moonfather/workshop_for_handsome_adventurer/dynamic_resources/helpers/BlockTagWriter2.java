@@ -53,6 +53,7 @@ public class BlockTagWriter2
             "tool_rack_pframed_",
             "tool_rack_framed_",
             "potion_shelf_",
+            "disc_shelf_",
             "book_shelf_minimal_",
             "book_shelf_open_minimal_",
             "book_shelf_double_",

@@ -2,10 +2,15 @@ package moonfather.workshop_for_handsome_adventurer.integration;
 
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlockEntity;
+import moonfather.workshop_for_handsome_adventurer.blocks.DiscShelf;
 import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.EitherHolder;
+import net.minecraft.world.item.JukeboxPlayable;
+import net.minecraft.world.item.JukeboxSong;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
@@ -28,8 +33,15 @@ public class JadePotionTooltipProvider implements IBlockComponentProvider, IServ
     {
         if (accessor.getBlockEntity() instanceof PotionShelfBlockEntity shelf)
         {
-            int slot = PotionShelf.getPotionShelfSlot(accessor.getHitResult());
-            if (! shelf.GetItem(slot).isEmpty())
+            int slot;
+            if (shelf.getNumberOfItems() != 9)
+            {
+                slot = PotionShelf.getPotionShelfSlot(accessor.getHitResult());
+            }
+            else
+            {
+                slot = DiscShelf.getDiscShelfSlot(accessor.getHitResult());
+            }            if (! shelf.GetItem(slot).isEmpty())
             {
                 int count;
                 if (accessor.getServerData().contains("Bottles" + slot))
@@ -42,8 +54,17 @@ public class JadePotionTooltipProvider implements IBlockComponentProvider, IServ
                 }
                 List<IElement> list = new ArrayList<>(2);
                 list.add(IElementHelper.get().text(Component.literal(" " + count + "x  ")));
-                list.add(IElementHelper.get().text(shelf.GetItem(slot).getDisplayName()));
+                list.add(IElementHelper.get().text(shelf.GetItem(slot).getHoverName()));
                 tooltip.add(list);
+                JukeboxPlayable songContainer = shelf.GetItem(slot).get(DataComponents.JUKEBOX_PLAYABLE);
+                if (songContainer != null)
+                {
+                    List<IElement> list2 = new ArrayList<>(2);
+                    list2.add(IElementHelper.get().text(Component.literal(" ")));
+                    EitherHolder<JukeboxSong> song = songContainer.song();
+                    song.unwrap(accessor.getLevel().registryAccess()).ifPresent(holder -> list2.add(IElementHelper.get().text(holder.value().description())));
+                    tooltip.add(list2);
+                }
             }
         }
     }

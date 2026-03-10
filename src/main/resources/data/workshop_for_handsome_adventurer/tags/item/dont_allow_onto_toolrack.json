@@ -4,6 +4,7 @@
     "minecraft:elytra",
     "#c:music_discs",
     "minecraft:saddle",
+    "#workshop_for_handsome_adventurer:allowed_on_potion_shelf",
 
     { "id": "tconstruct:cleaver", "required": false }
   ]

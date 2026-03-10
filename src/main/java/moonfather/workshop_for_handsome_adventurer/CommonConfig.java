@@ -12,6 +12,8 @@ public class CommonConfig
     private static final int defaultSlotRoomMaximum = 16;
     private static final boolean defaultOffhandInteractsWithToolRack = true;
     private static final boolean defaultOffhandInteractsWithPotionShelf = false;
+    private static final int defaultSlotRoomMultiplierForDiscs = 3;
+    private static final int defaultSlotRoomMaximumForDiscs = 16;
     ///---------------------------------------------
     private static final ModConfigSpec.Builder BUILDER;
     public static final ModConfigSpec.ConfigValue<Integer> SimpleTableNumberOfSlots;
@@ -22,6 +24,8 @@ public class CommonConfig
     public static final ModConfigSpec.ConfigValue<Integer> SlotRoomMaximum;
     public static final ModConfigSpec.BooleanValue OffhandInteractsWithToolRack;
     public static final ModConfigSpec.BooleanValue OffhandInteractsWithPotionShelf;
+    public static final ModConfigSpec.ConfigValue<Integer> SlotRoomMultiplierForDiscs;
+    public static final ModConfigSpec.ConfigValue<Integer> SlotRoomMaximumForDiscs;
     static final ModConfigSpec SPEC;
 
 
@@ -45,7 +49,7 @@ public class CommonConfig
         BUILDER.pop();
         BUILDER.push("Potion shelves");
             SlotRoomMultiplier = BUILDER
-                .comment("This is a multiplier for the number of bottles that fit in a single potion shelf slot, multiplying normal stack maximum. Default 6 (unrelated to six slots) means each slot can fit 6 non-stackable potions or for example 24 potions that stack up to 4 in players inventory.")
+                .comment("This is a multiplier for the number of bottles that fit in a single potion shelf slot, multiplying normal stack maximum. Default 6 (unrelated to six slots) means each slot can fit 6 non-stackable potions or for example 24 potions that stack up to 4 in player's inventory.")
                 .defineInRange("Room in one potion shelf slot (multiplier)", defaultSlotRoomMultiplier, 1, 12);
             SlotRoomMaximum = BUILDER
                 .comment("This is a total maximum of number of bottles that fit in a single potion shelf slot. Whatever above math gives you will be clipped to fit this value.")
@@ -58,6 +62,14 @@ public class CommonConfig
             OffhandInteractsWithToolRack = BUILDER
                 .comment("If set to false, you need to move a tool from off-hand to main hand (F) before putting it onto a toolrack, it's simpler but needs extra actions. If you set this to true you can put tools from off-hand to toolrack directly and you can take items directly; quicker but there might be possible unintended interactions with the toolrack.")
                 .define("Offhand interacts with tool rack directly", defaultOffhandInteractsWithToolRack);
+        BUILDER.pop();
+        BUILDER.push("Disc shelves");
+            SlotRoomMultiplierForDiscs = BUILDER
+                .comment("This is a multiplier for the number of discs that fit in a single shelf slot, multiplying normal stack maximum. Default 3 means each slot can fit 3 non-stackable discs or for example 12 discs that stack up to 4 in players' inventory.")
+                .defineInRange("Room in one disc shelf slot (multiplier)", defaultSlotRoomMultiplierForDiscs, 1, 6);
+            SlotRoomMaximumForDiscs = BUILDER
+                .comment("This is a total maximum of number of discs that can fit in a single shelf slot. Whatever above math gives you will be clipped to fit this value.")
+                .defineInRange("Maximum number of discs that fit into one shelf slot", defaultSlotRoomMaximumForDiscs, 1, 64);
         BUILDER.pop();
         SPEC = BUILDER.build();
     }

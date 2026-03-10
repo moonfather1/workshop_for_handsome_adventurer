@@ -1,0 +1,7 @@
+{
+    "parent": "workshop_for_handsome_adventurer:block/disc_shelf",
+    "textures": {
+        "particle": "minecraft:block/mangrove_planks",
+        "stripped_log": "minecraft:block/stripped_mangrove_log"
+    }
+}
