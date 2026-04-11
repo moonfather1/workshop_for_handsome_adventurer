@@ -5,10 +5,11 @@ import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.DualTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -22,10 +23,16 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 {
 	private static final Identifier[] BACKGROUND_LOCATION = new Identifier[5];
 
-	public DualTableCraftingScreen(SimpleTableMenu p_98448_, Inventory p_98449_, Component p_98450_) {
-		super(p_98448_, p_98449_, p_98450_);
-		this.imageHeight = 233;
+	public DualTableCraftingScreen(SimpleTableMenu p_98448_, Inventory p_98449_, Component p_98450_)
+	{
+		super(p_98448_, p_98449_, p_98450_, 176, 233);
 	}
+
+	public static DualTableCraftingScreen create2(SimpleTableMenu simpleTableMenu, Inventory itemStacks, Component component)
+	{
+		return new DualTableCraftingScreen(simpleTableMenu, itemStacks, component);
+	}
+
 
 
 	@Override
@@ -54,10 +61,10 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 
 
 	@Override
-	protected void renderLabels(GuiGraphics graphics, int p_97809_, int p_97810_) {
-		graphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
-		graphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY + 3*18+13, 4210752, false);
-		graphics.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY + 3*18+13, 4210752, false);
+	protected void extractLabels(GuiGraphicsExtractor graphics, int p_97809_, int p_97810_) {
+		graphics.text(this.font, this.title, this.titleLabelX, this.titleLabelY, 4210752, false);
+		graphics.text(this.font, this.title, this.titleLabelX, this.titleLabelY + 3*18+13, 4210752, false);
+		graphics.text(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY + 3*18+13, 4210752, false);
 	}
 
 	//////jei////////
@@ -171,7 +178,7 @@ public class DualTableCraftingScreen extends SimpleTableCraftingScreen
 		public void onPress(InputWithModifiers input) { }
 
 		@Override
-		public void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float p_283453_)
+		public void extractContents(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float p_283453_)
 		{
 			int localX = mouseX - this.getX();
 			int localY = mouseY - this.getY();

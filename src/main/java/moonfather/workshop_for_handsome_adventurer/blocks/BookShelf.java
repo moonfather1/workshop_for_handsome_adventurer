@@ -139,7 +139,7 @@ public abstract class BookShelf extends ToolRack
             }
             else if (!itemInMainHand.isEmpty() || !itemInOffHand.isEmpty())
             {
-                player.displayClientMessage(NotABookMessage, true);
+                player.sendOverlayMessage(NotABookMessage);
             }
         }
         else if (!existing.isEmpty() && itemInMainHand.isEmpty())

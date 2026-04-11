@@ -43,7 +43,7 @@ public class TaskListMessageHandler
         }
         if (! itemStack.is(TaskListItem.Utility.ourItem()))
         {
-            sp.displayClientMessage(Component.literal("error: didn't find task list."), false);
+            sp.sendSystemMessage(Component.literal("error: didn't find task list."));
             return;
         }
         //////////

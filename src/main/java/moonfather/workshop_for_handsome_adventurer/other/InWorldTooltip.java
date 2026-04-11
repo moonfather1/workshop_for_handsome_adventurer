@@ -7,8 +7,7 @@ import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
 import moonfather.workshop_for_handsome_adventurer.blocks.ToolRack;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-//import net.minecraft.client.gui.LayeredDraw;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.core.BlockPos;
@@ -33,7 +32,7 @@ public class InWorldTooltip implements GuiLayer
 
 
     @Override
-    public void render(@NotNull GuiGraphics guiGraphics, @NotNull DeltaTracker deltaTracker)
+    public void render(@NotNull GuiGraphicsExtractor guiGraphics, @NotNull DeltaTracker deltaTracker)
     {
         if (Minecraft.getInstance().player == null || Minecraft.getInstance().level == null || Minecraft.getInstance().screen != null) { return; }
         if (Minecraft.getInstance().hitResult instanceof BlockHitResult hitResult)
@@ -94,7 +93,7 @@ public class InWorldTooltip implements GuiLayer
                                     lastList.add(ClientTooltipComponent.create(c.getVisualOrderText()));
                                 }
                             }
-                            guiGraphics.renderTooltip(Minecraft.getInstance().font, lastList, Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2 - 30, Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 + 20, DefaultTooltipPositioner.INSTANCE, null);
+                            guiGraphics.tooltip(Minecraft.getInstance().font, lastList, Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2 - 30, Minecraft.getInstance().getWindow().getGuiScaledHeight() / 2 + 20, DefaultTooltipPositioner.INSTANCE, null);
                         }
                     }
                 }

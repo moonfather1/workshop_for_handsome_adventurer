@@ -5,7 +5,7 @@ import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.moving_data.TaskListComponent;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.moving_data.TaskListMessaging;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ImageWidget;
 import net.minecraft.client.gui.components.Renderable;
@@ -203,7 +203,7 @@ public class TaskListScreen extends Screen
         this.arrowNext1.visible = ! this.arrowNext2.visible;
     }
 
-    protected void renderTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY)
+    protected void renderTooltip(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY)
     {
         // if right button, say craft with paper
         boolean hover = mouseX >= this.arrowNext1.getX() && mouseX <= this.arrowNext1.getX() + this.arrowNext1.getWidth()
@@ -270,7 +270,7 @@ public class TaskListScreen extends Screen
         {
             return;
         }
-        guiGraphics.renderTooltip(Minecraft.getInstance().font, this.currentTooltip, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
+        guiGraphics.tooltip(Minecraft.getInstance().font, this.currentTooltip, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
     }
     private static final Component PAPER = Component.translatable(Items.PAPER.getDescriptionId()).withColor(0xffddaa);
     private static final Component PAPER_TOOLTIP = Component.translatable("message.workshop_for_handsome_adventurer.task_list_ex", PAPER);
@@ -446,7 +446,7 @@ public class TaskListScreen extends Screen
     ////////////////////
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick)
     {
         if (this.untapsToSkip == 0)
         {
@@ -454,23 +454,23 @@ public class TaskListScreen extends Screen
             this.untapsToSkip = 5;
         }
         this.untapsToSkip--;
-        this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+        this.extractBackground(guiGraphics, mouseX, mouseY, partialTick);
         for (Renderable renderable : this.renderables)
         {
-            renderable.render(guiGraphics, mouseX, mouseY, partialTick);
+            renderable.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
         }
         // hor lines
         int height = 12; // 14 if borders
         for (int i = 0; i < 5; i++)
         {
-            guiGraphics.hLine(this.leftPos + 14, this.leftPos + this.imageWidth - 16, this.topPos + this.topMarginMain - 4 + (i+1)*(height+height-1+1), 0xff776666);
+            guiGraphics.horizontalLine(this.leftPos + 14, this.leftPos + this.imageWidth - 16, this.topPos + this.topMarginMain - 4 + (i+1)*(height+height-1+1), 0xff776666);
         }
         // page num
         if (this.footer == null)
         {
             this.footer = String.format("%d/%d", this.page, this.pageCount);
         }
-        guiGraphics.drawString(Minecraft.getInstance().font, this.footer, this.leftPos + this.imageWidth / 2 - 12, this.topPos + this.imageHeight - 18, 0xff776666, false);
+        guiGraphics.text(Minecraft.getInstance().font, this.footer, this.leftPos + this.imageWidth / 2 - 12, this.topPos + this.imageHeight - 18, 0xff776666, false);
         // checkboxes
         int y = this.topPos + this.topMarginMain + 2;
         int x = this.leftPos + 10;
@@ -486,7 +486,7 @@ public class TaskListScreen extends Screen
     private int untapsToSkip = 5;
 
     @Override
-    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
+    public void extractBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick)
     {
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, BG_LOCATION, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth, this.imageHeight, 256, 256);
     }

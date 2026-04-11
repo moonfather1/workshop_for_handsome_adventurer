@@ -1,8 +1,9 @@
 package moonfather.workshop_for_handsome_adventurer.items.task_list.items.crafting;
 
-import moonfather.workshop_for_handsome_adventurer.items.task_list.RegistrationForTaskList;
+import com.mojang.serialization.MapCodec;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.TaskListItem;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.data.registries.VanillaRegistries;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
@@ -15,12 +16,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class TaskListPlusCreamRecipe extends CustomRecipe
 {
-    public TaskListPlusCreamRecipe() {
-        super(CraftingBookCategory.EQUIPMENT);
+    public TaskListPlusCreamRecipe() { super(); }
+
+
+    @Override
+    public CraftingBookCategory category()
+    {
+        return CraftingBookCategory.EQUIPMENT;
     }
 
-    public TaskListPlusCreamRecipe(CraftingBookCategory craftingBookCategory) { super(craftingBookCategory); }
-
+    @Override
     public boolean matches(CraftingInput input, @NotNull Level level)
     {
         boolean haveCream = false;
@@ -59,7 +64,8 @@ public class TaskListPlusCreamRecipe extends CustomRecipe
         return haveClipboard && haveCream && ! alreadyCreamed;
     }
 
-    public ItemStack assemble(CraftingInput input, HolderLookup.Provider registries)
+    @Override
+    public ItemStack assemble(CraftingInput input)
     {
         ItemStack result = null;
         for (int i = 0; i < input.size(); i++)
@@ -84,6 +90,16 @@ public class TaskListPlusCreamRecipe extends CustomRecipe
     @Override
     public RecipeSerializer<? extends CustomRecipe> getSerializer()
     {
-        return RegistrationForTaskList.TASK_LIST_CREAMING_RECIPE.get();
+        return SERIALIZER;
     }
+
+    private static final TaskListPlusCreamRecipe INSTANCE = new TaskListPlusCreamRecipe();
+
+    public static final RecipeSerializer<TaskListPlusCreamRecipe> SERIALIZER = new RecipeSerializer<>
+            (
+                    // The map codec for reading the recipe to/from disk.
+                    MapCodec.unit(INSTANCE),
+                    // The stream codec for reading the recipe to/from the network.
+                    StreamCodec.unit(INSTANCE)
+            );
 }

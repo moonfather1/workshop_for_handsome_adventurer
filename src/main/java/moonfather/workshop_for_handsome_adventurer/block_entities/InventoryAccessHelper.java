@@ -292,7 +292,7 @@ public class InventoryAccessHelper
             }
             // now for DataComponents.CONTAINER... blindly typing this. no idea what to test on.
             ItemContainerContents container = maybeStorageItem.get(DataComponents.CONTAINER);
-            if (container != null && ! maybeStorageItem.getItemHolder().getRegisteredName().contains("backpacked"))
+            if (container != null && ! maybeStorageItem.typeHolder().getRegisteredName().contains("backpacked"))
             {
                 InventoryAccessRecord record = new InventoryAccessRecord();
                 record.ItemChest = maybeStorageItem.copy();

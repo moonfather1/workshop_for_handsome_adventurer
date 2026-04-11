@@ -16,17 +16,17 @@ public class TaskListEditBox extends EditBox
     @Override
     public boolean charTyped(CharacterEvent event)
     {
-        if ((event.codepoint() == '*' || event.codepoint() == '+') && event.modifiers() == 0)
+        if ((event.codepoint() == '*' || event.codepoint() == '+') /*&& event.modifiers() == 0*/)
         {
             return false;
         }
-        if ((event.codepoint() == '-') && event.modifiers() == 0)
+        if ((event.codepoint() == '-') /*&& event.modifiers() == 0*/)
         {
             return false; // a little problematic
         }
         if (event.codepoint() == '_')
         {
-            return super.charTyped(new CharacterEvent('-', 0)); // allow dashes
+            return super.charTyped(new CharacterEvent('-')); // allow dashes
         }
         return super.charTyped(event);
     }

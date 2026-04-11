@@ -44,8 +44,8 @@ public class RegistrationForTaskList
 
     public static final Supplier<DataComponentType<TaskListComponent>> TASK_LIST_CONTENT = DATA_COMPONENT_TYPES.registerComponentType("task_list_data", builder -> builder.persistent(TaskListComponent.CODEC_FOR_COMPONENT).networkSynchronized(TaskListComponent.STREAM_CODEC_FOR_COMPONENT));
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Unit>> FIRE_RESISTANT = DATA_COMPONENT_TYPES.register("fire_resistant", () -> DataComponentType.<Unit>builder().persistent(Unit.CODEC).networkSynchronized(Unit.STREAM_CODEC).build() );
-    public static final Supplier<RecipeSerializer<TaskListPlusPaperRecipe>> TASK_LIST_EXPANSION_RECIPE = RECIPES.register("task_list_ex", () -> new CustomRecipe.Serializer<TaskListPlusPaperRecipe>(TaskListPlusPaperRecipe::new));
-    public static final Supplier<RecipeSerializer<TaskListPlusCreamRecipe>> TASK_LIST_CREAMING_RECIPE = RECIPES.register("task_list_creaming", () -> new CustomRecipe.Serializer<TaskListPlusCreamRecipe>(TaskListPlusCreamRecipe::new));
+    public static final Supplier<RecipeSerializer<TaskListPlusPaperRecipe>> TASK_LIST_EXPANSION_RECIPE = RECIPES.register("task_list_ex", () -> TaskListPlusPaperRecipe.SERIALIZER);
+    public static final Supplier<RecipeSerializer<TaskListPlusCreamRecipe>> TASK_LIST_CREAMING_RECIPE = RECIPES.register("task_list_creaming", () -> TaskListPlusCreamRecipe.SERIALIZER);
 
     public static final Supplier<BlockEntityType<TaskListBlockEntity>> TASK_LIST_PANEL_BE = BLOCK_ENTITIES.register("task_list_panel_be", () -> new BlockEntityType<>(TaskListBlockEntity::new, TASK_LIST_PANEL.get()));
 }

@@ -23,7 +23,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
-import net.minecraft.world.ContainerListener;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -71,7 +70,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	protected final ResultContainer resultSlots = new ResultContainer();
 	protected final Player player;
 	protected final ContainerLevelAccess access;
-	private final SimpleContainer customizationSlots = new SimpleContainer(CUST_CONTAINER_SIZE);
+	private final SimpleContainerWithListeners customizationSlots = new SimpleContainerWithListeners(CUST_CONTAINER_SIZE);
 	private final Container tabElements = new SimpleContainer(TAB_SMUGGLING_CONTAINER_SIZE); // magic to transfer to client
 	private Container chestSlots = null;
 	protected boolean initialLoading = true;
@@ -126,11 +125,13 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		this.lastLanternCount = this.getLanternCount();
 		if (! this.player.level().isClientSide())
 		{
-			this.customizationSlots.addListener(new CustomizationListenerServer(this));
+			this.customizationSlots.parent = this;
+			this.customizationSlots.changeListener = SimpleTableMenu::customizationListenerServer;
 		}
 		else
 		{
-			this.customizationSlots.addListener(new CustomizationListenerClient(this));
+			this.customizationSlots.parent = this;
+			this.customizationSlots.changeListener = SimpleTableMenu::customizationListenerClient;
 		}
 
 		//---slots to sneak tab images to the client---
@@ -155,6 +156,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		this.initialLoading = false;
 		this.access.execute((level, pos) -> TableLockManager.register(this.containerId, level, pos));
 	}
+
 
 
 	public DataSlot addDataSlot(DataSlot slot) { return super.addDataSlot(slot); }
@@ -189,7 +191,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			{
 				if (resultContainer.setRecipeUsed(serverplayer, recipeHolder.get()))
 				{
-					itemstack = recipeHolder.get().value().assemble(craftinginput, level.registryAccess());
+					itemstack = recipeHolder.get().value().assemble(craftinginput);
 				}
 			}
 
@@ -1215,57 +1217,48 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 	/////////////////////////////////////////////////////////////////////////
 
-	private class CustomizationListenerClient implements ContainerListener {
-		private final SimpleTableMenu parent;
-		public CustomizationListenerClient(SimpleTableMenu simpleTableMenu)
-		{
-			this.parent = simpleTableMenu;
-		}
+	private static class SimpleContainerWithListeners extends SimpleContainer
+	{
+		public SimpleContainerWithListeners(int containerSize) { super(containerSize); }
 
-		@Override
-		public void containerChanged(Container container)
-		{
-			// changing drawer state of block in world here causes duping (fixed onRemove, might work now)
-			// anyway we need to hide/show access slots here
-			this.parent.updateAccessSlotsOnClient();
-		}
+		private SimpleTableMenu parent;
+		private Consumer<SimpleTableMenu> changeListener;
 	}
 
-	private class CustomizationListenerServer implements ContainerListener {
-		private final SimpleTableMenu parent;
-		public CustomizationListenerServer(SimpleTableMenu simpleTableMenu)
+	private static void customizationListenerClient(SimpleTableMenu parent)
+	{
+		// changing drawer state of block in world here causes duping (fixed onRemove, might work now)
+		// anyway we need to hide/show access slots here
+		parent.updateAccessSlotsOnClient();
+	}
+
+	private static void customizationListenerServer(SimpleTableMenu parent)
+	{
+		// name tags
+		int range = parent.getInventoryAccessRange();
+		int lastRange = parent.lastInventoryAccessRange; // will be overwritten before i need it
+		if (range != parent.lastInventoryAccessRange)
 		{
-			this.parent = simpleTableMenu;
+			parent.storeAdjacentInventoriesInSlots();
+			parent.DataSlots.resetDataSlotFlagForClientFlag(SimpleTableDataSlots.DATA_SLOT_TABS_NEED_UPDATE); // for some reason i managed to get it stuck on 1
+			parent.DataSlots.raiseDataSlotFlagForClientFlag(SimpleTableDataSlots.DATA_SLOT_TABS_NEED_UPDATE);
+			if (lastRange == 0)
+			{
+				parent.sendAllDataToRemote();
+			}
+			parent.lastInventoryAccessRange = range;
 		}
-		@Override
-		public void containerChanged(Container container)
+		// lanterns
+		int lanternCount = parent.getLanternCount();
+		if (lanternCount == 2 && parent.lastLanternCount != 2)
 		{
-			// name tags
-			int range = this.parent.getInventoryAccessRange();
-			int lastRange = this.parent.lastInventoryAccessRange; // will be overwritten before i need it
-			if (range != this.parent.lastInventoryAccessRange)
-			{
-				this.parent.storeAdjacentInventoriesInSlots();
-				this.parent.DataSlots.resetDataSlotFlagForClientFlag(SimpleTableDataSlots.DATA_SLOT_TABS_NEED_UPDATE); // for some reason i managed to get it stuck on 1
-				this.parent.DataSlots.raiseDataSlotFlagForClientFlag(SimpleTableDataSlots.DATA_SLOT_TABS_NEED_UPDATE);
-				if (lastRange == 0)
-				{
-					this.parent.sendAllDataToRemote();
-				}
-				this.parent.lastInventoryAccessRange = range;
-			}
-			// lanterns
-			int lanternCount = this.parent.getLanternCount();
-			if (lanternCount == 2 && this.parent.lastLanternCount != 2)
-			{
-				this.parent.access.execute( (l, p) -> this.parent.setLanternState(l, p, true) );
-				this.parent.lastLanternCount = lanternCount;
-			}
-			else if (lanternCount != 2 && this.parent.lastLanternCount == 2)
-			{
-				this.parent.access.execute( (l, p) -> this.parent.setLanternState(l, p, false) );
-				this.parent.lastLanternCount = lanternCount;
-			}
+			parent.access.execute( (l, p) -> parent.setLanternState(l, p, true) );
+			parent.lastLanternCount = lanternCount;
+		}
+		else if (lanternCount != 2 && parent.lastLanternCount == 2)
+		{
+			parent.access.execute( (l, p) -> parent.setLanternState(l, p, false) );
+			parent.lastLanternCount = lanternCount;
 		}
 	}
 }

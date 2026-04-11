@@ -115,7 +115,7 @@ public class SimpleTable extends Block implements EntityBlock, IBlockWithCleverH
         {
             if (level.isClientSide())
             {
-                player.displayClientMessage(MessageInaccessible, true);
+                player.sendOverlayMessage(MessageInaccessible);
             }
             return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
@@ -125,7 +125,7 @@ public class SimpleTable extends Block implements EntityBlock, IBlockWithCleverH
         }
         else if (TableLockManager.isLocked(level, pos))
         {
-            player.displayClientMessage(Component.translatable("message.workshop_for_handsome_adventurer.workshop_table_in_use", TableLockManager.getPlayerName(level, pos).copy().withStyle(Style.EMPTY.withColor(0xffeeee11))), true);
+            player.sendOverlayMessage(Component.translatable("message.workshop_for_handsome_adventurer.workshop_table_in_use", TableLockManager.getPlayerName(level, pos).copy().withStyle(Style.EMPTY.withColor(0xffeeee11))));
             return InteractionResult.CONSUME;
         }
         else if (ModList.get().isLoaded("tetra_tables") && ! player.isCrouching() && TetraHammerSupport.isHammer(player.getMainHandItem()))

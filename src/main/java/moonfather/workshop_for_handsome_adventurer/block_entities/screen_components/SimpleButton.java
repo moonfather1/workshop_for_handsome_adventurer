@@ -2,7 +2,7 @@ package moonfather.workshop_for_handsome_adventurer.block_entities.screen_compon
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
@@ -38,7 +38,7 @@ public class SimpleButton extends Button
 
 
     @Override
-    public void renderContents(GuiGraphics graphics, int mouseX, int mouseY, float p_94285_)
+    public void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float p_94285_)
     {
         Identifier image = this.resourceLocationNormal;
         if (this.isActive() && this.isHoveredOrFocused())
@@ -52,7 +52,7 @@ public class SimpleButton extends Button
         graphics.blit(RenderPipelines.GUI_TEXTURED, image, this.getX(), this.getY(), 0, 0, this.width, this.height, this.textureWidth, this.textureHeight);
     }
 
-    public void renderTooltipsSeparately(GuiGraphics graphics, Font font, int mouseX, int mouseY)
+    public void renderTooltipsSeparately(GuiGraphicsExtractor graphics, Font font, int mouseX, int mouseY)
     {
         if (this.isHovered)
         {
@@ -77,7 +77,7 @@ public class SimpleButton extends Button
                           this.tooltipLines.add(ClientTooltipComponent.create(line.getVisualOrderText()));
                       });
             }
-            graphics.renderTooltip(font, this.tooltipLines, mouseX, mouseY - 8, DefaultTooltipPositioner.INSTANCE, null);
+            graphics.tooltip(font, this.tooltipLines, mouseX, mouseY - 8, DefaultTooltipPositioner.INSTANCE, null);
         }
     }
 

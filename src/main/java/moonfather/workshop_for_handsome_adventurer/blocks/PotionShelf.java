@@ -128,7 +128,7 @@ public class PotionShelf extends ToolRack
                 &&
                 ! (this.canInteractWithOffhand() && ! player.getOffhandItem().isEmpty() && this.canDepositItem(player.getOffhandItem())))
         {
-            player.displayClientMessage(ShelfMessage, true);
+            player.sendOverlayMessage(ShelfMessage);
             return level.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         }
 
@@ -167,13 +167,13 @@ public class PotionShelf extends ToolRack
             }  // done depositing, now a message
             if (showHintAboutOtherSlot)
             {
-                player.displayClientMessage(HintMessage, true);
+                player.sendOverlayMessage(HintMessage);
             }
             else if (BE.GetRemainingRoom(slot) + BE.GetRemainingItems(slot) > 1)  // no message if no stacking
             {
                 player.playSound(SoundEvents.WOOD_PLACE, 0.5f, 0.7f);
                 MutableComponent remainingRoomMessage = Component.translatable(RemainingRoomKey);
-                player.displayClientMessage(remainingRoomMessage.append(BE.GetRemainingRoom(slot).toString()), true);
+                player.sendOverlayMessage(remainingRoomMessage.append(BE.GetRemainingRoom(slot).toString()));
             }
         }
         else if (existing.isEmpty() && player.getMainHandItem().isEmpty() && (! this.canInteractWithOffhand() || player.getOffhandItem().isEmpty()))
@@ -196,7 +196,7 @@ public class PotionShelf extends ToolRack
             if (BE.GetRemainingItems(slot) > 0)
             {
                 MutableComponent remainingItemsMessage = Component.translatable(RemainingItemsKey);
-                player.displayClientMessage(remainingItemsMessage.append(BE.GetRemainingItems(slot).toString()), true);
+                player.sendOverlayMessage(remainingItemsMessage.append(BE.GetRemainingItems(slot).toString()));
             }
         }
         else
@@ -206,7 +206,7 @@ public class PotionShelf extends ToolRack
             {
                 if (BE.IsSlotMaxed(slot))
                 {
-                    player.displayClientMessage(MaxedMessage, true);
+                    player.sendOverlayMessage(MaxedMessage);
                     return InteractionResult.SUCCESS_SERVER;
                 }
                 if (player.getMainHandItem().getMaxStackSize() > 1 && player.isCrouching())
@@ -219,13 +219,13 @@ public class PotionShelf extends ToolRack
                 }
                 player.playSound(SoundEvents.WOOD_PLACE, 0.5f, 0.7f);
                 MutableComponent remainingRoomMessage = Component.translatable(RemainingRoomKey);
-                player.displayClientMessage(remainingRoomMessage.append(BE.GetRemainingRoom(slot).toString()), true);
+                player.sendOverlayMessage(remainingRoomMessage.append(BE.GetRemainingRoom(slot).toString()));
             }
             else if (! player.getOffhandItem().isEmpty() && this.canInteractWithOffhand() && ItemStack.isSameItemSameComponents(existing, player.getOffhandItem()))
             {
                 if (BE.IsSlotMaxed(slot))
                 {
-                    player.displayClientMessage(MaxedMessage, true);
+                    player.sendOverlayMessage(MaxedMessage);
                     return InteractionResult.SUCCESS_SERVER;
                 }
                 if (player.getOffhandItem().getMaxStackSize() > 1 && player.isCrouching())
@@ -238,11 +238,11 @@ public class PotionShelf extends ToolRack
                 }
                 player.playSound(SoundEvents.WOOD_PLACE, 0.5f, 0.7f);
                 MutableComponent remainingRoomMessage = Component.translatable(RemainingRoomKey);
-                player.displayClientMessage(remainingRoomMessage.append(BE.GetRemainingRoom(slot).toString()), true);
+                player.sendOverlayMessage(remainingRoomMessage.append(BE.GetRemainingRoom(slot).toString()));
             }
             else
             {
-                player.displayClientMessage(NotTheSameTypeMessage, true);
+                player.sendOverlayMessage(NotTheSameTypeMessage);
             }
         }
         level.sendBlockUpdated(pos, blockState, blockState, 2);

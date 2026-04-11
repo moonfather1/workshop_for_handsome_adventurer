@@ -1,17 +1,16 @@
 package moonfather.workshop_for_handsome_adventurer.other;
 
 
+import com.mojang.serialization.MapCodec;
 import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
-import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -22,12 +21,7 @@ public class UnsupportedWoodRecipe extends CustomRecipe
 {
     public UnsupportedWoodRecipe()
     {
-        super(CraftingBookCategory.MISC);
-    }
-
-    public UnsupportedWoodRecipe(CraftingBookCategory craftingBookCategory)
-    {
-        super(CraftingBookCategory.MISC);
+        super();
     }
 
     @Override
@@ -82,7 +76,7 @@ public class UnsupportedWoodRecipe extends CustomRecipe
 
 
     @Override
-    public ItemStack assemble(CraftingInput craftingInput, HolderLookup.Provider lookupProvider)
+    public ItemStack assemble(CraftingInput craftingInput)
     {
         if (!CommonConfig.SimpleTableReplacesVanillaTable.get())
         {
@@ -94,9 +88,21 @@ public class UnsupportedWoodRecipe extends CustomRecipe
     @Override
     public boolean showNotification() { return false; }
 
+    /////////////////////////////////////////////////////
+
     @Override
     public RecipeSerializer<? extends CustomRecipe> getSerializer()
     {
-        return ContentRegistration.TABLE_RECIPE.get();
+        return SERIALIZER;
     }
+
+    private static final UnsupportedWoodRecipe INSTANCE = new UnsupportedWoodRecipe();
+
+    public static final RecipeSerializer<UnsupportedWoodRecipe> SERIALIZER = new RecipeSerializer<>
+            (
+                    // The map codec for reading the recipe to/from disk.
+                    MapCodec.unit(INSTANCE),
+                    // The stream codec for reading the recipe to/from the network.
+                    StreamCodec.unit(INSTANCE)
+            );
 }

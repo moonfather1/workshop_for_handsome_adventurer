@@ -32,13 +32,13 @@ public class CraftingTweaksProvider implements CraftingGridProvider
     public void buildCraftingGrids(CraftingGridBuilder builder, AbstractContainerMenu menu)
     {
         if (menu instanceof DualTableMenu) {
-            builder.addGrid("primary", DualTableMenu.CRAFT_SLOT_START, 3*3)
+            builder.addGrid(DualTableMenu.CRAFT_SLOT_START, 3, 3)
                    .setButtonAlignment(ButtonAlignment.LEFT);
-            builder.addGrid("secondary", DualTableMenu.CRAFT_SECONDARY_SLOT_START, 3*3)
+            builder.addGrid(DualTableMenu.CRAFT_SECONDARY_SLOT_START, 3, 3)
                    .setButtonAlignment(ButtonAlignment.LEFT);
         }
         else if (menu instanceof SimpleTableMenu) {
-            builder.addGrid("single", SimpleTableMenu.CRAFT_SLOT_START, 3*3)
+            builder.addGrid(SimpleTableMenu.CRAFT_SLOT_START, 3, 3)
                    .setButtonAlignment(ButtonAlignment.LEFT);
         }
     }

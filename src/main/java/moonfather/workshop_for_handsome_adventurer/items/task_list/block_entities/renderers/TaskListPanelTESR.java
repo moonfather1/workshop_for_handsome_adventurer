@@ -1,28 +1,22 @@
 package moonfather.workshop_for_handsome_adventurer.items.task_list.block_entities.renderers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import moonfather.workshop_for_handsome_adventurer.ClientConfig;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.block_entities.TaskListBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.blocks.TaskListPanel;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.moving_data.TaskListMessaging;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
-import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 
@@ -83,7 +77,7 @@ public class TaskListPanelTESR implements BlockEntityRenderer<TaskListBlockEntit
         TaskPageRenderState state = (TaskPageRenderState) renderState;
         state.direction = blockEntity.getBlockState().getValue(TaskListPanel.FACING);
         state.page = RenderStateManagement.extract(blockEntity);
-        state.lightColor = blockEntity.getLevel() != null ? LevelRenderer.getLightColor(blockEntity.getLevel(), blockEntity.getBlockPos()) : -1;
+        state.lightColor = blockEntity.getLevel() != null ? LevelRenderer.getLightCoords(blockEntity.getLevel(), blockEntity.getBlockPos()) : -1;
     }
 
     @Override

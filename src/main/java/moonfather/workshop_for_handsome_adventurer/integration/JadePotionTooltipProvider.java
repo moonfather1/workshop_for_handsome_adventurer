@@ -5,10 +5,12 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlo
 import moonfather.workshop_for_handsome_adventurer.blocks.DiscShelf;
 import moonfather.workshop_for_handsome_adventurer.blocks.PotionShelf;
 import net.minecraft.client.gui.layouts.LayoutElement;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.*;
+import org.jetbrains.annotations.NotNull;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
@@ -60,8 +62,8 @@ public class JadePotionTooltipProvider implements IBlockComponentProvider
                 {
                     List<LayoutElement> list2 = new ArrayList<>(2);
                     list2.add(JadeUI.text(Component.literal(" ")));
-                    EitherHolder<JukeboxSong> song = songContainer.song();
-                    song.unwrap(accessor.getLevel().registryAccess()).ifPresent(holder -> list2.add(JadeUI.text(holder.value().description())));
+                    Holder<JukeboxSong> song = songContainer.song();
+                    list2.add(JadeUI.text(song.value().description()));
                     tooltip.add(list2);
                 }
             }
@@ -71,7 +73,7 @@ public class JadePotionTooltipProvider implements IBlockComponentProvider
 
 
     @Override
-    public Identifier getUid() {
+    public @NotNull Identifier getUid() {
         return this.pluginId;
     }
     private final Identifier pluginId = Identifier.fromNamespaceAndPath(Constants.MODID, "jade_plugin1");

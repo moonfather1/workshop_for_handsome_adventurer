@@ -140,7 +140,7 @@ public class AdvancedTableBottomPrimary extends DualTableBaseBlock implements En
 		}
 		else if (TableLockManager.isLocked(level, pos))
 		{
-			player.displayClientMessage(Component.translatable("message.workshop_for_handsome_adventurer.workshop_table_in_use", TableLockManager.getPlayerName(level, pos).copy().withStyle(Style.EMPTY.withColor(0xffeeee11))), true);
+			player.sendOverlayMessage(Component.translatable("message.workshop_for_handsome_adventurer.workshop_table_in_use", TableLockManager.getPlayerName(level, pos).copy().withStyle(Style.EMPTY.withColor(0xffeeee11))));
 			return InteractionResult.CONSUME;
 		}
 		else

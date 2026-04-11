@@ -228,7 +228,6 @@ public class ToolRack extends Block implements EntityBlock, IBlockWithCleverHove
 
     private final MutableComponent RackMessage = Component.translatable("message.workshop_for_handsome_adventurer.invalid_item_for_rack");
 
-
     @Override
     public InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult)
     {
@@ -258,7 +257,7 @@ public class ToolRack extends Block implements EntityBlock, IBlockWithCleverHove
         {
             if (! this.canDepositItem(itemInMainHand))
             {
-                player.displayClientMessage(RackMessage, true);
+                player.sendOverlayMessage(RackMessage);
                 return InteractionResult.CONSUME; // we're not on client.
             }
             //System.out.println("~~~~~ADDED FROM MAIN");
@@ -276,7 +275,7 @@ public class ToolRack extends Block implements EntityBlock, IBlockWithCleverHove
         {
             if (! this.canDepositItem(itemInOffHand))
             {
-                player.displayClientMessage(RackMessage, true);
+                player.sendOverlayMessage(RackMessage);
                 return InteractionResult.CONSUME; // we're not on client.
             }
             //System.out.println("~~~~~ADDED FROM OFFHAND");

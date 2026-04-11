@@ -67,7 +67,7 @@ public class WorkstationPlacerItem extends Item
 		{
 			if (context.getPlayer() != null)
 			{
-				context.getPlayer().displayClientMessage(Component.translatable("message.workshop_for_handsome_adventurer.no_room_for_workstation"), true);
+				context.getPlayer().sendOverlayMessage(Component.translatable("message.workshop_for_handsome_adventurer.no_room_for_workstation"));
 			}
 			return InteractionResult.FAIL;
 		}

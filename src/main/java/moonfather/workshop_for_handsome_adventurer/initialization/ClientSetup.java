@@ -2,13 +2,17 @@ package moonfather.workshop_for_handsome_adventurer.initialization;
 
 import moonfather.workshop_for_handsome_adventurer.ClientConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
+import moonfather.workshop_for_handsome_adventurer.block_entities.SimpleTableMenu;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screens.DualTableCraftingScreen;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screens.SimpleTableCraftingScreen;
 import moonfather.workshop_for_handsome_adventurer.block_entities.renderers.*;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.FinderEvents;
 import moonfather.workshop_for_handsome_adventurer.integration.PolymorphAccessorClient;
 import moonfather.workshop_for_handsome_adventurer.other.InWorldTooltip;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
@@ -36,8 +40,8 @@ public class ClientSetup
 	@SubscribeEvent
 	public static void RegisterScreens(RegisterMenuScreensEvent event)
 	{
-		event.register(ContentRegistration.CRAFTING_SINGLE_MENU_TYPE.get(), SimpleTableCraftingScreen::new);
-		event.register(ContentRegistration.CRAFTING_DUAL_MENU_TYPE.get(), DualTableCraftingScreen::new);
+		event.register(ContentRegistration.CRAFTING_SINGLE_MENU_TYPE.get(), SimpleTableCraftingScreen::create1);
+		event.register(ContentRegistration.CRAFTING_DUAL_MENU_TYPE.get(), DualTableCraftingScreen::create2);
 	}
 
 

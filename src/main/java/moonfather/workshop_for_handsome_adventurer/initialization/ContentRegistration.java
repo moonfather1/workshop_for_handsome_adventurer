@@ -216,11 +216,11 @@ public class ContentRegistration
 	public static final Supplier<BlockEntityType<DiscShelfBlockEntity>> DISC_SHELF_BE = BLOCK_ENTITIES.register("disc_shelf_be", () -> new BlockEntityType<>(DiscShelfBlockEntity::new, false, ListToArray(blocks_dshelf)));
 	public static final Supplier<BlockEntityType<BookShelfBlockEntity>> BOOK_SHELF_BE = BLOCK_ENTITIES.register("book_shelf_be", () -> new BlockEntityType<>(BookShelfBlockEntity::new, false, ListToArray(blocks_bshelf)));
 	public static final Supplier<MenuType<SimpleTableMenu>> CRAFTING_SINGLE_MENU_TYPE = CONTAINER_TYPES.register("crafting_single", () -> IMenuTypeExtension.create(SimpleTableMenu::new));
-	public static final Supplier<MenuType<DualTableMenu>> CRAFTING_DUAL_MENU_TYPE = CONTAINER_TYPES.register("crafting_dual", () -> IMenuTypeExtension.create(DualTableMenu::new));
+	public static final Supplier<MenuType<SimpleTableMenu>> CRAFTING_DUAL_MENU_TYPE = CONTAINER_TYPES.register("crafting_dual", () -> IMenuTypeExtension.create(DualTableMenu::new));
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public static final Supplier<RecipeSerializer<UnsupportedWoodRecipe>> TABLE_RECIPE = RECIPES.register("table_recipe_unknown_planks", () -> new CustomRecipe.Serializer<UnsupportedWoodRecipe>(UnsupportedWoodRecipe::new));
+	public static final Supplier<RecipeSerializer<UnsupportedWoodRecipe>> TABLE_RECIPE = RECIPES.register("table_recipe_unknown_planks", () -> UnsupportedWoodRecipe.SERIALIZER);
 
 	public static final Supplier<CreativeModeTab> CREATIVE_TAB = CREATIVE_TABS.register("tab", CreativeTab::buildTab);
 

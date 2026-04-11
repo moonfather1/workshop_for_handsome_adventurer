@@ -11,10 +11,10 @@ import net.minecraft.world.inventory.Slot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EMIRecipeHandlerForDualTable implements StandardRecipeHandler<DualTableMenu>
+public class EMIRecipeHandlerForDualTable implements StandardRecipeHandler<SimpleTableMenu> // changed in 26.1
 {
     @Override
-    public List<net.minecraft.world.inventory.Slot> getInputSources(DualTableMenu menu)
+    public List<net.minecraft.world.inventory.Slot> getInputSources(SimpleTableMenu menu)
     {
         boolean showingChestInventories = menu.showInventoryAccess();
         List<Slot> result = new ArrayList<Slot>(9 * 4 + (showingChestInventories ? 54 : 0));
@@ -37,11 +37,11 @@ public class EMIRecipeHandlerForDualTable implements StandardRecipeHandler<DualT
     }
 
     @Override
-    public List<net.minecraft.world.inventory.Slot> getCraftingSlots(DualTableMenu menu)
+    public List<net.minecraft.world.inventory.Slot> getCraftingSlots(SimpleTableMenu menu)
     {
         List<Slot> list = Lists.newArrayList();
         int start = DualTableMenu.CRAFT_SLOT_START;
-        if (menu.getRecipeTargetGrid() == 2)
+        if (((DualTableMenu) menu).getRecipeTargetGrid() == 2)
         {
             start = DualTableMenu.CRAFT_SECONDARY_SLOT_START;
         }

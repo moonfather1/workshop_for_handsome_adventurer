@@ -1,5 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.items.task_list.items;
 
+import com.mojang.serialization.DataResult;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.RegistrationForTaskList;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.block_entities.TaskListBlockEntity;
@@ -31,6 +32,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.event.AddPackFindersEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 
 public class TaskListItem extends Item
 {
@@ -139,8 +142,15 @@ public class TaskListItem extends Item
         public static void setFireImmune(ItemStack taskList)
         {
             taskList.set(RegistrationForTaskList.FIRE_RESISTANT, Unit.INSTANCE);  // don't ask.  this wasn't retarded in 1.21.1, but now it is.
-            taskList.set(DataComponents.DAMAGE_RESISTANT, new DamageResistant(DamageTypeTags.IS_FIRE));
+            assert fireResistance != null;
+            taskList.set(DataComponents.DAMAGE_RESISTANT, fireResistance);
         }
+
+        public static void initializeStupidDamageTypes(ServerStartedEvent event)
+        {
+            fireResistance = new DamageResistant(event.getServer().registryAccess().getOrThrow(DamageTypeTags.IS_FIRE));
+        }
+        private static DamageResistant fireResistance = null;
 
         public static ItemStack createInstance()
         {

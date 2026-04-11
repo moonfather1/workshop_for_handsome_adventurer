@@ -14,6 +14,7 @@ import moonfather.workshop_for_handsome_adventurer.integration.CarryOnBlacklisti
 import moonfather.workshop_for_handsome_adventurer.integration.TOPProxyRegistration;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.RegistrationForTaskList;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.MissingMappingsHandler2;
+import moonfather.workshop_for_handsome_adventurer.items.task_list.items.TaskListItem;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.moving_data.TaskListMessagingInitialization;
 import moonfather.workshop_for_handsome_adventurer.other.CreativeTab;
 import net.neoforged.bus.api.EventPriority;
@@ -44,16 +45,9 @@ public class ModWorkshop
     //---------------------------------------------------------------//
     //   https://modrinth.com/mod/frycooks-delight
 
-
-    //https://www.reddit.com/r/MinecraftMod/comments/1p91nz1/spent_a_year_making_a_musicmod_for_minecraft_c418/
-
-    // 1.21.1 : does rename update tabs?
-    // test placer on 319
     // test keyboard in rename box, test f and e
-    // !   missing tables don't turn to oak.   verity in 1.21.1
-    //   ? bookshelf recipes
-    // sd in lang, emba in lang
-    // https://modrinth.com/mod/ars-elixirum
+
+
 
     public ModWorkshop(IEventBus modBus, ModContainer modContainer)
     {
@@ -68,6 +62,7 @@ public class ModWorkshop
         modBus.addListener(CreativeTab::onCreativeTabPopulation);
         modBus.addListener(FinderEvents::addServerPack);
         modBus.addListener(MessagingInitialization::register);
+        NeoForge.EVENT_BUS.addListener(TaskListItem.Utility::initializeStupidDamageTypes);
         NeoForge.EVENT_BUS.addListener(PotionShelf::onRightClickBlock);
         modBus.addListener(EventPriority.LOWEST, DynamicContentRegistration::handleRegistryEvent);
         MissingMappingsHandler.read();

@@ -10,7 +10,7 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.screen_compone
 import moonfather.workshop_for_handsome_adventurer.block_entities.screen_components.SlightlyNicerEditBox;
 import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
 import moonfather.workshop_for_handsome_adventurer.integration.PolymorphAccessorClient;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
@@ -224,7 +224,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     /////////////////////////////////////////////////////////////////////
 
     @Override
-    public void render(GuiGraphics graphics, int p_100320_, int p_100321_, float p_100322_)
+    public void extractRenderState(GuiGraphicsExtractor graphics, int p_100320_, int p_100321_, float p_100322_)
     {
         if (this.isVisibleTotal())
         {
@@ -232,12 +232,12 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             int y = (this.parent.height - parent.getYSize()) / 2;
             graphics.blit(RenderPipelines.GUI_TEXTURED, this.getBackground(), x, y,0, 0, PANEL_WIDTH, PANEL_HEIGHT_WITH_TABS, 256, 256);
 
-            this.renameBox.render(graphics, p_100320_, p_100321_, p_100322_);
-            this.renameButton.render(graphics, p_100320_, p_100321_, p_100322_);
+            this.renameBox.extractRenderState(graphics, p_100320_, p_100321_, p_100322_);
+            this.renameButton.extractRenderState(graphics, p_100320_, p_100321_, p_100322_);
 
             for (AbstractButton tabButton : this.tabButtons)
             {
-                tabButton.render(graphics, p_100320_, p_100321_, p_100322_);
+                tabButton.extractRenderState(graphics, p_100320_, p_100321_, p_100322_);
             }
         }
     }
@@ -251,7 +251,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         return BG_CHEST_LOCATION_3_ROWS;
     }
 
-    public void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY)
+    public void renderTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY)
     {
         if (this.isVisibleTotal()) {
             this.renameButton.renderTooltipsSeparately(graphics, this.parent.getFont(), mouseX, mouseY);
@@ -261,7 +261,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
                 {
                     if (this.parent.getMinecraft().screen != null)
                     {
-                        graphics.renderTooltip(this.parent.getFont(), tabButton.getMessageForTooltip(), mouseX+2, mouseY+12, DefaultTooltipPositioner.INSTANCE, null);
+                        graphics.tooltip(this.parent.getFont(), tabButton.getMessageForTooltip(), mouseX+2, mouseY+12, DefaultTooltipPositioner.INSTANCE, null);
                     }
                     break;
                 }
@@ -532,7 +532,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         }
 
         @Override
-        protected void renderContents(GuiGraphics graphics, int mouseX, int mouseY, float partialTick)
+        protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick)
         {
             int texX = 2;  // ignoring isHoveredOrFocused()
             int texY = this.chestIndex < TAB_ROW_COUNT ? 2 : 4;
@@ -545,7 +545,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         }
 
         private boolean checkedForSpecialScaling = false, doSpecialScaling = false;
-        private void renderIcon(GuiGraphics graphics)
+        private void renderIcon(GuiGraphicsExtractor graphics)
         {
             int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
             int y = (this.parent.parent.height - this.parent.parent.getYSize()) / 2;
@@ -565,21 +565,21 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             }
             if (! this.doSpecialScaling) {
                 // main image - block   (chests, barrels)
-                graphics.renderFakeItem(itemMain, this.getX() + 1, this.getY() + 3 + textureYAdjustment2);
+                graphics.fakeItem(itemMain, this.getX() + 1, this.getY() + 3 + textureYAdjustment2);
                 // not using x and y prepared above; still moved above because it is used for first item and for backpack/belt icons.
             }
             else {
                 // main image - item    (belt, backpack...)
                 graphics.pose().pushMatrix();
                 graphics.pose().scale(2/3f, 2/3f); // why did i downsize? looks bad but i probably had a reason.
-                graphics.renderFakeItem(itemMain, (int)((x + tabIndexInRow * (WIDTH-1) + 7) * 1.5d), (int)((y+5)*1.5d));
+                graphics.fakeItem(itemMain, (int)((x + tabIndexInRow * (WIDTH-1) + 7) * 1.5d), (int)((y+5)*1.5d));
                 graphics.pose().popMatrix();
             }
             // sub image
             graphics.pose().pushMatrix();
             graphics.pose().scale(2/3f, 2/3f);
             //graphics.renderFakeItem(itemSub, (int)((x + tabIndexInRow * (WIDTH-1) + 13) * 1.5d), (int)((y+12)*1.5d));
-            graphics.renderFakeItem(itemSub, (int)((x + tabIndexInRow * (WIDTH-1) + 13) * 1.5d), (int)((this.getY() + textureYAdjustment2+12)*1.5d));
+            graphics.fakeItem(itemSub, (int)((x + tabIndexInRow * (WIDTH-1) + 13) * 1.5d), (int)((this.getY() + textureYAdjustment2+12)*1.5d));
             graphics.pose().popMatrix();
         }
 

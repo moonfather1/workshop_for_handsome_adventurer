@@ -9,10 +9,10 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.PotionShelfBlo
 import moonfather.workshop_for_handsome_adventurer.block_entities.ToolRackBlockEntity;
 import moonfather.workshop_for_handsome_adventurer.blocks.*;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.JukeboxPlayable;
 import net.minecraft.world.item.JukeboxSong;
@@ -102,8 +102,8 @@ public class WthitPlugin implements IWailaPlugin {
                     JukeboxPlayable songContainer = bottle.get(DataComponents.JUKEBOX_PLAYABLE);
                     if (songContainer != null)
                     {
-                        EitherHolder<JukeboxSong> song = songContainer.song();
-                        song.unwrap(accessor.getPlayer().registryAccess()).ifPresent(holder -> tooltip.addLine().with(holder.value().description()));
+                        Holder<JukeboxSong> song = songContainer.song();
+                        tooltip.addLine().with(song.value().description());
                     }
                     if (count+room > 1)  // no msg if no stacking
                     {
