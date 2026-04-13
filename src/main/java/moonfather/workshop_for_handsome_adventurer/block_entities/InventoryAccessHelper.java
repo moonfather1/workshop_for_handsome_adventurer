@@ -113,15 +113,6 @@ public class InventoryAccessHelper
         if (be.getBlockState().getBlock().getDescriptionId().contains("mm_storage"))
         {
             if (! be.getBlockState().getBlock().getDescriptionId().contains("barrel")) { return; }
-//            IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);
-//            if (handler != null)  //&& handler.getSlots() <= 54  ?
-//            {
-//                this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new MultipartBarrelsSimpleTranslator(handler), false);
-//                this.chosenContainerTrueSize = handler.getSlots() - 1;
-//                this.chosenContainerVisibleSize = 27;
-//                this.currentType = RecordTypes.BLOCK;
-//                return;
-//            }
             ResourceHandler<ItemResource> handler = level.getCapability(Capabilities.Item.BLOCK, pos, (Direction) null);
             if (handler != null)  //&& handler.getSlots() <= 54  ?
             {
@@ -275,17 +266,18 @@ public class InventoryAccessHelper
             ItemStack maybeStorageItem = getItemFromNamedSlot(player, slotName);
 
             ResourceHandler<ItemResource> newHandler = maybeStorageItem.getCapability(Capabilities.Item.ITEM, null); // should cover ComponentItemHandler
-            IItemHandler itemHandler = newHandler == null ? null : IItemHandler.of(newHandler);  //todo: remove this, use above handler normally, maybe check ComponentItemHandler
-            if (itemHandler != null)
+            // maybe check ComponentItemHandler
+            if (newHandler != null && newHandler.size() <= 54)
             {
                 InventoryAccessRecord record = new InventoryAccessRecord();
                 record.ItemChest = maybeStorageItem.copy();
                 record.Nameable = true;
                 record.Name = record.ItemChest.getHoverName();
                 record.Type = slotName;
-                record.VisibleSlotCount = itemHandler.getSlots() <= 27 ? 27 : 54;
+                record.VisibleSlotCount = newHandler.size() <= 27 ? 27 : 54;
                 record.ItemFirst = ItemStack.EMPTY;
                 record.Index = this.adjacentInventories.size();
+                if (record.Name.toString().contains("travelersb")) { continue; }  // we'll find it via direct support
                 this.adjacentInventories.add(record);
                 record.ModId = "";
                 continue;
