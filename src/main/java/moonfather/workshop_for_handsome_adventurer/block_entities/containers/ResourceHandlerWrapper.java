@@ -52,12 +52,13 @@ public class ResourceHandlerWrapper extends SimpleContainer
     {
         if (internal.getAmountAsInt(index) == 0) { return ItemStack.EMPTY; }
         ItemResource resource = internal.getResource(index);
+        int amount = 0;
         try (Transaction tx = Transaction.openRoot())
         {
-            int amount = internal.extract(index, resource, count, tx);
+            amount = internal.extract(index, resource, count, tx);
             tx.commit(); // what to check...
         }
-        return resource.toStack(internal.getAmountAsInt(index));
+        return resource.toStack(amount);
     }
 
 

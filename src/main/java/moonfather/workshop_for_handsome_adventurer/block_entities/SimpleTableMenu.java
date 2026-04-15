@@ -1126,51 +1126,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 	//////////////////////////////////////////////////////////////////////////
 
 	/// just takes care of excess slots. prevents interaction with them.
-	public static class VariableSizeItemStackHandlerWrapper extends BaseItemHandlerWrapper  //todo: delete this class
-	{
-		private final int slotCount;
-		private final boolean allowPlaceContainers;
-		public VariableSizeItemStackHandlerWrapper(IItemHandler wrapped, boolean allowPlaceContainers)
-		{
-			super(wrapped);
-			this.allowPlaceContainers = allowPlaceContainers;
-			this.slotCount = wrapped.getSlots();
-		}
-
-		@Override
-		public boolean canPlaceItem(int slot, ItemStack itemStack)
-		{
-			if (! this.allowPlaceContainers && ! itemStack.getItem().canFitInsideContainerItems()) { return false; }
-			return slot < slotCount && super.canPlaceItem(slot, itemStack);
-		}
-
-		@Override
-		public ItemStack getItem(int slot) { return slot < slotCount ? super.getItem(slot) : ItemStack.EMPTY; }
-
-		@Override
-		public ItemStack removeItem(int slot, int count) { return slot < slotCount ? super.removeItem(slot, count) : ItemStack.EMPTY; }
-
-		@Override
-		public ItemStack removeItemNoUpdate(int slot) {	return slot < slotCount ? super.removeItemNoUpdate(slot) : ItemStack.EMPTY; }
-
-		@Override
-		public void setItem(int slot, ItemStack itemStack) { if (slot < slotCount) { super.setItem(slot, itemStack); } }
-
-		@Override
-		public boolean isEmpty() { return super.isEmpty(); }
-
-		@Override
-		public void setChanged() { }
-
-		@Override
-		public int getMaxStackSize() { return super.getMaxStackSize(); }
-
-		@Override
-		public int getMaxStackSize(ItemStack itemStack) { return super.getMaxStackSize(itemStack); }
-	}
-
-	/// just takes care of excess slots. prevents interaction with them.
-	public static class VariableSizeResourceHandlerWrapper extends ResourceHandlerWrapper
+	public static class VariableSizeResourceHandlerWrapper extends ResourceHandlerWrapper implements IExcessSlotManager
 	{
 		private final int slotCount;
 		private final boolean allowPlaceContainers;
@@ -1211,6 +1167,9 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 		@Override
 		public int getMaxStackSize(ItemStack itemStack) { return super.getMaxStackSize(itemStack); }
+
+		@Override
+		public boolean isSlotSpecificallyDisabled(int slot)  { return slot >= slotCount; }
 	}
 
 	/////////////////////////////////////////////////////////////////////////

@@ -1,10 +1,8 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities;
 
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.ItemContainerContentsWrapper;
-import moonfather.workshop_for_handsome_adventurer.block_entities.containers.ResourceHandlerWrapper;
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.BackpackedVersion3Translator;
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.MultipartBarrelsSimpleTranslator;
-import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.StorageDrawersSimpleTranslator;
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.TetraBeltTranslator;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
 import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
@@ -15,6 +13,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.CompoundContainer;
 import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.player.Player;
@@ -34,7 +33,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 
@@ -113,17 +111,8 @@ public class InventoryAccessHelper
         if (be.getBlockState().getBlock().getDescriptionId().contains("mm_storage"))
         {
             if (! be.getBlockState().getBlock().getDescriptionId().contains("barrel")) { return; }
-//            IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);
-//            if (handler != null)  //&& handler.getSlots() <= 54  ?
-//            {
-//                this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new MultipartBarrelsSimpleTranslator(handler), false);
-//                this.chosenContainerTrueSize = handler.getSlots() - 1;
-//                this.chosenContainerVisibleSize = 27;
-//                this.currentType = RecordTypes.BLOCK;
-//                return;
-//            }
             ResourceHandler<ItemResource> handler = level.getCapability(Capabilities.Item.BLOCK, pos, (Direction) null);
-            if (handler != null)  //&& handler.getSlots() <= 54  ?
+            if (handler != null)  // barrel needs no size check
             {
                 this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new MultipartBarrelsSimpleTranslator(handler), false);
                 this.chosenContainerTrueSize = handler.size() - 1;
@@ -164,13 +153,11 @@ public class InventoryAccessHelper
         }
         if (be.getBlockState().getBlock().getDescriptionId().contains("storagedrawers"))
         {
-            ResourceHandler<ItemResource> newHandler = level.getCapability(Capabilities.Item.BLOCK, pos, (Direction) null);
-            //IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);
-            IItemHandler handler = newHandler == null ? null : IItemHandler.of(newHandler);  //todo: remove this. make translator below accept newHandler
-            if (handler != null)  //&& handler.getSlots() <= 54  ?
+            SimpleContainer sdWrapper = StorageDrawersAccessor.getCapabilityFromWorld(level, pos);
+            if (sdWrapper != null && sdWrapper.getContainerSize() <= 54)
             {
-                this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new StorageDrawersSimpleTranslator(handler), false);
-                this.chosenContainerTrueSize = handler.getSlots() - 1;
+                this.chosenContainer = sdWrapper;
+                this.chosenContainerTrueSize = sdWrapper.getContainerSize();
                 this.chosenContainerVisibleSize = this.chosenContainerTrueSize <= 27 ? 27 : 54;
                 this.currentType = RecordTypes.BLOCK;
                 return;
@@ -204,7 +191,8 @@ public class InventoryAccessHelper
         {
             if (handler.size() <= 54)
             {
-                this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new ResourceHandlerWrapper(handler), true);
+                //this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new ResourceHandlerWrapper(handler), true);
+                this.chosenContainer = new SimpleTableMenu.VariableSizeResourceHandlerWrapper(handler, true);
                 this.chosenContainerTrueSize = handler.size();
                 this.chosenContainerVisibleSize = this.chosenContainerTrueSize <= 27 ? 27 : 54;
                 this.chosenContainerForRename = be;
@@ -274,18 +262,18 @@ public class InventoryAccessHelper
             String slotName = RecordTypes.NAMED_SLOTS[slot];
             ItemStack maybeStorageItem = getItemFromNamedSlot(player, slotName);
 
-            ResourceHandler<ItemResource> newHandler = maybeStorageItem.getCapability(Capabilities.Item.ITEM, null); // should cover ComponentItemHandler
-            IItemHandler itemHandler = newHandler == null ? null : IItemHandler.of(newHandler);  //todo: remove this, use above handler normally, maybe check ComponentItemHandler
-            if (itemHandler != null)
+            ResourceHandler<ItemResource> newHandler = maybeStorageItem.getCapability(Capabilities.Item.ITEM, null); // maybe check ComponentItemHandler
+            if (newHandler != null && newHandler.size() <= 54)
             {
                 InventoryAccessRecord record = new InventoryAccessRecord();
                 record.ItemChest = maybeStorageItem.copy();
                 record.Nameable = true;
                 record.Name = record.ItemChest.getHoverName();
                 record.Type = slotName;
-                record.VisibleSlotCount = itemHandler.getSlots() <= 27 ? 27 : 54;
+                record.VisibleSlotCount = newHandler.size() <= 27 ? 27 : 54;
                 record.ItemFirst = ItemStack.EMPTY;
                 record.Index = this.adjacentInventories.size();
+                //if (record.Name.toString().contains("travelersb")) { continue; }  // we'll find it via direct support
                 this.adjacentInventories.add(record);
                 record.ModId = "";
                 continue;
@@ -516,7 +504,7 @@ public class InventoryAccessHelper
             if (itemHandler != null)
             {
                 this.chosenContainer = new SimpleTableMenu.VariableSizeResourceHandlerWrapper(itemHandler, false);
-                this.chosenContainerTrueSize = itemHandler.size();         //todo: replace VariableSizeContainerWrapper with direct-from-capability wrapper
+                this.chosenContainerTrueSize = itemHandler.size();
                 this.chosenContainerItem = item;
                 this.currentType = record.Type;
             }
