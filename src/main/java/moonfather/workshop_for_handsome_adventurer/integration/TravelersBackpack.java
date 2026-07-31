@@ -1,6 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.integration;
 
-import com.tiviacz.travelersbackpack.capability.AttachmentUtils;
+
+import com.tiviacz.travelersbackpack.attachment.AttachmentUtils;
 import com.tiviacz.travelersbackpack.init.ModDataComponents;
 import com.tiviacz.travelersbackpack.inventory.BackpackWrapper;
 import net.minecraft.world.SimpleContainer;

@@ -26,13 +26,13 @@ public class REIPlugin implements REIClientPlugin
         zones.register(DualTableCraftingScreen.class, screen ->
         {
             Collection<me.shedaniel.math.Rectangle> result = new HashSet<>();
-            result.add(new me.shedaniel.math.Rectangle(screen.getGuiLeft(), screen.getGuiTop(), screen.getXSize(), screen.getYSize()));
+            result.add(new me.shedaniel.math.Rectangle(screen.getLeftPos(), screen.getTopPos(), screen.getXSize(), screen.getImageHeight()));
             return result;
         });
         zones.register(SimpleTableCraftingScreen.class, screen ->
         {
             Collection<me.shedaniel.math.Rectangle> result = new HashSet<>();
-            result.add(new me.shedaniel.math.Rectangle(screen.getGuiLeft(), screen.getGuiTop(), screen.getXSize(), screen.getYSize()));
+            result.add(new me.shedaniel.math.Rectangle(screen.getLeftPos(), screen.getTopPos(), screen.getXSize(), screen.getImageHeight()));
             return result;
         });
     }

@@ -4,10 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.Identifier;
 
@@ -20,7 +17,7 @@ public class SpecialFirstEverRenderer
 {
     public static void render(String image, float xInPixels, float yInPixelsFromTop, PoseStack.Pose pose, VertexConsumer vertexConsumer, int combinedLight)
     {
-        if (sprites.size() == 0)
+        if (sprites.isEmpty())
         {
             sprites.put("e", Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(atlasId).getSprite(Identifier.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check1")));
             sprites.put("y", Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(atlasId).getSprite(Identifier.fromNamespaceAndPath(Constants.MODID, "gui/task_list_check2")));
@@ -37,10 +34,7 @@ public class SpecialFirstEverRenderer
         vertex(pose2, vertexConsumer, 16,  0, sprite.getU1(), sprite.getV0(), combinedLight);
         vertex(pose2, vertexConsumer,  0,  0, sprite.getU0(), sprite.getV0(), combinedLight);
     }
-    public static void render(String image, float xInPixels, float yInPixelsFromTop, PoseStack.Pose pose, MultiBufferSource multiBufferSource, int combinedLight, int combinedOverlay, int lightColor)
-    {
-        render(image, xInPixels, yInPixelsFromTop, pose, multiBufferSource.getBuffer(RenderTypes.cutoutMovingBlock()), combinedLight);
-    }
+
     private static final Map<String, TextureAtlasSprite> sprites = new HashMap<>(4);
     private static final Identifier atlasId = Identifier.fromNamespaceAndPath("minecraft", "blocks");
 

@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 
@@ -77,7 +78,7 @@ public class TaskListPanelTESR implements BlockEntityRenderer<TaskListBlockEntit
         TaskPageRenderState state = (TaskPageRenderState) renderState;
         state.direction = blockEntity.getBlockState().getValue(TaskListPanel.FACING);
         state.page = RenderStateManagement.extract(blockEntity);
-        state.lightColor = blockEntity.getLevel() != null ? LevelRenderer.getLightCoords(blockEntity.getLevel(), blockEntity.getBlockPos()) : -1;
+        state.lightColor = blockEntity.getLevel() != null ? LightCoordsUtil.getLightCoords(blockEntity.getLevel(), blockEntity.getBlockPos()) : -1;
     }
 
     @Override

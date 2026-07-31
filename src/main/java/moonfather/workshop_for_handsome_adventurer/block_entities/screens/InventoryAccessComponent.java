@@ -10,6 +10,7 @@ import moonfather.workshop_for_handsome_adventurer.block_entities.screen_compone
 import moonfather.workshop_for_handsome_adventurer.block_entities.screen_components.SlightlyNicerEditBox;
 import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
 import moonfather.workshop_for_handsome_adventurer.integration.PolymorphAccessorClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -90,7 +91,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     public void initVisuals()
     {
         this.xOffset = (this.parent.width - this.parent.getImageWidth() - PANEL_WIDTH) / 2;
-        int bottomY = (this.parent.height - parent.getYSize()) / 2 + PANEL_HEIGHT_WITH_TABS;
+        int bottomY = (this.parent.height - parent.getImageHeight()) / 2 + PANEL_HEIGHT_WITH_TABS;
         if (this.renameBox == null)
         {
             this.renameBox = new SlightlyNicerEditBox(this.parent.getMinecraft().font, this.xOffset, bottomY - 18, 120, 9 + 5, Component.literal("Input box for new name for container"));
@@ -228,8 +229,8 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     {
         if (this.isVisibleTotal())
         {
-            int x = this.parent.getGuiLeft();
-            int y = (this.parent.height - parent.getYSize()) / 2;
+            int x = this.parent.getLeftPos();
+            int y = (this.parent.height - parent.getImageHeight()) / 2;
             graphics.blit(RenderPipelines.GUI_TEXTURED, this.getBackground(), x, y,0, 0, PANEL_WIDTH, PANEL_HEIGHT_WITH_TABS, 256, 256);
 
             this.renameBox.extractRenderState(graphics, p_100320_, p_100321_, p_100322_);
@@ -259,9 +260,9 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
             {
                 if (tabButton.isHoveredOrFocused())
                 {
-                    if (this.parent.getMinecraft().screen != null)
+                    if (Minecraft.getInstance().gui.screen() != null)
                     {
-                        graphics.tooltip(this.parent.getFont(), tabButton.getMessageForTooltip(), mouseX+2, mouseY+12, DefaultTooltipPositioner.INSTANCE, null);
+                        graphics.tooltip(this.parent.getFont(), tabButton.getMessageForTooltip(), mouseX + 2, mouseY + 12, DefaultTooltipPositioner.INSTANCE, null);
                     }
                     break;
                 }
@@ -420,7 +421,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     private void updateTabLocations()
     {
         int startx = this.xOffset + 3;
-        int starty = (this.parent.height - this.parent.getYSize()) / 2;
+        int starty = (this.parent.height - this.parent.getImageHeight()) / 2;
         int counter = 0;
         boolean topRow = true;
         for (AbstractButton tabButton : this.tabButtons)
@@ -548,14 +549,14 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         private void renderIcon(GuiGraphicsExtractor graphics)
         {
             int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
-            int y = (this.parent.parent.height - this.parent.parent.getYSize()) / 2;
+            int y = (this.parent.parent.height - this.parent.parent.getImageHeight()) / 2;
             int tabIndexInRow = this.chestIndex;
             int textureYAdjustment = 0; // 0 for top
             int textureYAdjustment2 = 0; // 0 for top
             if (this.chestIndex >= TAB_ROW_COUNT) {
                 tabIndexInRow = this.chestIndex - TAB_ROW_COUNT;
                 textureYAdjustment = 3;
-                y = y + this.parent.parent.getYSize() - HEIGHT - 39 - textureYAdjustment;
+                y = y + this.parent.parent.getImageHeight() - HEIGHT - 39 - textureYAdjustment;
                 textureYAdjustment2 = 1;
             }
 

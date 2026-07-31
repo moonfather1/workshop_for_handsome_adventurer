@@ -34,7 +34,7 @@ public class InWorldTooltip implements GuiLayer
     @Override
     public void render(@NotNull GuiGraphicsExtractor guiGraphics, @NotNull DeltaTracker deltaTracker)
     {
-        if (Minecraft.getInstance().player == null || Minecraft.getInstance().level == null || Minecraft.getInstance().screen != null) { return; }
+        if (Minecraft.getInstance().player == null || Minecraft.getInstance().level == null || Minecraft.getInstance().gui.screen() == null) { return; }
         if (Minecraft.getInstance().hitResult instanceof BlockHitResult hitResult)
         {
             if (hitResult.getType().equals(HitResult.Type.BLOCK)) // no longer needed?

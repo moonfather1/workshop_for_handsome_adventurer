@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class ToolRackBlockEntity extends BaseContainerBlockEntity implements ItemOwner
 {
@@ -51,8 +52,8 @@ public class ToolRackBlockEntity extends BaseContainerBlockEntity implements Ite
 	@Override
 	public Level level() { return this.level; }
 
-	@Override
-	public Vec3 position() { return this.getBlockPos().getBottomCenter(); }
+	@Override  @NotNull
+	public Vec3 position() { return Vec3.atBottomCenterOf(this.getBlockPos()); }
 
 	@Override
 	public float getVisualRotationYInDegrees() { return this.level().getBlockState(this.getBlockPos()).getValue(ToolRack.FACING).toYRot(); }

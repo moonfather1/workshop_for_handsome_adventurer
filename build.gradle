@@ -121,32 +121,32 @@ configurations {
 }
 
 dependencies {
-    compileOnly "curse.maven:wthit-forge-455982:7880673"  // 26.1.2
-//    runtimeOnly "curse.maven:wthit-forge-455982:7880673"   // 26.1.2
-//    runtimeOnly "curse.maven:badpackets-615134:7878544"    // 26.1.2
-    compileOnly "curse.maven:jade-324717:7903350"    // 26.1.1
-    runtimeOnly "curse.maven:jade-324717:7903350"  // 26.1.1
+    compileOnly "curse.maven:wthit-forge-455982:8512439"  // 26.2
+//    runtimeOnly "curse.maven:wthit-forge-455982:8512439"   // 26.2
+//    runtimeOnly "curse.maven:badpackets-615134:7878544"    // 26.2
+    compileOnly "curse.maven:jade-324717:8326243"    // 26.2
+    runtimeOnly "curse.maven:jade-324717:8326243"  // 26.2
     compileOnly "curse.maven:the-one-probe-245211:6106998"  //!! top is at 1.21.1 still
 
-    runtimeOnly "curse.maven:jei-238222:7904641"   // 26.1.2
-    compileOnly "curse.maven:jei-238222:7904641"  // 26.1.2
+    runtimeOnly "curse.maven:jei-238222:8534476"   // 26.2
+    compileOnly "curse.maven:jei-238222:8534476"  // 26.2
     compileOnly "curse.maven:emi-580555:5436759"    //!! EMI is on 1.21.1
-    compileOnly "curse.maven:cloth-config-348521:7361439"              //!!  REI is still on 1.21.11
-    //runtimeOnly "curse.maven:cloth-config-348521:7361439"            //!!  REI is still on 1.21.11
-    compileOnly "curse.maven:roughly-enough-items-310111:7486490"      //!!  REI is still on 1.21.11
-    //runtimeOnly "curse.maven:roughly-enough-items-310111:7486490"    //!!  REI is still on 1.21.11
-    //runtimeOnly "curse.maven:architectury-api-419699:7339257"        //!!  REI is still on 1.21.11
+    compileOnly "curse.maven:cloth-config-348521:8269700"              // 26.2
+    //runtimeOnly "curse.maven:cloth-config-348521:8269700"            // 26.2
+    compileOnly "curse.maven:roughly-enough-items-310111:8271756"      // 26.2
+    //runtimeOnly "curse.maven:roughly-enough-items-310111:8271756"    // 26.2
+    //runtimeOnly "curse.maven:architectury-api-419699:8506548"        // 26.2
 
-    compileOnly "curse.maven:crafting-tweaks-233071:7806683"   // 26.1.2
-    runtimeOnly "curse.maven:crafting-tweaks-233071:7806683"   // 26.1.2
-    runtimeOnly "curse.maven:balm-531761:7903729"            // 26.1.2
+    compileOnly "curse.maven:crafting-tweaks-233071:8362299"   // 26.2
+    runtimeOnly "curse.maven:crafting-tweaks-233071:8362299"   // 26.2
+    runtimeOnly "curse.maven:balm-531761:8459358"            // 26.2
 
     compileOnly "curse.maven:polymorph-388800:6451024"        //!! PM is on 1.21.1 at the moment
     compileOnly "curse.maven:dynamic-asset-generator-577096:5471770"   //!! DAG is on 1.21.1 at the moment
 
     //runtimeOnly "curse.maven:owo-lib-532610:7248199"         //!! owo is on 1.21.10
-    runtimeOnly "curse.maven:curios-309927:7810501"         // 26.1
-    compileOnly "curse.maven:curios-309927:7810501"         // 26.1
+    runtimeOnly "curse.maven:curios-309927:8478313"         // 26.1
+    compileOnly "curse.maven:curios-309927:8478313"         // 26.1
     compileOnly "curse.maven:accessories-938917:7318047"       //!! acce is on 1.21.10
 
 
@@ -158,11 +158,13 @@ dependencies {
     //!! runtimeOnly "curse.maven:titanium-287342:5889342"                 //!! FS is still on 1.21.1
 
 
-    compileOnly "curse.maven:backpacked-352835:7866696"               // 26.1.2
-    runtimeOnly "curse.maven:backpacked-352835:7866696"               // 26.1.2
-    runtimeOnly "curse.maven:framework-549225:7866654"                // 26.1.2
-    runtimeOnly "curse.maven:travelers-backpack-321117:7895230"       // 26.1.2
-    compileOnly "curse.maven:travelers-backpack-321117:7895230"       // 26.1.2
+    compileOnly "curse.maven:backpacked-352835:7943167"               // 26.2
+    //runtimeOnly "curse.maven:backpacked-352835:7943167"               // 26.2 ???
+    //runtimeOnly "curse.maven:framework-549225:8403586"                // 26.2  ??
+    //runtimeOnly "curse.maven:travelers-backpack-321117:8527345"       // 26.2 ??
+    compileOnly "curse.maven:travelers-backpack-321117:8527345"       // 26.2
+
+    //runtimeOnly "curse.maven:yyzsbackpack-1285177:8520654"             // 26.2 ??
     }
 
 // This block of code expands all declared replace properties in the specified resource targets.

@@ -74,7 +74,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	}
 
 	@Override
-	public int getXSize()
+	public int getXSize() // just delete it
 	{
 		int leftPanel = this.inventoryComponent.getWidth();
 		return imageWidth + leftPanel + (leftPanel > 0 ? 2 : 0);
@@ -165,7 +165,7 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		}
 		if (this.hoveredSlot instanceof SimpleTableMenu.CustomizationSlot && this.hoveredSlot.getSlotIndex() < this.getMenu().getCustomizationSlotCount())
 		{
-			if (this.minecraft.screen != null)
+			if (this.minecraft.gui.screen() != null)
 			{
 				if (this.minecraft.hasShiftDown())
 				{
@@ -280,9 +280,14 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 		return super.charTyped(event);
 	}
 
+	@Override
 	public int getImageWidth()
 	{
 		return this.imageWidth;
+		// problematic, we have x-size method that normally return getImageWidth but here it's just this.
+		// maybe return:
+		//int leftPanel = this.inventoryComponent.getWidth();
+		//return imageWidth + leftPanel + (leftPanel > 0 ? 2 : 0);
 	}
 
 	@Override

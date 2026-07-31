@@ -32,6 +32,7 @@ import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -207,7 +208,7 @@ public class InventoryAccessHelper
 
     private static boolean canOpenShulkerBox(Level level, BlockState blockState, BlockPos pos)
     {
-        AABB aabb = Shulker.getProgressDeltaAabb(1.0F, blockState.getValue(DirectionalBlock.FACING), 0.0F, 0.5F, pos.getBottomCenter()).deflate(1.0E-6);
+        AABB aabb = Shulker.getProgressDeltaAabb(1.0F, blockState.getValue(DirectionalBlock.FACING), 0.0F, 0.5F, Vec3.atBottomCenterOf(pos)).deflate(1.0E-6);
         return level.noCollision(aabb);
     }
 
