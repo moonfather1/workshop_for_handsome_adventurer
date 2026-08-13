@@ -22,7 +22,6 @@ public class BlockTagWriter4
                 "tool_rack_framed_",
                 "potion_shelf_",
                 "disc_shelf_",
-                "book_shelf_minimal_",
                 "book_shelf_open_minimal_",
                 "book_shelf_double_",
                 "book_shelf_open_double_",

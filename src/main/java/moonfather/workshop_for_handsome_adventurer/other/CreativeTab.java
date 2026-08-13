@@ -29,7 +29,6 @@ public class CreativeTab
                 event.accept(ContentRegistration.items_pshelf.get(i).get());
                 event.accept(ContentRegistration.items_bshelf1.get(i).get());
                 event.accept(ContentRegistration.items_bshelf2.get(i).get());
-                event.accept(ContentRegistration.items_bshelf3.get(i).get());
                 event.accept(ContentRegistration.items_bshelf4.get(i).get());
                 event.accept(ContentRegistration.items_bshelf5.get(i).get());
                 event.accept(ContentRegistration.items_dshelf.get(i).get());

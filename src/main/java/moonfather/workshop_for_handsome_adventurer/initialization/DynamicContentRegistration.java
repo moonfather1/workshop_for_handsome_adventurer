@@ -139,7 +139,6 @@ public class DynamicContentRegistration
                 Block.Properties prop16 = BookShelf.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id16)));
                 registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.Dual("double", prop12), id12, ContentRegistration.blocks_bshelf, SecondCreativeTab.items_bshelf1);
                 registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.Dual("open_double", prop13), id13, ContentRegistration.blocks_bshelf, SecondCreativeTab.items_bshelf2);
-                registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.TopSimple("minimal", prop14), id14, ContentRegistration.blocks_bshelf, SecondCreativeTab.items_bshelf3);
                 registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.TopSimple("open_minimal", prop15), id15, ContentRegistration.blocks_bshelf, SecondCreativeTab.items_bshelf4);
                 registerSinglePrimaryBlockForThirdPartyWood(new BookShelf.TopWithLanterns("with_lanterns", prop16), id16, ContentRegistration.blocks_bshelf, SecondCreativeTab.items_bshelf5);
             }

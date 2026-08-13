@@ -35,7 +35,6 @@ public class LootTableWriter
 
     private static final String[] files = {
             "loot_table/blocks/book_shelf_double_spruce.json",
-            "loot_table/blocks/book_shelf_minimal_spruce.json",
             "loot_table/blocks/book_shelf_open_double_spruce.json",
             "loot_table/blocks/book_shelf_open_minimal_spruce.json",
             "loot_table/blocks/book_shelf_with_lanterns_spruce.json",

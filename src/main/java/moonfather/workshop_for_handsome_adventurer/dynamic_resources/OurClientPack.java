@@ -277,7 +277,6 @@ public class OurClientPack extends BaseResourcePack
     private static final String[] files =
             {
                     "blockstates/book_shelf_double_spruce.json",
-                    "blockstates/book_shelf_minimal_spruce.json",
                     "blockstates/book_shelf_open_double_spruce.json",
                     "blockstates/book_shelf_open_minimal_spruce.json",
                     "blockstates/book_shelf_with_lanterns_spruce.json",
@@ -293,7 +292,6 @@ public class OurClientPack extends BaseResourcePack
                     "blockstates/tool_rack_pframed_spruce.json",
                     "blockstates/tool_rack_single_spruce.json",
                     "models/block/book_shelf_double_spruce.json",
-                    "models/block/book_shelf_minimal_spruce.json",
                     "models/block/book_shelf_open_double_spruce.json",
                     "models/block/book_shelf_open_minimal_spruce.json",
                     "models/block/book_shelf_with_lit_lanterns_spruce.json",
@@ -318,7 +316,6 @@ public class OurClientPack extends BaseResourcePack
                     "models/block/simple_table_spruce.json",
                     "models/block/simple_table_with_drawer_spruce.json",
                     "models/item/book_shelf_double_spruce.json",
-                    "models/item/book_shelf_minimal_spruce.json",
                     "models/item/book_shelf_open_double_spruce.json",
                     "models/item/book_shelf_open_minimal_spruce.json",
                     "models/item/book_shelf_with_lanterns_spruce.json",
@@ -337,7 +334,6 @@ public class OurClientPack extends BaseResourcePack
                     "items/tetra_table_spruce.json",
 
                     "items/book_shelf_double_spruce.json",    // client items introduced in 1.21.2
-                    "items/book_shelf_minimal_spruce.json",
                     "items/book_shelf_open_double_spruce.json",
                     "items/book_shelf_open_minimal_spruce.json",
                     "items/book_shelf_with_lanterns_spruce.json",

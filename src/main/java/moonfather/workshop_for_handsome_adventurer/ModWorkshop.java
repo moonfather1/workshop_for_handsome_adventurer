@@ -16,6 +16,7 @@ import moonfather.workshop_for_handsome_adventurer.items.task_list.RegistrationF
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.MissingMappingsHandler2;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.TaskListItem;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.moving_data.TaskListMessagingInitialization;
+import moonfather.workshop_for_handsome_adventurer.other.BookShelfRemovalHandler;
 import moonfather.workshop_for_handsome_adventurer.other.CreativeTab;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -30,24 +31,6 @@ import org.slf4j.Logger;
 public class ModWorkshop
 {
     private static final Logger LOGGER = LogUtils.getLogger();
-
-
-
-    // todo: 1.21.8  added camera to DualTableTESR;  not using it.
-    // todo: 1.21.8  InventoryAccessHelper.getItemFromNamedSlot  now gets chest slot and leggings differently
-    //               model.isGui3d() in TR TESR is changed and i don't know what to replace it with     ---- https://docs.neoforged.net/docs/resources/client/models/items/
-    //               test TL saving thoroughly.  also toolrack saving/loading.
-    //               TR canDepositItem might be too strict now
-    //               checkboxes - blit in TaskListScreen, maybe remove last two args
-    //               interaction with tetra hammer is fixed - it was stupid in all  old versions
-    //               potion cloning disabled
-    //               todo: rework tetra creation when tetra is up.
-    //---------------------------------------------------------------//
-    //   https://modrinth.com/mod/frycooks-delight
-
-    // test keyboard in rename box, test f and e
-
-
 
     public ModWorkshop(IEventBus modBus, ModContainer modContainer)
     {
@@ -66,6 +49,7 @@ public class ModWorkshop
         NeoForge.EVENT_BUS.addListener(PotionShelf::onRightClickBlock);
         modBus.addListener(EventPriority.LOWEST, DynamicContentRegistration::handleRegistryEvent);
         MissingMappingsHandler.read();
+        BookShelfRemovalHandler.prepareAliases();
 		
         RegistrationForTaskList.init(modBus);
         modBus.addListener(TaskListMessagingInitialization::register);

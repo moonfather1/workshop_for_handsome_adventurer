@@ -74,7 +74,6 @@ public class ContentRegistration
 	public static final List<Supplier<Item>> items_dshelf = new ArrayList<>();
 	public static final List<Supplier<Item>> items_bshelf1 = new ArrayList<>();
 	public static final List<Supplier<Item>> items_bshelf2 = new ArrayList<>();
-	public static final List<Supplier<Item>> items_bshelf3 = new ArrayList<>();
 	public static final List<Supplier<Item>> items_bshelf4 = new ArrayList<>();
 	public static final List<Supplier<Item>> items_bshelf5 = new ArrayList<>();
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,10 +163,7 @@ public class ContentRegistration
 			items_bshelf2.add(FromBlock(rack, id));
 			blocks_bshelf.add(rack);
 			id = "book_shelf_minimal_" + woodType;
-			Block.Properties prop3 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id)));
-			rack = BLOCKS.register(id, () -> new BookShelf.TopSimple("minimal", prop3));
-			items_bshelf3.add(FromBlock(rack, id));
-			blocks_bshelf.add(rack);
+			// removed in 26.2
 			id = "book_shelf_open_minimal_" + woodType;
 			Block.Properties prop4 = ToolRack.getDefaultProperties().setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id)));
 			rack = BLOCKS.register(id, () -> new BookShelf.TopSimple("open_minimal", prop4));

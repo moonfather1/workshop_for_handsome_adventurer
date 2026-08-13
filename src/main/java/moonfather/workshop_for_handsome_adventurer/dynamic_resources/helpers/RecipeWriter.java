@@ -90,7 +90,6 @@ public class RecipeWriter
 
     private static final String[] allRecipes = {
             "recipe/book_shelf_double_spruce.json",
-            "recipe/book_shelf_minimal_spruce.json",
             "recipe/book_shelf_open_double_spruce.json",
             "recipe/book_shelf_open_minimal_from_double_spruce.json",
             "recipe/book_shelf_open_minimal_spruce.json",
@@ -106,7 +105,6 @@ public class RecipeWriter
             "recipe/workstation_placer_spruce.json"
     };
     private static final List<String> conversionRecipes = List.of(
-            "recipe/book_shelf_minimal_spruce.json",
             "recipe/book_shelf_open_double_spruce.json",
             "recipe/book_shelf_open_minimal_from_double_spruce.json",
             "recipe/book_shelf_open_minimal_spruce.json",

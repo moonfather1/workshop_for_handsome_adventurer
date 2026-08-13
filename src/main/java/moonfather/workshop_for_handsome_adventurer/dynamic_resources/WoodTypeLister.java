@@ -1,10 +1,14 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 
 import com.google.common.base.Stopwatch;
+import moonfather.workshop_for_handsome_adventurer.ModWorkshop;
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.config.DynamicAssetCommonConfig;
 import moonfather.workshop_for_handsome_adventurer.initialization.ContentRegistration;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Block;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,6 +60,7 @@ public class WoodTypeLister
             final String vertical = "vertical";
             final String LOG1 = "stripped_";
             final String LOG2 = "_log";
+            // and no we can't just iterate through   BuiltInRegistries.BLOCK.get(BlockTags.PLANKS).get()
             for (Identifier id: BuiltInRegistries.BLOCK.keySet())
             {
                 if (! id.getNamespace().equals(mc) && id.getPath().endsWith(planks) && ! id.getPath().contains(vertical))

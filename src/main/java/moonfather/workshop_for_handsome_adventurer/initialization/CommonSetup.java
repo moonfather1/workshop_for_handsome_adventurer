@@ -1,5 +1,6 @@
 package moonfather.workshop_for_handsome_adventurer.initialization;
 
+import moonfather.workshop_for_handsome_adventurer.other.BookShelfRemovalHandler;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
