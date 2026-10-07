@@ -128,7 +128,9 @@ dependencies {
     runtimeOnly "curse.maven:jade-324717:8326243"  // 26.2
     compileOnly "curse.maven:the-one-probe-245211:6106998"  //!! top is at 1.21.1 still
 
-    runtimeOnly "curse.maven:jei-238222:8534476"   // 26.2
+    runtimeOnly "curse.maven:rrv-1422317:8890164"
+    compileOnly "curse.maven:rrv-1422317:8890164"
+    //runtimeOnly "curse.maven:jei-238222:8534476"   // 26.2
     compileOnly "curse.maven:jei-238222:8534476"  // 26.2
     compileOnly "curse.maven:emi-580555:5436759"    //!! EMI is on 1.21.1
     compileOnly "curse.maven:cloth-config-348521:8269700"              // 26.2
@@ -145,8 +147,8 @@ dependencies {
     compileOnly "curse.maven:dynamic-asset-generator-577096:5471770"   //!! DAG is on 1.21.1 at the moment
 
     //runtimeOnly "curse.maven:owo-lib-532610:7248199"         //!! owo is on 1.21.10
-    runtimeOnly "curse.maven:curios-309927:8478313"         // 26.1
-    compileOnly "curse.maven:curios-309927:8478313"         // 26.1
+    runtimeOnly "curse.maven:curios-309927:8478313"         // 26.2
+    compileOnly "curse.maven:curios-309927:8478313"         // 26.2
     compileOnly "curse.maven:accessories-938917:7318047"       //!! acce is on 1.21.10
 
 

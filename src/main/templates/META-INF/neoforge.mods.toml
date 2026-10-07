@@ -14,7 +14,7 @@ updateJSONURL="https://api.modrinth.com/updates/6lu9blWp/forge_updates.json?neof
 displayURL="https://modrinth.com/mod/workshop-for-handsome-adventurer" #optional
 
 # A file name (in the root of the mod JAR) containing a logo for display
-logoFile="textures/gui/catalogue.png" #optional
+#iconFile="textures/gui/catalogue.png" #optional
 # A text field displayed in the mod UI
 #credits="" #optional
 # A text field displayed in the mod UI
@@ -30,6 +30,7 @@ authors="${mod_authors}" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''${mod_description}'''
 
+rrv_client = "moonfather.workshop_for_handsome_adventurer.integration.RRVTransferSupport"
 
 [[dependencies.${mod_id}]] #optional
     # the modid of the dependency

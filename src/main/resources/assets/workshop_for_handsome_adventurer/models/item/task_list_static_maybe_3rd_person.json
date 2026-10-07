@@ -1,0 +1,35 @@
+{
+        "parent": "workshop_for_handsome_adventurer:block/task_list_panel_static",
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [8, -46, 0],
+			"translation": [1.25, 2, -3.5],
+			"scale": [0.56, 0.54, 0.56]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [-11, 164, 1],
+			"translation": [-3.75, 1, 4],
+			"scale": [0.54, 0.55, 0.55]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 149, 0],
+			"translation": [5.5, -5.5, 0],
+			"scale": [0.64, 0.63, 0.63]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 180, 0],
+			"translation": [12, -4, 0],
+			"scale": [0.55, 0.56, 0.54]
+		},
+		"gui": {
+			"rotation": [0, 180, 0]
+		},
+		"fixed": {
+			"translation": [0, 0, -6.25]
+		},
+		"on_shelf": {
+			"rotation": [0, 180, 0],
+			"translation": [0, 0, 3.25]
+		}
+	}
+}

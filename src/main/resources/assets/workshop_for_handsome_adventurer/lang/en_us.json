@@ -172,6 +172,7 @@
 	"config.jade.plugin_workshop_for_handsome_adventurer.jade_plugin1" : "Jade config for WfHA",
 	"config.jade.plugin_workshop_for_handsome_adventurer.jade_plugin2" : "Jade config for WfHA",
 	"config.jade.plugin_workshop_for_handsome_adventurer.jade_plugin3" : "Jade config for WfHA",
+    "neoforge.screen.mods.info.description.workshop_for_handsome_adventurer": "Workshop for handsome adventurer",
 	"alias.emi.workbench": "Workbench",
 	"tag.item.forge.workbench": "Workbenches",
 	"tag.item.c.player_workstations.crafting_tables": "Workbenches",
