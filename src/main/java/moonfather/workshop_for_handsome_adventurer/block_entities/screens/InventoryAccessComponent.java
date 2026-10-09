@@ -16,6 +16,7 @@ import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
@@ -31,6 +32,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.ModList;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -500,6 +502,16 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         PacketSender.sendRenameRequestToServer(this.renameBox.getValue());
         this.selectedTab.setMessage(Component.literal(this.renameBox.getValue())); // fake it
         this.renameBox.setValue("");
+    }
+
+    @NotNull
+    @Override
+    public ScreenRectangle getRectangle() // for jei
+    {
+        if (this.isVisibleTotal())
+            return new ScreenRectangle(this.xOffset, (this.parent.height - parent.getImageHeight()) / 2, PANEL_WIDTH, PANEL_HEIGHT_WITH_TABS);
+        else
+            return ScreenRectangle.empty();
     }
 
     ///////////////////////////////////////////////////////

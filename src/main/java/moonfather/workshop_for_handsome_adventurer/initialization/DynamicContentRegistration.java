@@ -9,6 +9,7 @@ import moonfather.workshop_for_handsome_adventurer.dynamic_resources.WoodTypeLis
 import moonfather.workshop_for_handsome_adventurer.dynamic_resources.config.DynamicAssetCommonConfig;
 import moonfather.workshop_for_handsome_adventurer.items.BlockItemEx;
 import moonfather.workshop_for_handsome_adventurer.items.WorkstationPlacerItem;
+import moonfather.workshop_for_handsome_adventurer.other.BookShelfRemovalHandler;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -35,6 +36,7 @@ public class DynamicContentRegistration
             }
             MissingMappingsHandler.prepareMappings();
             MissingMappingsHandler.storeForNextTime();
+            BookShelfRemovalHandler.prepareAliases();
         }
         if (event.getRegistryKey().equals(Registries.CREATIVE_MODE_TAB))
         {

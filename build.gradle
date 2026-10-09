@@ -128,7 +128,7 @@ dependencies {
     runtimeOnly "curse.maven:jade-324717:8326243"  // 26.2
     compileOnly "curse.maven:the-one-probe-245211:6106998"  //!! top is at 1.21.1 still
 
-    runtimeOnly "curse.maven:rrv-1422317:8890164"
+    //runtimeOnly "curse.maven:rrv-1422317:8890164"
     compileOnly "curse.maven:rrv-1422317:8890164"
     //runtimeOnly "curse.maven:jei-238222:8534476"   // 26.2
     compileOnly "curse.maven:jei-238222:8534476"  // 26.2

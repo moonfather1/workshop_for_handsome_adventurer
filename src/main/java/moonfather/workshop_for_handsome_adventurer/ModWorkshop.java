@@ -49,7 +49,6 @@ public class ModWorkshop
         NeoForge.EVENT_BUS.addListener(PotionShelf::onRightClickBlock);
         modBus.addListener(EventPriority.LOWEST, DynamicContentRegistration::handleRegistryEvent);
         MissingMappingsHandler.read();
-        BookShelfRemovalHandler.prepareAliases();
 		
         RegistrationForTaskList.init(modBus);
         modBus.addListener(TaskListMessagingInitialization::register);

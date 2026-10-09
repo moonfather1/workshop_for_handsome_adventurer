@@ -11,6 +11,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -292,4 +293,16 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 
 	@Override
 	public Font getFont() { return this.font; }
+
+    public Rect2i getExclusionZone()  // for jei
+    {
+        if (this.inventoryComponent.isVisibleTotal())
+        {
+            return new Rect2i(this.inventoryComponent.getRectangle().left(), this.inventoryComponent.getRectangle().top() - 2, this.inventoryComponent.getRectangle().width() + this.getImageWidth(), this.inventoryComponent.getRectangle().height() + this.getImageHeight());
+        }
+        else
+        {
+            return new Rect2i(this.getLeftPos(), this.getTopPos(), this.getImageWidth(), this.getImageHeight());
+        }
+    }
 }
