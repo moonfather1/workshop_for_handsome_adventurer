@@ -689,8 +689,8 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			this.clearExcessSlotMap();
 		}
 		this.selectedTab = index; //this only happens on server side. we need to separately set this value on client side. it is on client where i need it so this line is for academic purposes.
-		this.DataSlots.resetDataSlotFlagForClientFlag(SimpleTableDataSlots.DATA_SLOT_TABS_NEED_UPDATE); // 1->0 because change in tab list invokes tab change call
-		this.sendAllDataToRemote(); //todo!! do i need?
+	//	this.DataSlots.resetDataSlotFlagForClientFlag(SimpleTableDataSlots.DATA_SLOT_TABS_NEED_UPDATE); // 1->0 because change in tab list invokes tab change call
+	//	this.sendAllDataToRemote();
 	}
 	public int selectedTab = -1;
 
@@ -827,7 +827,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 		// range change - again this worked, but apparently we're "fixing" everything
 		int range = this.getInventoryAccessRange();
-		if	(range != this.lastInventoryAccessRange)
+		if	(range != this.lastInventoryAccessRange && range != 0)
 		{
 			PacketSender.sendTabChangeToServer(0);
 		}
@@ -1223,7 +1223,17 @@ public class SimpleTableMenu extends AbstractContainerMenu
 
 		private SimpleTableMenu parent;
 		private Consumer<SimpleTableMenu> changeListener;
-	}
+
+        @Override
+        public void setChanged()
+        {
+            super.setChanged();
+            if (changeListener != null)
+            {
+                this.changeListener.accept(parent);
+            }
+        }
+    }
 
 	private static void customizationListenerClient(SimpleTableMenu parent)
 	{
@@ -1246,6 +1256,10 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			{
 				parent.sendAllDataToRemote();
 			}
+            if (range > 0)
+            {
+                parent.changeTabTo(0);
+            }
 			parent.lastInventoryAccessRange = range;
 		}
 		// lanterns

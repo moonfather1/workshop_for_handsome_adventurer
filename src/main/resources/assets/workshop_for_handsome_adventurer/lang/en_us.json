@@ -169,6 +169,7 @@
 	"message.workshop_for_handsome_adventurer.workshop_table_in_use": "Crafting table is in use by %s. You need to wait.",
 
 	"itemGroup.workshop_for_handsome_adventurer": "Workshop for handsome adventurer",
+    "neoforge.screen.mods.info.description.workshop_for_handsome_adventurer": "Workshop for handsome adventurer",
 	"config.jade.plugin_workshop_for_handsome_adventurer.jade_plugin1" : "Jade config for WfHA",
 	"config.jade.plugin_workshop_for_handsome_adventurer.jade_plugin2" : "Jade config for WfHA",
 	"config.jade.plugin_workshop_for_handsome_adventurer.jade_plugin3" : "Jade config for WfHA",

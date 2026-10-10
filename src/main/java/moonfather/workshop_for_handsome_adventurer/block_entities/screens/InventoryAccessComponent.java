@@ -15,6 +15,7 @@ import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
@@ -30,6 +31,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.ModList;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -62,6 +64,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
 
     public void init(SimpleTableCraftingScreen parent, boolean widthTooNarrow)
     {
+        this.screenRectangle = null;
         this.parent = parent;
         updateWidth(widthTooNarrow);
         this.parent.getMinecraft().player.containerMenu = this.parent.getMenu();
@@ -192,15 +195,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         }
 
         this.tabsInitialized = false;
-//!!        this.parent.getMenu().selectedTab = -1;
         this.initVisuals();
-        if (previousTabCount == 0 && newTabCount > 0)   //! N
-        {
-//!!            if (this.tabButtons.size() > 0)
-//!!            {
-//????????????            this.tabChanged(this.tabButtons.get(0));
-//!!            }
-        }
     }
 
 
@@ -325,6 +320,22 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         this.updatePolymorphButton();
     }
 
+    @NotNull
+    @Override
+    public ScreenRectangle getRectangle() // for jei
+    {
+        if (this.isVisibleTotal())
+        {
+            if (this.screenRectangle == null)
+            {
+                this.screenRectangle = new ScreenRectangle(this.xOffset, (this.parent.height - parent.getImageHeight()) / 2, PANEL_WIDTH, PANEL_HEIGHT_WITH_TABS);
+            }
+            return this.screenRectangle;
+        }
+        else
+            return ScreenRectangle.empty();
+    }
+    ScreenRectangle screenRectangle = null;
 
 
     public void tick()
@@ -548,7 +559,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         private void renderIcon(GuiGraphicsExtractor graphics)
         {
             int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
-            int y = (this.parent.parent.height - this.parent.parent.getYSize()) / 2;
+            int y = (this.parent.parent.height - this.parent.parent.getYSize()) / 2;  // replace with getImageHeight
             int tabIndexInRow = this.chestIndex;
             int textureYAdjustment = 0; // 0 for top
             int textureYAdjustment2 = 0; // 0 for top

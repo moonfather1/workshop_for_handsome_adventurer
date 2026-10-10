@@ -29,7 +29,7 @@ authors="${mod_authors}" #optional
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''${mod_description}'''
-
+rrv_client = "moonfather.workshop_for_handsome_adventurer.integration.RRVTransferSupport"
 
 [[dependencies.${mod_id}]] #optional
     # the modid of the dependency

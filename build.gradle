@@ -131,11 +131,13 @@ dependencies {
     //runtimeOnly "curse.maven:jei-238222:7904641"   // 26.1.2
     compileOnly "curse.maven:jei-238222:7904641"  // 26.1.2
     compileOnly "curse.maven:emi-580555:5436759"    //!! EMI is on 1.21.1
-    compileOnly "curse.maven:cloth-config-348521:7361439"              //!!  REI is still on 1.21.11
-    //runtimeOnly "curse.maven:cloth-config-348521:7361439"            //!!  REI is still on 1.21.11
-    compileOnly "curse.maven:roughly-enough-items-310111:7486490"      //!!  REI is still on 1.21.11
-    //runtimeOnly "curse.maven:roughly-enough-items-310111:7486490"    //!!  REI is still on 1.21.11
-    //runtimeOnly "curse.maven:architectury-api-419699:7339257"        //!!  REI is still on 1.21.11
+    compileOnly "curse.maven:cloth-config-348521:7361439"              // compile time REI on 1.21.11 but i tested 26.1.2 and it's fine
+    //runtimeOnly "curse.maven:cloth-config-348521:7361439"            // compile time REI on 1.21.11 but i tested 26.1.2 and it's fine
+    compileOnly "curse.maven:roughly-enough-items-310111:7486490"      // compile time REI on 1.21.11 but i tested 26.1.2 and it's fine
+    //runtimeOnly "curse.maven:roughly-enough-items-310111:7486490"    // compile time REI on 1.21.11 but i tested 26.1.2 and it's fine
+    //runtimeOnly "curse.maven:architectury-api-419699:7339257"        // compile time REI on 1.21.11 but i tested 26.1.2 and it's fine
+    compileOnly "curse.maven:rrv-1422317:8975832"
+    runtimeOnly "curse.maven:rrv-1422317:8975832"
 
     compileOnly "curse.maven:crafting-tweaks-233071:8697035"   // 26.1.2
     runtimeOnly "curse.maven:crafting-tweaks-233071:8697035"   // 26.1.2

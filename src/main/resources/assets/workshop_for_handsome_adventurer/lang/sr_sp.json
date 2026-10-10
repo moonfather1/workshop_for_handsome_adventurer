@@ -169,13 +169,14 @@
 	"message.workshop_for_handsome_adventurer.workshop_table_in_use": "Тај сто користи %s. Сачекај да заврши.",
 
 	"itemGroup.workshop_for_handsome_adventurer": "Радионица за згодног авантуристу",
+    "neoforge.screen.mods.info.description.workshop_for_handsome_adventurer": "Радионица за згодног авантуристу",
 	"config.jade.plugin_workshop_for_handsome_adventurer.jade_plugin1" : "Jade config for WfHA",
 	"config.jade.plugin_workshop_for_handsome_adventurer.jade_plugin2" : "Jade config for WfHA",
 	"config.jade.plugin_workshop_for_handsome_adventurer.jade_plugin3" : "Jade config for WfHA",
 	"alias.emi.workbench": "Радна станица",
 	"tag.item.forge.workbench": "Радне станице",
 	"tag.item.c.player_workstations.crafting_tables": "Радне станице",
-	"tag.item.workshop_for_handsome_adventurer.metal_nuggets": "Metal nuggets"
+	"tag.item.workshop_for_handsome_adventurer.metal_nuggets": "Metal nuggets",
 	
 	"item.workshop_for_handsome_adventurer.task_list": "Листа задатака",
 	"block.workshop_for_handsome_adventurer.task_list_panel": "Листа задатака",
