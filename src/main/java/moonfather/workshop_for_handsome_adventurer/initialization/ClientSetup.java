@@ -29,7 +29,7 @@ public class ClientSetup
 	@SubscribeEvent
 	public static void Initialize(FMLClientSetupEvent event)
 	{
-		if (ModList.get().isLoaded("polymorph"))
+		if (ModList.get().isLoaded("polymorph") || ModList.get().isLoaded("polymorph_plus"))
 		{
 			PolymorphAccessorClient.register();
 		}

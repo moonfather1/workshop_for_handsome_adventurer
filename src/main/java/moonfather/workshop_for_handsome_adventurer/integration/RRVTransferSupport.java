@@ -26,7 +26,7 @@ public class RRVTransferSupport implements ReliableRecipeViewerClientPlugin
         }
         else if (screen instanceof SimpleTableCraftingScreen screen1)
         {
-            exclusionAreaManager.setExclusionArea(new BlockingGuiComponent(ID_DUAL, screen1.getLeftPos(), screen1.getTopPos(), screen1.getXSize(), screen1.getImageHeight()));
+            exclusionAreaManager.setExclusionArea(new BlockingGuiComponent(ID_SOLO, screen1.getLeftPos(), screen1.getTopPos(), screen1.getXSize(), screen1.getImageHeight()));
         }
     }
     private static final Identifier ID_DUAL = Identifier.fromNamespaceAndPath(Constants.MODID, "table_dual");
