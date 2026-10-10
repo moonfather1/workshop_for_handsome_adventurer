@@ -86,11 +86,11 @@ public class PolymorphAccessorClient
 
         ////////
 
-//        @Override
-//        public void selectRecipe(Identifier resourceLocation)
-//        {
-//            super.selectRecipe(resourceLocation);
-//            PacketSender.sendCraftingResultUpdateRequestToServer(this.getOutputSlot().index);
-//        }
+        @Override
+        public void selectRecipe(Identifier resourceLocation)
+        {
+            super.selectRecipe(resourceLocation);
+            PacketSender.sendCraftingResultUpdateRequestToServer(this.getOutputSlot().index);
+        }
     }
 }
