@@ -224,6 +224,7 @@ public class InventoryAccessHelper
             this.adjacentInventories = new LinkedList<>();
         }
         this.adjacentInventories.clear();
+        if (inventoryAccessRange == 0) { return; }
         this.loadAdjacentInventoriesCore(level, pos, player, inventoryAccessRange);
         BlockState statePrimary = level.getBlockState(pos);
         BlockPos posSecondary = null;
@@ -486,7 +487,7 @@ public class InventoryAccessHelper
         {
             BlockPos pos = new BlockPos(record.x, record.y, record.z);
             BlockEntity be = level.getBlockEntity(pos);
-            resolveBlockContainer(be, player, pos, level);
+            this.resolveBlockContainer(be, player, pos, level);
             return this.chosenContainer != null;
         }
         else if (record.Type.equals(RecordTypes.TOOLBELT))

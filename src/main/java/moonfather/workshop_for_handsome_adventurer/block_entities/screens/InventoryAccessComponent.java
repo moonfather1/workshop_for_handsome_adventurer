@@ -65,6 +65,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
 
     public void init(SimpleTableCraftingScreen parent, boolean widthTooNarrow)
     {
+        this.screenRectangle = null;
         this.parent = parent;
         updateWidth(widthTooNarrow);
         this.parent.getMinecraft().player.containerMenu = this.parent.getMenu();
@@ -195,15 +196,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         }
 
         this.tabsInitialized = false;
-//!!        this.parent.getMenu().selectedTab = -1;
         this.initVisuals();
-        if (previousTabCount == 0 && newTabCount > 0)   //! N
-        {
-//!!            if (this.tabButtons.size() > 0)
-//!!            {
-//????????????            this.tabChanged(this.tabButtons.get(0));
-//!!            }
-        }
     }
 
 
@@ -509,10 +502,20 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     public ScreenRectangle getRectangle() // for jei
     {
         if (this.isVisibleTotal())
-            return new ScreenRectangle(this.xOffset, (this.parent.height - parent.getImageHeight()) / 2, PANEL_WIDTH, PANEL_HEIGHT_WITH_TABS);
+        {
+            if (this.screenRectangle == null)
+            {
+                this.screenRectangle = new ScreenRectangle(this.xOffset, (this.parent.height - parent.getImageHeight()) / 2, PANEL_WIDTH, PANEL_HEIGHT_WITH_TABS);
+            }
+            return this.screenRectangle;
+        }
         else
+        {
             return ScreenRectangle.empty();
+        }
     }
+
+    ScreenRectangle screenRectangle = null;
 
     ///////////////////////////////////////////////////////
 
