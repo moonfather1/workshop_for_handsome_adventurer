@@ -1,8 +1,11 @@
 package moonfather.workshop_for_handsome_adventurer.dynamic_resources;
 
 import net.minecraft.server.packs.PackLocationInfo;
+import net.minecraft.server.packs.PackMetadataResources;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.repository.Pack;
+
+import java.util.stream.Stream;
 
 public class SimpleResourceSupplier implements Pack.ResourcesSupplier
 {
@@ -13,9 +16,9 @@ public class SimpleResourceSupplier implements Pack.ResourcesSupplier
     private final PackResources packContents;
 
     @Override
-    public PackResources openPrimary(PackLocationInfo packLocationInfo)
+    public PackMetadataResources openMetadata(PackLocationInfo location)
     {
-        if (packLocationInfo.equals(this.packContents.location()))
+        if (location.equals(this.packContents.location()))
         {
             return this.packContents;
         }
@@ -23,12 +26,12 @@ public class SimpleResourceSupplier implements Pack.ResourcesSupplier
     }
 
     @Override
-    public PackResources openFull(PackLocationInfo packLocationInfo, Pack.Metadata metadata)
+    public Stream<PackResources> openResources(PackLocationInfo location, Pack.Metadata metadata)
     {
-        if (packLocationInfo.equals(this.packContents.location()))
+        if (location.equals(this.packContents.location()))
         {
-            return this.packContents;
+            return Stream.of(this.packContents);
         }
-        return null;
+        return Stream.empty();
     }
 }

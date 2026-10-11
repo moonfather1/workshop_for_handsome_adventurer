@@ -77,7 +77,7 @@ public class SimpleButton extends Button
                           this.tooltipLines.add(ClientTooltipComponent.create(line.getVisualOrderText()));
                       });
             }
-            graphics.tooltip(font, this.tooltipLines, mouseX, mouseY - 8, DefaultTooltipPositioner.INSTANCE, null);
+            graphics.tooltip(font, this.tooltipLines, mouseX, mouseY - 8, DefaultTooltipPositioner.INSTANCE, null, false);
         }
     }
 

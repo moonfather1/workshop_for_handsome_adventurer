@@ -53,7 +53,7 @@ public class ToolRack extends Block implements EntityBlock, IBlockWithCleverHove
 {
     public static Block.Properties getDefaultProperties()
     {
-        return Properties.of().strength(2f, 3f).sound(SoundType.WOOD).ignitedByLava().mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY);
+        return Properties.of().strength(2f, 3f).sound(SoundType.WOOD).ignitedByLava().mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.POPPED);
     }
 
     public ToolRack(int itemCount, String type, Properties properties)

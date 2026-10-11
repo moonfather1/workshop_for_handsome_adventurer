@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.141'
+    id 'net.neoforged.moddev' version '2.0.148'
     id 'idea'
 }
 
@@ -124,48 +124,46 @@ dependencies {
     compileOnly "curse.maven:wthit-forge-455982:8512439"  // 26.2
 //    runtimeOnly "curse.maven:wthit-forge-455982:8512439"   // 26.2
 //    runtimeOnly "curse.maven:badpackets-615134:7878544"    // 26.2
-    compileOnly "curse.maven:jade-324717:8326243"    // 26.2
-//    runtimeOnly "curse.maven:jade-324717:8326243"  // 26.2
+    compileOnly "curse.maven:jade-324717:9042207"    // 26.3
+//    runtimeOnly "curse.maven:jade-324717:9042207"  // 26.3
     compileOnly "curse.maven:the-one-probe-245211:8887302"  // 26.2
 
-    //runtimeOnly "curse.maven:rrv-1422317:8890164"
-    compileOnly "curse.maven:rrv-1422317:8890164"
-    //runtimeOnly "curse.maven:jei-238222:8534476"   // 26.2
-    compileOnly "curse.maven:jei-238222:8534476"  // 26.2
+    //runtimeOnly "curse.maven:rrv-1422317:8975840"   // 26.3
+    compileOnly "curse.maven:rrv-1422317:8975840"     // 26.3
+    //runtimeOnly "curse.maven:jei-238222:9115761"   // 26.3
+    compileOnly "curse.maven:jei-238222:9115761"  // 26.3
     compileOnly "curse.maven:emi-580555:5436759"    //!! EMI is on 1.21.1
     compileOnly "curse.maven:cloth-config-348521:8269700"              // 26.2
     //runtimeOnly "curse.maven:cloth-config-348521:8269700"            // 26.2
-    compileOnly "curse.maven:roughly-enough-items-310111:8271756"      // 26.2
-    //runtimeOnly "curse.maven:roughly-enough-items-310111:8271756"    // 26.2
-    //runtimeOnly "curse.maven:architectury-api-419699:8506548"        // 26.2
+    compileOnly "curse.maven:roughly-enough-items-310111:9090699"      // 26.3
+    //runtimeOnly "curse.maven:roughly-enough-items-310111:9090699"    // 26.3
+    //runtimeOnly "curse.maven:architectury-api-419699:9111315"        // 26.3
 
-    compileOnly "curse.maven:crafting-tweaks-233071:8362299"   // 26.2
-    runtimeOnly "curse.maven:crafting-tweaks-233071:8362299"   // 26.2
-    runtimeOnly "curse.maven:balm-531761:8459358"            // 26.2
+    compileOnly "curse.maven:crafting-tweaks-233071:8893528"   // 26.3
+    runtimeOnly "curse.maven:crafting-tweaks-233071:8893528"   // 26.3
+    runtimeOnly "curse.maven:balm-531761:9035246"            // 26.3
 
 //    compileOnly "curse.maven:polymorph-388800:6451024"        //!! PM is on 1.21.1 at the moment
-    compileOnly "curse.maven:polymorph-unofficial-port-1615358:8458909"
+    compileOnly "curse.maven:polymorph-unofficial-port-1615358:8458909"     // 26.2
     compileOnly "curse.maven:dynamic-asset-generator-577096:5471770"   //!! DAG is on 1.21.1 at the moment
 
     //runtimeOnly "curse.maven:owo-lib-532610:7248199"         //!! owo is on 1.21.10
-    runtimeOnly "curse.maven:curios-309927:8478313"         // 26.2
-    compileOnly "curse.maven:curios-309927:8478313"         // 26.2
+    //runtimeOnly "curse.maven:curios-309927:8983938"         // 26.3 but broken
+    compileOnly "curse.maven:curios-309927:8983938"         // 26.3
     compileOnly "curse.maven:accessories-938917:7318047"       //!! acce is on 1.21.10
 
 
     compileOnly "curse.maven:inventory-tweaks-refoxed-976858:5610776"  //!! IT is still on 1.21.1
 
-    //runtimeOnly "curse.maven:storage-drawers-223852:7335085"     // sd is on 1.21.11
-    //  sd  crashes with jsde
-    //!! runtimeOnly "curse.maven:functional-storage-556861:5861256"       //!! FS is still on 1.21.1
-    //!! runtimeOnly "curse.maven:titanium-287342:5889342"                 //!! FS is still on 1.21.1
+    //!! runtimeOnly "curse.maven:functional-storage-556861:5861256"       //!! FS is still on 26.1
+    //!! runtimeOnly "curse.maven:titanium-287342:5889342"                 //!! FS is still on 26.1, TEST IT THERE
 
 
     compileOnly "curse.maven:backpacked-352835:7943167"               // 26.2
     //runtimeOnly "curse.maven:backpacked-352835:7943167"               // 26.2 ???
     //runtimeOnly "curse.maven:framework-549225:8403586"                // 26.2  ??
-    runtimeOnly "curse.maven:travelers-backpack-321117:9008246"       // 26.2 ??
-    compileOnly "curse.maven:travelers-backpack-321117:9008246"       // 26.2
+    runtimeOnly "curse.maven:travelers-backpack-321117:9068233"       // 26.3
+    compileOnly "curse.maven:travelers-backpack-321117:9068233"       // 26.3
 
     //runtimeOnly "curse.maven:yyzsbackpack-1285177:8520654"             // 26.2 ??
     }

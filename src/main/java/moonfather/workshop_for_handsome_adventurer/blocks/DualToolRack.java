@@ -125,13 +125,6 @@ public class DualToolRack extends ToolRack
         return true;
     }
 
-
-    public PushReaction getPistonPushReaction(BlockState state)
-    {
-        return PushReaction.DESTROY;
-    }
-
-
     ///////////////////////////////////////////////////////
 
     private static final VoxelShape SHAPE_PLANK1N = Block.box(1.0D, 1.0D, 0.0D, 15.0D, 16.0D, 1.0D);

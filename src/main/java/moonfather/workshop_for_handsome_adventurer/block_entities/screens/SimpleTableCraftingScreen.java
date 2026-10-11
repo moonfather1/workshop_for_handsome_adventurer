@@ -75,13 +75,6 @@ public class SimpleTableCraftingScreen extends AbstractContainerScreen<SimpleTab
 	}
 
 	@Override
-	public int getXSize() // just delete it.  for emi/rei/rrv we have getExclusionZone
-	{
-		int leftPanel = this.inventoryComponent.getWidth();
-		return imageWidth + leftPanel + (leftPanel > 0 ? 2 : 0);
-	}
-
-	@Override
 	public void containerTick()
 	{
 		super.containerTick();

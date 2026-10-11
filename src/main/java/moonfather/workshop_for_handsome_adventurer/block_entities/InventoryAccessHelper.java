@@ -35,7 +35,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 
@@ -157,35 +156,16 @@ public class InventoryAccessHelper
         if (be.getBlockState().getBlock().getDescriptionId().contains("storagedrawers"))
         {
             ResourceHandler<ItemResource> newHandler = level.getCapability(Capabilities.Item.BLOCK, pos, (Direction) null);
-            //IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);
-            IItemHandler handler = newHandler == null ? null : IItemHandler.of(newHandler);  //todo: remove this. make translator below accept newHandler
-            if (handler != null)  //&& handler.getSlots() <= 54  ?
+            if (newHandler != null)  //&& handler.getSlots() <= 54  ?
             {
-                this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new StorageDrawersSimpleTranslator(handler), false);
-                this.chosenContainerTrueSize = handler.getSlots() - 1;
+                // as of 26.3, using just newHandler instead of new StorageDrawersSimpleTranslator(newHandler)
+                this.chosenContainer = new SimpleTableMenu.VariableSizeResourceHandlerWrapper(newHandler, false);
+                this.chosenContainerTrueSize = newHandler.size();//   no more - 1;
                 this.chosenContainerVisibleSize = this.chosenContainerTrueSize <= 27 ? 27 : 54;
                 this.currentType = RecordTypes.BLOCK;
                 return;
             }
         }
-//        // IItemHandler capability
-//        IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);
-//        if (handler == null)
-//        {
-//            handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, Direction.UP);
-//        }
-//        if (handler != null)
-//        {
-//            if (handler.getSlots() <= 54)
-//            {
-//                this.chosenContainer = new SimpleTableMenu.VariableSizeItemStackHandlerWrapper(handler, true);
-//                this.chosenContainerTrueSize = handler.getSlots();
-//                this.chosenContainerVisibleSize = this.chosenContainerTrueSize <= 27 ? 27 : 54;
-//                this.chosenContainerForRename = be;
-//                this.currentType = RecordTypes.BLOCK;
-//                return;
-//            }
-//        }
         // 2025 capability
         ResourceHandler<ItemResource> handler = level.getCapability(Capabilities.Item.BLOCK, pos, (Direction) null);
         if (handler == null)

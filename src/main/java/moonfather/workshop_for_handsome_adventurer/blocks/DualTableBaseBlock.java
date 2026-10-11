@@ -29,7 +29,7 @@ public abstract class DualTableBaseBlock extends Block
 
 	public static Block.Properties getDefaultProperties()
 	{
-		return Properties.of().strength(2f, 3f).sound(SoundType.WOOD).lightLevel(DualTableBaseBlock::getLightLevel).ignitedByLava().mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY);
+		return Properties.of().strength(2f, 3f).sound(SoundType.WOOD).lightLevel(DualTableBaseBlock::getLightLevel).ignitedByLava().mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.POPPED);
 	}
 
 

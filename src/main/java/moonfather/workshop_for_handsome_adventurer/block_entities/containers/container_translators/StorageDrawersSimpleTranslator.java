@@ -1,13 +1,14 @@
 package moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators;
 
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 
-public class StorageDrawersSimpleTranslator extends BaseItemHandlerTranslator
+public class StorageDrawersSimpleTranslator extends BaseResourceHandlerTranslator
 {
-    public StorageDrawersSimpleTranslator(IItemHandler wrapped)
+    public StorageDrawersSimpleTranslator(ResourceHandler<ItemResource> wrapped)
     {
-        super(wrapped, wrapped.getSlots() - 1);
+        super(wrapped, wrapped.size() - 1, false);
     }
 
     @Override

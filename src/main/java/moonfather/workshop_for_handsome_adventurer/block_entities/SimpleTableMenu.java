@@ -3,7 +3,6 @@ package moonfather.workshop_for_handsome_adventurer.block_entities;
 import moonfather.workshop_for_handsome_adventurer.CommonConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.ResourceHandlerWrapper;
-import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.BaseItemHandlerWrapper;
 import moonfather.workshop_for_handsome_adventurer.block_entities.containers.container_translators.IExcessSlotManager;
 import moonfather.workshop_for_handsome_adventurer.block_entities.messaging.PacketSender;
 import moonfather.workshop_for_handsome_adventurer.blocks.AdvancedTableBottomPrimary;
@@ -22,6 +21,7 @@ import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -37,7 +37,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.fml.ModList;
-import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 
@@ -358,7 +357,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 			slot.onTake(player, itemstack1);
 			if (slotIndex == 0)
 			{
-				player.drop(itemstack1, false);
+				player.drop(itemstack1, false, Prediction.PREDICTED);
 			}
 			// don't return itemstack1. mistake caused by retarded names copied from vanilla crafting table.
 		}
@@ -492,7 +491,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		{
 			for (int j = 0; j < container.getContainerSize(); ++j)
 			{
-				player.drop(container.removeItemNoUpdate(j), false);
+				player.drop(container.removeItemNoUpdate(j), false, Prediction.SERVER_ONLY);
 			}
 		}
 		else
@@ -1125,52 +1124,6 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		}
 	}
 
-	//////////////////////////////////////////////////////////////////////////
-
-	/// just takes care of excess slots. prevents interaction with them.
-	public static class VariableSizeItemStackHandlerWrapper extends BaseItemHandlerWrapper  //todo: delete this class
-	{
-		private final int slotCount;
-		private final boolean allowPlaceContainers;
-		public VariableSizeItemStackHandlerWrapper(IItemHandler wrapped, boolean allowPlaceContainers)
-		{
-			super(wrapped);
-			this.allowPlaceContainers = allowPlaceContainers;
-			this.slotCount = wrapped.getSlots();
-		}
-
-		@Override
-		public boolean canPlaceItem(int slot, ItemStack itemStack)
-		{
-			if (! this.allowPlaceContainers && ! itemStack.getItem().canFitInsideContainerItems()) { return false; }
-			return slot < slotCount && super.canPlaceItem(slot, itemStack);
-		}
-
-		@Override
-		public ItemStack getItem(int slot) { return slot < slotCount ? super.getItem(slot) : ItemStack.EMPTY; }
-
-		@Override
-		public ItemStack removeItem(int slot, int count) { return slot < slotCount ? super.removeItem(slot, count) : ItemStack.EMPTY; }
-
-		@Override
-		public ItemStack removeItemNoUpdate(int slot) {	return slot < slotCount ? super.removeItemNoUpdate(slot) : ItemStack.EMPTY; }
-
-		@Override
-		public void setItem(int slot, ItemStack itemStack) { if (slot < slotCount) { super.setItem(slot, itemStack); } }
-
-		@Override
-		public boolean isEmpty() { return super.isEmpty(); }
-
-		@Override
-		public void setChanged() { }
-
-		@Override
-		public int getMaxStackSize() { return super.getMaxStackSize(); }
-
-		@Override
-		public int getMaxStackSize(ItemStack itemStack) { return super.getMaxStackSize(itemStack); }
-	}
-
 	/// just takes care of excess slots. prevents interaction with them.
 	public static class VariableSizeResourceHandlerWrapper extends ResourceHandlerWrapper
 	{
@@ -1206,7 +1159,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		public boolean isEmpty() { return super.isEmpty(); }
 
 		@Override
-		public void setChanged() { }
+		public void setChanged() { super.setChanged(); }
 
 		@Override
 		public int getMaxStackSize() { return super.getMaxStackSize(); }

@@ -19,18 +19,20 @@ public class EMITransferSupport implements EmiPlugin
         emiRegistry.addRecipeHandler(ContentRegistration.CRAFTING_SINGLE_MENU_TYPE.get(), new EMIRecipeHandlerForSmallTable());
 
         emiRegistry.addExclusionArea(SimpleTableCraftingScreen.class, (screen, consumer) -> {
+            var zone = screen.getExclusionZone();
             int left = screen.getLeftPos();
             int top = ((HandledScreenAccessor) screen).getY();
-            int width = screen.getXSize(); //((HandledScreenAccessor) screen).getBackgroundWidth();
+            int width = zone.getWidth(); //((HandledScreenAccessor) screen).getBackgroundWidth();
             int height = ((HandledScreenAccessor) screen).getBackgroundHeight();
             consumer.accept(new Bounds(left, top, width, height));
         });
 
         emiRegistry.addExclusionArea(DualTableCraftingScreen.class, (screen, consumer) -> {
+            var zone = screen.getExclusionZone();
             int left = screen.getLeftPos();
-            int top = ((HandledScreenAccessor) screen).getY();
-            int width = screen.getXSize(); //((HandledScreenAccessor) screen).getBackgroundWidth();
-            int height = ((HandledScreenAccessor) screen).getBackgroundHeight();
+            int top = zone.getY();
+            int width = zone.getWidth(); //((HandledScreenAccessor) screen).getBackgroundWidth();
+            int height = zone.getHeight();
             consumer.accept(new Bounds(left, top, width, height));
         });
     }

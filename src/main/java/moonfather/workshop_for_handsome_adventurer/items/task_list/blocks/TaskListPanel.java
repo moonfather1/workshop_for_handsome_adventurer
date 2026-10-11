@@ -45,7 +45,7 @@ public class TaskListPanel extends Block implements EntityBlock
 {
     public TaskListPanel(String id)
     {
-        super(Properties.of().strength(0.3f, 0.6f).sound(SoundType.WOOD).mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.DESTROY).setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id))));
+        super(Properties.of().strength(0.3f, 0.6f).sound(SoundType.WOOD).mapColor(MapColor.COLOR_BROWN).pushReaction(PushReaction.POPPED).setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MODID, id))));
         registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(EMPTY, true));
         this.PrepareListOfShapes();
     }
@@ -135,12 +135,6 @@ public class TaskListPanel extends Block implements EntityBlock
         {
             level.destroyBlock(pos, false);
         }
-    }
-
-    @Override
-    public PushReaction getPistonPushReaction(BlockState p_60584_)
-    {
-        return PushReaction.DESTROY;
     }
 
     @Override

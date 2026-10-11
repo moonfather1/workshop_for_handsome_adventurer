@@ -8,6 +8,7 @@ import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screens.DualTableCraftingScreen;
 import moonfather.workshop_for_handsome_adventurer.block_entities.screens.SimpleTableCraftingScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.resources.Identifier;
 
 public class RRVTransferSupport implements ReliableRecipeViewerClientPlugin
@@ -22,11 +23,13 @@ public class RRVTransferSupport implements ReliableRecipeViewerClientPlugin
     {
         if (screen instanceof DualTableCraftingScreen screen2)
         {
-            exclusionAreaManager.setExclusionArea(new BlockingGuiComponent(ID_DUAL, screen2.getLeftPos(), screen2.getTopPos(), screen2.getXSize(), screen2.getImageHeight()));
+            Rect2i zone = screen2.getExclusionZone();
+            exclusionAreaManager.setExclusionArea(new BlockingGuiComponent(ID_DUAL, screen2.getLeftPos(), screen2.getTopPos(), zone.getWidth(), screen2.getImageHeight()));
         }
         else if (screen instanceof SimpleTableCraftingScreen screen1)
         {
-            exclusionAreaManager.setExclusionArea(new BlockingGuiComponent(ID_SOLO, screen1.getLeftPos(), screen1.getTopPos(), screen1.getXSize(), screen1.getImageHeight()));
+            Rect2i zone = screen1.getExclusionZone();
+            exclusionAreaManager.setExclusionArea(new BlockingGuiComponent(ID_SOLO, screen1.getLeftPos(), screen1.getTopPos(), zone.getWidth(), screen1.getImageHeight()));
         }
     }
     private static final Identifier ID_DUAL = Identifier.fromNamespaceAndPath(Constants.MODID, "table_dual");

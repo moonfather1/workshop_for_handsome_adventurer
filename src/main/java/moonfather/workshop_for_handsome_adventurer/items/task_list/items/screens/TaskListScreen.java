@@ -1,5 +1,7 @@
 package moonfather.workshop_for_handsome_adventurer.items.task_list.items.screens;
 
+import com.mojang.blaze3d.platform.InputConstants;
+import mcjty.theoneprobe.network.PacketGetEntityInfo;
 import moonfather.workshop_for_handsome_adventurer.ClientConfig;
 import moonfather.workshop_for_handsome_adventurer.Constants;
 import moonfather.workshop_for_handsome_adventurer.items.task_list.items.moving_data.TaskListComponent;
@@ -270,7 +272,7 @@ public class TaskListScreen extends Screen
         {
             return;
         }
-        guiGraphics.tooltip(Minecraft.getInstance().font, this.currentTooltip, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null);
+        guiGraphics.tooltip(Minecraft.getInstance().font, this.currentTooltip, mouseX, mouseY, DefaultTooltipPositioner.INSTANCE, null, false);
     }
     private static final Component PAPER = Component.translatable(Items.PAPER.getDescriptionId()).withColor(0xffddaa);
     private static final Component PAPER_TOOLTIP = Component.translatable("message.workshop_for_handsome_adventurer.task_list_ex", PAPER);
@@ -378,15 +380,15 @@ public class TaskListScreen extends Screen
                 int index = i / 2;
                 String current = this.checkBoxValues.get(index);
                 String newValue = "e";
-                if (keyCode == K_PLU)
+                if (keyCode == InputConstants.KEY_ADD)
                 {
                     newValue = current.equals("y") ? "e" : "y";
                 }
-                else if (keyCode == K_MIN)
+                else if (keyCode == InputConstants.KEY_MINUS || keyCode == InputConstants.KEY_ADD-1)
                 {
                     newValue = current.equals("n") ? "e" : "n";
                 }
-                else if (keyCode == K_STR)
+                else if (keyCode == InputConstants.KEY_MULTIPLY)
                 {
                     newValue = current.equals("q") ? "e" : "q";
                 }
@@ -501,19 +503,19 @@ public class TaskListScreen extends Screen
     @Override
     public boolean keyPressed(KeyEvent event)
     {
-        if (event.key() == K_ESC && this.shouldCloseOnEsc())
+        if (event.key() == InputConstants.KEY_ESCAPE && this.shouldCloseOnEsc())
         {
             this.onClose();
             return true;
         }
-        if ((event.key() == K_DN || event.key() == K_UP)  && (event.modifiers() & 1) == 1)
+        if ((event.key() == InputConstants.KEY_DOWN || event.key() == InputConstants.KEY_UP)  && event.hasShiftDown())
         {
             // special focus
             if (this.header.equals(this.getFocused())) { return true; }
             this.setFocused(this.header);
             return true;
         }
-        if (event.key() == K_DN || (event.key() == K_ENT && (event.modifiers() & 1) == 0) || (event.key() == K_ENT_NP && (event.modifiers() & 1) == 0))
+        if (event.key() == InputConstants.KEY_DOWN || (event.key() == InputConstants.KEY_RETURN && ! event.hasShiftDown()) || (event.key() == InputConstants.KEY_NUMPADENTER && ! event.hasShiftDown()))
         {
             // focus down
             for (int i = 0; i < this.editBoxes.size(); i++)
@@ -534,7 +536,7 @@ public class TaskListScreen extends Screen
             this.setFocused(this.editBoxes.get(0));
             return true;
         }
-        if (event.key() == K_UP || (event.key() == K_ENT && (event.modifiers() & 1) == 1) || (event.key() == K_ENT_NP && (event.modifiers() & 1) == 1))
+        if (event.key() == InputConstants.KEY_UP || (event.key() == InputConstants.KEY_RETURN && event.hasShiftDown()) || (event.key() == InputConstants.KEY_NUMPADENTER && event.hasShiftDown()))
         {
             // focus up
             for (int i = 0; i < this.editBoxes.size(); i++)
@@ -555,18 +557,18 @@ public class TaskListScreen extends Screen
             this.setFocused(this.editBoxes.get(0)); // first focus
             return true;
         }
-        if ((event.key() == K_PLU || event.key() == K_MIN || event.key() == K_STR) && ((event.modifiers() & 1) == 0))
+        if ((event.key() == InputConstants.KEY_ADD || event.key() == (InputConstants.KEY_ADD-1 /*minus*/) || event.key() == InputConstants.KEY_MULTIPLY || event.key() == InputConstants.KEY_MINUS) && ! event.hasShiftDown())
         {
             this.checkByKeyboard(event.key());
             return true;
         }
-        if (event.key() == K_PG_DN && this.page < this.pageCount)
+        if (event.key() == InputConstants.KEY_PAGEDOWN && this.page < this.pageCount)
         {
             // paging
             this.changePage(1);
             return true;
         }
-        if (event.key() == K_PG_UP && this.page > 1)
+        if (event.key() == InputConstants.KEY_PAGEUP && this.page > 1)
         {
             // paging
             this.changePage(-1);

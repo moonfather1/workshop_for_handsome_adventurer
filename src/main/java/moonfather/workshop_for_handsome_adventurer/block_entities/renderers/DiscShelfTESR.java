@@ -36,7 +36,7 @@ public class DiscShelfTESR extends ToolRackTESR
                     poseStack.pushPose();
                     double antiZFighting = row * 0.003d + i * 0.001d;
                     poseStack.translate(itemDirection.getStepX() * (i - 1d) + antiZFighting, 0 - vertical, itemDirection.getStepZ() * (i - 1d) + antiZFighting);
-                    poseStack.mulPose(direction.getRotation());
+                    poseStack.rotate(direction.getRotation());
                     poseStack.scale(1f, 1.4f, 1f);  // thicker
                     double rowExtrude = +0.225d * row - 0.1d;   if (row == 2) rowExtrude += 0.025;
                     poseStack.translate(0, rowExtrude, 0);
@@ -54,8 +54,8 @@ public class DiscShelfTESR extends ToolRackTESR
     @Override
     protected void doSpecialPoseStackAdjustments(ToolRackItemRenderState state, PoseStack matrixStack)
     {
-        matrixStack.mulPose(XMinus90);  // 1.19.4   Vector3f.XP.rotationDegrees(-90.0F)
-        matrixStack.mulPose(YPlus180);  // 1.19.4   Vector3f.YP.rotationDegrees(180.0F)
+        matrixStack.rotate(XMinus90);  // 1.19.4   Vector3f.XP.rotationDegrees(-90.0F)
+        matrixStack.rotate(YPlus180);  // 1.19.4   Vector3f.YP.rotationDegrees(180.0F)
 
         if (state.larger150) // first this. apply the rest on top of this.
         {

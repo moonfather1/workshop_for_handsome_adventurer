@@ -257,7 +257,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
                 {
                     if (Minecraft.getInstance().gui.screen() != null)
                     {
-                        graphics.tooltip(this.parent.getFont(), tabButton.getMessageForTooltip(), mouseX + 2, mouseY + 12, DefaultTooltipPositioner.INSTANCE, null);
+                        graphics.tooltip(this.parent.getFont(), tabButton.getMessageForTooltip(), mouseX + 2, mouseY + 12, DefaultTooltipPositioner.INSTANCE, null, false);
                     }
                     break;
                 }
@@ -351,12 +351,17 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
     {
         if (this.renameBox.isFocused())
         {
-            if (event.scancode() == 23) // tab
+            if (event.keycode() == 9) // tab
             {
                 this.renameBox.setFocused(false);
                 return true;
             }
             this.renameBox.keyPressed(event);
+            return true;
+        }
+        if (! this.renameBox.isFocused() && this.renameBox.isVisible())
+        {
+            this.renameBox.setFocused(true);
             return true;
         }
         return GuiEventListener.super.keyPressed(event);
@@ -563,7 +568,7 @@ public class InventoryAccessComponent implements Renderable, GuiEventListener, N
         private boolean checkedForSpecialScaling = false, doSpecialScaling = false;
         private void renderIcon(GuiGraphicsExtractor graphics)
         {
-            int x = (this.parent.parent.width - this.parent.parent.getXSize()) / 2;
+            int x = this.parent.xOffset;// parent.parent.width - this.parent.parent.getImageWidth()) / 2;
             int y = (this.parent.parent.height - this.parent.parent.getImageHeight()) / 2;
             int tabIndexInRow = this.chestIndex;
             int textureYAdjustment = 0; // 0 for top

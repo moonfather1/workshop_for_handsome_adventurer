@@ -99,25 +99,25 @@ public class TaskListPanelTESR implements BlockEntityRenderer<TaskListBlockEntit
         Direction direction = renderState.direction;
         poseStack.pushPose();
         if (direction.equals(Direction.NORTH)) {
-            poseStack.mulPose(ZPlus180);
+            poseStack.rotate(ZPlus180);
             poseStack.translate(-1f, -1f, +148/160f);
         }
         if (direction.equals(Direction.EAST))
         {
-            poseStack.mulPose(XPlus180);
-            poseStack.mulPose(YPlus270);
+            poseStack.rotate(XPlus180);
+            poseStack.rotate(YPlus270);
             poseStack.translate(-1f, -1f, +-1+149/160f);
         }
         if (direction.equals(Direction.SOUTH))
         {
-            poseStack.mulPose(ZPlus180);
-            poseStack.mulPose(YPlus180);
+            poseStack.rotate(ZPlus180);
+            poseStack.rotate(YPlus180);
             poseStack.translate(0f, -1f, -1 + 148/160f);
         }
         if (direction.equals(Direction.WEST))
         {
-            poseStack.mulPose(XPlus180);
-            poseStack.mulPose(YPlus090);
+            poseStack.rotate(XPlus180);
+            poseStack.rotate(YPlus090);
             poseStack.translate(0f, -1f, +0+149/160f);
         }
         poseStack.scale(0.0035f, 0.0045f, 0.0050f);

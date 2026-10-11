@@ -13,12 +13,14 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CookingFuel;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
 import java.util.function.Consumer;
 
@@ -26,7 +28,7 @@ public class WorkstationPlacerItem extends Item
 {
 	public WorkstationPlacerItem(String wood, Properties properties)
 	{
-		super(properties);
+		super(properties.stacksTo(1).cookingFuel(ContextIntProviders.COOKING_TIME_BOATS));
 		this.Tooltip1 = Component.translatable("item.workshop_for_handsome_adventurer.workstation_placer.tooltip1").withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
 		this.Tooltip2 = Component.translatable("item.workshop_for_handsome_adventurer.workstation_placer.tooltip2").withStyle(Style.EMPTY.withItalic(true).withColor(0x9966cc));
 		this.woodType = wood;

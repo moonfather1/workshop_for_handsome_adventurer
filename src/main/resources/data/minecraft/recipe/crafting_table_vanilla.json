@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": "#minecraft:planks"
+  },
+  "result": {
+    "id": "minecraft:crafting_table"
+  },
+  "show_notification": false,
+  "neoforge:conditions": [
+    {
+      "type": "workshop_for_handsome_adventurer:optional",
+      "flag_code": "dont_replace_vanilla_crafting_table"
+    }
+  ]
+}

@@ -50,7 +50,6 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity, To
 	private void storeItemStackSpecifics(ItemStack itemStack, ToolRackItemRenderState renderState)
 	{
 		if (itemStack.isEmpty()) { return; }
-//			BakedModel model = this.itemRenderer. getModel(itemStack, tile.getLevel(), null, combinedLight);
 		if (itemStack.is(TAG_LARGER_ON_TOOLRACK_150)) // first this. apply the rest on top of this.
 		{
 			renderState.larger150 = true;
@@ -103,8 +102,8 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity, To
 	// render state to pose stack
 	protected void doSpecialPoseStackAdjustments(ToolRackItemRenderState state, PoseStack matrixStack)
 	{
-		matrixStack.mulPose(XMinus90);  // 1.19.4   Vector3f.XP.rotationDegrees(-90.0F)
-		matrixStack.mulPose(YPlus180);  // 1.19.4   Vector3f.YP.rotationDegrees(180.0F)
+        matrixStack.rotate(XMinus90);  // 1.19.4   Vector3f.XP.rotationDegrees(-90.0F)
+        matrixStack.rotate(YPlus180);  // 1.19.4   Vector3f.YP.rotationDegrees(180.0F)
 
 		if (state.larger150) // first this. apply the rest on top of this.
 		{
@@ -119,7 +118,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity, To
 
 		if (state.rotate180)
 		{
-			matrixStack.mulPose(ZPlus180);
+            matrixStack.rotate(ZPlus180);
 		} // this rotation is separate as it's added onto any rotation below
 
 		if (state.noDefaultRotation)
@@ -138,17 +137,17 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity, To
 			// check ModularBladedItem ? stupid tetra doesn't tag swords and doesn't return true for any canPerformAction call
 			// currently using separate tag for tetra swords.
 			matrixStack.translate(0, -0.2, 0);
-			matrixStack.mulPose(ZPlus135);  // 1.19.4      Vector3f.ZP.rotationDegrees(135.0F)
+            matrixStack.rotate(ZPlus135);  // 1.19.4      Vector3f.ZP.rotationDegrees(135.0F)
 		}
 		else if (state.spearLike)
 		{
 			matrixStack.translate(0, -0.2, 0);
-			matrixStack.mulPose(ZMinus45);
+            matrixStack.rotate(ZMinus45);
 		}
 		else if (state.crossbowLike)
 		{
 			matrixStack.translate(0, -0.2, 0);
-			matrixStack.mulPose(ZPlus225);  // 1.19.4      Vector3f.ZP.rotationDegrees(225.0F)
+            matrixStack.rotate(ZPlus225);  // 1.19.4      Vector3f.ZP.rotationDegrees(225.0F)
 		}
 //			else if (state.gui3d)
 //			{
@@ -160,7 +159,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity, To
 		}
 		else
 		{
-			matrixStack.mulPose(ZMinus45);  // 1.19.4    Vector3f.ZP.rotationDegrees(-45.0F)
+            matrixStack.rotate(ZMinus45);  // 1.19.4    Vector3f.ZP.rotationDegrees(-45.0F)
 		}
 	}
 	protected static final Quaternionf ZMinus45 = new Quaternionf().fromAxisAngleDeg(0, 0, 1, -45);
@@ -257,7 +256,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity, To
 						poseStack.pushPose();
 						double antiZFighting = row * 0.003d + i * 0.001d;
 						poseStack.translate(itemDirection.getStepX() * (i - 1d) + antiZFighting, 0 - row*(rowHeight/16f+3/16f)-2/16f, itemDirection.getStepZ() * (i - 1d) + antiZFighting);
-						poseStack.mulPose(rackRenderState.direction.getRotation());
+                        poseStack.rotate(rackRenderState.direction.getRotation());
 						doSpecialPoseStackAdjustments(itemToRender, poseStack);
 						itemToRender.submit(poseStack, nodeCollector, rackRenderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
 						poseStack.popPose();
@@ -283,7 +282,7 @@ public class ToolRackTESR implements BlockEntityRenderer<ToolRackBlockEntity, To
 						poseStack.pushPose();
 						double antiZFighting = row * 0.003d + i * 0.001d;
 						poseStack.translate(itemDirection.getStepX() * (i - 0.5) + antiZFighting, 0 - row*(rowHeight/16f), itemDirection.getStepZ() * (i - 0.5) + antiZFighting);
-						poseStack.mulPose(rackRenderState.direction.getRotation());
+                        poseStack.rotate(rackRenderState.direction.getRotation());
 						doSpecialPoseStackAdjustments(itemToRender, poseStack);
 						itemToRender.submit(poseStack, nodeCollector, rackRenderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
 						poseStack.popPose();

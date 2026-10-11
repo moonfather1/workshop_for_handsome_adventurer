@@ -41,6 +41,8 @@ public class WoodTypeLister
             idsWithSpecials = new ArrayList<>(ids);
             if (! DynamicAssetCommonConfig.masterLeverOn()) { return; }
             Stopwatch s = Stopwatch.createStarted();
+            ids.add("poplar");
+            woodToHostMap.put("poplar", "minecraft");
             ids.add("acacia");
             woodToHostMap.put("acacia", "minecraft");
             ids.add("bamboo");

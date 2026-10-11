@@ -34,7 +34,7 @@ public class ModWorkshop
 
     public ModWorkshop(IEventBus modBus, ModContainer modContainer)
     {
-        modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
+        modContainer.registerConfig(ModConfig.Type.LOCAL, CommonConfig.SPEC, "workshop_for_handsome_adventurer-common.toml");
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         modContainer.registerConfig(ModConfig.Type.STARTUP, DynamicAssetClientConfig.SPEC, "workshop/special-client.toml");
         modContainer.registerConfig(ModConfig.Type.STARTUP, DynamicAssetCommonConfig.SPEC, "workshop/special-server.toml");

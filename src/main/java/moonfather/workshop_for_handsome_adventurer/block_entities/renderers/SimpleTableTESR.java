@@ -138,12 +138,12 @@ public class SimpleTableTESR implements BlockEntityRenderer<SimpleTableBlockEnti
                 int tableOffsetX = secondary ? direction.getStepX() : 0;
                 int tableOffsetZ = secondary ? direction.getStepZ() : 0;
                 poseStack.translate(0.5D + tableOffsetZ, 0, 0.5D - tableOffsetX); // center
-                poseStack.mulPose(getYRotation(direction, direction.getStepZ() == 0));  // rotate towards player
+                poseStack.rotate(getYRotation(direction, direction.getStepZ() == 0));  // rotate towards player
                 double positionScale = 0.63f;
                 poseStack.translate(j % 3 * 0.3D * positionScale, 0, j / 3 * 0.3D * positionScale); // spread into grid
                 poseStack.translate(-0.19D, 0, -0.19D); // center the grid
-                poseStack.mulPose(XPlus90); // lay items horizontal
-                poseStack.mulPose(ZPlus180); // lay items horizontal
+                poseStack.rotate(XPlus90); // lay items horizontal
+                poseStack.rotate(ZPlus180); // lay items horizontal
                 float itemScale = 0.15f;
                 poseStack.scale(itemScale, itemScale, itemScale / 3); // last part flattens them a little. i don't know how else to deal with blocks
                 itemStackRenderState.submit(poseStack, nodeCollector, tableRenderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
