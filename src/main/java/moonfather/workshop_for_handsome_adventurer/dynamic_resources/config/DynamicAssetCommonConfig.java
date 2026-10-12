@@ -154,7 +154,6 @@ public class DynamicAssetCommonConfig
                 String s = reader.readLine();
                 if (s == null)
                 {
-                    LogUtils.getLogger().info("[Workshop] Done reading factory defaults. Path:  \"{}\".", path);
                     return;
                 }
                 s = s.trim();

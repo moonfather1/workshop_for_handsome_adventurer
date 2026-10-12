@@ -1206,7 +1206,7 @@ public class SimpleTableMenu extends AbstractContainerMenu
 		public boolean isEmpty() { return super.isEmpty(); }
 
 		@Override
-		public void setChanged() { }
+		public void setChanged() { super.setChanged(); }
 
 		@Override
 		public int getMaxStackSize() { return super.getMaxStackSize(); }

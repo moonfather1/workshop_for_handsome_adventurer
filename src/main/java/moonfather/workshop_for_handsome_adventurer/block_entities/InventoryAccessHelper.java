@@ -158,11 +158,10 @@ public class InventoryAccessHelper
         {
             ResourceHandler<ItemResource> newHandler = level.getCapability(Capabilities.Item.BLOCK, pos, (Direction) null);
             //IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, (Direction) null);
-            IItemHandler handler = newHandler == null ? null : IItemHandler.of(newHandler);  //todo: remove this. make translator below accept newHandler
-            if (handler != null)  //&& handler.getSlots() <= 54  ?
+            if (newHandler != null && newHandler.size() <= 54)
             {
-                this.chosenContainer = new SimpleTableMenu.VariableSizeContainerWrapper(new StorageDrawersSimpleTranslator(handler), false);
-                this.chosenContainerTrueSize = handler.getSlots() - 1;
+                this.chosenContainer = new SimpleTableMenu.VariableSizeResourceHandlerWrapper(newHandler, false);
+                this.chosenContainerTrueSize = newHandler.size();
                 this.chosenContainerVisibleSize = this.chosenContainerTrueSize <= 27 ? 27 : 54;
                 this.currentType = RecordTypes.BLOCK;
                 return;

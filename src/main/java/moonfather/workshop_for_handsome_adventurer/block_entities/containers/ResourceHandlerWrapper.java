@@ -77,28 +77,52 @@ public class ResourceHandlerWrapper extends SimpleContainer
     {
         ItemResource oldRes = internal.getResource(index);
         int oldCount = internal.getAmountAsInt(index);
-        if (stack.isEmpty())
-        {
-            return;
-        }
         if (oldCount == 0)
         {
             try (Transaction tx = Transaction.openRoot())
             {
+                if (stack.isEmpty())
+                {
+                    return;
+                }
                 int accepted = internal.insert(index, ItemResource.of(stack), stack.getCount(), tx);
                 stack.shrink(accepted);
-                tx.commit();
+                if (! insideTransaction)
+                {
+                    tx.commit();
+                }
             }
             return;
         }
-        if (oldRes.is(stack.getItem()))
+        if (oldRes.matches(stack))
         {
-            // should check ItemStack.isSameItemSameComponents(stack, old) above but i won't; i'll let handler refuse it and that's that.
-            try (Transaction tx = Transaction.openRoot())
+            if (stack.isEmpty() || stack.getCount() == oldCount)
             {
-                int accepted = internal.insert(index, ItemResource.of(stack), stack.getCount(), tx);
-                stack.shrink(accepted);
-                tx.commit();
+                return;
+            }
+            if (stack.getCount() > oldCount)
+            {
+                try (Transaction tx = Transaction.openRoot())
+                {
+                    int accepted = internal.insert(index, ItemResource.of(stack), stack.getCount() - oldCount, tx);
+                    stack.shrink(accepted);
+                    if (! insideTransaction)
+                    {
+                        tx.commit();
+                    }
+                }
+            }
+            else
+            {
+                try (Transaction tx = Transaction.openRoot())
+                {
+                    int extracted = this.internal.extract(index, oldRes, oldCount - stack.getCount(), tx);
+                    stack.shrink(stack.getCount());
+                    if (! insideTransaction)
+                    {
+                        tx.commit();
+                    }
+                }
             }
             return;
         }
@@ -106,11 +130,18 @@ public class ResourceHandlerWrapper extends SimpleContainer
         try (Transaction tx = Transaction.openRoot())
         {
             int extracted = this.internal.extract(index, oldRes, oldCount, tx);
-            int inserted = this.internal.insert(index, ItemResource.of(stack), stack.getCount(), tx);
+            int inserted = 0;
+            if (! stack.isEmpty())
+            {
+                inserted = this.internal.insert(index, ItemResource.of(stack), stack.getCount(), tx);
+            }
             if (inserted == stack.getCount())
             {
                 stack = oldRes.toStack(extracted);
-                tx.commit();
+                if (! insideTransaction)
+                {
+                    tx.commit();
+                }
             }
         }
     }
